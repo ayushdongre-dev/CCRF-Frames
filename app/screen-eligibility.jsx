@@ -304,7 +304,7 @@ function Eligibility({ go }) {
         </div>
 
         {/* ── What your savings could buy ── */}
-        {false && (() => {
+        {(() => {
           const TRIP_COST  = 8000;
           const PHONE_COST = 30000;
           const RENT_COST  = 7000;
