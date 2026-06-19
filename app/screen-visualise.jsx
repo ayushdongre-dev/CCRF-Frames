@@ -1,0 +1,405 @@
+// screen-visualise.jsx — CCRF Illustration: potential savings
+
+// ── Fixed scenario constants ─────────────────────────────────────
+const VIZ_DUE       = 500000;
+const CARD_RATE_PCT = 54;
+const MELT_RATE_PCT = 25;
+
+// ── Amortisation builder ─────────────────────────────────────────
+function buildAmort(B, P, rAnnual) {
+  const r = rAnnual / 12 / 100;
+  const balArr = [Math.round(B)];
+  const intArr = [0];
+  let bal = B, cumInt = 0;
+  while (bal > 0.5 && balArr.length < 300) {
+    const interest = bal * r;
+    const principal = Math.min(P - interest, bal);
+    if (principal <= 0) { balArr.push(Math.round(bal)); intArr.push(Math.round(cumInt)); break; }
+    cumInt += interest;
+    bal -= principal;
+    balArr.push(Math.round(Math.max(0, bal)));
+    intArr.push(Math.round(cumInt));
+  }
+  return { balArr, intArr, months: balArr.length - 1, totalInt: Math.round(cumInt) };
+}
+
+// ── Helpers ──────────────────────────────────────────────────────
+function fmtShort(v) {
+  if (v <= 0) return '₹0';
+  if (v >= 100000) {
+    const l = v / 100000;
+    return '₹' + (l % 1 === 0 ? l.toFixed(0) : l.toFixed(1)) + 'L';
+  }
+  return '₹' + Math.round(v / 1000) + 'K';
+}
+function fmtIN(v) {
+  if (v <= 0) return '₹0';
+  return '₹' + Number(v).toLocaleString('en-IN');
+}
+
+// ── Chart layout constants ────────────────────────────────────────
+const CW = 308, CH = 168, CPL = 44, CPR = 8, CPT = 10, CPB = 28;
+function cX(month, totalMonths) { return CPL + (month / totalMonths) * (CW - CPL - CPR); }
+function cY(val, maxVal) { return CPT + (1 - Math.max(0, val) / maxVal) * (CH - CPT - CPB); }
+
+function hoverMonth(e, isSVG, totalMonths) {
+  const rect = e.currentTarget.getBoundingClientRect();
+  const clientX = isSVG ? e.clientX : e.touches[0].clientX;
+  const svgX = (clientX - rect.left) / rect.width * CW;
+  return Math.max(0, Math.min(totalMonths, Math.round((svgX - CPL) / (CW - CPL - CPR) * totalMonths)));
+}
+
+// ── Balance Chart ─────────────────────────────────────────────────
+function BalanceChart({ cardBal, meltBal, cardMonths, meltMonths }) {
+  const [hov, setHov] = React.useState(null);
+  const [animPct, setAnimPct] = React.useState(0);
+  const maxBal = 500000;
+  const totalMonths = cardMonths;
+
+  React.useEffect(() => {
+    setAnimPct(0);
+    const start = performance.now();
+    const dur = 900;
+    function step(now) {
+      const t = Math.min((now - start) / dur, 1);
+      setAnimPct(t < 1 ? t * t * (3 - 2 * t) : 1);
+      if (t < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }, [cardMonths, meltMonths]);
+
+  const animMonths = Math.round(animPct * totalMonths);
+  const cardPath = cardBal.slice(0, animMonths + 1).map((b, i) => `${i === 0 ? 'M' : 'L'}${cX(i, totalMonths).toFixed(1)},${cY(b, maxBal).toFixed(1)}`).join(' ');
+  const meltPath = meltBal.slice(0, animMonths + 1).map((b, i) => `${i === 0 ? 'M' : 'L'}${cX(i, totalMonths).toFixed(1)},${cY(b, maxBal).toFixed(1)}`).join(' ');
+
+  const cardArea = cardPath ? `${cardPath} L${cX(animMonths, totalMonths).toFixed(1)},${cY(0, maxBal).toFixed(1)} L${cX(0, totalMonths).toFixed(1)},${cY(0, maxBal).toFixed(1)} Z` : '';
+  const meltArea = meltPath ? `${meltPath} L${cX(animMonths, totalMonths).toFixed(1)},${cY(0, maxBal).toFixed(1)} L${cX(0, totalMonths).toFixed(1)},${cY(0, maxBal).toFixed(1)} Z` : '';
+
+  const yLabels = [500000, 400000, 300000, 200000, 100000, 0];
+  const step = Math.max(1, Math.round(totalMonths / 6));
+  const xLabels = Array.from({ length: totalMonths + 1 }, (_, i) => i).filter(m => m % step === 0 || m === totalMonths);
+
+  let tip = null;
+  if (hov !== null) {
+    const hx      = cX(hov, totalMonths);
+    const cb = cardBal[Math.min(hov, cardBal.length - 1)] || 0;
+    const mb = meltBal[Math.min(hov, meltBal.length - 1)] || 0;
+    const tipW = 108, tipH = 58;
+    const tipX = hx + 8 + tipW > CW - CPR ? hx - tipW - 8 : hx + 8;
+    const tipY = CPT + 4;
+    tip = (
+      <g>
+        <line x1={hx} y1={CPT} x2={hx} y2={CH - CPB} stroke="#bbb" strokeWidth="1" strokeDasharray="3,2" />
+        <circle cx={hx} cy={cY(cb, maxBal)} r="3.5" fill="var(--red)" />
+        <circle cx={hx} cy={cY(mb, maxBal)} r="3.5" fill="var(--primary)" />
+        <rect x={tipX} y={tipY} width={tipW} height={tipH} rx={7} fill="white" opacity="0.97" filter="url(#ts)" />
+        <text x={tipX + 8} y={tipY + 14} fontSize="8" fill="#888" fontWeight="600">Month {hov}</text>
+        <text x={tipX + 8} y={tipY + 29} fontSize="8.5" fill="var(--red)" fontWeight="700">Card  {fmtShort(cb)}</text>
+        <text x={tipX + 8} y={tipY + 44} fontSize="8.5" fill="var(--primary)" fontWeight="700">Melt  {hov >= meltMonths ? 'Paid off ✓' : fmtShort(mb)}</text>
+      </g>
+    );
+  }
+
+  return (
+    <svg viewBox={`0 0 ${CW} ${CH}`} style={{ width: '100%', cursor: 'pointer', userSelect: 'none' }}
+      onMouseMove={e => setHov(hoverMonth(e, true, totalMonths))}
+      onMouseLeave={() => setHov(null)}
+      onTouchMove={e => { e.preventDefault(); setHov(hoverMonth(e, false, totalMonths)); }}
+      onTouchEnd={() => setHov(null)}
+    >
+      <defs>
+        <filter id="ts" x="-20%" y="-20%" width="140%" height="140%">
+          <feDropShadow dx="0" dy="2" stdDeviation="4" floodColor="#00000020" />
+        </filter>
+      </defs>
+      {yLabels.map((v, i) => {
+        const y = cY(v, maxBal);
+        return <g key={i}>
+          <line x1={CPL} y1={y} x2={CW - CPR} y2={y} stroke="#EEE" strokeWidth="1" />
+          <text x={CPL - 5} y={y + 3} fontSize="7.5" fill="#A9A6B8" textAnchor="end">{fmtShort(v)}</text>
+        </g>;
+      })}
+      {xLabels.map((m, i) => (
+        <text key={i} x={cX(m, totalMonths)} y={CH - CPB + 14} fontSize="7.5" fill="#A9A6B8" textAnchor="middle">{m}</text>
+      ))}
+      <path d={cardArea} fill="rgba(212,79,72,.09)" />
+      <path d={meltArea} fill="rgba(127,85,223,.11)" />
+      <path d={cardPath} stroke="var(--red)" strokeWidth="2.5" fill="none" strokeLinecap="round" strokeLinejoin="round" />
+      <path d={meltPath} stroke="var(--primary)" strokeWidth="2.5" fill="none" strokeLinecap="round" strokeLinejoin="round" />
+      {tip}
+    </svg>
+  );
+}
+
+// ── Cumulative Interest Chart ─────────────────────────────────────
+const CCW = 308, CCH = 210, CCPL = 46, CCPR = 8, CCPT = 14, CCPB = 26;
+
+function ccX(month, total) { return CCPL + (month / total) * (CCW - CCPL - CCPR); }
+function ccY(val, maxVal)  { return CCPT + (1 - Math.max(0, val) / maxVal) * (CCH - CCPT - CCPB); }
+
+function smoothPts(pts) {
+  if (pts.length < 2) return '';
+  let d = `M${pts[0].x.toFixed(1)},${pts[0].y.toFixed(1)}`;
+  for (let i = 1; i < pts.length - 1; i++) {
+    const mx = ((pts[i].x + pts[i + 1].x) / 2).toFixed(1);
+    const my = ((pts[i].y + pts[i + 1].y) / 2).toFixed(1);
+    d += ` Q${pts[i].x.toFixed(1)},${pts[i].y.toFixed(1)} ${mx},${my}`;
+  }
+  d += ` L${pts[pts.length - 1].x.toFixed(1)},${pts[pts.length - 1].y.toFixed(1)}`;
+  return d;
+}
+
+function CumulativeChart({ cardInt, meltInt, cardMonths, meltMonths, meltInterest, intSaved }) {
+  const [hov, setHov] = React.useState(null);
+  const [animPct, setAnimPct] = React.useState(0);
+  const totalMonths = cardMonths;
+  const maxInt = Math.max(...cardInt, 100000);
+
+  React.useEffect(() => {
+    setAnimPct(0);
+    const start = performance.now();
+    const dur = 1100;
+    function step(now) {
+      const t = Math.min((now - start) / dur, 1);
+      setAnimPct(t < 1 ? t * t * (3 - 2 * t) : 1);
+      if (t < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }, [cardMonths, meltMonths]);
+
+  const animMonths = Math.round(animPct * totalMonths);
+
+  const cardPts = cardInt.slice(0, animMonths + 1).map((v, i) => ({ x: ccX(i, totalMonths), y: ccY(v, maxInt) }));
+  const meltPts = meltInt.slice(0, animMonths + 1).map((v, i) => ({ x: ccX(i, totalMonths), y: ccY(v, maxInt) }));
+
+  const cardPath = smoothPts(cardPts);
+  const meltPath = smoothPts(meltPts);
+
+  // Green gap: melt forward then card backward
+  const gapPath = cardPts.length > 1 && meltPts.length > 1
+    ? meltPts.map((p, i) => `${i === 0 ? 'M' : 'L'}${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(' ')
+      + ' ' + [...cardPts].reverse().map(p => `L${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(' ') + ' Z'
+    : '';
+
+  // Y-axis labels
+  const yMax = Math.ceil(maxInt / 100000) * 100000;
+  const yLabels = [yMax, yMax * 0.75, yMax * 0.5, yMax * 0.25, 0].map(Math.round);
+  const xStep = Math.max(1, Math.round(totalMonths / 6));
+  const xLabels = Array.from({ length: totalMonths + 1 }, (_, i) => i).filter(m => m % xStep === 0 || m === totalMonths);
+
+  // Savings callout badge — positioned top-left, arrow into gap
+  const badgeX = CCPL + 2, badgeY = CCPT + 2, badgeW = 108, badgeH = 36;
+  const arrowTipX = ccX(Math.round(totalMonths * 0.52), totalMonths);
+  const arrowTipY = (ccY(cardInt[Math.round(totalMonths * 0.52)] || maxInt * 0.6, maxInt) + ccY(meltInt[Math.round(totalMonths * 0.52)] || 0, maxInt)) / 2;
+  const arrowStartX = badgeX + badgeW * 0.7;
+  const arrowStartY = badgeY + badgeH;
+
+  // Hover tooltip
+  function ccHover(e, isSVG) {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const clientX = isSVG ? e.clientX : e.touches[0].clientX;
+    const svgX = (clientX - rect.left) / rect.width * CCW;
+    return Math.max(0, Math.min(totalMonths, Math.round((svgX - CCPL) / (CCW - CCPL - CCPR) * totalMonths)));
+  }
+
+  let tip = null;
+  if (hov !== null) {
+    const hx    = ccX(hov, totalMonths);
+    const ci    = cardInt[Math.min(hov, cardInt.length - 1)];
+    const mi    = meltInt[Math.min(hov, meltInt.length - 1)];
+    const mDone = hov >= meltMonths;
+    const saved = Math.max(0, ci - (mDone ? meltInterest : mi));
+    const tipW = 148, tipH = 66;
+    const tipX = hx + 8 + tipW > CCW - CCPR ? hx - tipW - 8 : hx + 8;
+    const tipY = CCH - CCPB - tipH - 4;
+    tip = (
+      <g>
+        <line x1={hx} y1={CCPT} x2={hx} y2={CCH - CCPB} stroke="#ccc" strokeWidth="1" strokeDasharray="3,2" />
+        <circle cx={hx} cy={ccY(ci, maxInt)} r="3.5" fill="#E8453C" />
+        <circle cx={hx} cy={ccY(mi, maxInt)} r="3.5" fill="var(--primary)" />
+        <rect x={tipX} y={tipY} width={tipW} height={tipH} rx={8} fill="white" opacity="0.97" filter="url(#tc2)" />
+        <text x={tipX + 9} y={tipY + 13} fontSize="7.5" fill="#999" fontWeight="600">Month {hov}</text>
+        <text x={tipX + 9} y={tipY + 27} fontSize="8.5" fill="#E8453C" fontWeight="700">Without Melt  {fmtIN(ci)}</text>
+        <text x={tipX + 9} y={tipY + 41} fontSize="8.5" fill="var(--primary)" fontWeight="700">With Melt  {mDone ? fmtIN(meltInterest) + ' ✓' : fmtIN(mi)}</text>
+        <rect x={tipX + 7} y={tipY + 49} width={tipW - 14} height={13} rx={4} fill="rgba(22,163,74,.13)" />
+        <text x={tipX + 11} y={tipY + 59} fontSize="7.5" fill="#15803D" fontWeight="700">Saved  {fmtIN(saved)}</text>
+      </g>
+    );
+  }
+
+  return (
+    <svg viewBox={`0 0 ${CCW} ${CCH}`} style={{ width: '100%', cursor: 'crosshair', userSelect: 'none', overflow: 'visible' }}
+      onMouseMove={e => setHov(ccHover(e, true))}
+      onMouseLeave={() => setHov(null)}
+      onTouchMove={e => { e.preventDefault(); setHov(ccHover(e, false)); }}
+      onTouchEnd={() => setHov(null)}
+    >
+      <defs>
+        <filter id="tc2" x="-20%" y="-20%" width="140%" height="150%">
+          <feDropShadow dx="0" dy="3" stdDeviation="5" floodColor="#00000018" />
+        </filter>
+        <filter id="badgeShadow" x="-10%" y="-10%" width="120%" height="140%">
+          <feDropShadow dx="0" dy="3" stdDeviation="6" floodColor="#00000025" />
+        </filter>
+      </defs>
+
+      {/* grid lines + y-axis labels */}
+      {yLabels.map((v, i) => {
+        const y = ccY(v, maxInt);
+        return <g key={i}>
+          <line x1={CCPL} y1={y} x2={CCW - CCPR} y2={y} stroke="#EBEBF0" strokeWidth="1" />
+          <text x={CCPL - 5} y={y + 3} fontSize="7.5" fill="#B0AECA" textAnchor="end" fontWeight="500">{fmtShort(v)}</text>
+        </g>;
+      })}
+
+      {/* x-axis labels */}
+      {xLabels.map((m, i) => (
+        <text key={i} x={ccX(m, totalMonths)} y={CCH - CCPB + 14} fontSize="7.5" fill="#B0AECA" textAnchor="middle" fontWeight="500">{m}</text>
+      ))}
+
+      {/* green gap area */}
+      <path d={gapPath} fill="rgba(22,163,74,0.13)" />
+
+      {/* pink under-card area */}
+      <path d={cardPath ? `${cardPath} L${ccX(animMonths, totalMonths).toFixed(1)},${ccY(0, maxInt).toFixed(1)} L${ccX(0, totalMonths).toFixed(1)},${ccY(0, maxInt).toFixed(1)} Z` : ''} fill="rgba(232,69,60,0.07)" />
+
+      {/* curves */}
+      <path d={cardPath} stroke="#E8453C" strokeWidth="3" fill="none" strokeLinecap="round" strokeLinejoin="round" />
+      <path d={meltPath} stroke="var(--primary)" strokeWidth="3" fill="none" strokeLinecap="round" strokeLinejoin="round" />
+
+      {/* savings callout badge */}
+      {animPct > 0.85 && (
+        <g style={{ animation: 'fadeIn .3s' }}>
+          {/* arrow */}
+          <path
+            d={`M${arrowStartX.toFixed(1)},${arrowStartY.toFixed(1)} C${arrowStartX.toFixed(1)},${(arrowStartY + 22).toFixed(1)} ${arrowTipX.toFixed(1)},${(arrowTipY - 18).toFixed(1)} ${arrowTipX.toFixed(1)},${arrowTipY.toFixed(1)}`}
+            stroke="#16A34A" strokeWidth="1.8" fill="none" strokeLinecap="round"
+            markerEnd="url(#arrowHead)"
+          />
+          <defs>
+            <marker id="arrowHead" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto">
+              <path d="M0,0 L0,6 L6,3 Z" fill="#16A34A" />
+            </marker>
+          </defs>
+          {/* badge */}
+          <rect x={badgeX} y={badgeY} width={badgeW} height={badgeH} rx={8} fill="#16A34A" filter="url(#badgeShadow)" />
+          <text x={badgeX + badgeW / 2} y={badgeY + 13} fontSize="7" fill="rgba(255,255,255,0.85)" fontWeight="700" textAnchor="middle" letterSpacing="0.6">YOU SAVE IN INTEREST</text>
+          <text x={badgeX + badgeW / 2} y={badgeY + 28} fontSize="13" fill="#fff" fontWeight="800" textAnchor="middle">{fmtIN(intSaved)}</text>
+        </g>
+      )}
+
+      {tip}
+    </svg>
+  );
+}
+
+// ── UI Components ─────────────────────────────────────────────────
+function Card({ children }) {
+  return <div style={{ background: '#fff', borderRadius: 18, padding: '16px 16px 14px', marginTop: 14, boxShadow: '0 10px 26px -22px rgba(40,30,80,.5)' }}>{children}</div>;
+}
+function CardTitle({ children }) {
+  return <div style={{ fontWeight: 700, fontSize: 15, lineHeight: 1.25, marginBottom: 14 }}>{children}</div>;
+}
+function Caption({ children }) {
+  return <div style={{ fontSize: 11, color: 'var(--muted)', textAlign: 'center', marginTop: 8 }}>{children}</div>;
+}
+function Row({ label, value }) {
+  return (
+    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px 0' }}>
+      <span style={{ fontSize: 14, color: 'var(--ink-2)' }}>{label}</span>
+      <span style={{ fontWeight: 800, fontSize: 18, color: 'var(--green)', whiteSpace: 'nowrap' }}>{value}</span>
+    </div>
+  );
+}
+function Mini({ tone, label, rate, time, interest }) {
+  const isRed = tone === 'red';
+  const c      = isRed ? 'var(--red)'     : 'var(--primary)';
+  const bg     = isRed ? '#FDEDE8'        : '#EDE8FF';
+  const border = isRed ? '#F5BDB5'        : '#C4B5FD';
+  const muted  = '#666';
+  return (
+    <div style={{ flex: 1, background: bg, border: `1px solid ${border}`, borderRadius: 14, padding: '12px 13px', textAlign: 'center' }}>
+      <div style={{ fontWeight: 700, fontSize: 14, color: c }}>{label}</div>
+      <div style={{ fontSize: 11, fontWeight: 600, color: muted, marginTop: 2 }}>{rate}</div>
+      <div style={{ fontSize: 10, fontWeight: 700, color: muted, letterSpacing: 0.5, marginTop: 10 }}>TOTAL INTEREST</div>
+      <div style={{ fontWeight: 800, fontSize: 18, color: c, marginTop: 1 }}>{interest}</div>
+      <div style={{ fontSize: 10, fontWeight: 700, color: muted, letterSpacing: 0.5, marginTop: 8 }}>TIMEFRAME</div>
+      <div style={{ fontWeight: 800, fontSize: 18, color: c, marginTop: 1 }}>{time}</div>
+    </div>
+  );
+}
+function Legend({ items }) {
+  return (
+    <div style={{ display: 'flex', gap: 18, justifyContent: 'center', marginTop: 12 }}>
+      {items.map(([c, l], i) => (
+        <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12, color: 'var(--ink-2)', fontWeight: 600 }}>
+          <span style={{ width: 9, height: 9, borderRadius: 999, background: c }} />{l}
+        </div>
+      ))}
+    </div>
+  );
+}
+
+// ── Screen ────────────────────────────────────────────────────────
+function Visualise({ go, ccrfRate = 22, monthly = 30000 }) {
+  const { cardAmort, meltAmort } = React.useMemo(() => ({
+    cardAmort: buildAmort(VIZ_DUE, monthly, CARD_RATE_PCT),
+    meltAmort: buildAmort(VIZ_DUE, monthly, MELT_RATE_PCT),
+  }), [monthly]);
+
+  const cardMonths   = cardAmort.months;
+  const meltMonths   = meltAmort.months;
+  const cardInterest = cardAmort.totalInt;
+  const meltInterest = meltAmort.totalInt;
+  const intSaved     = cardInterest - meltInterest;
+  const moSaved      = cardMonths - meltMonths;
+
+  // Pad melt balance/interest arrays to card length
+  const meltBalPadded = [...meltAmort.balArr, ...Array(Math.max(0, cardMonths - meltAmort.months)).fill(0)];
+  const meltIntPadded = [...meltAmort.intArr, ...Array(Math.max(0, cardMonths - meltAmort.months)).fill(meltInterest)];
+
+  return (
+    <div style={{ minHeight: '100%', background: 'linear-gradient(180deg,#EFEEFE,#E7E3FA)', animation: 'fadeIn .35s' }}>
+      <Header title="Savings illustration" onBack={() => go('eligibility')} />
+      <div style={{ padding: '4px 18px 30px' }}>
+        <Chip tone="plain" icon={Icon.shield('var(--primary)')}>Eligibility + Savings</Chip>
+        <div style={{ fontSize: 13.5, color: 'var(--ink-2)', marginTop: 14 }}>Your Outstanding Credit Card Due</div>
+        <div style={{ fontWeight: 800, fontSize: 34, color: 'var(--primary)', letterSpacing: -0.5 }}>{inr(VIZ_DUE)}</div>
+        <div style={{ fontSize: 12.5, color: 'var(--muted)', marginTop: 4 }}>based on a monthly credit card payment of {inr(monthly)}</div>
+
+        <div style={{ display: 'flex', gap: 10, marginTop: 14 }}>
+          <Mini tone="red"  label="On Your Current Credit Card" rate={`${CARD_RATE_PCT}%(45% p.a.+18% GST)`} time={`${cardMonths} months`} interest={inr(cardInterest)} />
+          <Mini tone="blue" label="With Melt" rate={`${MELT_RATE_PCT}% p.a.`} time={`${meltMonths} months`} interest={inr(meltInterest)} />
+        </div>
+
+        <div style={{ background: 'var(--green-l)', borderRadius: 18, padding: '16px 17px', marginTop: 14 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 9 }}>
+            <div style={{ width: 26, height: 26, borderRadius: 999, background: 'var(--green)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>{Icon.check('#fff', 16)}</div>
+            <span style={{ fontWeight: 800, fontSize: 16 }}>Total Potential Savings With Melt</span>
+          </div>
+          <Row label="Interest Saved" value={inr(intSaved)} />
+          <div style={{ height: 1, background: 'rgba(31,169,113,.18)', margin: '2px 0' }} />
+          <Row label="Time Saved" value={`${moSaved} months`} />
+        </div>
+
+        <Card>
+          <div style={{ fontWeight: 800, fontSize: 16, color: 'var(--ink)', lineHeight: 1.25, marginBottom: 4 }}>Interest paid over time: On Your Current Credit Card vs With Melt</div>
+          <CumulativeChart cardInt={cardAmort.intArr} meltInt={meltIntPadded} cardMonths={cardMonths} meltMonths={meltMonths} meltInterest={meltInterest} intSaved={intSaved} />
+          <Legend items={[['#E8453C', `Credit Card (${CARD_RATE_PCT}% p.a.)`], ['var(--primary)', `With Melt (${MELT_RATE_PCT}% p.a.)`]]} />
+        </Card>
+
+        <Card>
+          <CardTitle>Repayment Journey Over Time: On Your Current Credit Card v/s With Melt</CardTitle>
+          <BalanceChart cardBal={cardAmort.balArr} meltBal={meltBalPadded} cardMonths={cardMonths} meltMonths={meltMonths} />
+          <Legend items={[['var(--red)', `Credit Card (${CARD_RATE_PCT}% p.a.)`], ['var(--primary)', `Melt (${MELT_RATE_PCT}% p.a.)`]]} />
+        </Card>
+
+        <div style={{ fontSize: 11.5, color: 'var(--muted)', textAlign: 'center', marginTop: 16, lineHeight: 1.4, padding: '0 10px' }}>
+          Estimated interest is calculated assuming an annual rate of 54%, including 3–4% monthly interest (up to 45% p.a.) and 18% GST on the interest charged. Actual charges may vary.
+        </div>
+      </div>
+    </div>
+  );
+}
+
+window.Visualise = Visualise;
