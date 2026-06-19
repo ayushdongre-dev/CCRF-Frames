@@ -614,7 +614,21 @@ function SavingsScreen({ go, monthly = 30000, setMonthly }) {
           </div>
         </div>
 
-        {/* 4. two stat chips */}
+        {/* 4. comparison card */}
+        <div style={{ padding: '12px 20px 0' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 7 }}>
+            <div style={{ fontFamily: 'Plus Jakarta Sans, sans-serif', fontSize: 11, fontWeight: 800, letterSpacing: 0.8, color: MELT.muted3 }}>TOTAL INTEREST YOU'D PAY</div>
+            <button onClick={() => go('visualise')} style={{ display: 'inline-flex', alignItems: 'center', gap: 5, fontFamily: 'Plus Jakarta Sans, sans-serif', fontSize: 13, fontWeight: 800, color: MELT.purple }}>
+              Visualise how {Icon.arrowR(MELT.purple)}
+            </button>
+          </div>
+          <div style={{ background: '#fff', borderRadius: 10, padding: 16, boxShadow: '0 10px 26px -20px rgba(40,30,80,.45)', display: 'flex', flexDirection: 'column', gap: 12, border: '1px solid #EFEAFD' }}>
+            <MeltCompareRow label="Your cards now" rate={54} total={inr(animCardsInt)} frac={1} color={MELT.red} playKey={playKey} />
+            <MeltCompareRow label="With Melt" rate={25} total={inr(animMeltInt)} frac={cardsInt > 0 ? meltInt / cardsInt : 0.25} color={MELT.purple} playKey={playKey} delay={160} />
+          </div>
+        </div>
+
+        {/* 5. two stat chips */}
         <div style={{ display: 'flex', gap: 8, padding: '14px 20px 0' }}>
           <div style={{ flex: 1, height: 80, borderRadius: 14, background: MELT.purpleL, border: `1px solid ${MELT.purpleBorder}`, padding: '12px 13px', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 7 }}>
@@ -629,20 +643,6 @@ function SavingsScreen({ go, monthly = 30000, setMonthly }) {
               <span style={{ fontWeight: 800, fontSize: 20, color: MELT.ink, whiteSpace: 'nowrap' }}>{animMonthsDiff} months</span>
             </div>
             <div style={{ fontSize: 12, color: MELT.muted2, marginTop: 5 }}>sooner debt-free</div>
-          </div>
-        </div>
-
-        {/* 5. comparison card */}
-        <div style={{ padding: '12px 20px 0' }}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 7 }}>
-            <div style={{ fontFamily: 'Plus Jakarta Sans, sans-serif', fontSize: 11, fontWeight: 800, letterSpacing: 0.8, color: MELT.muted3 }}>TOTAL INTEREST YOU'D PAY</div>
-            <button onClick={() => go('visualise')} style={{ display: 'inline-flex', alignItems: 'center', gap: 5, fontFamily: 'Plus Jakarta Sans, sans-serif', fontSize: 13, fontWeight: 800, color: MELT.purple }}>
-              Visualise how {Icon.arrowR(MELT.purple)}
-            </button>
-          </div>
-          <div style={{ background: '#fff', borderRadius: 10, padding: 16, boxShadow: '0 10px 26px -20px rgba(40,30,80,.45)', display: 'flex', flexDirection: 'column', gap: 12, border: '1px solid #EFEAFD' }}>
-            <MeltCompareRow label="Your cards now" rate={54} total={inr(animCardsInt)} frac={1} color={MELT.red} playKey={playKey} />
-            <MeltCompareRow label="With Melt" rate={25} total={inr(animMeltInt)} frac={cardsInt > 0 ? meltInt / cardsInt : 0.25} color={MELT.purple} playKey={playKey} delay={160} />
           </div>
         </div>
 
