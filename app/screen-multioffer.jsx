@@ -1,61 +1,9 @@
-// screen-multioffer.jsx — Eligibility result screen
+// screen-multioffer.jsx — Choose how to use your offer
 function MultiOffer({ go }) {
-  const benefitTiles = [
-    {
-      icon: (
-        <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
-          <circle cx="16" cy="16" r="13" stroke="#1A7A4A" strokeWidth="1.6" strokeDasharray="3 2" opacity="0.35"/>
-          <circle cx="16" cy="16" r="8" fill="#E8F8EE"/>
-          <path d="M16 10v6l3.5 2" stroke="#1A7A4A" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
-          <path d="M10.5 21.5l3-3" stroke="#1A7A4A" strokeWidth="1.6" strokeLinecap="round"/>
-          <circle cx="16" cy="16" r="2.5" fill="#1A7A4A"/>
-          <path d="M20 8.5c2.5 1.4 4 4 4 7a8 8 0 0 1-16 0c0-3 1.5-5.6 4-7" stroke="#1A7A4A" strokeWidth="1.6" strokeLinecap="round"/>
-          <path d="M13.5 11.5l1.5 3 3-4.5" stroke="#1A7A4A" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"/>
-        </svg>
-      ),
-      label: 'Save up to\n70% on\nInterest',
-      color: '#1A7A4A',
-    },
-    {
-      icon: (
-        <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
-          <rect x="5" y="9" width="18" height="12" rx="3" fill="#EDE8FF" stroke="#5B3FD4" strokeWidth="1.6"/>
-          <rect x="9" y="13" width="18" height="12" rx="3" fill="#fff" stroke="#5B3FD4" strokeWidth="1.6"/>
-          <line x1="9" y1="17" x2="27" y2="17" stroke="#5B3FD4" strokeWidth="1.4"/>
-          <rect x="11" y="19" width="5" height="2.5" rx="1" fill="#5B3FD4" opacity="0.5"/>
-        </svg>
-      ),
-      label: 'Convert\nmultiple bills\ninto one',
-      color: '#5B3FD4',
-    },
-    {
-      icon: (
-        <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
-          <rect x="5" y="7" width="18" height="17" rx="3" fill="#FFF8EC" stroke="#E8A020" strokeWidth="1.6"/>
-          <line x1="5" y1="12" x2="23" y2="12" stroke="#E8A020" strokeWidth="1.4"/>
-          <line x1="9" y1="5" x2="9" y2="9" stroke="#E8A020" strokeWidth="1.7" strokeLinecap="round"/>
-          <line x1="19" y1="5" x2="19" y2="9" stroke="#E8A020" strokeWidth="1.7" strokeLinecap="round"/>
-          <path d="M21 20h6M24 17v6" stroke="#E8A020" strokeWidth="1.8" strokeLinecap="round"/>
-        </svg>
-      ),
-      label: 'Reduce\nRepayment\nTime',
-      color: '#E8A020',
-    },
-  ];
+  const [selected, setSelected] = React.useState('debt');
 
   return (
     <div style={{ minHeight: '100%', display: 'flex', flexDirection: 'column', background: '#F0EFFE', animation: 'fadeIn .4s' }}>
-      <style>{`
-        @keyframes popIn {
-          0%   { transform: scale(0); opacity: 0; }
-          60%  { transform: scale(1.15); }
-          100% { transform: scale(1); opacity: 1; }
-        }
-        @keyframes slideUp {
-          from { transform: translateY(18px); opacity: 0; }
-          to   { transform: translateY(0);    opacity: 1; }
-        }
-      `}</style>
 
       {/* nav */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '2px 14px 6px', flexShrink: 0 }}>
@@ -66,63 +14,140 @@ function MultiOffer({ go }) {
         <div style={{ width: 38 }} />
       </div>
 
-      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '8px 24px 32px' }}>
-
-        {/* checkmark circle */}
-        <div style={{
-          width: 72, height: 72, borderRadius: 999, background: '#5B3FD4',
-          display: 'flex', alignItems: 'center', justifyContent: 'center',
-          boxShadow: '0 16px 36px -12px rgba(91,63,212,.6)',
-          animation: 'popIn .5s cubic-bezier(.34,1.56,.64,1)',
-        }}>
-          {Icon.check('#fff', 34)}
-        </div>
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', padding: '4px 20px 32px', overflowY: 'auto' }}>
 
         {/* heading */}
-        <div style={{ fontWeight: 800, fontSize: 26, marginTop: 18, letterSpacing: -0.4, textAlign: 'center', animation: 'slideUp .4s .1s both' }}>
-          You're eligible!
-        </div>
-        <div style={{ fontSize: 14, color: '#888', marginTop: 3, animation: 'slideUp .4s .15s both' }}>
-          Your loan offer
+        <div style={{ fontWeight: 800, fontSize: 26, letterSpacing: -0.5, lineHeight: 1.2, marginTop: 8, marginBottom: 18 }}>
+          Choose how to<br />use your offer
         </div>
 
-        {/* amount */}
-        <div style={{ fontWeight: 800, fontSize: 52, color: '#5B3FD4', letterSpacing: -4, marginTop: 8, lineHeight: 1, fontStretch: 'condensed', fontVariantNumeric: 'tabular-nums', animation: 'slideUp .4s .2s both' }}>
-          ₹2,50,000
-        </div>
-
-        {/* recommendation card */}
-        <div style={{
-          marginTop: 28, width: '100%', background: '#fff', borderRadius: 18,
-          padding: '18px 16px 16px', border: '1px solid #E8E4FA',
-          boxShadow: '0 8px 28px -14px rgba(40,30,80,.25)',
-          animation: 'slideUp .4s .28s both',
-        }}>
-          <div style={{ fontSize: 10.5, fontWeight: 700, letterSpacing: 1, color: '#5B3FD4', marginBottom: 10 }}>RECOMMENDATION</div>
-          <div style={{ fontSize: 13.5, color: '#333', lineHeight: 1.55, fontWeight: 500, marginBottom: 16 }}>
-            Your current card debt is <span style={{ color: '#1A1733', fontWeight: 700 }}>₹5,00,000</span>.
+        {/* approved amount */}
+        <div style={{ textAlign: 'center', marginBottom: 20 }}>
+          <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: 1.1, color: '#888', marginBottom: 4 }}>
+            YOU'RE APPROVED FOR
           </div>
-
-          {/* three benefit tiles */}
-          <div style={{ display: 'flex', gap: 8 }}>
-            {benefitTiles.map((t, i) => (
-              <div key={i} style={{
-                flex: 1, borderRadius: 14, border: '1px solid #F0EEF8',
-                background: '#FAFAFE', padding: '14px 8px 12px',
-                display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10,
-                textAlign: 'center',
-              }}>
-                {t.icon}
-                <div style={{
-                  fontSize: 11, fontWeight: 600, color: '#444', lineHeight: 1.4,
-                  whiteSpace: 'pre-line',
-                }}>
-                  {t.label}
-                </div>
-              </div>
-            ))}
+          <div style={{ fontWeight: 800, fontSize: 48, color: '#5B3FD4', letterSpacing: -3, lineHeight: 1, fontVariantNumeric: 'tabular-nums' }}>
+            ₹2,50,000
+          </div>
+          <div style={{ fontSize: 13, color: '#888', marginTop: 5 }}>
+            Pick what works best for you
           </div>
         </div>
+
+        {/* Option 1 — Clear card debt */}
+        <div
+          onClick={() => setSelected('debt')}
+          style={{
+            borderRadius: 18,
+            border: selected === 'debt' ? '2px solid #5B3FD4' : '2px solid #E0DCF5',
+            background: '#fff',
+            padding: '14px 14px 16px',
+            cursor: 'pointer',
+            position: 'relative',
+            transition: 'border-color .15s',
+          }}
+        >
+          {/* RECOMMENDED badge */}
+          <div style={{
+            position: 'absolute', top: -1, right: 14,
+            background: '#5B3FD4', color: '#fff',
+            fontSize: 9.5, fontWeight: 700, letterSpacing: 0.8,
+            padding: '3px 9px', borderRadius: '0 0 8px 8px',
+          }}>
+            RECOMMENDED
+          </div>
+
+          {/* row: checkmark + label */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 12 }}>
+            <div style={{
+              width: 22, height: 22, borderRadius: 999,
+              background: selected === 'debt' ? '#5B3FD4' : 'transparent',
+              border: selected === 'debt' ? 'none' : '2px solid #ccc',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              flexShrink: 0,
+            }}>
+              {selected === 'debt' && (
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                  <path d="M2 6l3 3 5-5" stroke="#fff" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+              )}
+            </div>
+            <div>
+              <div style={{ fontWeight: 700, fontSize: 15.5, color: '#1A1733', lineHeight: 1.2 }}>Clear your card debt</div>
+              <div style={{ fontSize: 12.5, color: '#5B3FD4', fontWeight: 600 }}>with melt</div>
+            </div>
+          </div>
+
+          {/* inner info card */}
+          <div style={{
+            background: '#F8F7FE', borderRadius: 12,
+            padding: '12px 14px',
+          }}>
+            <div style={{ fontSize: 12, color: '#888', fontWeight: 600, marginBottom: 4 }}>Your credit card debt</div>
+            <div style={{ fontWeight: 800, fontSize: 26, color: '#1A1733', letterSpacing: -1, lineHeight: 1, fontVariantNumeric: 'tabular-nums', marginBottom: 8 }}>₹5,00,000</div>
+            <div style={{ fontSize: 12, color: '#888', lineHeight: 1.5 }}>
+              Reduce it now at a lower cost, skip paying high interest rate on your credit cards
+            </div>
+          </div>
+        </div>
+
+        {/* OR divider */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10, margin: '14px 0' }}>
+          <div style={{ flex: 1, height: 1, background: '#DDD' }} />
+          <div style={{ fontSize: 12, fontWeight: 600, color: '#AAA' }}>OR</div>
+          <div style={{ flex: 1, height: 1, background: '#DDD' }} />
+        </div>
+
+        {/* Option 2 — Cash loan */}
+        <div
+          onClick={() => setSelected('cash')}
+          style={{
+            borderRadius: 18,
+            border: selected === 'cash' ? '2px solid #5B3FD4' : '2px solid #E0DCF5',
+            background: '#fff',
+            padding: '16px 14px',
+            cursor: 'pointer',
+            display: 'flex', alignItems: 'center', gap: 12,
+            transition: 'border-color .15s',
+          }}
+        >
+          {/* radio */}
+          <div style={{
+            width: 22, height: 22, borderRadius: 999,
+            background: selected === 'cash' ? '#5B3FD4' : 'transparent',
+            border: selected === 'cash' ? 'none' : '2px solid #ccc',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            flexShrink: 0,
+          }}>
+            {selected === 'cash' && (
+              <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                <path d="M2 6l3 3 5-5" stroke="#fff" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            )}
+          </div>
+
+          <div style={{ flex: 1 }}>
+            <div style={{ fontWeight: 700, fontSize: 15.5, color: '#1A1733' }}>Cash loan</div>
+            <div style={{ fontSize: 12.5, color: '#888', marginTop: 2 }}>
+              Instant cash, <span style={{ color: '#5B3FD4', fontWeight: 600 }}>any purpose</span>
+            </div>
+          </div>
+
+          {/* card icon */}
+          <div style={{
+            width: 38, height: 38, borderRadius: 10,
+            background: '#F0EFFE',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            flexShrink: 0,
+          }}>
+            <svg width="20" height="16" viewBox="0 0 20 16" fill="none">
+              <rect x="1" y="1" width="18" height="14" rx="3" stroke="#5B3FD4" strokeWidth="1.6"/>
+              <line x1="1" y1="5.5" x2="19" y2="5.5" stroke="#5B3FD4" strokeWidth="1.4"/>
+              <rect x="3" y="8.5" width="5" height="2.5" rx="1" fill="#5B3FD4" opacity="0.45"/>
+            </svg>
+          </div>
+        </div>
+
       </div>
 
       {/* CTA */}
@@ -138,7 +163,7 @@ function MultiOffer({ go }) {
           onMouseUp={e => e.currentTarget.style.transform = 'scale(1)'}
           onMouseLeave={e => e.currentTarget.style.transform = 'scale(1)'}
         >
-          Know how much you can save {Icon.arrowR('#fff')}
+          Continue {Icon.arrowR('#fff')}
         </button>
       </BottomBar>
     </div>
