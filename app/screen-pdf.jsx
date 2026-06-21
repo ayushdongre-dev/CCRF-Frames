@@ -1,98 +1,137 @@
-// screen-pdf.jsx — PDF Upload (Design 1: latest statement per card)
+// screen-pdf.jsx — Interest explanation
 function PdfUpload({ go, selected, showLogos }) {
-  const cards = CARD_DATA.filter(c => selected.includes(c.bank));
-  const [uploaded, setUploaded] = useState({});
-  const doneCount = Object.values(uploaded).filter(Boolean).length;
-  const activeIdx = cards.findIndex(c => !uploaded[c.bank]);
-
-  const upload = (bank) => {
-    setUploaded(u => ({ ...u, [bank]: `${BANKS[bank].short}_stmt_Dec.pdf` }));
-  };
-
   return (
-    <div style={{ minHeight: '100%', display: 'flex', flexDirection: 'column', animation: 'fadeIn .35s' }}>
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '4px 16px 6px' }}>
-        <button onClick={() => go('eligibility')} style={{ width: 38, height: 38, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>{Icon.back()}</button>
-        <button style={{ fontSize: 13, fontWeight: 700, color: 'var(--primary)', letterSpacing: 0.5, paddingRight: 6 }}>HELP</button>
-      </div>
+    <div style={{
+      minHeight: '100%', background: '#fff', animation: 'fadeIn .25s',
+      color: '#2F2E33', display: 'flex', justifyContent: 'center',
+    }}>
+      <div style={{
+        width: 720, height: 541, flexShrink: 0, padding: '0 0 54px',
+        transform: 'scale(.5)', transformOrigin: 'top center',
+      }}>
+        <div style={{
+          width: 72, height: 8, borderRadius: 999, background: '#CFCBC3',
+          margin: '20px auto 32px',
+        }} />
 
-      <div style={{ padding: '6px 22px 0', flex: 1 }}>
-        <div style={{ fontWeight: 800, fontSize: 27, lineHeight: 1.15, letterSpacing: -0.4 }}>We need your credit card statements</div>
+        <div style={{
+          display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+          margin: '0 36px 34px',
+        }}>
+          <div style={{ fontSize: 30, lineHeight: 1, fontWeight: 800 }}>Why 54%?</div>
+          <button onClick={() => go('visualise')} style={{
+            color: '#514ABA', fontSize: 28, fontWeight: 800, lineHeight: 1,
+            padding: '2px 0 0 12px',
+          }}>Close</button>
+        </div>
 
-        <div style={{ display: 'flex', gap: 10, alignItems: 'flex-start', background: '#EEF3FE', borderRadius: 13, padding: '12px 13px', marginTop: 16 }}>
-          <div style={{ flexShrink: 0, marginTop: 1 }}>{Icon.help('#3B6FE0')}</div>
-          <div style={{ fontSize: 12.5, color: 'var(--ink-2)', lineHeight: 1.45 }}>
-            Please upload the latest PDF statement of 2 months for each listed card to verify your actual card debt.
+        <section style={{
+          background: '#1C1833', borderRadius: 30, padding: '31px 32px 35px',
+          color: '#fff', minHeight: 174, margin: '0 36px',
+          display: 'grid', gridTemplateColumns: '1fr 214px', columnGap: 16,
+          alignItems: 'center',
+        }}>
+        <div style={{ minWidth: 0 }}>
+          <div style={{
+            color: '#B6ADF2', fontSize: 22, fontWeight: 700,
+            letterSpacing: 2.1, textTransform: 'uppercase', marginBottom: 10,
+          }}>Effective annual cost</div>
+          <div style={{ display: 'flex', alignItems: 'baseline', gap: 8 }}>
+            <span style={{ fontSize: 72, lineHeight: .92, fontWeight: 800 }}>53.1%</span>
+            <span style={{ color: '#A9A79E', fontSize: 26, fontWeight: 800 }}>p.a.</span>
           </div>
         </div>
-
-        {/* timeline */}
-        <div style={{ marginTop: 22, position: 'relative' }}>
-          {cards.map((c, i) => {
-            const b = BANKS[c.bank];
-            const isUp = !!uploaded[c.bank];
-            const isActive = i === activeIdx;
-            const last = i === cards.length - 1;
-            return (
-              <div key={c.bank} style={{ display: 'flex', gap: 14, position: 'relative', paddingBottom: last ? 0 : 18 }}>
-                {!last && <div style={{ position: 'absolute', left: 12, top: 26, bottom: 2, width: 2, background: isUp ? 'var(--primary)' : 'var(--line)' }} />}
-                {/* status node */}
-                <div style={{
-                  width: 26, height: 26, borderRadius: 999, flexShrink: 0, zIndex: 1, marginTop: 2,
-                  background: isUp ? 'var(--primary)' : '#fff',
-                  boxShadow: isUp ? 'none' : isActive ? 'inset 0 0 0 2px var(--primary)' : 'inset 0 0 0 2px var(--line)',
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                }}>
-                  {isUp ? Icon.check('#fff', 16) : <span style={{ width: 8, height: 8, borderRadius: 999, background: isActive ? 'var(--primary)' : 'var(--line)' }} />}
-                </div>
-
-                <div style={{ flex: 1 }}>
-                  {isActive && !isUp && (
-                    <div style={{ fontSize: 12, fontWeight: 600, color: 'var(--primary)', marginBottom: 7 }}>Please upload statement for {b.short} Bank</div>
-                  )}
-                  <div style={{
-                    background: '#fff', borderRadius: 16, padding: '14px 15px',
-                    boxShadow: isActive && !isUp ? '0 0 0 2px var(--primary), 0 14px 26px -18px rgba(127,85,223,.4)' : '0 0 0 1px var(--line)',
-                  }}>
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                        <BankLogo id={c.bank} size={30} show={showLogos} />
-                        <span style={{ fontWeight: 700, fontSize: 15 }}>{b.short} {c.bank === 'SBI' ? 'Card' : 'Bank'}</span>
-                      </div>
-                      <span style={{ fontSize: 11, color: 'var(--muted)', fontWeight: 600 }}>•••• {c.last4}</span>
-                    </div>
-                    <div style={{ fontSize: 12, color: 'var(--ink-2)', marginTop: 8 }}>
-                      Credit Utilised: <b>{inr(c.due)}</b> / {inr(c.limit)}
-                    </div>
-                    {isUp ? (
-                      <div style={{ display: 'flex', alignItems: 'center', gap: 9, background: 'var(--green-l)', borderRadius: 12, padding: '11px 13px', marginTop: 12 }}>
-                        {Icon.doc('var(--green)')}
-                        <span style={{ fontSize: 12.5, fontWeight: 600, color: 'var(--ink-2)', flex: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{uploaded[c.bank]}</span>
-                        <button onClick={() => setUploaded(u => ({ ...u, [c.bank]: false }))} style={{ fontSize: 11.5, fontWeight: 700, color: 'var(--green)' }}>Replace</button>
-                      </div>
-                    ) : (
-                      <button onClick={() => upload(c.bank)} style={{
-                        width: '100%', marginTop: 12, height: 44, borderRadius: 12, background: 'var(--primary-l)',
-                        color: 'var(--primary)', fontWeight: 700, fontSize: 14, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
-                      }}>{Icon.upload('var(--primary)')} Choose PDF</button>
-                    )}
-                  </div>
-                </div>
-              </div>
-            );
-          })}
+        <div style={{
+          textAlign: 'right', color: '#AAA79E', fontSize: 24,
+          lineHeight: 1.36, fontWeight: 800, flexShrink: 0,
+        }}>
+          <div>on ₹1L unpaid</div>
+          <div>for a year</div>
+          <div style={{ color: '#F6F5F2', marginTop: 4 }}>₹53,100 gone</div>
         </div>
+        </section>
+
+        <section style={{
+          background: '#F0EEFC', borderRadius: 26, margin: '28px 36px 0',
+          padding: '28px 28px 32px',
+        }}>
+          <CostBlock
+            title="Monthly · on ₹1L balance"
+            rows={[
+              { dot: '#DF6137', label: 'Interest at 3.75%/month', value: '₹3,750' },
+              { dot: '#564ABA', label: '+ 18% GST on interest', value: '₹675' },
+            ]}
+            totalLabel="Monthly cost"
+            totalValue="₹4,425"
+          />
+
+          <div style={{ display: 'flex', alignItems: 'center', gap: 16, margin: '18px 0 26px' }}>
+            <div style={{ height: 1, background: '#CEC9C2', flex: 1 }} />
+            <div style={{ color: '#AAA79E', fontSize: 22, fontWeight: 700 }}>×12 months</div>
+            <div style={{ height: 1, background: '#CEC9C2', flex: 1 }} />
+          </div>
+
+          <CostBlock
+            title="Annually · on ₹1L balance"
+            rows={[
+              { dot: '#DF6137', label: 'Interest at 45%/year', value: '₹45,000' },
+              { dot: '#564ABA', label: '+ 18% GST on interest', value: '₹8,100' },
+            ]}
+            totalLabel="Annual cost"
+            totalValue="₹53,100"
+          />
+        </section>
+
+        <section style={{
+          margin: '24px 36px 0', background: '#E9F4DF', borderRadius: 23,
+          minHeight: 113, padding: '24px 30px', display: 'flex',
+          alignItems: 'flex-start', gap: 16, color: '#1F5511',
+        }}>
+          <div style={{
+            width: 30, height: 30, borderRadius: 999, border: '3px solid #387E20',
+            flexShrink: 0, display: 'flex', alignItems: 'center',
+            justifyContent: 'center', marginTop: 1,
+          }}>
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none">
+              <path d="M5.5 12.4l4.1 4.1 9-9" stroke="#387E20" strokeWidth="3.2" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </div>
+          <div style={{ fontSize: 27, lineHeight: 1.25, fontWeight: 500 }}>
+            <b style={{ fontWeight: 800 }}>Pay full bill by due date</b> — and you pay zero interest, ever.
+          </div>
+        </section>
+      </div>
+    </div>
+  );
+}
+
+function CostBlock({ title, rows, totalLabel, totalValue }) {
+  return (
+    <div>
+      <div style={{
+        color: '#8177E3', fontSize: 21, lineHeight: 1.1,
+        fontWeight: 800, textTransform: 'uppercase',
+        letterSpacing: 1.6, marginBottom: 24,
+      }}>{title}</div>
+
+      <div style={{ display: 'grid', gap: 18 }}>
+        {rows.map((row) => (
+          <div key={row.label} style={{
+            display: 'grid', gridTemplateColumns: '20px minmax(0, 1fr) auto',
+            alignItems: 'center', columnGap: 13,
+          }}>
+            <span style={{ width: 16, height: 16, borderRadius: 999, background: row.dot }} />
+            <span style={{ color: '#5D5B5A', fontSize: 27, lineHeight: 1.12, fontWeight: 700 }}>{row.label}</span>
+            <span style={{ color: '#2F2E33', fontSize: 28, lineHeight: 1, fontWeight: 800 }}>{row.value}</span>
+          </div>
+        ))}
       </div>
 
-      <div style={{ position: 'sticky', bottom: 0, background: 'rgba(244,243,251,.92)', backdropFilter: 'blur(14px)', borderTop: '1px solid var(--line)', padding: '13px 22px 26px' }}>
-        <div style={{ fontSize: 12, fontWeight: 600, color: 'var(--ink-2)', marginBottom: 7 }}>{doneCount} of {cards.length} uploaded</div>
-        <div style={{ height: 4, borderRadius: 9, background: 'var(--line)', overflow: 'hidden', marginBottom: 14 }}>
-          <div style={{ height: '100%', width: (doneCount / cards.length * 100) + '%', background: 'var(--primary)', borderRadius: 9, transition: 'width .3s' }} />
-        </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
-          <button onClick={() => go('success')} style={{ fontSize: 14, fontWeight: 700, color: 'var(--ink-2)', whiteSpace: 'nowrap' }}>I'll provide later</button>
-          <Btn variant="dark" onClick={() => go('success')} style={{ flex: 1, opacity: doneCount === cards.length ? 1 : 0.92 }}>Continue</Btn>
-        </div>
+      <div style={{ height: 1, background: '#CEC9C2', margin: '26px 0 20px' }} />
+
+      <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between' }}>
+        <span style={{ color: '#2F2E33', fontSize: 27, lineHeight: 1, fontWeight: 800 }}>{totalLabel}</span>
+        <span style={{ color: '#5B50C8', fontSize: 35, lineHeight: 1, fontWeight: 800 }}>{totalValue}</span>
       </div>
     </div>
   );

@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    {
+      "source": "/",
+      "destination": "/CCRF%20Flow.html"
+    }
+  ]
+}

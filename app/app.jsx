@@ -15,6 +15,11 @@ const LABELS = {
 function App() {
   const [t, setTweak] = useTweaks(TWEAK_DEFAULTS);
   const [route, setRoute] = useState(() => {
+    const requested = new URLSearchParams(window.location.search).get('route');
+    if (requested && ORDER.includes(requested)) {
+      localStorage.setItem('ccrf_route', requested);
+      return requested;
+    }
     const saved = localStorage.getItem('ccrf_route');
     return (saved && ORDER.includes(saved)) ? saved : 'home';
   });
@@ -52,6 +57,7 @@ function App() {
   const light = route === 'selling';
   const bg = route === 'savings' ? '#F7F7FC'
     : route === 'eligibility' ? '#F7F7FB'
+    : route === 'pdf' ? '#fff'
     : (route === 'selling' || route === 'visualise' || route === 'success') ? '#EFEEFE'
     : 'var(--bg)';
 
@@ -83,7 +89,7 @@ function App() {
         })}
       </div>
 
-      <Phone light={light} bg={bg}>{screen}</Phone>
+      <Phone light={light} bg={bg} clean={route === 'pdf'}>{screen}</Phone>
 
       <TweaksPanel title="Tweaks">
         <TweakSection label="Brand" />

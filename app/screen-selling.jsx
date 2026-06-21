@@ -614,8 +614,22 @@ function SavingsScreen({ go, monthly = 30000, setMonthly }) {
           </div>
         </div>
 
+        {/* 5. comparison card */}
+        <div style={{ padding: '14px 20px 0' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 7 }}>
+            <div style={{ fontFamily: 'Plus Jakarta Sans, sans-serif', fontSize: 11, fontWeight: 800, letterSpacing: 0.8, color: MELT.muted3 }}>TOTAL INTEREST YOU'D PAY</div>
+            <button onClick={() => go('visualise')} style={{ display: 'inline-flex', alignItems: 'center', gap: 5, fontFamily: 'Plus Jakarta Sans, sans-serif', fontSize: 13, fontWeight: 800, color: MELT.purple }}>
+              Visualise how {Icon.arrowR(MELT.purple)}
+            </button>
+          </div>
+          <div style={{ background: '#fff', borderRadius: 10, padding: 16, boxShadow: '0 10px 26px -20px rgba(40,30,80,.45)', display: 'flex', flexDirection: 'column', gap: 12, border: '1px solid #EFEAFD' }}>
+            <MeltCompareRow label="Your cards now" rate={54} total={inr(animCardsInt)} frac={1} color={MELT.red} playKey={playKey} />
+            <MeltCompareRow label="With Melt" rate={25} total={inr(animMeltInt)} frac={cardsInt > 0 ? meltInt / cardsInt : 0.25} color={MELT.purple} playKey={playKey} delay={160} />
+          </div>
+        </div>
+
         {/* 4. two stat chips */}
-        <div style={{ display: 'flex', gap: 8, padding: '14px 20px 0' }}>
+        <div style={{ display: 'flex', gap: 8, padding: '12px 20px 0' }}>
           <div style={{ flex: 1, height: 80, borderRadius: 14, background: MELT.purpleL, border: `1px solid ${MELT.purpleBorder}`, padding: '12px 13px', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 7 }}>
               {coinDownIcon}
@@ -629,20 +643,6 @@ function SavingsScreen({ go, monthly = 30000, setMonthly }) {
               <span style={{ fontWeight: 800, fontSize: 20, color: MELT.ink, whiteSpace: 'nowrap' }}>{animMonthsDiff} months</span>
             </div>
             <div style={{ fontSize: 12, color: MELT.muted2, marginTop: 5 }}>sooner debt-free</div>
-          </div>
-        </div>
-
-        {/* 5. comparison card */}
-        <div style={{ padding: '12px 20px 0' }}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 7 }}>
-            <div style={{ fontFamily: 'Plus Jakarta Sans, sans-serif', fontSize: 11, fontWeight: 800, letterSpacing: 0.8, color: MELT.muted3 }}>TOTAL INTEREST YOU'D PAY</div>
-            <button onClick={() => go('visualise')} style={{ display: 'inline-flex', alignItems: 'center', gap: 5, fontFamily: 'Plus Jakarta Sans, sans-serif', fontSize: 13, fontWeight: 800, color: MELT.purple }}>
-              Visualise how {Icon.arrowR(MELT.purple)}
-            </button>
-          </div>
-          <div style={{ background: '#fff', borderRadius: 10, padding: 16, boxShadow: '0 10px 26px -20px rgba(40,30,80,.45)', display: 'flex', flexDirection: 'column', gap: 12, border: '1px solid #EFEAFD' }}>
-            <MeltCompareRow label="Your cards now" rate={54} total={inr(animCardsInt)} frac={1} color={MELT.red} playKey={playKey} />
-            <MeltCompareRow label="With Melt" rate={25} total={inr(animMeltInt)} frac={cardsInt > 0 ? meltInt / cardsInt : 0.25} color={MELT.purple} playKey={playKey} delay={160} />
           </div>
         </div>
 
@@ -781,35 +781,60 @@ function SavingsScreen({ go, monthly = 30000, setMonthly }) {
             <div style={{ padding: '16px 16px 24px', overflowY: 'auto', maxHeight: 'calc(90vh - 72px)' }}>
               {sheetOpen === 'interest' ? (
                 <>
-                  <div style={{ fontSize: 14, color: '#5F617A', lineHeight: 1.6 }}>
-                    <div>Credit cards are interest-free only when the total bill amount is paid by the due date.</div>
-                    <div style={{ marginTop: 8 }}>If the full bill is not paid, interest may be charged on the outstanding balance.</div>
-                    <div style={{ marginTop: 8 }}>GST is charged on the interest amount.</div>
-                  </div>
-                  <div style={{ marginTop: 16, background: '#F7F5FF', borderRadius: 16, padding: 14, border: '1px solid #E8E0FF' }}>
-                    <div style={{ fontSize: 12, color: MELT.muted3, fontWeight: 700, textTransform: 'uppercase', letterSpacing: 0.6 }}>Example</div>
-                    <div style={{ marginTop: 8, display: 'grid', gridTemplateColumns: '1fr auto', rowGap: 6, columnGap: 10, fontSize: 13, color: '#2D2B43' }}>
-                      <span>Outstanding Balance</span><strong>₹1,00,000</strong>
-                      <span>Monthly Interest Rate</span><strong>3.75%</strong>
-                      <span>Monthly Interest</span><strong>₹3,750</strong>
-                      <span>GST on Interest</span><strong>₹675</strong>
-                      <span>Total Monthly Cost</span><strong>₹4,425</strong>
+                  <div style={{
+                    borderRadius: 22,
+                    padding: '18px 16px 16px',
+                    color: '#fff',
+                    background: '#171331',
+                    boxShadow: '0 18px 36px -24px rgba(23, 19, 49, 0.9)',
+                  }}>
+                    <div style={{ fontSize: 12, fontWeight: 800, color: '#BEB5F5', textTransform: 'uppercase', letterSpacing: 0.6 }}>
+                      Effective Annual Cost
+                    </div>
+                    <div style={{ marginTop: 8, display: 'flex', alignItems: 'flex-end', gap: 8 }}>
+                      <span style={{ fontSize: 44, fontWeight: 850, lineHeight: 0.95, letterSpacing: 0 }}>53.1%</span>
+                      <span style={{ paddingBottom: 4, fontSize: 15, fontWeight: 750, color: '#DCD7FF' }}>p.a.</span>
+                    </div>
+                    <div style={{ marginTop: 12, height: 1, background: 'rgba(255,255,255,0.12)' }} />
+                    <div style={{ marginTop: 12, fontSize: 14, fontWeight: 650, color: '#F4F1FF', lineHeight: 1.35 }}>
+                      A ₹1,00,000 balance can cost <strong>₹53,100</strong> in one year.
                     </div>
                   </div>
-                  <div style={{ marginTop: 16, background: '#0F0D2E', borderRadius: 18, padding: 14, color: '#fff' }}>
-                    <div style={{ fontSize: 12, fontWeight: 700, color: '#C8BFFF' }}>Annual Cost</div>
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr auto', rowGap: 6, columnGap: 10, fontSize: 13, marginTop: 8 }}>
-                      <span>Interest Charges</span><strong>₹45,000</strong>
-                      <span>GST on Interest</span><strong>₹8,100</strong>
-                      <span style={{ fontWeight: 800, color: '#fff' }}>Total Cost</span><strong style={{ color: '#fff' }}>₹53,100</strong>
+
+                  <div style={{ marginTop: 16, background: '#FFFFFF', borderRadius: 18, padding: 14, border: '1px solid #ECE8F7', boxShadow: '0 12px 28px -24px rgba(24, 21, 47, 0.7)' }}>
+                    <div style={{ fontSize: 12, color: '#78758D', fontWeight: 800, textTransform: 'uppercase', letterSpacing: 0.6 }}>
+                      Monthly cost on ₹1 lakh
                     </div>
-                    <div style={{ marginTop: 12, background: '#1A174A', borderRadius: 12, padding: '10px 12px', fontSize: 13, fontWeight: 700, color: '#F7F4FF' }}>
-                      Effective Annual Cost<br />
-                      <span style={{ fontSize: 24, fontWeight: 800 }}>53.1% p.a.</span>
+                    <div style={{ marginTop: 12, display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 14 }}>
+                      <div style={{ flex: 1 }}>
+                        {[
+                          ['Interest', '₹3,750'],
+                          ['GST on interest', '₹675'],
+                        ].map(([label, value]) => (
+                          <div key={label} style={{ display: 'flex', justifyContent: 'space-between', gap: 12, padding: '8px 0', borderBottom: label === 'Interest' ? '1px solid #F0EDF8' : 'none', fontSize: 13, color: '#555168', fontWeight: 650 }}>
+                            <span>{label}</span>
+                            <strong style={{ color: '#18152F' }}>{value}</strong>
+                          </div>
+                        ))}
+                      </div>
+                      <div style={{
+                        minWidth: 92,
+                        borderRadius: 16,
+                        background: '#F6F3FF',
+                        border: '1px solid #E9E2FF',
+                        padding: '12px 10px',
+                        textAlign: 'center',
+                      }}>
+                        <div style={{ fontSize: 11, color: '#77738E', fontWeight: 800 }}>Total</div>
+                        <div style={{ marginTop: 5, fontSize: 22, color: MELT.purple, fontWeight: 850, lineHeight: 1 }}>
+                          ₹4,425
+                        </div>
+                      </div>
                     </div>
                   </div>
-                  <div style={{ marginTop: 14, background: '#FFF7E8', borderRadius: 14, padding: '12px 14px', fontSize: 13, color: '#5A4A12', lineHeight: 1.5 }}>
-                    Carrying a credit card balance for a long period can significantly increase the total cost of repayment.
+
+                  <div style={{ marginTop: 14, background: '#FFF8EA', borderRadius: 16, padding: '12px 14px', fontSize: 13, color: '#5A4A12', lineHeight: 1.4, fontWeight: 650, border: '1px solid #F5E2BA' }}>
+                    The longer the balance stays unpaid, the more expensive it becomes.
                   </div>
                 </>
               ) : (

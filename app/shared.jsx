@@ -167,7 +167,7 @@ function StatusBar({ light = false }) {
 }
 
 // ── Phone frame ──────────────────────────────────────────────
-function Phone({ children, light = false, bg = 'var(--bg)' }) {
+function Phone({ children, light = false, bg = 'var(--bg)', clean = false }) {
   return (
     <div style={{
       width: 402, height: 858, borderRadius: 52, padding: 5,
@@ -178,18 +178,18 @@ function Phone({ children, light = false, bg = 'var(--bg)' }) {
         width: '100%', height: '100%', borderRadius: 47, overflow: 'hidden',
         background: bg, position: 'relative', display: 'flex', flexDirection: 'column',
       }}>
-        <div style={{
+        {!clean && <div style={{
           position: 'absolute', top: 11, left: '50%', transform: 'translateX(-50%)',
           width: 116, height: 33, borderRadius: 20, background: '#0E0D16', zIndex: 40,
-        }} />
-        <StatusBar light={light} />
+        }} />}
+        {!clean && <StatusBar light={light} />}
         <div className="scr" style={{ flex: 1, overflowY: 'auto', overflowX: 'hidden', position: 'relative' }}>
           {children}
         </div>
-        <div style={{
+        {!clean && <div style={{
           position: 'absolute', bottom: 8, left: '50%', transform: 'translateX(-50%)',
           width: 138, height: 5, borderRadius: 9, background: light ? 'rgba(255,255,255,.6)' : 'rgba(20,16,40,.28)', zIndex: 40,
-        }} />
+        }} />}
       </div>
     </div>
   );
