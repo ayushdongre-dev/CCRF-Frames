@@ -40,6 +40,8 @@ function Eligibility({ go }) {
 
   const [animIn, setAnimIn] = useState(false);
   const [unlockOpen, setUnlockOpen] = useState(false);
+  const [howItWorksOpen, setHowItWorksOpen] = useState(false);
+  const [activeStep, setActiveStep] = useState(0);
   useEffect(() => { const t = setTimeout(() => setAnimIn(true), 80); return () => clearTimeout(t); }, []);
 
   const milestones = [
@@ -83,9 +85,128 @@ function Eligibility({ go }) {
     </div>
   );
 
-  const nodeSize = 38;
-  const nodeOuter = 46;
-  const trackH = 6;
+  const steps = [
+    {
+      title: "1. Get Approved Amount",
+      description: "Take the initial approved amount today to start clearing your high-interest debt.",
+      visual: (
+        <div style={{ position: 'relative', width: 200, height: 120, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <div style={{
+            position: 'absolute',
+            width: 80, height: 80,
+            borderRadius: '50%',
+            background: 'rgba(26, 122, 74, 0.15)',
+            animation: 'pulseGlow 2s infinite ease-in-out',
+            zIndex: 1
+          }} />
+          <div style={{
+            position: 'relative',
+            width: 140, height: 80,
+            background: 'linear-gradient(135deg, #1A7A4A 0%, #115F36 100%)',
+            borderRadius: 14,
+            boxShadow: '0 10px 25px -5px rgba(26,122,74,0.4)',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'space-between',
+            padding: 12,
+            zIndex: 2,
+            border: '1px solid rgba(255, 255, 255, 0.15)',
+            animation: 'float 3s infinite ease-in-out',
+          }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <span style={{ fontSize: 9, fontWeight: 700, color: '#A3F3C9', letterSpacing: 1 }}>APPROVED LIMIT</span>
+              <span style={{ width: 14, height: 14, borderRadius: 99, background: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                {Icon.check('#1A7A4A', 9)}
+              </span>
+            </div>
+            <div style={{ fontSize: 18, fontWeight: 800, color: '#fff', letterSpacing: -0.2 }}>Approved Limit</div>
+            <div style={{ fontSize: 8, color: 'rgba(255,255,255,0.7)', fontWeight: 600 }}>READY TO CLAIM TODAY</div>
+          </div>
+        </div>
+      )
+    },
+    {
+      title: "2. Pay Credit Card Bill",
+      description: "We transfer the unlocked limit directly to your bank account. You then go and pay off your credit card bill by yourself.",
+      visual: (
+        <div style={{ position: 'relative', width: 200, height: 120, display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
+          <div style={{
+            position: 'relative',
+            width: 130, height: 78,
+            background: 'linear-gradient(135deg, #E84040 0%, #9F1C1C 100%)',
+            borderRadius: 12,
+            boxShadow: '0 8px 20px rgba(0,0,0,0.3)',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'space-between',
+            padding: 10,
+            zIndex: 2,
+            border: '1px solid rgba(255, 255, 255, 0.1)',
+            transform: 'rotate(-5deg)',
+            animation: 'howItWorksShake 4s infinite ease-in-out',
+          }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <span style={{ fontSize: 8, fontWeight: 700, color: '#FFB8B8', letterSpacing: 0.5 }}>HIGH INTEREST CARD</span>
+              <span style={{ fontSize: 10, fontWeight: 900, color: '#fff' }}>💳</span>
+            </div>
+            <div style={{ fontSize: 13, fontWeight: 700, color: '#fff' }}>Card Balance</div>
+            <div style={{
+              position: 'absolute', inset: 0, borderRadius: 12,
+              background: 'rgba(26, 122, 74, 0.9)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              color: '#fff', fontWeight: 800, fontSize: 12,
+              opacity: 0,
+              animation: 'paymentFlash 3s infinite ease-in-out',
+            }}>
+              PAID & MELTED!
+            </div>
+          </div>
+          <div style={{ position: 'absolute', left: '15%', bottom: '10%', width: 12, height: 12, borderRadius: '50%', background: '#F5D9A0', border: '1px solid #E8A020', animation: 'coinFly1 3s infinite ease-in-out', zIndex: 3 }} />
+          <div style={{ position: 'absolute', right: '20%', bottom: '15%', width: 10, height: 10, borderRadius: '50%', background: '#F5D9A0', border: '1px solid #E8A020', animation: 'coinFly2 3s infinite ease-in-out', zIndex: 3 }} />
+        </div>
+      )
+    },
+    {
+      title: "3. Come Back & Unlock More",
+      description: "Once your card payment reflects in your credit history, return to Equall to unlock even more of your limit.",
+      visual: (
+        <div style={{ position: 'relative', width: 200, height: 120, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <div style={{
+            position: 'absolute',
+            width: 140, height: 80,
+            borderRadius: '50%',
+            background: 'radial-gradient(circle, rgba(91,63,212,0.3) 0%, transparent 70%)',
+            zIndex: 1,
+            animation: 'glowPulse 2s infinite ease-in-out',
+          }} />
+          <div style={{
+            position: 'relative',
+            width: 130, height: 78,
+            background: 'linear-gradient(135deg, #5B3FD4 0%, #3B249E 100%)',
+            borderRadius: 12,
+            boxShadow: '0 10px 25px rgba(91,63,212,0.3)',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'space-between',
+            padding: 10,
+            zIndex: 2,
+            border: '1px solid rgba(255, 255, 255, 0.15)',
+          }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <span style={{ fontSize: 8, fontWeight: 700, color: '#D4C8FF', letterSpacing: 0.5 }}>LOCKED PORTION</span>
+              <span style={{ fontSize: 12, animation: 'unlockRotate 3s infinite ease-in-out' }}>🔓</span>
+            </div>
+            <div>
+              <div style={{ fontSize: 9, color: '#C4B5FD', fontWeight: 600 }}>TOTAL UNLOCKED</div>
+              <div style={{ fontSize: 17, fontWeight: 800, color: '#fff' }}>More Limit</div>
+            </div>
+          </div>
+          <div style={{ position: 'absolute', top: 15, left: 20, width: 6, height: 6, borderRadius: 99, background: '#FFE082', animation: 'sparkleFloat 2s infinite ease-out' }} />
+          <div style={{ position: 'absolute', bottom: 15, right: 20, width: 8, height: 8, borderRadius: 99, background: '#A3E2C9', animation: 'sparkleFloat 2.5s infinite ease-out', animationDelay: '0.5s' }} />
+        </div>
+      )
+    }
+  ];
 
   return (
     <div style={{ minHeight: '100%', display: 'flex', flexDirection: 'column', background: EL.bg, animation: 'fadeIn .35s' }}>
@@ -109,6 +230,43 @@ function Eligibility({ go }) {
         @keyframes scrollBounce {
           0%, 100% { transform: translateY(0); opacity: .9; }
           50% { transform: translateY(5px); opacity: .5; }
+        }
+        @keyframes howItWorksFadeIn {
+          from { opacity: 0; }
+          to { opacity: 1; }
+        }
+        @keyframes cardSlideUp {
+          from { transform: translateY(20px); opacity: 0; }
+          to { transform: translateY(0); opacity: 1; }
+        }
+        @keyframes howItWorksShake {
+          0%, 100% { transform: translateY(0) rotate(-4deg); }
+          50% { transform: translateY(-4px) rotate(-6deg); }
+        }
+        @keyframes paymentFlash {
+          0%, 40% { opacity: 0; }
+          50%, 90% { opacity: 1; }
+          100% { opacity: 0; }
+        }
+        @keyframes coinFly1 {
+          0% { transform: translate(0, 50px) scale(0.5); opacity: 0; }
+          20% { opacity: 1; }
+          50%, 100% { transform: translate(50px, -35px) scale(1); opacity: 0; }
+        }
+        @keyframes coinFly2 {
+          0% { transform: translate(0, 50px) scale(0.5); opacity: 0; }
+          30% { opacity: 1; }
+          60%, 100% { transform: translate(-35px, -45px) scale(1); opacity: 0; }
+        }
+        @keyframes unlockRotate {
+          0%, 40% { transform: scale(1) rotate(0deg); }
+          50%, 90% { transform: scale(1.15) rotate(-15deg); }
+          100% { transform: scale(1) rotate(0deg); }
+        }
+        @keyframes sparkleFloat {
+          0% { transform: translate(0, 0) scale(0.5); opacity: 0; }
+          50% { opacity: 1; }
+          100% { transform: translate(15px, -15px) scale(1.2); opacity: 0; }
         }
       `}</style>
 
@@ -216,7 +374,29 @@ function Eligibility({ go }) {
           padding: '20px 20px 22px',
           boxShadow: '0 10px 26px -20px rgba(40,30,80,.45)',
         }}>
-          <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: 0.8, color: EL.muted3, marginBottom: 8 }}>MELT PROGRESS</div>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
+            <span style={{ fontSize: 11, fontWeight: 700, letterSpacing: 0.8, color: EL.muted3 }}>MELT PROGRESS</span>
+            <button
+              onClick={() => { setHowItWorksOpen(true); setActiveStep(0); }}
+              style={{
+                fontSize: 12,
+                fontWeight: 700,
+                color: EL.purple,
+                background: EL.purpleL,
+                padding: '4px 10px',
+                borderRadius: 999,
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: 4,
+                cursor: 'pointer',
+                transition: 'opacity 0.2s',
+              }}
+              onMouseEnter={e => e.currentTarget.style.opacity = 0.85}
+              onMouseLeave={e => e.currentTarget.style.opacity = 1}
+            >
+              How it works?
+            </button>
+          </div>
           <div style={{ fontWeight: 800, fontSize: 20, color: EL.ink, letterSpacing: -0.3, marginBottom: 6 }}>Here's your melt journey</div>
           <div style={{ fontSize: 13, color: EL.muted2, lineHeight: 1.5, marginBottom: 22 }}>These are the steps to clear your card debt — and how you can unlock more than ₹1,50,000 over time.</div>
 
@@ -425,6 +605,162 @@ function Eligibility({ go }) {
           Claim Offer {Icon.arrowR('#fff')}
         </button>
       </BottomBar>
+
+      {/* How it Works Modal */}
+      {howItWorksOpen && (
+        <div style={{
+          position: 'absolute',
+          inset: 0,
+          zIndex: 100,
+          background: 'rgba(9, 9, 20, 0.92)',
+          backdropFilter: 'blur(16px)',
+          WebkitBackdropFilter: 'blur(16px)',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+          padding: 20,
+          animation: 'howItWorksFadeIn 0.3s ease-out',
+        }}>
+          <div style={{
+            width: '100%',
+            maxWidth: 340,
+            background: '#121124',
+            border: '1px solid rgba(255, 255, 255, 0.1)',
+            borderRadius: 24,
+            padding: 24,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            position: 'relative',
+            animation: 'cardSlideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1)',
+            color: '#fff',
+          }}>
+            {/* Close Button */}
+            <button
+              onClick={() => setHowItWorksOpen(false)}
+              style={{
+                position: 'absolute',
+                top: 16,
+                right: 16,
+                width: 32,
+                height: 32,
+                borderRadius: '50%',
+                background: 'rgba(255, 255, 255, 0.08)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                color: '#fff',
+                fontWeight: 600,
+                fontSize: 16,
+                border: 'none',
+                cursor: 'pointer',
+              }}
+            >
+              ✕
+            </button>
+
+            <span style={{ fontSize: 11, fontWeight: 700, letterSpacing: 1.5, color: '#CBA6FF', textTransform: 'uppercase', marginBottom: 12 }}>
+              How CCRF works
+            </span>
+            
+            {/* Visual Container */}
+            <div style={{
+              width: '100%',
+              height: 140,
+              background: 'rgba(255, 255, 255, 0.03)',
+              borderRadius: 16,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              marginBottom: 20,
+              border: '1px solid rgba(255, 255, 255, 0.05)',
+            }}>
+              {steps[activeStep].visual}
+            </div>
+
+            {/* Stepper Dots */}
+            <div style={{ display: 'flex', gap: 6, marginBottom: 16 }}>
+              {steps.map((_, idx) => (
+                <div
+                  key={idx}
+                  onClick={() => setActiveStep(idx)}
+                  style={{
+                    width: idx === activeStep ? 24 : 8,
+                    height: 8,
+                    borderRadius: 4,
+                    background: idx === activeStep ? '#7F55DF' : 'rgba(255, 255, 255, 0.2)',
+                    transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
+                    cursor: 'pointer',
+                  }}
+                />
+              ))}
+            </div>
+
+            {/* Title & Description */}
+            <div style={{ textAlign: 'center', minHeight: 90, marginBottom: 24 }}>
+              <h3 style={{ fontSize: 17, fontWeight: 800, margin: '0 0 8px 0', color: '#fff', fontFamily: 'Sora, sans-serif' }}>
+                {steps[activeStep].title}
+              </h3>
+              <p style={{ fontSize: 13, color: 'rgba(255, 255, 255, 0.7)', margin: 0, lineHeight: 1.45, padding: '0 6px', fontFamily: 'inherit' }}>
+                {steps[activeStep].description}
+              </p>
+            </div>
+
+            {/* Navigation buttons */}
+            <div style={{ display: 'flex', width: '100%', gap: 12 }}>
+              {activeStep > 0 ? (
+                <button
+                  onClick={() => setActiveStep(activeStep - 1)}
+                  style={{
+                    flex: 1,
+                    height: 48,
+                    borderRadius: 14,
+                    background: 'rgba(255, 255, 255, 0.08)',
+                    color: '#fff',
+                    fontWeight: 600,
+                    fontSize: 14,
+                    cursor: 'pointer',
+                    transition: 'background 0.2s',
+                  }}
+                  onMouseEnter={e => e.currentTarget.style.background = 'rgba(255, 255, 255, 0.12)'}
+                  onMouseLeave={e => e.currentTarget.style.background = 'rgba(255, 255, 255, 0.08)'}
+                >
+                  Back
+                </button>
+              ) : null}
+              
+              <button
+                onClick={() => {
+                  if (activeStep < steps.length - 1) {
+                    setActiveStep(activeStep + 1);
+                  } else {
+                    setHowItWorksOpen(false);
+                  }
+                }}
+                style={{
+                  flex: 2,
+                  height: 48,
+                  borderRadius: 14,
+                  background: '#7F55DF',
+                  color: '#fff',
+                  fontWeight: 700,
+                  fontSize: 14,
+                  cursor: 'pointer',
+                  boxShadow: '0 8px 20px rgba(127, 85, 223, 0.3)',
+                  transition: 'background 0.2s, transform 0.1s',
+                }}
+                onMouseEnter={e => e.currentTarget.style.background = '#6B40CF'}
+                onMouseLeave={e => e.currentTarget.style.background = '#7F55DF'}
+                onMouseDown={e => e.currentTarget.style.transform = 'scale(0.98)'}
+                onMouseUp={e => e.currentTarget.style.transform = 'scale(1)'}
+              >
+                {activeStep === steps.length - 1 ? 'Got it!' : 'Next'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
