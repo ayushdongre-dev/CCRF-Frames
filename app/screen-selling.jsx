@@ -484,22 +484,22 @@ function SavingsScreen({ go, monthly = 30000, setMonthly }) {
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'flex-start' }}>
         {/* 2. eyebrow + headline */}
         <div style={{ textAlign: 'center', padding: '0 24px 0' }}>
-          <div style={{ fontSize: 12, fontWeight: 700, letterSpacing: 1, color: MELT.purple, marginTop: 0 }}>YOUR MONEY IS FROZEN IN CARD DEBT</div>
-          <div style={{ fontWeight: 800, fontSize: 27, lineHeight: 1.16, marginTop: 6, color: MELT.ink, letterSpacing: -0.4 }}>
+          <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: 1, color: MELT.purple, marginTop: 0 }}>YOUR MONEY IS FROZEN IN CARD DEBT</div>
+          <div style={{ fontWeight: 800, fontSize: 24, lineHeight: 1.15, marginTop: 4, color: MELT.ink, letterSpacing: -0.4 }}>
             Here's how much<br />Melt frees for you
           </div>
           {/* card debt pill — fixed */}
-          <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, marginTop: 8, padding: '8px 16px', borderRadius: 999, background: '#fff', border: `1px solid ${MELT.purpleBorder}`, boxShadow: '0 6px 18px -12px rgba(40,30,80,.5)' }}>
-            <span style={{ fontSize: 12.5, fontWeight: 600, color: MELT.muted2 }}>Your credit card debt</span>
-            <span style={{ fontWeight: 800, fontSize: 16, color: MELT.ink }}>₹5,00,000</span>
+          <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, marginTop: 6, padding: '6px 12px', borderRadius: 999, background: '#fff', border: `1px solid ${MELT.purpleBorder}`, boxShadow: '0 6px 18px -12px rgba(40,30,80,.5)' }}>
+            <span style={{ fontSize: 11.5, fontWeight: 600, color: MELT.muted2 }}>Your credit card debt</span>
+            <span style={{ fontWeight: 800, fontSize: 15, color: MELT.ink }}>₹5,00,000</span>
           </div>
 
           {/* ── Monthly payment stepper ── */}
-          <div style={{ marginTop: 8, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 5 }}>
-            <div style={{ fontSize: 13, color: MELT.muted2, fontFamily: 'Sora, sans-serif', fontWeight: 500 }}>Monthly credit card payment</div>
+          <div style={{ marginTop: 6, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4 }}>
+            <div style={{ fontSize: 12, color: MELT.muted2, fontFamily: 'Sora, sans-serif', fontWeight: 500 }}>Monthly credit card payment</div>
             <div style={{
               display: 'inline-flex', alignItems: 'center', justifyContent: 'space-between',
-              gap: 0, padding: '5px 8px', borderRadius: 12,
+              gap: 0, padding: '4px 6px', borderRadius: 10,
               background: '#fff', border: `1px solid ${MELT.purpleBorder}`,
               boxShadow: '0 6px 18px -12px rgba(40,30,80,.5)',
               minWidth: 0,
@@ -507,21 +507,21 @@ function SavingsScreen({ go, monthly = 30000, setMonthly }) {
               <button
                 onClick={() => setMonthly(m => Math.max(MIN, m - STEP))}
                 disabled={monthly <= MIN}
-                style={{ ...btnBase, opacity: monthly <= MIN ? 0.35 : 1 }}
+                style={{ ...btnBase, width: 28, height: 28, opacity: monthly <= MIN ? 0.35 : 1 }}
               >
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
                   <path d="M5 12h14" stroke="#3D3DC4" strokeWidth="2.5" strokeLinecap="round" />
                 </svg>
               </button>
-              <span style={{ fontWeight: 800, fontSize: 16, color: '#1A1733', fontFamily: 'Sora, sans-serif', minWidth: 80, textAlign: 'center', letterSpacing: -0.3 }}>
+              <span style={{ fontWeight: 800, fontSize: 15, color: '#1A1733', fontFamily: 'Sora, sans-serif', minWidth: 72, textAlign: 'center', letterSpacing: -0.3 }}>
                 {inr(animMonthly)}
               </span>
               <button
                 onClick={() => setMonthly(m => Math.min(MAX, m + STEP))}
                 disabled={monthly >= MAX}
-                style={{ ...btnBase, opacity: monthly >= MAX ? 0.35 : 1 }}
+                style={{ ...btnBase, width: 28, height: 28, opacity: monthly >= MAX ? 0.35 : 1 }}
               >
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
                   <path d="M12 5v14M5 12h14" stroke="#3D3DC4" strokeWidth="2.5" strokeLinecap="round" />
                 </svg>
               </button>
@@ -530,30 +530,60 @@ function SavingsScreen({ go, monthly = 30000, setMonthly }) {
         </div>
 
         {/* 3. hero card */}
-        <div style={{ margin: '10px 20px 0', borderRadius: 24, background: MELT.hero, boxShadow: '0 22px 44px -22px rgba(15,13,46,.7)', position: 'relative', zIndex: 0 }}>
-          <div style={{ padding: 24, position: 'relative' }}>
-            {/* divider */}
-            <div style={{ position: 'absolute', top: 24, bottom: 24, left: '50%', width: 1, background: 'rgba(255,255,255,.3)' }} />
-            <div style={{ display: 'flex' }}>
+        <div style={{ margin: '8px 16px 0', borderRadius: 24, background: MELT.hero, boxShadow: '0 16px 36px -16px rgba(15,13,46,.8)', position: 'relative', zIndex: 0, overflow: 'hidden' }}>
+          <div style={{ padding: '10px 10px 10px', position: 'relative' }}>
+            <div style={{ display: 'flex', gap: 8 }}>
               {/* LEFT — your cards now */}
-              <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10, paddingRight: 8, position: 'relative' }}>
-                <HalfLabel color="#F06A6A">YOUR CARDS NOW</HalfLabel>
-                <IceCube />
-                <div style={{ textAlign: 'center' }}>
-                  <div style={{ display: 'inline-flex', alignItems: 'center', gap: 5 }}>
-                    <span style={{ fontSize: 16, fontWeight: 800, color: '#FF6B6B' }}>54% p.a.</span>
+              <div style={{
+                flex: 1,
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                gap: 4,
+                padding: '10px 8px 8px',
+                borderRadius: 18,
+                background: 'linear-gradient(180deg, rgba(233, 91, 91, 0.03) 0%, rgba(233, 91, 91, 0.08) 100%)',
+                border: '1px solid rgba(233, 91, 91, 0.16)',
+                position: 'relative',
+              }}>
+                <HalfLabel color="#FFA1A1">YOUR CARDS NOW</HalfLabel>
+                <div style={{ animation: 'float 5s ease-in-out infinite' }}>
+                  <IceCube size={60} />
+                </div>
+                <div style={{ textAlign: 'center', width: '100%' }}>
+                  <div style={{ fontSize: 8, fontWeight: 800, color: '#E79A9A', letterSpacing: 0.5, textTransform: 'uppercase', marginBottom: 2 }}>Interest Rate</div>
+                  <div style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 4, width: '100%' }}>
+                    <span style={{ fontSize: 16, fontWeight: 850, color: '#FF6B6B', letterSpacing: -0.5 }}>54% <span style={{ fontSize: 10, fontWeight: 700 }}>p.a.</span></span>
                     <InfoTip text="At 42% interest rate, you also pay 18% GST on your interest paid" />
                   </div>
-                  <div style={{ fontSize: 13, color: '#E79A9A', marginTop: 2 }}>{inr(animCardsInt)} interest</div>
+                  <div style={{ fontSize: 8, fontWeight: 800, color: '#E79A9A', letterSpacing: 0.5, textTransform: 'uppercase', marginTop: 6, marginBottom: 2 }}>Est. Interest</div>
+                  <div style={{ fontSize: 13, fontWeight: 800, color: '#FFB8B8' }}>{inr(animCardsInt)}</div>
                 </div>
               </div>
+              
               {/* RIGHT — with melt */}
-              <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10, paddingLeft: 8 }}>
+              <div style={{
+                flex: 1,
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                gap: 4,
+                padding: '10px 8px 8px',
+                borderRadius: 18,
+                background: 'linear-gradient(180deg, rgba(91, 63, 212, 0.15) 0%, rgba(26, 122, 74, 0.1) 100%)',
+                border: '1px solid rgba(74, 222, 128, 0.28)',
+                boxShadow: '0 8px 32px -10px rgba(74, 222, 128, 0.2)',
+                position: 'relative',
+              }}>
                 <HalfLabel color={MELT.greenSoft}>WITH MELT</HalfLabel>
-                <Puddle />
-                <div style={{ textAlign: 'center' }}>
-                  <div style={{ fontSize: 16, fontWeight: 800, color: '#4ADE80' }}>25% p.a.</div>
-                  <div style={{ fontSize: 13, color: '#9AD9B4', marginTop: 2 }}>{inr(animMeltInt)} interest</div>
+                <div style={{ animation: 'float 5s ease-in-out infinite 0.5s' }}>
+                  <Puddle size={60} />
+                </div>
+                <div style={{ textAlign: 'center', width: '100%' }}>
+                  <div style={{ fontSize: 8, fontWeight: 800, color: '#9AD9B4', letterSpacing: 0.5, textTransform: 'uppercase', marginBottom: 2 }}>Interest Rate</div>
+                  <div style={{ fontSize: 16, fontWeight: 850, color: '#4ADE80', letterSpacing: -0.5 }}>25% <span style={{ fontSize: 10, fontWeight: 700 }}>p.a.</span></div>
+                  <div style={{ fontSize: 8, fontWeight: 800, color: '#9AD9B4', letterSpacing: 0.5, textTransform: 'uppercase', marginTop: 6, marginBottom: 2 }}>Est. Interest</div>
+                  <div style={{ fontSize: 13, fontWeight: 800, color: '#A3E635' }}>{inr(animMeltInt)}</div>
                 </div>
               </div>
             </div>
@@ -561,14 +591,10 @@ function SavingsScreen({ go, monthly = 30000, setMonthly }) {
           {/* savings badge (rolling counter) */}
           <div onClick={() => setPlayKey(k => k + 1)} style={{
             background: '#FFFFFF',
-            border: '1px solid rgba(30, 27, 75, 0.08)',
-            borderRadius: 20,
-            padding: '14px 16px',
+            borderTop: '1px solid rgba(127, 85, 223, 0.1)',
+            padding: '10px 14px',
             textAlign: 'center',
             cursor: 'pointer',
-            margin: '0',
-            width: '100%',
-            boxShadow: '0 14px 34px -26px rgba(32, 28, 72, 0.38)',
             fontFamily: fintechFont,
           }}>
             <div style={{
@@ -578,7 +604,7 @@ function SavingsScreen({ go, monthly = 30000, setMonthly }) {
             }}>
               <span style={{
                 fontWeight: 650,
-                fontSize: 15,
+                fontSize: 14,
                 color: '#2B2A3A',
                 whiteSpace: 'nowrap',
                 letterSpacing: 0,
@@ -590,11 +616,11 @@ function SavingsScreen({ go, monthly = 30000, setMonthly }) {
                 background: 'transparent',
                 borderRadius: 0,
               }}>
-                <SlotNumber value={saving} playKey={playKey} h={28} chrome={false} digitColor={MELT.purple} sepColor={MELT.purple} gap={0} />
+                <SlotNumber value={saving} playKey={playKey} h={26} chrome={false} digitColor={MELT.purple} sepColor={MELT.purple} gap={0} />
               </div>
               <span style={{
                 fontWeight: 650,
-                fontSize: 15,
+                fontSize: 14,
                 color: '#2B2A3A',
                 whiteSpace: 'nowrap',
                 letterSpacing: 0,
@@ -602,9 +628,9 @@ function SavingsScreen({ go, monthly = 30000, setMonthly }) {
               }}>in interest</span>
             </div>
             <div style={{
-              fontSize: 13,
+              fontSize: 12,
               color: '#737184',
-              marginTop: 8,
+              marginTop: 4,
               fontWeight: 600,
               lineHeight: 1.4,
               letterSpacing: 0,
@@ -615,34 +641,34 @@ function SavingsScreen({ go, monthly = 30000, setMonthly }) {
         </div>
 
         {/* 5. comparison card */}
-        <div style={{ padding: '14px 20px 0' }}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 7 }}>
-            <div style={{ fontFamily: 'Plus Jakarta Sans, sans-serif', fontSize: 11, fontWeight: 800, letterSpacing: 0.8, color: MELT.muted3 }}>TOTAL INTEREST YOU'D PAY</div>
-            <button onClick={() => go('visualise')} style={{ display: 'inline-flex', alignItems: 'center', gap: 5, fontFamily: 'Plus Jakarta Sans, sans-serif', fontSize: 13, fontWeight: 800, color: MELT.purple }}>
+        <div style={{ padding: '8px 16px 0' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 5 }}>
+            <div style={{ fontFamily: 'Plus Jakarta Sans, sans-serif', fontSize: 10.5, fontWeight: 800, letterSpacing: 0.8, color: MELT.muted3 }}>TOTAL INTEREST YOU'D PAY</div>
+            <button onClick={() => go('visualise')} style={{ display: 'inline-flex', alignItems: 'center', gap: 5, fontFamily: 'Plus Jakarta Sans, sans-serif', fontSize: 12.5, fontWeight: 800, color: MELT.purple }}>
               Visualise how {Icon.arrowR(MELT.purple)}
             </button>
           </div>
-          <div style={{ background: '#fff', borderRadius: 10, padding: 16, boxShadow: '0 10px 26px -20px rgba(40,30,80,.45)', display: 'flex', flexDirection: 'column', gap: 12, border: '1px solid #EFEAFD' }}>
+          <div style={{ background: '#fff', borderRadius: 10, padding: 12, boxShadow: '0 8px 20px -16px rgba(40,30,80,.4)', display: 'flex', flexDirection: 'column', gap: 8, border: '1px solid #EFEAFD' }}>
             <MeltCompareRow label="Your cards now" rate={54} total={inr(animCardsInt)} frac={1} color={MELT.red} playKey={playKey} />
             <MeltCompareRow label="With Melt" rate={25} total={inr(animMeltInt)} frac={cardsInt > 0 ? meltInt / cardsInt : 0.25} color={MELT.purple} playKey={playKey} delay={160} />
           </div>
         </div>
 
         {/* 4. two stat chips */}
-        <div style={{ display: 'flex', gap: 8, padding: '12px 20px 0' }}>
-          <div style={{ flex: 1, height: 80, borderRadius: 14, background: MELT.purpleL, border: `1px solid ${MELT.purpleBorder}`, padding: '12px 13px', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+        <div style={{ display: 'flex', gap: 8, padding: '8px 16px 0' }}>
+          <div style={{ flex: 1, height: 68, borderRadius: 14, background: MELT.purpleL, border: `1px solid ${MELT.purpleBorder}`, padding: '8px 10px', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 7 }}>
               {coinDownIcon}
-              <span style={{ fontWeight: 800, fontSize: 20, color: MELT.ink, whiteSpace: 'nowrap' }}>₹{savingLakh}L</span>
+              <span style={{ fontWeight: 800, fontSize: 18, color: MELT.ink, whiteSpace: 'nowrap' }}>₹{savingLakh}L</span>
             </div>
-            <div style={{ fontSize: 12, color: MELT.muted2, marginTop: 5 }}>freed in interest</div>
+            <div style={{ fontSize: 11.5, color: MELT.muted2, marginTop: 3 }}>freed in interest</div>
           </div>
-          <div style={{ flex: 1, height: 80, borderRadius: 14, background: MELT.greenBg, border: `1px solid ${MELT.greenBorder}`, padding: '12px 13px', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+          <div style={{ flex: 1, height: 68, borderRadius: 14, background: MELT.greenBg, border: `1px solid ${MELT.greenBorder}`, padding: '8px 10px', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 7 }}>
               {calTickIcon}
-              <span style={{ fontWeight: 800, fontSize: 20, color: MELT.ink, whiteSpace: 'nowrap' }}>{animMonthsDiff} months</span>
+              <span style={{ fontWeight: 800, fontSize: 18, color: MELT.ink, whiteSpace: 'nowrap' }}>{animMonthsDiff} months</span>
             </div>
-            <div style={{ fontSize: 12, color: MELT.muted2, marginTop: 5 }}>sooner debt-free</div>
+            <div style={{ fontSize: 11.5, color: MELT.muted2, marginTop: 3 }}>sooner debt-free</div>
           </div>
         </div>
 
@@ -757,11 +783,11 @@ function SavingsScreen({ go, monthly = 30000, setMonthly }) {
             }} />
             <div style={{
               display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-              padding: '4px 16px 12px', borderBottom: '1px solid #F0ECFA'
+              padding: '6px 16px 14px', borderBottom: '1px solid #F0ECFA'
             }}>
-              <div style={{ fontSize: 16, fontWeight: 800, color: '#161331' }}>
+              <div style={{ fontSize: 16, fontWeight: 800, color: '#161331', letterSpacing: -0.2 }}>
                 {sheetOpen === 'interest'
-                  ? 'How Credit Card Interest Works'
+                  ? 'Understanding Credit Card Interest'
                   : 'What Happens When You Pay Only the Minimum Due?'}
               </div>
               <button onClick={dismissSheet} style={{
@@ -774,67 +800,173 @@ function SavingsScreen({ go, monthly = 30000, setMonthly }) {
                 fontWeight: 700,
                 color: MELT.purple,
                 lineHeight: 1,
-              }}>
+                transition: 'opacity 0.2s ease',
+              }}
+              onMouseEnter={e => e.currentTarget.style.opacity = 0.8}
+              onMouseLeave={e => e.currentTarget.style.opacity = 1}>
                 Close
               </button>
             </div>
             <div style={{ padding: '16px 16px 24px', overflowY: 'auto', maxHeight: 'calc(90vh - 72px)' }}>
               {sheetOpen === 'interest' ? (
                 <>
+                  {/* Premium light-themed dashboard audit card */}
                   <div style={{
-                    borderRadius: 22,
-                    padding: '18px 16px 16px',
-                    color: '#fff',
-                    background: '#171331',
-                    boxShadow: '0 18px 36px -24px rgba(23, 19, 49, 0.9)',
+                    background: 'linear-gradient(135deg, #FAF9FD 0%, #F4F2FA 100%)',
+                    borderRadius: 20,
+                    padding: '20px 18px',
+                    border: '1px solid #E2DDF0',
+                    boxShadow: '0 10px 25px -12px rgba(26, 14, 80, 0.12), inset 0 1px 0 #FFF',
+                    color: '#1B192E',
                   }}>
-                    <div style={{ fontSize: 12, fontWeight: 800, color: '#BEB5F5', textTransform: 'uppercase', letterSpacing: 0.6 }}>
-                      Effective Annual Cost
+                    <div style={{ fontSize: 10, fontWeight: 800, color: '#6A6782', letterSpacing: '0.8px', textTransform: 'uppercase' }}>
+                      ANNUAL COST ON A ₹1,00,000 BALANCE
                     </div>
-                    <div style={{ marginTop: 8, display: 'flex', alignItems: 'flex-end', gap: 8 }}>
-                      <span style={{ fontSize: 44, fontWeight: 850, lineHeight: 0.95, letterSpacing: 0 }}>53.1%</span>
-                      <span style={{ paddingBottom: 4, fontSize: 15, fontWeight: 750, color: '#DCD7FF' }}>p.a.</span>
+                    <div style={{ marginTop: 10, display: 'flex', alignItems: 'baseline', gap: 6 }}>
+                      <span style={{
+                        fontSize: 38,
+                        fontWeight: 900,
+                        letterSpacing: -1,
+                        fontFamily: 'Sora, sans-serif',
+                        color: '#D32F2F', // Clean premium crimson
+                      }}>
+                        ₹67,260
+                      </span>
+                      <span style={{ fontSize: 13, fontWeight: 600, color: '#6C6A84' }}>yearly added cost</span>
                     </div>
-                    <div style={{ marginTop: 12, height: 1, background: 'rgba(255,255,255,0.12)' }} />
-                    <div style={{ marginTop: 12, fontSize: 14, fontWeight: 650, color: '#F4F1FF', lineHeight: 1.35 }}>
-                      A ₹1,00,000 balance can cost <strong>₹53,100</strong> in one year.
+                    <div style={{ fontSize: 13, color: '#4B4960', marginTop: 10, fontWeight: 500, lineHeight: 1.5 }}>
+                      If you carry a credit card balance of <strong>₹1,00,000</strong> for 1 year, you end up paying an extra <strong style={{ color: '#D32F2F', fontWeight: 800 }}>₹67,260</strong> in interest, fees, and taxes.
+                    </div>
+
+                    {/* Sleek horizontal meter */}
+                    <div style={{
+                      display: 'flex',
+                      height: 8,
+                      borderRadius: 99,
+                      overflow: 'hidden',
+                      marginTop: 18,
+                      background: '#EAE6F5',
+                      boxShadow: 'inset 0 1px 1px rgba(0,0,0,0.06)'
+                    }}>
+                      <div style={{ width: '67%', background: 'linear-gradient(90deg, #E54B4B 0%, #F06A6A 100%)' }} />
+                      <div style={{ width: '15%', background: 'linear-gradient(90deg, #F59E0B 0%, #FBBF24 100%)' }} />
+                      <div style={{ width: '18%', background: 'linear-gradient(90deg, #EC4899 0%, #F472B6 100%)' }} />
+                    </div>
+
+                    {/* Breakdown items */}
+                    <div style={{ marginTop: 18, display: 'flex', flexDirection: 'column', gap: 10 }}>
+                      {[
+                        { label: 'Interest (42% p.a.)', val: '₹45,000', color: '#E54B4B' },
+                        { label: 'GST Tax (18% on Interest & Fees)', val: '₹10,260', color: '#F59E0B' },
+                        { label: 'Late Payment Fees & Penalty', val: '₹12,000', color: '#EC4899' },
+                      ].map((item, idx) => (
+                        <div key={idx} style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'space-between',
+                          fontSize: 13,
+                          color: '#4B4960',
+                          paddingBottom: 8,
+                          borderBottom: idx < 2 ? '1px solid #ECE8F6' : 'none'
+                        }}>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                            <span style={{
+                              width: 6,
+                              height: 6,
+                              borderRadius: 99,
+                              background: item.color,
+                            }} />
+                            <span style={{ fontWeight: 600 }}>{item.label}</span>
+                          </div>
+                          <strong style={{ color: '#1B192E', fontFamily: 'Sora, sans-serif', fontWeight: 750 }}>{item.val}</strong>
+                        </div>
+                      ))}
                     </div>
                   </div>
 
-                  <div style={{ marginTop: 16, background: '#FFFFFF', borderRadius: 18, padding: 14, border: '1px solid #ECE8F7', boxShadow: '0 12px 28px -24px rgba(24, 21, 47, 0.7)' }}>
-                    <div style={{ fontSize: 12, color: '#78758D', fontWeight: 800, textTransform: 'uppercase', letterSpacing: 0.6 }}>
-                      Monthly cost on ₹1 lakh
-                    </div>
-                    <div style={{ marginTop: 12, display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 14 }}>
-                      <div style={{ flex: 1 }}>
-                        {[
-                          ['Interest', '₹3,750'],
-                          ['GST on interest', '₹675'],
-                        ].map(([label, value]) => (
-                          <div key={label} style={{ display: 'flex', justifyContent: 'space-between', gap: 12, padding: '8px 0', borderBottom: label === 'Interest' ? '1px solid #F0EDF8' : 'none', fontSize: 13, color: '#555168', fontWeight: 650 }}>
-                            <span>{label}</span>
-                            <strong style={{ color: '#18152F' }}>{value}</strong>
+                  {/* Detailed Reality warning points */}
+                  <div style={{ marginTop: 16, display: 'flex', flexDirection: 'column', gap: 10 }}>
+                    {[
+                      {
+                        title: 'Interest Backdated to Swipe Date',
+                        desc: 'Accumulates from the transaction day, not the bill date, if any balance is carried.',
+                        icon: (
+                          <div style={{
+                            width: 32, height: 32, borderRadius: 99,
+                            background: '#FFEAEA',
+                            border: '1px solid rgba(211, 47, 47, 0.08)',
+                            display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0
+                          }}>
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#D32F2F" strokeWidth="2.5"><circle cx="12" cy="12" r="10" /><path d="M12 6v6l4 2" /></svg>
                           </div>
-                        ))}
-                      </div>
-                      <div style={{
-                        minWidth: 92,
+                        )
+                      },
+                      {
+                        title: 'Tax Applied on All Charges',
+                        desc: 'A mandatory 18% GST is added to all interest and late fees automatically.',
+                        icon: (
+                          <div style={{
+                            width: 32, height: 32, borderRadius: 99,
+                            background: '#FFEAEA',
+                            border: '1px solid rgba(211, 47, 47, 0.08)',
+                            display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0
+                          }}>
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#D32F2F" strokeWidth="2.5"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" /></svg>
+                          </div>
+                        )
+                      },
+                      {
+                        title: 'Daily Compounding Late Fees',
+                        desc: 'Up to ₹1,300 per cycle added immediately for missed or delayed payments.',
+                        icon: (
+                          <div style={{
+                            width: 32, height: 32, borderRadius: 99,
+                            background: '#FFEAEA',
+                            border: '1px solid rgba(211, 47, 47, 0.08)',
+                            display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0
+                          }}>
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#D32F2F" strokeWidth="2.5"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" /><line x1="12" y1="9" x2="12" y2="13" /><line x1="12" y1="17" x2="12.01" y2="17" /></svg>
+                          </div>
+                        )
+                      }
+                    ].map((item, idx) => (
+                      <div key={idx} style={{
+                        display: 'flex',
+                        gap: 12,
+                        padding: '14px 16px',
                         borderRadius: 16,
-                        background: '#F6F3FF',
-                        border: '1px solid #E9E2FF',
-                        padding: '12px 10px',
-                        textAlign: 'center',
+                        background: '#FFF',
+                        border: '1px solid #ECE8F7',
+                        borderLeft: '4px solid #D32F2F',
+                        boxShadow: '0 8px 20px -16px rgba(24, 21, 47, 0.08)',
                       }}>
-                        <div style={{ fontSize: 11, color: '#77738E', fontWeight: 800 }}>Total</div>
-                        <div style={{ marginTop: 5, fontSize: 22, color: MELT.purple, fontWeight: 850, lineHeight: 1 }}>
-                          ₹4,425
+                        {item.icon}
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+                          <span style={{ fontSize: 13.5, fontWeight: 800, color: '#1B192E' }}>{item.title}</span>
+                          <span style={{ fontSize: 11.5, color: '#5C5870', lineHeight: 1.5 }}>{item.desc}</span>
                         </div>
                       </div>
-                    </div>
+                    ))}
                   </div>
 
-                  <div style={{ marginTop: 14, background: '#FFF8EA', borderRadius: 16, padding: '12px 14px', fontSize: 13, color: '#5A4A12', lineHeight: 1.4, fontWeight: 650, border: '1px solid #F5E2BA' }}>
-                    The longer the balance stays unpaid, the more expensive it becomes.
+                  <div style={{
+                    marginTop: 14,
+                    background: '#FFF9F0',
+                    borderRadius: 16,
+                    padding: '12px 14px',
+                    fontSize: 13,
+                    color: '#8A5A00',
+                    lineHeight: 1.4,
+                    fontWeight: 650,
+                    border: '1px solid #FFE4C4',
+                    boxShadow: '0 8px 20px -16px rgba(138, 90, 0, 0.1)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: 6
+                  }}>
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#8A5A00" strokeWidth="2.5"><circle cx="12" cy="12" r="10" /><path d="M12 16v-4M12 8h.01" /></svg>
+                    <span>The longer the balance stays unpaid, the more expensive it becomes.</span>
                   </div>
                 </>
               ) : (
