@@ -29,7 +29,7 @@ function Eligibility({ go }) {
   const UNLOCKED = 150000;
   const FULL_LIMIT = 300000;
   const TOTAL_DEBT = 187400;
-  const CARD_APR = 0.42;
+  const CARD_APR = 0.45;
   const EQUALL_APR = 0.22;
   const LOCKED_MORE = FULL_LIMIT - UNLOCKED;
   const ANNUAL_SAVINGS = Math.round(TOTAL_DEBT * (CARD_APR - EQUALL_APR));

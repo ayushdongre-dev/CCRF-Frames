@@ -416,6 +416,8 @@ function SavingsScreen({ go, monthly = 30000, setMonthly }) {
   const dragStartY = useRef(null);
   const MIN = 25000, MAX = 100000, STEP = 5000;
 
+
+
   useEffect(() => { const t = setTimeout(() => setPlayKey(k => k + 1), 90); return () => clearTimeout(t); }, []);
   useEffect(() => { setPlayKey(k => k + 1); }, [monthly]);
 
@@ -554,7 +556,7 @@ function SavingsScreen({ go, monthly = 30000, setMonthly }) {
                   <div style={{ fontSize: 8, fontWeight: 800, color: '#E79A9A', letterSpacing: 0.5, textTransform: 'uppercase', marginBottom: 2 }}>Interest Rate</div>
                   <div style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 4, width: '100%' }}>
                     <span style={{ fontSize: 16, fontWeight: 850, color: '#FF6B6B', letterSpacing: -0.5 }}>54% <span style={{ fontSize: 10, fontWeight: 700 }}>p.a.</span></span>
-                    <InfoTip text="At 42% interest rate, you also pay 18% GST on your interest paid" />
+                    <InfoTip text="At 45% interest rate, you also pay 18% GST on your interest paid" />
                   </div>
                   <div style={{ fontSize: 8, fontWeight: 800, color: '#E79A9A', letterSpacing: 0.5, textTransform: 'uppercase', marginTop: 6, marginBottom: 2 }}>Est. Interest</div>
                   <div style={{ fontSize: 13, fontWeight: 800, color: '#FFB8B8' }}>{inr(animCardsInt)}</div>
@@ -819,24 +821,50 @@ function SavingsScreen({ go, monthly = 30000, setMonthly }) {
                     boxShadow: '0 10px 25px -12px rgba(26, 14, 80, 0.12), inset 0 1px 0 #FFF',
                     color: '#1B192E',
                   }}>
-                    <div style={{ fontSize: 10, fontWeight: 800, color: '#6A6782', letterSpacing: '0.8px', textTransform: 'uppercase' }}>
-                      ANNUAL COST ON A ₹1,00,000 BALANCE
+                    <div style={{ fontSize: 10, fontWeight: 800, color: '#6A6782', letterSpacing: '0.8px', textTransform: 'uppercase', textAlign: 'center', marginBottom: 12 }}>
+                      How a ₹1,00,000 Debt Grows in 1 Year
                     </div>
-                    <div style={{ marginTop: 10, display: 'flex', alignItems: 'baseline', gap: 6 }}>
-                      <span style={{
-                        fontSize: 38,
-                        fontWeight: 900,
-                        letterSpacing: -1,
-                        fontFamily: 'Sora, sans-serif',
-                        color: '#D32F2F', // Clean premium crimson
-                      }}>
-                        ₹67,260
-                      </span>
-                      <span style={{ fontSize: 13, fontWeight: 600, color: '#6C6A84' }}>yearly added cost</span>
+
+                    {/* Premium Invoice/Receipt Ledger Card */}
+                    <div style={{
+                      background: '#FFF',
+                      border: '1px solid #E2DDF0',
+                      borderRadius: 16,
+                      padding: '16px 18px',
+                      boxShadow: '0 8px 24px -12px rgba(26, 14, 80, 0.08), inset 0 1px 0 #FFF',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      gap: 12,
+                    }}>
+                      {/* Starting Debt Row */}
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <span style={{ fontSize: 13, fontWeight: 600, color: '#5C5870' }}>Starting Debt Balance</span>
+                        <span style={{ fontSize: 14, fontWeight: 750, color: '#1B192E', fontFamily: 'Sora, sans-serif' }}>₹1,00,000</span>
+                      </div>
+
+                      {/* Added Cost Row */}
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <span style={{ fontSize: 13, fontWeight: 650, color: '#D32F2F', display: 'flex', alignItems: 'center', gap: 6 }}>
+                          <span style={{ width: 6, height: 6, borderRadius: 99, background: '#D32F2F' }} />
+                          Added Cost (12 Months)
+                        </span>
+                        <span style={{ fontSize: 14, fontWeight: 850, color: '#D32F2F', fontFamily: 'Sora, sans-serif' }}>+ ₹67,260</span>
+                      </div>
+
+                      {/* Dashed Separator */}
+                      <div style={{ borderTop: '1px dashed #E2DDF0', margin: '2px 0' }} />
+
+                      {/* Total Owed Row */}
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <span style={{ fontSize: 13.5, fontWeight: 800, color: '#1B192E' }}>Total Owed after 1 Year</span>
+                        <span style={{ fontSize: 16, fontWeight: 900, color: '#1B192E', fontFamily: 'Sora, sans-serif' }}>₹1,67,260</span>
+                      </div>
                     </div>
-                    <div style={{ fontSize: 13, color: '#4B4960', marginTop: 10, fontWeight: 500, lineHeight: 1.5 }}>
+
+                    <div style={{ fontSize: 12.5, color: '#4B4960', marginTop: 14, fontWeight: 500, lineHeight: 1.45, textAlign: 'center' }}>
                       If you carry a credit card balance of <strong>₹1,00,000</strong> for 1 year, you end up paying an extra <strong style={{ color: '#D32F2F', fontWeight: 800 }}>₹67,260</strong> in interest, fees, and taxes.
                     </div>
+
 
                     {/* Sleek horizontal meter */}
                     <div style={{
@@ -856,7 +884,7 @@ function SavingsScreen({ go, monthly = 30000, setMonthly }) {
                     {/* Breakdown items */}
                     <div style={{ marginTop: 18, display: 'flex', flexDirection: 'column', gap: 10 }}>
                       {[
-                        { label: 'Interest (42% p.a.)', val: '₹45,000', color: '#E54B4B' },
+                        { label: 'Interest (45% p.a.)', val: '₹45,000', color: '#E54B4B' },
                         { label: 'GST Tax (18% on Interest & Fees)', val: '₹10,260', color: '#F59E0B' },
                         { label: 'Late Payment Fees & Penalty', val: '₹12,000', color: '#EC4899' },
                       ].map((item, idx) => (
@@ -888,8 +916,8 @@ function SavingsScreen({ go, monthly = 30000, setMonthly }) {
                   <div style={{ marginTop: 16, display: 'flex', flexDirection: 'column', gap: 10 }}>
                     {[
                       {
-                        title: 'Interest Backdated to Swipe Date',
-                        desc: 'Accumulates from the transaction day, not the bill date, if any balance is carried.',
+                        title: 'Daily Interest Accrual',
+                        desc: 'Interest accrues from transaction date, not the bill due date, if any balance is carried.',
                         icon: (
                           <div style={{
                             width: 32, height: 32, borderRadius: 99,
@@ -902,8 +930,8 @@ function SavingsScreen({ go, monthly = 30000, setMonthly }) {
                         )
                       },
                       {
-                        title: 'Tax Applied on All Charges',
-                        desc: 'A mandatory 18% GST is added to all interest and late fees automatically.',
+                        title: '18% GST on All Charges',
+                        desc: 'A mandatory 18% GST is added to all interest charges and penalty fees.',
                         icon: (
                           <div style={{
                             width: 32, height: 32, borderRadius: 99,
@@ -916,8 +944,8 @@ function SavingsScreen({ go, monthly = 30000, setMonthly }) {
                         )
                       },
                       {
-                        title: 'Daily Compounding Late Fees',
-                        desc: 'Up to ₹1,300 per cycle added immediately for missed or delayed payments.',
+                        title: 'Late Payment Penalty',
+                        desc: 'Missed or delayed payments immediately trigger penalty fees up to ₹1,300.',
                         icon: (
                           <div style={{
                             width: 32, height: 32, borderRadius: 99,
@@ -971,25 +999,201 @@ function SavingsScreen({ go, monthly = 30000, setMonthly }) {
                 </>
               ) : (
                 <>
-                  <div style={{ fontSize: 14, color: '#5F617A', lineHeight: 1.6 }}>
-                    The Minimum Due is the minimum amount required to keep your account active and avoid missing a payment.
-                  </div>
-                  <div style={{ fontSize: 14, color: '#5F617A', lineHeight: 1.6, marginTop: 8 }}>
-                    However, paying only the Minimum Due does not clear the outstanding balance.
-                  </div>
-                  <div style={{ marginTop: 16, background: '#F7F5FF', borderRadius: 16, padding: 14, border: '1px solid #E8E0FF' }}>
-                    <div style={{ fontSize: 12, color: MELT.muted3, fontWeight: 700, textTransform: 'uppercase', letterSpacing: 0.6 }}>Example</div>
-                    <div style={{ marginTop: 8, display: 'grid', gridTemplateColumns: '1fr auto', rowGap: 6, columnGap: 10, fontSize: 13, color: '#2D2B43' }}>
-                      <span>Outstanding Balance</span><strong>₹1,00,000</strong>
-                      <span>Minimum Due</span><strong>₹5,000</strong>
-                      <span>Amount Remaining</span><strong>₹95,000</strong>
+                  {/* Premium light-themed dashboard minimum due card */}
+                  <div style={{
+                    background: 'linear-gradient(135deg, #FAF9FD 0%, #F4F2FA 100%)',
+                    borderRadius: 20,
+                    padding: '20px 18px',
+                    border: '1px solid #E2DDF0',
+                    boxShadow: '0 10px 25px -12px rgba(26, 14, 80, 0.12), inset 0 1px 0 #FFF',
+                    color: '#1B192E',
+                  }}>
+                    <div style={{ fontSize: 10, fontWeight: 800, color: '#6A6782', letterSpacing: '0.8px', textTransform: 'uppercase', textAlign: 'center', marginBottom: 12 }}>
+                      ON A ₹5,000 MINIMUM PAYMENT
+                    </div>
+
+                    {/* Ultra-Simple Visual Payment Flow */}
+                    <div style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: 12,
+                      marginTop: 10,
+                    }}>
+                      {/* Box 1: Minimum Payment */}
+                      <div style={{
+                        background: '#FFF',
+                        border: '1px solid #E2DDF0',
+                        borderRadius: 12,
+                        padding: '10px 16px',
+                        textAlign: 'center',
+                        boxShadow: '0 2px 8px rgba(26, 14, 80, 0.02)',
+                        flex: 1,
+                      }}>
+                        <div style={{ fontSize: 9, fontWeight: 800, color: '#6A6782', letterSpacing: '0.4px', textTransform: 'uppercase' }}>
+                          Minimum Payment
+                        </div>
+                        <div style={{ fontSize: 18, fontWeight: 800, color: '#1B192E', marginTop: 4, fontFamily: 'Sora, sans-serif' }}>
+                          ₹5,000
+                        </div>
+                      </div>
+
+                      {/* Arrow */}
+                      <div style={{ fontSize: 20, color: '#88859E', fontWeight: 800 }}>➔</div>
+
+                      {/* Box 2: Principal Reduction */}
+                      <div style={{
+                        background: '#E7F7EF',
+                        border: '1px solid #A3E2C9',
+                        borderRadius: 12,
+                        padding: '10px 16px',
+                        textAlign: 'center',
+                        boxShadow: '0 2px 8px rgba(31, 169, 113, 0.02)',
+                        flex: 1,
+                      }}>
+                        <div style={{ fontSize: 9, fontWeight: 800, color: '#1FA971', letterSpacing: '0.4px', textTransform: 'uppercase' }}>
+                          Principal Reduction
+                        </div>
+                        <div style={{ fontSize: 18, fontWeight: 900, color: '#1FA971', marginTop: 4, fontFamily: 'Sora, sans-serif' }}>
+                          ₹575
+                        </div>
+                      </div>
+                    </div>
+
+                    <div style={{ fontSize: 12.5, color: '#4B4960', marginTop: 14, fontWeight: 500, lineHeight: 1.45, textAlign: 'center' }}>
+                      Interest and GST consume <strong style={{ color: '#D32F2F', fontWeight: 800 }}>₹4,425</strong> of your payment, leaving only <strong>₹575</strong> to reduce your balance.
+                    </div>
+
+                    {/* Split bar visualizing the payment leak */}
+                    <div style={{
+                      display: 'flex',
+                      height: 10,
+                      borderRadius: 99,
+                      overflow: 'hidden',
+                      marginTop: 18,
+                      background: '#EAE6F5',
+                      boxShadow: 'inset 0 1px 1px rgba(0,0,0,0.06)'
+                    }}>
+                      <div style={{ width: '88.5%', background: 'linear-gradient(90deg, #E54B4B 0%, #F06A6A 100%)' }} />
+                      <div style={{ width: '11.5%', background: 'linear-gradient(90deg, #1FA971 0%, #22C55E 100%)' }} />
+                    </div>
+
+                    {/* Simple legend */}
+                    <div style={{ marginTop: 14, display: 'flex', justifyContent: 'space-between', fontSize: 11, fontWeight: 700, gap: 10, flexWrap: 'wrap' }}>
+                      <span style={{ color: '#D32F2F', display: 'flex', alignItems: 'center', gap: 5 }}>
+                        <span style={{ width: 6, height: 6, borderRadius: 99, background: '#E54B4B' }} /> Interest + GST: ₹4,425
+                      </span>
+                      <span style={{ color: '#1FA971', display: 'flex', alignItems: 'center', gap: 5 }}>
+                        <span style={{ width: 6, height: 6, borderRadius: 99, background: '#1FA971' }} /> Debt Reduced: ₹575
+                      </span>
                     </div>
                   </div>
-                  <div style={{ marginTop: 12, fontSize: 14, color: '#5F617A', lineHeight: 1.6 }}>
-                    Interest may continue to apply on the remaining balance.
+
+                  {/* 1 Year Grid Picture */}
+                  <div style={{
+                    marginTop: 16,
+                    background: '#FFF',
+                    borderRadius: 20,
+                    border: '1px solid #ECE8F7',
+                    padding: '16px 18px',
+                    boxShadow: '0 8px 20px -16px rgba(24, 21, 47, 0.08)',
+                  }}>
+                    <div style={{ fontSize: 10, fontWeight: 800, color: '#88859E', letterSpacing: '0.8px', textTransform: 'uppercase', marginBottom: 12 }}>
+                      THE 1-YEAR PICTURE (PAYING MINIMUMS)
+                    </div>
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+                      <div style={{ borderRight: '1px solid #ECE8F7', paddingRight: 8 }}>
+                        <div style={{ fontSize: 11, color: '#88859E', fontWeight: 600 }}>Total Paid in Year</div>
+                        <div style={{ fontSize: 18, fontWeight: 800, color: '#1B192E', marginTop: 3 }}>₹60,000</div>
+                      </div>
+                      <div style={{ paddingLeft: 8 }}>
+                        <div style={{ fontSize: 11, color: '#88859E', fontWeight: 600 }}>Interest + GST Charged</div>
+                        <div style={{ fontSize: 18, fontWeight: 800, color: '#D32F2F', marginTop: 3 }}>₹53,100</div>
+                      </div>
+                      <div style={{ borderTop: '1px solid #ECE8F7', borderRight: '1px solid #ECE8F7', paddingTop: 10, paddingRight: 8 }}>
+                        <div style={{ fontSize: 11, color: '#88859E', fontWeight: 600 }}>Debt Remaining</div>
+                        <div style={{ fontSize: 18, fontWeight: 800, color: '#1B192E', marginTop: 3 }}>~₹93,100</div>
+                      </div>
+                      <div style={{ borderTop: '1px solid #ECE8F7', paddingTop: 10, paddingLeft: 8 }}>
+                        <div style={{ fontSize: 11, color: '#88859E', fontWeight: 600 }}>Time to Clear ₹1L</div>
+                        <div style={{ fontSize: 18, fontWeight: 800, color: '#D32F2F', marginTop: 3 }}>9–10 Years</div>
+                      </div>
+                    </div>
+                    
+                    <div style={{ marginTop: 14, paddingTop: 12, borderTop: '1px solid #F0ECFA', fontSize: 12.5, color: '#5C5870', lineHeight: 1.45 }}>
+                      You paid <strong>₹60,000</strong> in a year. The bank took <strong>₹53,100</strong> of it. Your debt is still <strong>₹93,100</strong>. Over 9 years, interest alone can exceed <strong>₹2,20,000</strong>.
+                    </div>
                   </div>
-                  <div style={{ marginTop: 14, background: '#FFF7E8', borderRadius: 14, padding: '12px 14px', fontSize: 13, color: '#5A4A12', lineHeight: 1.5 }}>
-                    Paying only the Minimum Due may reduce immediate payment pressure, but can increase the overall repayment cost over time.
+
+                  {/* Warning Points */}
+                  <div style={{ marginTop: 16, display: 'flex', flexDirection: 'column', gap: 10 }}>
+                    {[
+                      {
+                        title: 'Daily Compounding Interest',
+                        desc: 'Unpaid balances accrue interest daily, compounding the outstanding balance carried into the next billing cycle.',
+                        icon: (
+                          <div style={{
+                            width: 32, height: 32, borderRadius: 99,
+                            background: '#FFEAEA',
+                            border: '1px solid rgba(211, 47, 47, 0.08)',
+                            display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0
+                          }}>
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#D32F2F" strokeWidth="2.5"><path d="M23 6l-9.5 9.5-5-5L1 18" /><path d="M17 6h6v6" /></svg>
+                          </div>
+                        )
+                      },
+                      {
+                        title: 'Additional Late Penalty',
+                        desc: 'Missed or delayed payments immediately incur an additional late fee plus mandatory GST tax.',
+                        icon: (
+                          <div style={{
+                            width: 32, height: 32, borderRadius: 99,
+                            background: '#FFEAEA',
+                            border: '1px solid rgba(211, 47, 47, 0.08)',
+                            display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0
+                          }}>
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#D32F2F" strokeWidth="2.5"><path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
+                          </div>
+                        )
+                      }
+                    ].map((item, idx) => (
+                      <div key={idx} style={{
+                        display: 'flex',
+                        gap: 12,
+                        padding: '14px 16px',
+                        borderRadius: 16,
+                        background: '#FFF',
+                        border: '1px solid #ECE8F7',
+                        borderLeft: '4px solid #D32F2F',
+                        boxShadow: '0 8px 20px -16px rgba(24, 21, 47, 0.08)',
+                      }}>
+                        {item.icon}
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+                          <span style={{ fontSize: 13.5, fontWeight: 800, color: '#1B192E' }}>{item.title}</span>
+                          <span style={{ fontSize: 11.5, color: '#5C5870', lineHeight: 1.5 }}>{item.desc}</span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* High-Impact Advisory Block */}
+                  <div style={{
+                    marginTop: 14,
+                    background: 'linear-gradient(90deg, #F3F1FA 0%, #FAFAFD 100%)',
+                    borderRadius: 16,
+                    padding: '14px 16px',
+                    borderLeft: '4px solid #5B3FD4',
+                    boxShadow: '0 8px 20px -16px rgba(91, 63, 212, 0.12)',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'center',
+                  }}>
+                    <span style={{ fontSize: 10, fontWeight: 800, color: '#5B3FD4', letterSpacing: '0.8px', textTransform: 'uppercase', marginBottom: 4 }}>
+                      Advisory Note
+                    </span>
+                    <span style={{ fontSize: 12.5, fontWeight: 600, color: '#4B4960', lineHeight: 1.45 }}>
+                      Paying only the minimum due covers interest and fees, leaving your core debt balance virtually unchanged.
+                    </span>
                   </div>
                 </>
               )}
