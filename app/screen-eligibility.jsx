@@ -43,6 +43,25 @@ function Eligibility({ go }) {
   const [howItWorksOpen, setHowItWorksOpen] = useState(false);
   const [activeStep, setActiveStep] = useState(0);
   useEffect(() => { const t = setTimeout(() => setAnimIn(true), 80); return () => clearTimeout(t); }, []);
+  useEffect(() => {
+    const scr = document.getElementById('phone-scroll-viewport');
+    if (!scr) return;
+    if (howItWorksOpen) {
+      scr.style.overflowY = 'hidden';
+      scr.scrollTop = 0;
+      const preventDefault = (e) => {
+        // prevent dragging / scrolling gestures
+        e.preventDefault();
+      };
+      scr.addEventListener('wheel', preventDefault, { passive: false });
+      scr.addEventListener('touchmove', preventDefault, { passive: false });
+      return () => {
+        scr.removeEventListener('wheel', preventDefault);
+        scr.removeEventListener('touchmove', preventDefault);
+        scr.style.overflowY = 'auto';
+      };
+    }
+  }, [howItWorksOpen]);
 
   const milestones = [
     {
@@ -485,46 +504,46 @@ function Eligibility({ go }) {
 
         {/* ── What your savings could buy ── */}
         {(() => {
-          const TRIP_COST  = 8000;
+          const TRIP_COST = 8000;
           const PHONE_COST = 30000;
-          const RENT_COST  = 7000;
-          const INV_YEARS  = 5;
-          const INV_RATE   = 0.12;
-          const goaTrips   = Math.max(1, Math.floor(INTEREST_SAVED / TRIP_COST));
-          const phones     = Math.max(1, Math.floor(INTEREST_SAVED / PHONE_COST));
+          const RENT_COST = 7000;
+          const INV_YEARS = 5;
+          const INV_RATE = 0.12;
+          const goaTrips = Math.max(1, Math.floor(INTEREST_SAVED / TRIP_COST));
+          const phones = Math.max(1, Math.floor(INTEREST_SAVED / PHONE_COST));
           const rentMonths = Math.max(1, Math.floor(INTEREST_SAVED / RENT_COST));
           const investedValue = Math.round(INTEREST_SAVED * Math.pow(1 + INV_RATE, INV_YEARS));
-          const investReturn  = investedValue - INTEREST_SAVED;
+          const investReturn = investedValue - INTEREST_SAVED;
 
           const iconPlane = (
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-              <path d="M21 16v-2l-8-5V3.5A1.5 1.5 0 0 0 11.5 2a1.5 1.5 0 0 0-1.5 1.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5Z" fill="#3B82F6"/>
+              <path d="M21 16v-2l-8-5V3.5A1.5 1.5 0 0 0 11.5 2a1.5 1.5 0 0 0-1.5 1.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5Z" fill="#3B82F6" />
             </svg>
           );
           const iconPhone = (
             <svg width="18" height="22" viewBox="0 0 24 28" fill="none">
-              <rect x="4" y="1" width="16" height="26" rx="3" stroke="#3B82F6" strokeWidth="2"/>
-              <circle cx="12" cy="23" r="1.2" fill="#3B82F6"/>
-              <line x1="9" y1="5" x2="15" y2="5" stroke="#3B82F6" strokeWidth="1.5" strokeLinecap="round"/>
+              <rect x="4" y="1" width="16" height="26" rx="3" stroke="#3B82F6" strokeWidth="2" />
+              <circle cx="12" cy="23" r="1.2" fill="#3B82F6" />
+              <line x1="9" y1="5" x2="15" y2="5" stroke="#3B82F6" strokeWidth="1.5" strokeLinecap="round" />
             </svg>
           );
           const iconHouse = (
             <svg width="22" height="20" viewBox="0 0 24 22" fill="none">
-              <path d="M3 10.5L12 2l9 8.5V21a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V10.5Z" stroke="#3B82F6" strokeWidth="2" strokeLinejoin="round"/>
-              <path d="M9 22v-7h6v7" stroke="#3B82F6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              <path d="M3 10.5L12 2l9 8.5V21a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V10.5Z" stroke="#3B82F6" strokeWidth="2" strokeLinejoin="round" />
+              <path d="M9 22v-7h6v7" stroke="#3B82F6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
           );
           const iconGrowth = (
             <svg width="22" height="20" viewBox="0 0 24 22" fill="none">
-              <polyline points="2,18 8,10 13,14 20,4" stroke="#4ADE80" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"/>
-              <polyline points="16,4 20,4 20,8" stroke="#4ADE80" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"/>
+              <polyline points="2,18 8,10 13,14 20,4" stroke="#4ADE80" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
+              <polyline points="16,4 20,4 20,8" stroke="#4ADE80" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
           );
 
           const tiles = [
-            { icon: iconPlane,  count: goaTrips,   label: 'Goa trips' },
-            { icon: iconPhone,  count: phones,      label: 'Smartphones' },
-            { icon: iconHouse,  count: rentMonths,  label: "Months' rent" },
+            { icon: iconPlane, count: goaTrips, label: 'Goa trips' },
+            { icon: iconPhone, count: phones, label: 'Smartphones' },
+            { icon: iconHouse, count: rentMonths, label: "Months' rent" },
           ];
 
           return (
@@ -608,34 +627,40 @@ function Eligibility({ go }) {
 
       {/* How it Works Modal */}
       {howItWorksOpen && (
-        <div style={{
-          position: 'absolute',
-          inset: 0,
-          zIndex: 100,
-          background: 'rgba(9, 9, 20, 0.92)',
-          backdropFilter: 'blur(16px)',
-          WebkitBackdropFilter: 'blur(16px)',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          justifyContent: 'center',
-          padding: 20,
-          animation: 'howItWorksFadeIn 0.3s ease-out',
-        }}>
-          <div style={{
-            width: '100%',
-            maxWidth: 340,
-            background: '#121124',
-            border: '1px solid rgba(255, 255, 255, 0.1)',
-            borderRadius: 24,
-            padding: 24,
+        <div
+          onTouchMove={e => e.preventDefault()}
+          style={{
+            position: 'absolute',
+            inset: 0,
+            zIndex: 100,
+            background: 'rgba(9, 9, 20, 0.92)',
+            backdropFilter: 'blur(16px)',
+            WebkitBackdropFilter: 'blur(16px)',
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
-            position: 'relative',
-            animation: 'cardSlideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1)',
-            color: '#fff',
-          }}>
+            justifyContent: 'center',
+            padding: 20,
+            animation: 'howItWorksFadeIn 0.3s ease-out',
+          }}
+        >
+          <div
+            onTouchMove={e => e.stopPropagation()}
+            style={{
+              width: '100%',
+              maxWidth: 340,
+              background: '#121124',
+              border: '1px solid rgba(255, 255, 255, 0.1)',
+              borderRadius: 24,
+              padding: 24,
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              position: 'relative',
+              animation: 'cardSlideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1)',
+              color: '#fff',
+            }}
+          >
             {/* Close Button */}
             <button
               onClick={() => setHowItWorksOpen(false)}
@@ -663,7 +688,7 @@ function Eligibility({ go }) {
             <span style={{ fontSize: 11, fontWeight: 700, letterSpacing: 1.5, color: '#CBA6FF', textTransform: 'uppercase', marginBottom: 12 }}>
               How CCRF works
             </span>
-            
+
             {/* Visual Container */}
             <div style={{
               width: '100%',
@@ -729,7 +754,7 @@ function Eligibility({ go }) {
                   Back
                 </button>
               ) : null}
-              
+
               <button
                 onClick={() => {
                   if (activeStep < steps.length - 1) {

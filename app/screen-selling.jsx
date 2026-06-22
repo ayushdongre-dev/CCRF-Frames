@@ -326,6 +326,18 @@ function MeltCompareRow({ label, rate, total, frac, color, playKey, delay = 0 })
 // ── Info tooltip ─────────────────────────────────────────────
 function InfoTip({ text }) {
   const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    if (!open) return;
+    const handleClose = () => setOpen(false);
+    document.addEventListener('click', handleClose);
+    document.addEventListener('touchstart', handleClose);
+    return () => {
+      document.removeEventListener('click', handleClose);
+      document.removeEventListener('touchstart', handleClose);
+    };
+  }, [open]);
+
   return (
     <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
       <button
@@ -340,7 +352,6 @@ function InfoTip({ text }) {
       </button>
       {open && (
         <div
-          onClick={e => e.stopPropagation()}
           style={{ position: 'absolute', bottom: 26, left: '50%', transform: 'translateX(-50%)', width: 210, background: '#fff', borderRadius: 14, padding: '13px 14px 11px', boxShadow: '0 12px 32px -6px rgba(0,0,0,.18)', zIndex: 20, border: '1px solid #FBECEB' }}
         >
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 7, marginBottom: 8 }}>
@@ -562,7 +573,7 @@ function SavingsScreen({ go, monthly = 30000, setMonthly }) {
                   <div style={{ fontSize: 13, fontWeight: 800, color: '#FFB8B8' }}>{inr(animCardsInt)}</div>
                 </div>
               </div>
-              
+
               {/* RIGHT — with melt */}
               <div style={{
                 flex: 1,
@@ -804,8 +815,8 @@ function SavingsScreen({ go, monthly = 30000, setMonthly }) {
                 lineHeight: 1,
                 transition: 'opacity 0.2s ease',
               }}
-              onMouseEnter={e => e.currentTarget.style.opacity = 0.8}
-              onMouseLeave={e => e.currentTarget.style.opacity = 1}>
+                onMouseEnter={e => e.currentTarget.style.opacity = 0.8}
+                onMouseLeave={e => e.currentTarget.style.opacity = 1}>
                 Close
               </button>
             </div>
@@ -1119,7 +1130,7 @@ function SavingsScreen({ go, monthly = 30000, setMonthly }) {
                         <div style={{ fontSize: 18, fontWeight: 800, color: '#D32F2F', marginTop: 3 }}>9–10 Years</div>
                       </div>
                     </div>
-                    
+
                     <div style={{ marginTop: 14, paddingTop: 12, borderTop: '1px solid #F0ECFA', fontSize: 12.5, color: '#5C5870', lineHeight: 1.45 }}>
                       You paid <strong>₹60,000</strong> in a year. The bank took <strong>₹53,100</strong> of it. Your debt is still <strong>₹93,100</strong>. Over 9 years, interest alone can exceed <strong>₹2,20,000</strong>.
                     </div>

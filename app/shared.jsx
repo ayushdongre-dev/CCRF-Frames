@@ -28,11 +28,11 @@ function lakh(n) {
 // ── Brand bank marks (stylised, brand-coloured) ──────────────
 const BANKS = {
   FEDERAL: { name: 'FEDERAL BANK', short: 'Federal', bg: '#FDB913', fg: '#0B2C6F', mono: 'F' },
-  HDFC:    { name: 'HDFC BANK',    short: 'HDFC',    bg: '#004C8F', fg: '#ED232A', mono: 'H' },
-  ICICI:   { name: 'ICICI BANK',   short: 'ICICI',   bg: '#AE282E', fg: '#F58220', mono: 'I' },
-  AXIS:    { name: 'AXIS BANK',    short: 'Axis',    bg: '#97144D', fg: '#ED1C24', mono: 'A' },
-  SBI:     { name: 'SBI CARD',     short: 'SBI',     bg: '#22409A', fg: '#fff',    mono: 'S' },
-  IDFC:    { name: 'IDFC FIRST',   short: 'IDFC',    bg: '#9C1D26', fg: '#E4002B', mono: 'I' },
+  HDFC: { name: 'HDFC BANK', short: 'HDFC', bg: '#004C8F', fg: '#ED232A', mono: 'H' },
+  ICICI: { name: 'ICICI BANK', short: 'ICICI', bg: '#AE282E', fg: '#F58220', mono: 'I' },
+  AXIS: { name: 'AXIS BANK', short: 'Axis', bg: '#97144D', fg: '#ED1C24', mono: 'A' },
+  SBI: { name: 'SBI CARD', short: 'SBI', bg: '#22409A', fg: '#fff', mono: 'S' },
+  IDFC: { name: 'IDFC FIRST', short: 'IDFC', bg: '#9C1D26', fg: '#E4002B', mono: 'I' },
 };
 
 function BankLogo({ id, size = 34, show = true }) {
@@ -183,7 +183,7 @@ function Phone({ children, light = false, bg = 'var(--bg)', clean = false }) {
           width: 116, height: 33, borderRadius: 20, background: '#0E0D16', zIndex: 40,
         }} />}
         {!clean && <StatusBar light={light} />}
-        <div className="scr" style={{ flex: 1, overflowY: 'auto', overflowX: 'hidden', position: 'relative' }}>
+        <div id="phone-scroll-viewport" className="scr" style={{ flex: 1, overflowY: 'auto', overflowX: 'hidden', position: 'relative' }}>
           {children}
         </div>
         {!clean && <div style={{
