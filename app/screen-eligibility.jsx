@@ -366,7 +366,7 @@ function Eligibility({ go }) {
 
         </section>
 
-        {/* Progress section */}
+        {/* Unlock in Stages section */}
         <section style={{
           marginTop: 16,
           background: EL.card,
@@ -375,21 +375,12 @@ function Eligibility({ go }) {
           boxShadow: '0 10px 26px -20px rgba(40,30,80,.45)',
         }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
-            <span style={{ fontSize: 11, fontWeight: 700, letterSpacing: 0.8, color: EL.muted3 }}>MELT PROGRESS</span>
+            <span style={{ fontSize: 11, fontWeight: 700, letterSpacing: 0.8, color: EL.muted3 }}>UNLOCK IN STAGES</span>
             <button
               onClick={() => { setHowItWorksOpen(true); setActiveStep(0); }}
               style={{
-                fontSize: 12,
-                fontWeight: 700,
-                color: EL.purple,
-                background: EL.purpleL,
-                padding: '4px 10px',
-                borderRadius: 999,
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: 4,
-                cursor: 'pointer',
-                transition: 'opacity 0.2s',
+                fontSize: 12, fontWeight: 700, color: EL.purple, background: EL.purpleL,
+                padding: '4px 10px', borderRadius: 999, display: 'inline-flex', alignItems: 'center', gap: 4, cursor: 'pointer', transition: 'opacity 0.2s',
               }}
               onMouseEnter={e => e.currentTarget.style.opacity = 0.85}
               onMouseLeave={e => e.currentTarget.style.opacity = 1}
@@ -397,62 +388,95 @@ function Eligibility({ go }) {
               How it works?
             </button>
           </div>
-          <div style={{ fontWeight: 800, fontSize: 20, color: EL.ink, letterSpacing: -0.3, marginBottom: 6 }}>Here's your melt journey</div>
-          <div style={{ fontSize: 13, color: EL.muted2, lineHeight: 1.5, marginBottom: 22 }}>These are the steps to clear your card debt — and how you can unlock more than ₹1,50,000 over time.</div>
+          <div style={{ fontWeight: 800, fontSize: 20, color: EL.ink, letterSpacing: -0.3, marginBottom: 18 }}>You unlock it in stages</div>
 
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 24, padding: '4px 0' }}>
-            {/* Step 1: Approved */}
-            <div style={{ display: 'flex', gap: 14 }}>
-              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginTop: 2 }}>
-                <div style={{
-                  width: 30, height: 30, borderRadius: '50%', background: EL.green,
-                  display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
-                  boxShadow: '0 4px 12px -4px rgba(26,122,74,.6)',
-                }}>
-                  {Icon.check('#fff', 18)}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 7 }}>
+
+            {/* Stage 1 — available now */}
+            <div style={{ display: 'flex', gap: 10, alignItems: 'stretch' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', paddingTop: 3 }}>
+                <div style={{ width: 24, height: 24, borderRadius: '50%', background: EL.green, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, boxShadow: '0 4px 12px -4px rgba(26,122,74,.6)' }}>
+                  {Icon.check('#fff', 14)}
                 </div>
-                <div style={{ width: 2, flex: 1, background: EL.line, margin: '6px 0 -18px' }} />
+                <div style={{ flex: 1, width: 0, borderLeft: `2px dashed ${EL.amber}`, margin: '4px 0 0' }} />
               </div>
-              <div>
-                <div style={{ fontSize: 15, fontWeight: 800, color: EL.ink, letterSpacing: -0.2 }}>₹1,50,000 approved!</div>
-                <div style={{ fontSize: 13, color: EL.muted2, marginTop: 4, fontWeight: 500 }}>Complete application today</div>
+              <div style={{ flex: 1, background: EL.greenBg, border: `1px solid ${EL.greenBorder}`, borderRadius: 12, padding: '9px 12px 10px' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 3 }}>
+                  <span style={{ fontSize: 9.5, fontWeight: 800, color: EL.green, letterSpacing: 0.5 }}>AVAILABLE NOW</span>
+                  <div style={{ textAlign: 'right' }}>
+                    <div style={{ fontSize: 8.5, color: EL.muted3, fontWeight: 600, letterSpacing: 0.3 }}>TOTAL LIMIT</div>
+                    <div style={{ fontSize: 10, fontWeight: 800, color: EL.green }}>₹1,50,000</div>
+                  </div>
+                </div>
+                <div style={{ fontSize: 20, fontWeight: 800, color: EL.ink, letterSpacing: -0.5, lineHeight: 1 }}>₹1,50,000</div>
+                <div style={{ fontSize: 11, color: EL.muted2, marginTop: 2, fontWeight: 500 }}>Yours to use today</div>
+                <div style={{ marginTop: 7, height: 4, borderRadius: 99, background: 'rgba(26,122,74,.15)', overflow: 'hidden' }}>
+                  <div style={{ height: '100%', width: '37.5%', background: EL.green, borderRadius: 99 }} />
+                </div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 3 }}>
+                  <span style={{ fontSize: 9.5, color: EL.muted3, fontWeight: 500 }}>₹0</span>
+                  <span style={{ fontSize: 9.5, color: EL.muted3, fontWeight: 500 }}>of ₹4,00,000 max</span>
+                </div>
               </div>
             </div>
 
-            {/* Step 2: Melt your Debt */}
-            <div style={{ display: 'flex', gap: 14 }}>
-              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginTop: 2 }}>
-                <div style={{
-                  width: 30, height: 30, borderRadius: '50%', background: EL.purple,
-                  display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
-                  boxShadow: '0 4px 12px -4px rgba(91,63,212,.6)',
-                }}>
-                  {Icon.bolt('#fff', 16)}
+            {/* Stage 2 — unlock next */}
+            <div style={{ display: 'flex', gap: 10, alignItems: 'stretch' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', paddingTop: 3 }}>
+                <div style={{ width: 24, height: 24, borderRadius: '50%', background: '#fff', border: `2px solid ${EL.purple}`, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                  {Icon.lock(EL.purple, 11)}
                 </div>
-                <div style={{ width: 2, flex: 1, background: EL.line, margin: '6px 0 -18px' }} />
+                <div style={{ flex: 1, width: 0, borderLeft: '2px dashed #D4D0E8', margin: '4px 0 0' }} />
               </div>
-              <div>
-                <div style={{ fontSize: 15, fontWeight: 800, color: EL.ink, letterSpacing: -0.2 }}>Melt your Debt</div>
-                <div style={{ fontSize: 13, color: EL.muted2, marginTop: 4, fontWeight: 500 }}>Pay your credit card bill</div>
+              <div style={{ flex: 1, background: EL.purpleL, border: `1px solid ${EL.purpleBorder}`, borderRadius: 12, padding: '9px 12px 10px' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 3 }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+                    {Icon.lock(EL.purple, 9)}
+                    <span style={{ fontSize: 9.5, fontWeight: 800, color: EL.purple, letterSpacing: 0.5 }}>UNLOCK NEXT</span>
+                  </div>
+                  <div style={{ textAlign: 'right' }}>
+                    <div style={{ fontSize: 8.5, color: EL.muted3, fontWeight: 600, letterSpacing: 0.3 }}>TOTAL LIMIT</div>
+                    <div style={{ fontSize: 10, fontWeight: 800, color: EL.purple }}>₹2,50,000</div>
+                  </div>
+                </div>
+                <div style={{ fontSize: 20, fontWeight: 800, color: EL.ink, letterSpacing: -0.5, lineHeight: 1 }}>+₹1,00,000</div>
+                <div style={{ fontSize: 11, color: EL.muted2, marginTop: 2, fontWeight: 500 }}>Pay off your current card bill to unlock the offer</div>
+                <div style={{ marginTop: 7, height: 4, borderRadius: 99, background: '#D4D0E8', backgroundImage: `repeating-linear-gradient(90deg, #B8B0D8 0, #B8B0D8 8px, transparent 8px, transparent 13px)` }} />
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 3 }}>
+                  <span style={{ fontSize: 9.5, color: EL.muted3, fontWeight: 500 }}>Locked</span>
+                  <span style={{ fontSize: 9.5, color: EL.muted3, fontWeight: 500 }}>of ₹4,00,000 max</span>
+                </div>
               </div>
             </div>
 
-            {/* Step 3: Unlock More! */}
-            <div style={{ display: 'flex', gap: 14 }}>
-              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginTop: 2 }}>
-                <div style={{
-                  width: 30, height: 30, borderRadius: '50%', background: '#fff',
-                  border: `2px solid ${EL.amber}`,
-                  display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
-                }}>
-                  {Icon.lock(EL.amber, 14)}
+            {/* Stage 3 — next step */}
+            <div style={{ display: 'flex', gap: 10, alignItems: 'stretch' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', paddingTop: 3 }}>
+                <div style={{ width: 24, height: 24, borderRadius: '50%', background: '#fff', border: `2px solid #C8C4D8`, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                  {Icon.lock('#C8C4D8', 11)}
                 </div>
               </div>
-              <div>
-                <div style={{ fontSize: 15, fontWeight: 800, color: EL.ink, letterSpacing: -0.2 }}>Unlock More!</div>
-                <div style={{ fontSize: 13, color: EL.muted2, marginTop: 4, fontWeight: 500 }}>Get more offer after it reflects in your credit history</div>
+              <div style={{ flex: 1, background: '#F4F3FA', border: '1px solid #E0DCF0', borderRadius: 12, padding: '9px 12px 10px' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 3 }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+                    {Icon.lock('#B8B4C8', 9)}
+                    <span style={{ fontSize: 9.5, fontWeight: 800, color: EL.muted3, letterSpacing: 0.5 }}>NEXT STEP</span>
+                  </div>
+                  <div style={{ textAlign: 'right' }}>
+                    <div style={{ fontSize: 8.5, color: EL.muted3, fontWeight: 600, letterSpacing: 0.3 }}>TOTAL LIMIT</div>
+                    <div style={{ fontSize: 10, fontWeight: 800, color: EL.muted2 }}>₹4,00,000</div>
+                  </div>
+                </div>
+                <div style={{ fontSize: 20, fontWeight: 800, color: EL.muted2, letterSpacing: -0.5, lineHeight: 1 }}>+₹1,50,000</div>
+                <div style={{ fontSize: 11, color: EL.muted3, marginTop: 2, fontWeight: 500 }}>Get the above loan, pay off the rest of your bills, and unlock more!</div>
+                <div style={{ marginTop: 7, height: 4, borderRadius: 99, background: '#D4D0E8', backgroundImage: `repeating-linear-gradient(90deg, #C4C0D8 0, #C4C0D8 8px, transparent 8px, transparent 13px)` }} />
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 3 }}>
+                  <span style={{ fontSize: 9.5, color: EL.muted3, fontWeight: 500 }}>Locked</span>
+                  <span style={{ fontSize: 9.5, color: EL.muted3, fontWeight: 500 }}>of ₹4,00,000 max</span>
+                </div>
               </div>
             </div>
+
           </div>
         </section>
 
@@ -483,91 +507,6 @@ function Eligibility({ go }) {
           />
         </div>
 
-        {/* ── What your savings could buy ── */}
-        {(() => {
-          const TRIP_COST  = 8000;
-          const PHONE_COST = 30000;
-          const RENT_COST  = 7000;
-          const INV_YEARS  = 5;
-          const INV_RATE   = 0.12;
-          const goaTrips   = Math.max(1, Math.floor(INTEREST_SAVED / TRIP_COST));
-          const phones     = Math.max(1, Math.floor(INTEREST_SAVED / PHONE_COST));
-          const rentMonths = Math.max(1, Math.floor(INTEREST_SAVED / RENT_COST));
-          const investedValue = Math.round(INTEREST_SAVED * Math.pow(1 + INV_RATE, INV_YEARS));
-          const investReturn  = investedValue - INTEREST_SAVED;
-
-          const iconPlane = (
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-              <path d="M21 16v-2l-8-5V3.5A1.5 1.5 0 0 0 11.5 2a1.5 1.5 0 0 0-1.5 1.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5Z" fill="#3B82F6"/>
-            </svg>
-          );
-          const iconPhone = (
-            <svg width="18" height="22" viewBox="0 0 24 28" fill="none">
-              <rect x="4" y="1" width="16" height="26" rx="3" stroke="#3B82F6" strokeWidth="2"/>
-              <circle cx="12" cy="23" r="1.2" fill="#3B82F6"/>
-              <line x1="9" y1="5" x2="15" y2="5" stroke="#3B82F6" strokeWidth="1.5" strokeLinecap="round"/>
-            </svg>
-          );
-          const iconHouse = (
-            <svg width="22" height="20" viewBox="0 0 24 22" fill="none">
-              <path d="M3 10.5L12 2l9 8.5V21a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V10.5Z" stroke="#3B82F6" strokeWidth="2" strokeLinejoin="round"/>
-              <path d="M9 22v-7h6v7" stroke="#3B82F6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
-          );
-          const iconGrowth = (
-            <svg width="22" height="20" viewBox="0 0 24 22" fill="none">
-              <polyline points="2,18 8,10 13,14 20,4" stroke="#4ADE80" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"/>
-              <polyline points="16,4 20,4 20,8" stroke="#4ADE80" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
-          );
-
-          const tiles = [
-            { icon: iconPlane,  count: goaTrips,   label: 'Goa trips' },
-            { icon: iconPhone,  count: phones,      label: 'Smartphones' },
-            { icon: iconHouse,  count: rentMonths,  label: "Months' rent" },
-          ];
-
-          return (
-            <div style={{ marginTop: 6, borderRadius: 18, background: EL.hero, overflow: 'hidden', boxShadow: '0 16px 40px -20px rgba(15,13,46,.7)' }}>
-              <div style={{ padding: '14px 16px 8px' }}>
-                <div style={{ fontSize: 14, fontWeight: 800, color: '#fff', lineHeight: 1.3 }}>What your interest could buy instead</div>
-              </div>
-
-              {/* Investment tile — compact single row */}
-              <div style={{ margin: '4px 10px 6px', background: 'rgba(74,222,128,.1)', borderRadius: 12, padding: '10px 13px', border: '1px solid rgba(74,222,128,.2)', display: 'flex', alignItems: 'center', gap: 10 }}>
-                <div style={{ flexShrink: 0 }}>{iconGrowth}</div>
-                <div style={{ flex: 1, minWidth: 0 }}>
-                  <div style={{ fontSize: 10, color: 'rgba(255,255,255,.5)', fontWeight: 600, letterSpacing: 0.3 }}>IF YOU INVESTED IT INSTEAD</div>
-                  <div style={{ fontSize: 13.5, fontWeight: 800, color: '#4ADE80', marginTop: 2 }}>
-                    {inr(INTEREST_SAVED)} → {inr(investedValue)}
-                  </div>
-                  <div style={{ fontSize: 10, color: 'rgba(255,255,255,.5)', marginTop: 2 }}>
-                    at 12% p.a. over {INV_YEARS} yrs — <span style={{ color: '#4ADE80', fontWeight: 700 }}>+{inr(investReturn)} returns</span>
-                  </div>
-                </div>
-              </div>
-
-              {/* 3 tiles */}
-              <div style={{ display: 'flex', padding: '0 10px 12px', gap: 6 }}>
-                {tiles.map((t, i) => (
-                  <div key={i} style={{
-                    flex: 1,
-                    background: 'rgba(255,255,255,.06)',
-                    borderRadius: 12,
-                    padding: '10px 6px 9px',
-                    textAlign: 'center',
-                    border: '1px solid rgba(255,255,255,.08)',
-                  }}>
-                    <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 6 }}>{t.icon}</div>
-                    <div style={{ fontSize: 22, fontWeight: 800, color: '#fff', lineHeight: 1 }}>{t.count}</div>
-                    <div style={{ fontSize: 10, color: 'rgba(255,255,255,.65)', marginTop: 3, fontWeight: 500 }}>{t.label}</div>
-                    <div style={{ fontSize: 9, color: '#4ADE80', marginTop: 4, fontWeight: 600 }}>saved from interest</div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          );
-        })()}
 
         {/* Disclaimer */}
         <div style={{ fontSize: 11.5, color: EL.muted3, textAlign: 'center', marginTop: 16, lineHeight: 1.4, padding: '0 10px' }}>
