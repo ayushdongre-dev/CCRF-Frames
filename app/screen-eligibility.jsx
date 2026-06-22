@@ -24,6 +24,35 @@ const EL = {
   line: '#ECEAF4',
 };
 
+function AnimatedCounter({ from, to, duration, active }) {
+  const [val, setVal] = useState(from);
+
+  useEffect(() => {
+    if (!active) {
+      setVal(from);
+      return;
+    }
+    let start = null;
+    let animId;
+    const step = (timestamp) => {
+      if (!start) start = timestamp;
+      const elapsed = timestamp - start;
+      const progress = Math.min(elapsed / duration, 1);
+      const easedProgress = progress * (2 - progress); // easeOutQuad
+      setVal(Math.floor(easedProgress * (to - from) + from));
+      if (progress < 1) {
+        animId = window.requestAnimationFrame(step);
+      }
+    };
+    animId = window.requestAnimationFrame(step);
+    return () => {
+      if (animId) window.cancelAnimationFrame(animId);
+    };
+  }, [active, from, to, duration]);
+
+  return <span>{inr(val)}</span>;
+}
+
 function Eligibility({ go }) {
   const FIRST_UNLOCK = 50000;
   const UNLOCKED = 150000;
@@ -42,7 +71,40 @@ function Eligibility({ go }) {
   const [unlockOpen, setUnlockOpen] = useState(false);
   const [howItWorksOpen, setHowItWorksOpen] = useState(false);
   const [activeStep, setActiveStep] = useState(0);
+  const [autoplay, setAutoplay] = useState(true);
+  const [step2Time, setStep2Time] = useState(0);
+  const [dialUnlocked, setDialUnlocked] = useState(false);
+
   useEffect(() => { const t = setTimeout(() => setAnimIn(true), 80); return () => clearTimeout(t); }, []);
+
+  useEffect(() => {
+    if (activeStep !== 1 || !howItWorksOpen) {
+      setStep2Time(0);
+      return;
+    }
+    const interval = setInterval(() => {
+      setStep2Time(t => t + 100);
+    }, 100);
+    return () => clearInterval(interval);
+  }, [activeStep, howItWorksOpen]);
+
+  useEffect(() => {
+    if (activeStep !== 2) {
+      setDialUnlocked(false);
+    } else {
+      const t = setTimeout(() => setDialUnlocked(true), 1500);
+      return () => clearTimeout(t);
+    }
+  }, [activeStep]);
+
+  // Flat 7-second Autoplay loop sequence
+  useEffect(() => {
+    if (!howItWorksOpen || !autoplay) return;
+    const timer = setInterval(() => {
+      setActiveStep(current => (current + 1) % 3);
+    }, 7000);
+    return () => clearInterval(timer);
+  }, [howItWorksOpen, autoplay]);
   useEffect(() => {
     const scr = document.getElementById('phone-scroll-viewport');
     if (!scr) return;
@@ -106,124 +168,16 @@ function Eligibility({ go }) {
 
   const steps = [
     {
-      title: "1. Get Approved Amount",
-      description: "Take the initial approved amount today to start clearing your high-interest debt.",
-      visual: (
-        <div style={{ position: 'relative', width: 200, height: 120, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          <div style={{
-            position: 'absolute',
-            width: 80, height: 80,
-            borderRadius: '50%',
-            background: 'rgba(26, 122, 74, 0.15)',
-            animation: 'pulseGlow 2s infinite ease-in-out',
-            zIndex: 1
-          }} />
-          <div style={{
-            position: 'relative',
-            width: 140, height: 80,
-            background: 'linear-gradient(135deg, #1A7A4A 0%, #115F36 100%)',
-            borderRadius: 14,
-            boxShadow: '0 10px 25px -5px rgba(26,122,74,0.4)',
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'space-between',
-            padding: 12,
-            zIndex: 2,
-            border: '1px solid rgba(255, 255, 255, 0.15)',
-            animation: 'float 3s infinite ease-in-out',
-          }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <span style={{ fontSize: 9, fontWeight: 700, color: '#A3F3C9', letterSpacing: 1 }}>APPROVED LIMIT</span>
-              <span style={{ width: 14, height: 14, borderRadius: 99, background: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                {Icon.check('#1A7A4A', 9)}
-              </span>
-            </div>
-            <div style={{ fontSize: 18, fontWeight: 800, color: '#fff', letterSpacing: -0.2 }}>Approved Limit</div>
-            <div style={{ fontSize: 8, color: 'rgba(255,255,255,0.7)', fontWeight: 600 }}>READY TO CLAIM TODAY</div>
-          </div>
-        </div>
-      )
+      title: "1. Instant Disbursal",
+      description: "Out of your full limit, the initial approved amount is sent instantly to your bank account."
     },
     {
-      title: "2. Pay Credit Card Bill",
-      description: "We transfer the unlocked limit directly to your bank account. You then go and pay off your credit card bill by yourself.",
-      visual: (
-        <div style={{ position: 'relative', width: 200, height: 120, display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
-          <div style={{
-            position: 'relative',
-            width: 130, height: 78,
-            background: 'linear-gradient(135deg, #E84040 0%, #9F1C1C 100%)',
-            borderRadius: 12,
-            boxShadow: '0 8px 20px rgba(0,0,0,0.3)',
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'space-between',
-            padding: 10,
-            zIndex: 2,
-            border: '1px solid rgba(255, 255, 255, 0.1)',
-            transform: 'rotate(-5deg)',
-            animation: 'howItWorksShake 4s infinite ease-in-out',
-          }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <span style={{ fontSize: 8, fontWeight: 700, color: '#FFB8B8', letterSpacing: 0.5 }}>HIGH INTEREST CARD</span>
-              <span style={{ fontSize: 10, fontWeight: 900, color: '#fff' }}>💳</span>
-            </div>
-            <div style={{ fontSize: 13, fontWeight: 700, color: '#fff' }}>Card Balance</div>
-            <div style={{
-              position: 'absolute', inset: 0, borderRadius: 12,
-              background: 'rgba(26, 122, 74, 0.9)',
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              color: '#fff', fontWeight: 800, fontSize: 12,
-              opacity: 0,
-              animation: 'paymentFlash 3s infinite ease-in-out',
-            }}>
-              PAID & MELTED!
-            </div>
-          </div>
-          <div style={{ position: 'absolute', left: '15%', bottom: '10%', width: 12, height: 12, borderRadius: '50%', background: '#F5D9A0', border: '1px solid #E8A020', animation: 'coinFly1 3s infinite ease-in-out', zIndex: 3 }} />
-          <div style={{ position: 'absolute', right: '20%', bottom: '15%', width: 10, height: 10, borderRadius: '50%', background: '#F5D9A0', border: '1px solid #E8A020', animation: 'coinFly2 3s infinite ease-in-out', zIndex: 3 }} />
-        </div>
-      )
+      title: "2. Melt Card Dues",
+      description: "Use the approved funds to clear the card dues of some of your credit cards one by one."
     },
     {
-      title: "3. Come Back & Unlock More",
-      description: "Once your card payment reflects in your credit history, return to Equall to unlock even more of your limit.",
-      visual: (
-        <div style={{ position: 'relative', width: 200, height: 120, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          <div style={{
-            position: 'absolute',
-            width: 140, height: 80,
-            borderRadius: '50%',
-            background: 'radial-gradient(circle, rgba(91,63,212,0.3) 0%, transparent 70%)',
-            zIndex: 1,
-            animation: 'glowPulse 2s infinite ease-in-out',
-          }} />
-          <div style={{
-            position: 'relative',
-            width: 130, height: 78,
-            background: 'linear-gradient(135deg, #5B3FD4 0%, #3B249E 100%)',
-            borderRadius: 12,
-            boxShadow: '0 10px 25px rgba(91,63,212,0.3)',
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'space-between',
-            padding: 10,
-            zIndex: 2,
-            border: '1px solid rgba(255, 255, 255, 0.15)',
-          }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <span style={{ fontSize: 8, fontWeight: 700, color: '#D4C8FF', letterSpacing: 0.5 }}>LOCKED PORTION</span>
-              <span style={{ fontSize: 12, animation: 'unlockRotate 3s infinite ease-in-out' }}>🔓</span>
-            </div>
-            <div>
-              <div style={{ fontSize: 9, color: '#C4B5FD', fontWeight: 600 }}>TOTAL UNLOCKED</div>
-              <div style={{ fontSize: 17, fontWeight: 800, color: '#fff' }}>More Limit</div>
-            </div>
-          </div>
-          <div style={{ position: 'absolute', top: 15, left: 20, width: 6, height: 6, borderRadius: 99, background: '#FFE082', animation: 'sparkleFloat 2s infinite ease-out' }} />
-          <div style={{ position: 'absolute', bottom: 15, right: 20, width: 8, height: 8, borderRadius: 99, background: '#A3E2C9', animation: 'sparkleFloat 2.5s infinite ease-out', animationDelay: '0.5s' }} />
-        </div>
-      )
+      title: "3. Unlock Round 2",
+      description: "Once you clear some dues, come back to Equall to unlock your next round of funds."
     }
   ];
 
@@ -286,6 +240,61 @@ function Eligibility({ go }) {
           0% { transform: translate(0, 0) scale(0.5); opacity: 0; }
           50% { opacity: 1; }
           100% { transform: translate(15px, -15px) scale(1.2); opacity: 0; }
+        }
+
+        /* ── Morphing Card Keyframes ── */
+        @keyframes laserSweep {
+          0% { clip-path: inset(0 0 0 0); }
+          100% { clip-path: inset(0 0 0 100%); }
+        }
+        @keyframes laserLine {
+          0% { left: 0%; opacity: 0; }
+          5% { opacity: 1; }
+          95% { opacity: 1; }
+          100% { left: 100%; opacity: 0; }
+        }
+        @keyframes stampBounce {
+          0% { transform: scale(3) rotate(-15deg); opacity: 0; }
+          70% { transform: scale(0.9) rotate(-10deg); opacity: 1; }
+          85% { transform: scale(1.1) rotate(-12deg); }
+          100% { transform: scale(1) rotate(-10deg); opacity: 1; }
+        }
+        @keyframes rateSlash {
+          0% { width: 0%; }
+          100% { width: 100%; }
+        }
+        @keyframes floatSparkles {
+          0% { transform: translateY(10px) scale(0.5); opacity: 0; }
+          50% { opacity: 1; }
+          100% { transform: translateY(-30px) scale(1.2); opacity: 0; }
+        }
+        @keyframes cashFlowLine {
+          0% { transform: translateY(-100%); opacity: 0; }
+          30% { opacity: 0.5; }
+          70% { opacity: 0.5; }
+          100% { transform: translateY(100%); opacity: 0; }
+        }
+        @keyframes glowPulse {
+          0%, 100% { box-shadow: 0 0 12px rgba(91, 63, 212, 0.4); }
+          50% { box-shadow: 0 0 24px rgba(91, 63, 212, 0.8), 0 0 8px rgba(34, 211, 238, 0.4); }
+        }
+        
+        /* ── Revamped timeline keyframes ── */
+        @keyframes timerCountdown {
+          from { stroke-dashoffset: 50.26; }
+          to { stroke-dashoffset: 0; }
+        }
+        @keyframes cardSlideOut {
+          0% { transform: translateY(0) scale(1) rotate(-4deg); opacity: 1; }
+          100% { transform: translateY(-180px) scale(0.85) rotate(-15deg); opacity: 0; }
+        }
+        @keyframes cardStackUp {
+          0% { transform: translateY(14px) scale(0.92) rotate(-8deg); }
+          100% { transform: translateY(0) scale(1) rotate(-4deg); }
+        }
+        @keyframes pulseLimitBoost {
+          0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(74, 222, 128, 0.4); }
+          50% { transform: scale(1.05); box-shadow: 0 0 12px 4px rgba(74, 222, 128, 0.1); }
         }
       `}</style>
 
@@ -673,8 +682,8 @@ function Eligibility({ go }) {
             style={{
               width: '100%',
               maxWidth: 340,
-              background: '#121124',
-              border: '1px solid rgba(255, 255, 255, 0.1)',
+              background: '#0F0D2E',
+              border: '1px solid rgba(255, 255, 255, 0.15)',
               borderRadius: 24,
               padding: 24,
               display: 'flex',
@@ -692,31 +701,54 @@ function Eligibility({ go }) {
                 position: 'absolute',
                 top: 16,
                 right: 16,
-                width: 32,
-                height: 32,
+                width: 30,
+                height: 30,
                 borderRadius: '50%',
                 background: 'rgba(255, 255, 255, 0.08)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                color: '#fff',
+                color: 'rgba(255, 255, 255, 0.6)',
                 fontWeight: 600,
-                fontSize: 16,
+                fontSize: 12,
                 border: 'none',
                 cursor: 'pointer',
+                transition: 'all 0.2s',
+                zIndex: 10,
               }}
+              onMouseEnter={e => { e.currentTarget.style.background = 'rgba(255, 255, 255, 0.15)'; e.currentTarget.style.color = '#fff'; }}
+              onMouseLeave={e => { e.currentTarget.style.background = 'rgba(255, 255, 255, 0.08)'; e.currentTarget.style.color = 'rgba(255, 255, 255, 0.6)'; }}
             >
               ✕
             </button>
 
-            <span style={{ fontSize: 11, fontWeight: 700, letterSpacing: 1.5, color: '#CBA6FF', textTransform: 'uppercase', marginBottom: 12 }}>
-              How CCRF works
-            </span>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 12 }}>
+              <span style={{ fontSize: 11, fontWeight: 700, letterSpacing: 1.5, color: '#A3F3C9', textTransform: 'uppercase' }}>
+                How this works?
+              </span>
+              <svg width="14" height="14" viewBox="0 0 20 20" style={{ transform: 'rotate(-90deg)', filter: 'drop-shadow(0 0 2px rgba(163,243,201,0.5))' }}>
+                <circle cx="10" cy="10" r="8" fill="none" stroke="rgba(255, 255, 255, 0.15)" strokeWidth="2" />
+                <circle
+                  cx="10"
+                  cy="10"
+                  r="8"
+                  fill="none"
+                  stroke="#A3F3C9"
+                  strokeWidth="2"
+                  strokeDasharray="50.26"
+                  strokeDashoffset="50.26"
+                  style={{
+                    animation: autoplay ? 'timerCountdown 7s linear forwards' : 'none',
+                  }}
+                  key={activeStep + '_' + autoplay}
+                />
+              </svg>
+            </div>
 
-            {/* Visual Container */}
+            {/* Visual Container (Unified Morphing Card Canvas) */}
             <div style={{
               width: '100%',
-              height: 140,
+              height: 180,
               background: 'rgba(255, 255, 255, 0.03)',
               borderRadius: 16,
               display: 'flex',
@@ -724,26 +756,431 @@ function Eligibility({ go }) {
               justifyContent: 'center',
               marginBottom: 20,
               border: '1px solid rgba(255, 255, 255, 0.05)',
+              position: 'relative',
+              overflow: 'hidden',
             }}>
-              {steps[activeStep].visual}
+              <div style={{
+                width: 260,
+                height: 150,
+                position: 'relative',
+                borderRadius: 16,
+                overflow: 'hidden',
+                transition: 'all 0.5s cubic-bezier(0.16, 1, 0.3, 1)',
+                boxShadow: activeStep === 2 ? '0 12px 32px rgba(91, 63, 212, 0.4)' : '0 10px 25px rgba(0,0,0,0.3)',
+                animation: activeStep === 2 ? 'glowPulse 3s infinite' : 'none',
+              }}>
+                {/* Sparkles (Step 3 only) */}
+                {activeStep === 2 && (
+                  <>
+                    <span style={{ position: 'absolute', top: 15, left: 20, fontSize: 14, animation: 'floatSparkles 2s infinite ease-out', zIndex: 20 }}>✨</span>
+                    <span style={{ position: 'absolute', bottom: 20, right: 30, fontSize: 16, animation: 'floatSparkles 2.5s infinite ease-out', animationDelay: '0.4s', zIndex: 20 }}>✨</span>
+                    <span style={{ position: 'absolute', top: 30, right: 20, fontSize: 12, animation: 'floatSparkles 1.8s infinite ease-out', animationDelay: '0.8s', zIndex: 20 }}>✨</span>
+                  </>
+                )}
+
+                {/* Layer 3: Circular Limit Dial (visible during Step 3) */}
+                {activeStep === 2 && (
+                  <div style={{
+                    position: 'absolute',
+                    inset: 0,
+                    background: 'linear-gradient(135deg, #0F0D2E 0%, #15133C 100%)',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    padding: '8px 12px 10px',
+                    color: '#fff',
+                    zIndex: 10,
+                  }}>
+                    {/* Iterative Rounds flow indicator */}
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 8 }}>
+                      <span style={{ fontSize: 8, fontWeight: 800, color: '#4ADE80', background: 'rgba(74,222,128,0.1)', padding: '2px 5px', borderRadius: 4, whiteSpace: 'nowrap' }}>ROUND 1 (₹1.5L)</span>
+                      <span style={{ fontSize: 8, color: 'rgba(255,255,255,0.4)' }}>➔</span>
+                      <span style={{ fontSize: 8, fontWeight: 800, color: dialUnlocked ? '#4ADE80' : 'rgba(255,255,255,0.3)', background: dialUnlocked ? 'rgba(74,222,128,0.15)' : 'rgba(255,255,255,0.05)', padding: '2px 5px', borderRadius: 4, whiteSpace: 'nowrap' }}>ROUND 2 (+₹1L)</span>
+                      <span style={{ fontSize: 8, color: 'rgba(255,255,255,0.2)' }}>➔</span>
+                      <span style={{ fontSize: 8, fontWeight: 800, color: 'rgba(255,255,255,0.2)', background: 'rgba(255,255,255,0.02)', padding: '2px 5px', borderRadius: 4, whiteSpace: 'nowrap' }}>ROUND 3 (+₹1.5L)</span>
+                    </div>
+
+                    {/* SVG Gauge */}
+                    <div style={{ position: 'relative', width: 84, height: 84, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      <svg width="84" height="84" style={{ transform: 'rotate(-90deg)', position: 'absolute' }}>
+                        {/* Background track circle */}
+                        <circle cx="42" cy="42" r="37" fill="none" stroke="rgba(255,255,255,0.06)" strokeWidth="4" />
+                        {/* Foreground animated progress circle */}
+                        <circle
+                          cx="42"
+                          cy="42"
+                          r="37"
+                          fill="none"
+                          stroke="#4ADE80"
+                          strokeWidth="4"
+                          strokeLinecap="round"
+                          strokeDasharray="232.48"
+                          strokeDashoffset={dialUnlocked ? "0" : "116.24"}
+                          style={{
+                            transition: 'stroke-dashoffset 2.0s cubic-bezier(0.16, 1, 0.3, 1) 0.4s',
+                            filter: 'drop-shadow(0 0 4px rgba(74,222,128,0.5))',
+                          }}
+                        />
+                      </svg>
+                      {/* Center Content */}
+                      <div style={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        zIndex: 12,
+                        textAlign: 'center',
+                      }}>
+                        <span style={{
+                          fontSize: 14,
+                          animation: !dialUnlocked ? 'lockUnlockShake 0.8s infinite ease-in-out' : 'checkPop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) both',
+                          marginBottom: 1
+                        }}>
+                          {dialUnlocked ? '🔓' : '🔒'}
+                        </span>
+                        <div style={{ fontSize: 7, color: '#A3E2C9', fontWeight: 700, letterSpacing: 0.3 }}>ROUND 2</div>
+                        <div style={{ fontSize: 12, fontWeight: 800, color: '#fff', letterSpacing: -0.2 }}>
+                          +<AnimatedCounter from={0} to={100000} duration={2000} active={activeStep === 2} />
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Limit Boost Pulse Tag */}
+                    <div style={{
+                      marginTop: 8,
+                      background: 'rgba(74, 222, 128, 0.15)',
+                      border: '1px solid #4ADE80',
+                      borderRadius: 20,
+                      padding: '3px 10px',
+                      fontSize: 8,
+                      fontWeight: 800,
+                      color: '#4ADE80',
+                      letterSpacing: 0.8,
+                      opacity: dialUnlocked ? 1 : 0,
+                      transform: dialUnlocked ? 'scale(1)' : 'scale(0.8)',
+                      transition: 'all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.5s',
+                      animation: dialUnlocked ? 'pulseLimitBoost 2.0s infinite ease-in-out 1.2s' : 'none',
+                    }}>
+                      ROUND 2 FUNDS UNLOCKED
+                    </div>
+                  </div>
+                )}
+
+                {/* Layer 2: Card Stack (visible during Step 2) */}
+                {activeStep === 1 && (() => {
+                  const dues1 = step2Time < 500 ? 60000 : step2Time >= 1700 ? 0 : Math.round(60000 - ((step2Time - 500) / 1200) * 60000);
+                  const dues2 = step2Time < 3000 ? 90000 : step2Time >= 4200 ? 0 : Math.round(90000 - ((step2Time - 3000) / 1200) * 90000);
+
+                  const card1Transform = step2Time < 2200 ? 'translateY(0) scale(1) rotate(-4deg)' : 'translateY(-200px) scale(0.8) rotate(-15deg)';
+                  const card1Opacity = step2Time < 2200 ? 1 : 0;
+
+                  const card2Transform = step2Time < 2200 ? 'translateY(12px) scale(0.94) rotate(-2deg)' : step2Time < 4700 ? 'translateY(0) scale(1) rotate(-4deg)' : 'translateY(-200px) scale(0.8) rotate(-15deg)';
+                  const card2Opacity = step2Time < 4700 ? 1 : 0;
+
+                  const card3Transform = step2Time < 2200 ? 'translateY(24px) scale(0.88) rotate(0deg)' : step2Time < 4700 ? 'translateY(12px) scale(0.94) rotate(-2deg)' : 'translateY(0) scale(1) rotate(-4deg)';
+
+                  const card4Transform = step2Time < 2200 ? 'translateY(36px) scale(0.82) rotate(2deg)' : step2Time < 4700 ? 'translateY(24px) scale(0.88) rotate(0deg)' : 'translateY(12px) scale(0.94) rotate(-2deg)';
+
+                  return (
+                    <div style={{ position: 'absolute', inset: 0, overflow: 'hidden' }}>
+                      
+                      {/* Card 4 (Slate) */}
+                      <div style={{
+                        position: 'absolute',
+                        inset: 16,
+                        background: 'linear-gradient(135deg, #2C3E50 0%, #34495E 100%)',
+                        borderRadius: 12,
+                        padding: 12,
+                        display: 'flex',
+                        flexDirection: 'column',
+                        justifyContent: 'space-between',
+                        color: '#fff',
+                        boxShadow: '0 8px 20px rgba(0,0,0,0.3)',
+                        transform: card4Transform,
+                        transition: 'transform 0.5s cubic-bezier(0.16, 1, 0.3, 1)',
+                        zIndex: 1,
+                      }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                          <span style={{ fontSize: 8, fontWeight: 700, color: '#BDC3C7', letterSpacing: 0.8 }}>CARD 4 DUES</span>
+                          <span style={{ fontSize: 10 }}>💳</span>
+                        </div>
+                        <div>
+                          <div style={{ fontSize: 7, color: '#BDC3C7', opacity: 0.8 }}>CARD BALANCE DUES</div>
+                          <div style={{ fontSize: 18, fontWeight: 800, color: '#fff', letterSpacing: -0.3 }}>
+                            {inr(40000)}
+                          </div>
+                        </div>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }} />
+                      </div>
+
+                      {/* Card 3 (Purple) */}
+                      <div style={{
+                        position: 'absolute',
+                        inset: 16,
+                        background: 'linear-gradient(135deg, #5B3FD4 0%, #3A1C71 100%)',
+                        borderRadius: 12,
+                        padding: 12,
+                        display: 'flex',
+                        flexDirection: 'column',
+                        justifyContent: 'space-between',
+                        color: '#fff',
+                        boxShadow: '0 8px 20px rgba(0,0,0,0.3)',
+                        transform: card3Transform,
+                        transition: 'transform 0.5s cubic-bezier(0.16, 1, 0.3, 1)',
+                        zIndex: 2,
+                      }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                          <span style={{ fontSize: 8, fontWeight: 700, color: '#E8E8FF', letterSpacing: 0.8 }}>CARD 3 DUES</span>
+                          <span style={{ fontSize: 10 }}>💳</span>
+                        </div>
+                        <div>
+                          <div style={{ fontSize: 7, color: '#E8E8FF', opacity: 0.8 }}>CARD BALANCE DUES</div>
+                          <div style={{ fontSize: 18, fontWeight: 800, color: '#fff', letterSpacing: -0.3 }}>
+                            {inr(37400)}
+                          </div>
+                        </div>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }} />
+                      </div>
+
+                      {/* Card 2 (Orange) */}
+                      <div style={{
+                        position: 'absolute',
+                        inset: 16,
+                        background: 'linear-gradient(135deg, #E67E22 0%, #B85C00 100%)',
+                        borderRadius: 12,
+                        padding: 12,
+                        display: 'flex',
+                        flexDirection: 'column',
+                        justifyContent: 'space-between',
+                        color: '#fff',
+                        boxShadow: '0 8px 20px rgba(0,0,0,0.3)',
+                        transform: card2Transform,
+                        opacity: card2Opacity,
+                        transition: 'transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.5s ease-out',
+                        zIndex: 3,
+                      }}>
+                        {/* Laser line Card 2 */}
+                        {step2Time >= 3000 && step2Time < 4200 && (
+                          <div style={{
+                            position: 'absolute',
+                            top: 0,
+                            bottom: 0,
+                            width: 3,
+                            background: '#4ADE80',
+                            boxShadow: '0 0 10px #4ADE80, 0 0 20px #4ADE80',
+                            left: `${((step2Time - 3000) / 1200) * 100}%`,
+                            zIndex: 10,
+                          }} />
+                        )}
+
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                          <span style={{ fontSize: 8, fontWeight: 700, color: '#FFE0CC', letterSpacing: 0.8 }}>CARD 2 DUES</span>
+                          <span style={{ fontSize: 10 }}>💳</span>
+                        </div>
+                        <div>
+                          <div style={{ fontSize: 7, color: '#FFE0CC', opacity: 0.8 }}>CARD BALANCE DUES</div>
+                          <div style={{ fontSize: 18, fontWeight: 800, color: step2Time >= 4200 ? '#4ADE80' : '#fff', letterSpacing: -0.3 }}>
+                            {inr(dues2)}
+                          </div>
+                        </div>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }} />
+
+                        {/* PAID Stamp Card 2 */}
+                        {step2Time >= 4000 && (
+                          <div style={{
+                            position: 'absolute',
+                            top: '30%',
+                            left: '25%',
+                            transform: 'rotate(-10deg)',
+                            background: 'rgba(0, 0, 0, 0.2)',
+                            border: '2px solid #4ADE80',
+                            borderRadius: 4,
+                            color: '#4ADE80',
+                            padding: '3px 8px',
+                            fontSize: 12,
+                            fontWeight: 900,
+                            letterSpacing: 1,
+                            textTransform: 'uppercase',
+                            animation: 'stampBounce 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) both',
+                            zIndex: 15,
+                          }}>
+                            PAID
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Card 1 (Maroon) */}
+                      <div style={{
+                        position: 'absolute',
+                        inset: 16,
+                        background: 'linear-gradient(135deg, #97144D 0%, #5F0B30 100%)',
+                        borderRadius: 12,
+                        padding: 12,
+                        display: 'flex',
+                        flexDirection: 'column',
+                        justifyContent: 'space-between',
+                        color: '#fff',
+                        boxShadow: '0 8px 20px rgba(0,0,0,0.3)',
+                        transform: card1Transform,
+                        opacity: card1Opacity,
+                        transition: 'transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.5s ease-out',
+                        zIndex: 4,
+                      }}>
+                        {/* Laser line Card 1 */}
+                        {step2Time >= 500 && step2Time < 1700 && (
+                          <div style={{
+                            position: 'absolute',
+                            top: 0,
+                            bottom: 0,
+                            width: 3,
+                            background: '#4ADE80',
+                            boxShadow: '0 0 10px #4ADE80, 0 0 20px #4ADE80',
+                            left: `${((step2Time - 500) / 1200) * 100}%`,
+                            zIndex: 10,
+                          }} />
+                        )}
+
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                          <span style={{ fontSize: 8, fontWeight: 700, color: '#FFE5EC', letterSpacing: 0.8 }}>CARD 1 DUES</span>
+                          <span style={{ fontSize: 10 }}>💳</span>
+                        </div>
+                        <div>
+                          <div style={{ fontSize: 7, color: '#FFE5EC', opacity: 0.8 }}>CARD BALANCE DUES</div>
+                          <div style={{ fontSize: 18, fontWeight: 800, color: step2Time >= 1700 ? '#4ADE80' : '#fff', letterSpacing: -0.3 }}>
+                            {inr(dues1)}
+                          </div>
+                        </div>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }} />
+
+                        {/* PAID Stamp Card 1 */}
+                        {step2Time >= 1500 && (
+                          <div style={{
+                            position: 'absolute',
+                            top: '30%',
+                            left: '25%',
+                            transform: 'rotate(-10deg)',
+                            background: 'rgba(0, 0, 0, 0.2)',
+                            border: '2px solid #4ADE80',
+                            borderRadius: 4,
+                            color: '#4ADE80',
+                            padding: '3px 8px',
+                            fontSize: 12,
+                            fontWeight: 900,
+                            letterSpacing: 1,
+                            textTransform: 'uppercase',
+                            animation: 'stampBounce 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) both',
+                            zIndex: 15,
+                          }}>
+                            PAID
+                          </div>
+                        )}
+                      </div>
+
+                    </div>
+                  );
+                })()}
+
+                {/* Layer 1: White Ledger Card (Step 1 only, fades out on transition) */}
+                <div style={{
+                  position: 'absolute',
+                  inset: 0,
+                  background: '#FFFFFF',
+                  border: '1px solid #ECEAF4',
+                  padding: 16,
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'space-between',
+                  color: '#1B192E',
+                  zIndex: 3,
+                  opacity: activeStep === 0 ? 1 : 0,
+                  pointerEvents: activeStep === 0 ? 'auto' : 'none',
+                  transition: 'opacity 0.6s ease-in-out',
+                }}>
+                  {/* Ledger Grid Background */}
+                  <div style={{
+                    position: 'absolute',
+                    inset: 0,
+                    backgroundImage: 'radial-gradient(#ECEAF4 1.2px, transparent 1.2px)',
+                    backgroundSize: '12px 12px',
+                    opacity: 0.4,
+                    pointerEvents: 'none',
+                  }} />
+
+                  {/* Digital Cash Flow Lines */}
+                  {activeStep === 0 && (
+                    <div style={{ position: 'absolute', inset: 0, overflow: 'hidden', pointerEvents: 'none' }}>
+                      <div style={{ position: 'absolute', left: '15%', top: 0, bottom: 0, width: 1, borderLeft: '1.5px dashed #4ADE80', animation: 'cashFlowLine 2s infinite linear' }} />
+                      <div style={{ position: 'absolute', left: '50%', top: 0, bottom: 0, width: 1, borderLeft: '1.5px dashed #4ADE80', animation: 'cashFlowLine 2.5s infinite linear', animationDelay: '0.4s' }} />
+                      <div style={{ position: 'absolute', right: '15%', top: 0, bottom: 0, width: 1, borderLeft: '1.5px dashed #4ADE80', animation: 'cashFlowLine 1.8s infinite linear', animationDelay: '0.8s' }} />
+                    </div>
+                  )}
+
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', position: 'relative', zIndex: 2 }}>
+                    <span style={{ fontSize: 8.5, fontWeight: 800, color: '#534AB7', letterSpacing: 1.2 }}>CCRF BANK TRANSFER</span>
+                    <span style={{ fontSize: 10, color: '#1A7A4A', fontWeight: 700 }}>● DIRECT DEPOSIT</span>
+                  </div>
+
+                  <div style={{ position: 'relative', zIndex: 2 }}>
+                    <div style={{ fontSize: 8, color: '#888', fontWeight: 600 }}>DISBURSED FUNDS</div>
+                    <div style={{ fontSize: 24, fontWeight: 800, color: '#1A7A4A', letterSpacing: -0.5 }}>
+                      <AnimatedCounter from={0} to={150000} duration={2500} active={activeStep === 0} />
+                    </div>
+                  </div>
+
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', position: 'relative', zIndex: 2 }}>
+                    <span style={{ fontSize: 8, color: '#888', fontWeight: 500 }}>TRANSFERRED TO ACC: *8940</span>
+                    <span style={{
+                      fontSize: 8,
+                      fontWeight: 800,
+                      color: '#1A7A4A',
+                      background: '#E8F8EE',
+                      padding: '2px 6px',
+                      borderRadius: 4,
+                      transition: 'opacity 0.3s',
+                      opacity: 1,
+                    }}>
+                      SUCCESS
+                    </span>
+                  </div>
+                </div>
+              </div>
             </div>
 
-            {/* Stepper Dots */}
-            <div style={{ display: 'flex', gap: 6, marginBottom: 16 }}>
-              {steps.map((_, idx) => (
-                <div
-                  key={idx}
-                  onClick={() => setActiveStep(idx)}
-                  style={{
-                    width: idx === activeStep ? 24 : 8,
-                    height: 8,
-                    borderRadius: 4,
-                    background: idx === activeStep ? '#7F55DF' : 'rgba(255, 255, 255, 0.2)',
-                    transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
-                    cursor: 'pointer',
-                  }}
-                />
-              ))}
+            {/* Interactive Progress Tab Bar */}
+            <div style={{ display: 'flex', width: '100%', gap: 8, marginBottom: 20 }}>
+              {steps.map((s, idx) => {
+                const isActive = activeStep === idx;
+                const isCompleted = idx < activeStep;
+                return (
+                  <button
+                    key={idx}
+                    onClick={() => {
+                      setActiveStep(idx);
+                      setAutoplay(false);
+                    }}
+                    style={{
+                      flex: 1,
+                      padding: '8px 4px',
+                      borderRadius: 10,
+                      background: isActive ? 'rgba(127, 85, 223, 0.15)' : isCompleted ? 'rgba(26, 122, 74, 0.1)' : 'rgba(255, 255, 255, 0.03)',
+                      border: isActive ? '1px solid #7F55DF' : isCompleted ? '1px solid #1A7A4A' : '1px solid rgba(255, 255, 255, 0.08)',
+                      color: isActive ? '#fff' : isCompleted ? '#4ADE80' : 'rgba(255, 255, 255, 0.4)',
+                      fontSize: 10,
+                      fontWeight: 700,
+                      textAlign: 'center',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: 4,
+                      transition: 'all 0.3s ease',
+                      cursor: 'pointer',
+                    }}
+                  >
+                    {isCompleted ? '✓' : ''} {idx + 1}. {idx === 0 ? 'Transfer' : idx === 1 ? 'Melt Dues' : 'Unlock More'}
+                  </button>
+                );
+              })}
             </div>
 
             {/* Title & Description */}
@@ -756,57 +1193,29 @@ function Eligibility({ go }) {
               </p>
             </div>
 
-            {/* Navigation buttons */}
-            <div style={{ display: 'flex', width: '100%', gap: 12 }}>
-              {activeStep > 0 ? (
-                <button
-                  onClick={() => setActiveStep(activeStep - 1)}
-                  style={{
-                    flex: 1,
-                    height: 48,
-                    borderRadius: 14,
-                    background: 'rgba(255, 255, 255, 0.08)',
-                    color: '#fff',
-                    fontWeight: 600,
-                    fontSize: 14,
-                    cursor: 'pointer',
-                    transition: 'background 0.2s',
-                  }}
-                  onMouseEnter={e => e.currentTarget.style.background = 'rgba(255, 255, 255, 0.12)'}
-                  onMouseLeave={e => e.currentTarget.style.background = 'rgba(255, 255, 255, 0.08)'}
-                >
-                  Back
-                </button>
-              ) : null}
-
-              <button
-                onClick={() => {
-                  if (activeStep < steps.length - 1) {
-                    setActiveStep(activeStep + 1);
-                  } else {
-                    setHowItWorksOpen(false);
-                  }
-                }}
-                style={{
-                  flex: 2,
-                  height: 48,
-                  borderRadius: 14,
-                  background: '#7F55DF',
-                  color: '#fff',
-                  fontWeight: 700,
-                  fontSize: 14,
-                  cursor: 'pointer',
-                  boxShadow: '0 8px 20px rgba(127, 85, 223, 0.3)',
-                  transition: 'background 0.2s, transform 0.1s',
-                }}
-                onMouseEnter={e => e.currentTarget.style.background = '#6B40CF'}
-                onMouseLeave={e => e.currentTarget.style.background = '#7F55DF'}
-                onMouseDown={e => e.currentTarget.style.transform = 'scale(0.98)'}
-                onMouseUp={e => e.currentTarget.style.transform = 'scale(1)'}
-              >
-                {activeStep === steps.length - 1 ? 'Got it!' : 'Next'}
-              </button>
-            </div>
+            {/* Got it Button */}
+            <button
+              onClick={() => setHowItWorksOpen(false)}
+              style={{
+                width: '100%',
+                height: 48,
+                borderRadius: 14,
+                background: '#7F55DF',
+                color: '#fff',
+                fontWeight: 700,
+                fontSize: 14,
+                cursor: 'pointer',
+                boxShadow: '0 8px 20px rgba(127, 85, 223, 0.3)',
+                transition: 'background 0.2s, transform 0.1s',
+                border: 'none',
+              }}
+              onMouseEnter={e => e.currentTarget.style.background = '#6B40CF'}
+              onMouseLeave={e => e.currentTarget.style.background = '#7F55DF'}
+              onMouseDown={e => e.currentTarget.style.transform = 'scale(0.98)'}
+              onMouseUp={e => e.currentTarget.style.transform = 'scale(1)'}
+            >
+              Got it!
+            </button>
           </div>
         </div>
       )}

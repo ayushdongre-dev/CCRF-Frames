@@ -432,6 +432,34 @@ function SavingsScreen({ go, monthly = 30000, setMonthly }) {
   useEffect(() => { const t = setTimeout(() => setPlayKey(k => k + 1), 90); return () => clearTimeout(t); }, []);
   useEffect(() => { setPlayKey(k => k + 1); }, [monthly]);
 
+  const [showScrollArrow, setShowScrollArrow] = useState(true);
+  const [portalTarget, setPortalTarget] = useState(null);
+  useEffect(() => {
+    let scr = document.getElementById('phone-scroll-viewport');
+    let handleScroll;
+    const t = setTimeout(() => {
+      scr = document.getElementById('phone-scroll-viewport');
+      if (!scr) return;
+      if (scr.parentElement) {
+        setPortalTarget(scr.parentElement);
+      }
+      handleScroll = () => {
+        if (scr.scrollTop > 50) {
+          setShowScrollArrow(false);
+        } else {
+          setShowScrollArrow(true);
+        }
+      };
+      scr.addEventListener('scroll', handleScroll);
+    }, 150);
+    return () => {
+      clearTimeout(t);
+      if (scr && handleScroll) {
+        scr.removeEventListener('scroll', handleScroll);
+      }
+    };
+  }, []);
+
   const { cardsInt, meltInt, saving, monthsDiff } = useMemo(() => calcSavings(monthly), [monthly]);
 
   const animCardsInt = useAnimatedNumber(cardsInt);
@@ -1226,6 +1254,48 @@ function SavingsScreen({ go, monthly = 30000, setMonthly }) {
           Melt my debt {Icon.arrowR('#fff')}
         </button>
       </BottomBar>
+
+      <style>{`
+        @keyframes bounceArrow {
+          0%, 100% { transform: translate(-50%, 0); }
+          50% { transform: translate(-50%, 6px); }
+        }
+      `}</style>
+
+      {/* Floating Bouncing Circular Down Arrow */}
+      {portalTarget && window.ReactDOM.createPortal(
+        <div
+          onClick={() => {
+            const scr = document.getElementById('phone-scroll-viewport');
+            if (scr) scr.scrollTo({ top: 160, behavior: 'smooth' });
+          }}
+          style={{
+            position: 'absolute',
+            bottom: 110,
+            left: '50%',
+            zIndex: 100,
+            width: 36,
+            height: 36,
+            borderRadius: '50%',
+            background: '#fff',
+            boxShadow: '0 4px 14px rgba(40,30,80,.25), 0 0 0 1px rgba(91,63,212,.08)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            cursor: 'pointer',
+            opacity: showScrollArrow ? 1 : 0,
+            transform: `translateX(-50%) translateY(${showScrollArrow ? '0' : '10px'})`,
+            pointerEvents: showScrollArrow ? 'auto' : 'none',
+            transition: 'opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1), transform 0.35s cubic-bezier(0.16, 1, 0.3, 1)',
+            animation: showScrollArrow ? 'bounceArrow 1.6s infinite ease-in-out' : 'none',
+          }}
+        >
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+            <path d="M6 9l6 6 6-6" stroke={MELT.purple} strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+        </div>,
+        portalTarget
+      )}
     </div>
   );
 }
