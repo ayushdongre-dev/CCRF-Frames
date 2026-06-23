@@ -805,7 +805,6 @@ function Eligibility({ go }) {
                 <div style={{ position: 'relative', width: 26, height: 26, borderRadius: '50%', background: EL.green, display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 2, boxShadow: '0 4px 12px -4px rgba(26,122,74,.6)' }}>
                   {Icon.check('#fff', 15)}
                 </div>
-                <div style={{ flex: 1, width: 0, borderLeft: `2px dashed ${EL.amber}`, margin: '4px 0 0' }} />
               </div>
 
               <div style={{ flex: 1, background: EL.greenBg, border: `1px solid ${EL.greenBorder}`, borderRadius: 14, padding: '14px 14px 16px', overflow: 'hidden', position: 'relative' }}>
