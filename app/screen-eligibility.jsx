@@ -805,6 +805,7 @@ function Eligibility({ go }) {
                 <div style={{ position: 'relative', width: 26, height: 26, borderRadius: '50%', background: EL.green, display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 2, boxShadow: '0 4px 12px -4px rgba(26,122,74,.6)' }}>
                   {Icon.check('#fff', 15)}
                 </div>
+                <div style={{ flex: 1, width: 0, borderLeft: `2px dashed ${EL.amber}`, margin: '4px 0 0' }} />
               </div>
 
               <div style={{ flex: 1, background: EL.greenBg, border: `1px solid ${EL.greenBorder}`, borderRadius: 14, padding: '14px 14px 16px', overflow: 'hidden', position: 'relative' }}>
@@ -1022,91 +1023,6 @@ function Eligibility({ go }) {
           />
         </div>
 
-        {/* ── What your savings could buy ── */}
-        {(() => {
-          const TRIP_COST = 8000;
-          const PHONE_COST = 30000;
-          const RENT_COST = 7000;
-          const INV_YEARS = 5;
-          const INV_RATE = 0.12;
-          const goaTrips = Math.max(1, Math.floor(INTEREST_SAVED / TRIP_COST));
-          const phones = Math.max(1, Math.floor(INTEREST_SAVED / PHONE_COST));
-          const rentMonths = Math.max(1, Math.floor(INTEREST_SAVED / RENT_COST));
-          const investedValue = Math.round(INTEREST_SAVED * Math.pow(1 + INV_RATE, INV_YEARS));
-          const investReturn = investedValue - INTEREST_SAVED;
-
-          const iconPlane = (
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-              <path d="M21 16v-2l-8-5V3.5A1.5 1.5 0 0 0 11.5 2a1.5 1.5 0 0 0-1.5 1.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5Z" fill="#3B82F6" />
-            </svg>
-          );
-          const iconPhone = (
-            <svg width="18" height="22" viewBox="0 0 24 28" fill="none">
-              <rect x="4" y="1" width="16" height="26" rx="3" stroke="#3B82F6" strokeWidth="2" />
-              <circle cx="12" cy="23" r="1.2" fill="#3B82F6" />
-              <line x1="9" y1="5" x2="15" y2="5" stroke="#3B82F6" strokeWidth="1.5" strokeLinecap="round" />
-            </svg>
-          );
-          const iconHouse = (
-            <svg width="22" height="20" viewBox="0 0 24 22" fill="none">
-              <path d="M3 10.5L12 2l9 8.5V21a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V10.5Z" stroke="#3B82F6" strokeWidth="2" strokeLinejoin="round" />
-              <path d="M9 22v-7h6v7" stroke="#3B82F6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-          );
-          const iconGrowth = (
-            <svg width="22" height="20" viewBox="0 0 24 22" fill="none">
-              <polyline points="2,18 8,10 13,14 20,4" stroke="#4ADE80" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
-              <polyline points="16,4 20,4 20,8" stroke="#4ADE80" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-          );
-
-          const tiles = [
-            { icon: iconPlane, count: goaTrips, label: 'Goa trips' },
-            { icon: iconPhone, count: phones, label: 'Smartphones' },
-            { icon: iconHouse, count: rentMonths, label: "Months' rent" },
-          ];
-
-          return (
-            <div style={{ marginTop: 6, borderRadius: 18, background: EL.hero, overflow: 'hidden', boxShadow: '0 16px 40px -20px rgba(15,13,46,.7)' }}>
-              <div style={{ padding: '14px 16px 8px' }}>
-                <div style={{ fontSize: 14, fontWeight: 800, color: '#fff', lineHeight: 1.3 }}>What your interest could buy instead</div>
-              </div>
-
-              {/* Investment tile — compact single row */}
-              <div style={{ margin: '4px 10px 6px', background: 'rgba(74,222,128,.1)', borderRadius: 12, padding: '10px 13px', border: '1px solid rgba(74,222,128,.2)', display: 'flex', alignItems: 'center', gap: 10 }}>
-                <div style={{ flexShrink: 0 }}>{iconGrowth}</div>
-                <div style={{ flex: 1, minWidth: 0 }}>
-                  <div style={{ fontSize: 10, color: 'rgba(255,255,255,.5)', fontWeight: 600, letterSpacing: 0.3 }}>IF YOU INVESTED IT INSTEAD</div>
-                  <div style={{ fontSize: 13.5, fontWeight: 800, color: '#4ADE80', marginTop: 2 }}>
-                    {inr(INTEREST_SAVED)} → {inr(investedValue)}
-                  </div>
-                  <div style={{ fontSize: 10, color: 'rgba(255,255,255,.5)', marginTop: 2 }}>
-                    at 12% p.a. over {INV_YEARS} yrs — <span style={{ color: '#4ADE80', fontWeight: 700 }}>+{inr(investReturn)} returns</span>
-                  </div>
-                </div>
-              </div>
-
-              {/* 3 tiles */}
-              <div style={{ display: 'flex', padding: '0 10px 12px', gap: 6 }}>
-                {tiles.map((t, i) => (
-                  <div key={i} style={{
-                    flex: 1,
-                    background: 'rgba(255,255,255,.06)',
-                    borderRadius: 12,
-                    padding: '10px 6px 9px',
-                    textAlign: 'center',
-                    border: '1px solid rgba(255,255,255,.08)',
-                  }}>
-                    <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 6 }}>{t.icon}</div>
-                    <div style={{ fontSize: 22, fontWeight: 800, color: '#fff', lineHeight: 1 }}>{t.count}</div>
-                    <div style={{ fontSize: 10, color: 'rgba(255,255,255,.65)', marginTop: 3, fontWeight: 500 }}>{t.label}</div>
-                    <div style={{ fontSize: 9, color: '#4ADE80', marginTop: 4, fontWeight: 600 }}>saved from interest</div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          );
-        })()}
 
         {/* Disclaimer */}
         <div style={{ fontSize: 11.5, color: EL.muted3, textAlign: 'center', marginTop: 16, lineHeight: 1.4, padding: '0 10px' }}>
