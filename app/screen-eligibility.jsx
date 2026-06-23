@@ -884,7 +884,7 @@ function Eligibility({ go }) {
 
                   return (
                     <div style={{ position: 'absolute', inset: 0, overflow: 'hidden' }}>
-                      
+
                       {/* Card 4 (Slate) */}
                       <div style={{
                         position: 'absolute',
