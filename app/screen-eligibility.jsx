@@ -24,33 +24,324 @@ const EL = {
   line: '#ECEAF4',
 };
 
-function AnimatedCounter({ from, to, duration, active }) {
-  const [val, setVal] = useState(from);
+const LoopingCounter = ({ start, end, duration, loopDuration, delay = 0 }) => {
+  const { useState, useEffect } = React;
+  const [val, setVal] = useState(start);
+  useEffect(() => {
+    let startTime = performance.now();
+    let frame;
+    const animate = (time) => {
+      let elapsed = time - startTime;
+      let localTime = (elapsed - delay) % loopDuration;
+      if (localTime < 0) {
+         setVal(start);
+      } else if (localTime > duration) {
+         setVal(end);
+      } else {
+         let progress = localTime / duration;
+         const easeOut = 1 - Math.pow(1 - progress, 3);
+         setVal(Math.floor(start + (end - start) * easeOut));
+      }
+      frame = requestAnimationFrame(animate);
+    };
+    frame = requestAnimationFrame(animate);
+    return () => cancelAnimationFrame(frame);
+  }, [start, end, duration, loopDuration, delay]);
+  return <>{typeof inr === 'function' ? inr(val) : '₹' + val.toLocaleString('en-IN')}</>;
+};
+
+const IconUnlock = (c = 'var(--muted)', s = 13) => (
+  <svg width={s} height={s} viewBox="0 0 24 24" fill="none">
+    <rect x="5" y="10" width="14" height="10" rx="2" stroke={c} strokeWidth="2" />
+    <path d="M8 10V7a4 4 0 017-3" stroke={c} strokeWidth="2" strokeLinecap="round" />
+  </svg>
+);
+
+function Stage2Section({ animTick }) {
+  const { useState, useEffect } = React;
+  const [walletBal, setWalletBal] = useState(150000);
+  const [cardBal, setCardBal] = useState(187400);
+  const [phase, setPhase] = useState('idle'); // 'idle' | 'paying' | 'paid'
 
   useEffect(() => {
-    if (!active) {
-      setVal(from);
-      return;
-    }
-    let start = null;
-    let animId;
-    const step = (timestamp) => {
-      if (!start) start = timestamp;
-      const elapsed = timestamp - start;
-      const progress = Math.min(elapsed / duration, 1);
-      const easedProgress = progress * (2 - progress); // easeOutQuad
-      setVal(Math.floor(easedProgress * (to - from) + from));
-      if (progress < 1) {
-        animId = window.requestAnimationFrame(step);
-      }
-    };
-    animId = window.requestAnimationFrame(step);
-    return () => {
-      if (animId) window.cancelAnimationFrame(animId);
-    };
-  }, [active, from, to, duration]);
+    // Each time animTick changes, run one full cycle: idle → paying → paid
+    setPhase('idle');
+    setWalletBal(150000);
+    setCardBal(187400);
 
-  return <span>{inr(val)}</span>;
+    let animFrame;
+    const IDLE_HOLD = 1200; // brief idle before payment starts
+    const PAY_DUR   = 2800; // countdown duration
+
+    const t = setTimeout(() => {
+      setPhase('paying');
+      const startTime = performance.now();
+
+      const update = (now) => {
+        const elapsed = now - startTime;
+        if (elapsed < PAY_DUR) {
+          const ease = (elapsed / PAY_DUR) * (2 - elapsed / PAY_DUR);
+          setWalletBal(Math.round(150000 - 150000 * ease));
+          setCardBal(Math.round(187400 - 150000 * ease));
+          animFrame = requestAnimationFrame(update);
+        } else {
+          setWalletBal(0);
+          setCardBal(37400);
+          setPhase('paid');
+        }
+      };
+      animFrame = requestAnimationFrame(update);
+    }, IDLE_HOLD);
+
+    return () => {
+      clearTimeout(t);
+      cancelAnimationFrame(animFrame);
+    };
+  }, [animTick]);
+
+  const isUnlocked = phase === 'paid';
+  const isPaying = phase === 'paying';
+
+  return (
+    <div style={{ display: 'flex', gap: 10, alignItems: 'stretch' }}>
+      <div style={{ position: 'relative', display: 'flex', flexDirection: 'column', alignItems: 'center', paddingTop: 3, width: 26, flexShrink: 0 }}>
+        {/* Timeline rail */}
+        <div style={{ position: 'absolute', top: 24, bottom: -20, width: 2, background: isUnlocked ? '#E8F8EE' : '#ECEAF4', transition: 'background 0.5s ease' }} />
+        <div style={{
+          position: 'absolute',
+          width: 6,
+          height: 6,
+          borderRadius: '50%',
+          background: isUnlocked ? EL.green : EL.purple,
+          opacity: isPaying ? 0.8 : 0.4,
+          zIndex: 3,
+          boxShadow: isUnlocked ? `0 0 8px ${EL.green}` : 'none',
+          animation: isPaying ? 'railFlowFast 1s linear infinite' : 'railFlow 2.5s ease-in-out infinite',
+        }} />
+
+        <div style={{
+          width: 24,
+          height: 24,
+          borderRadius: '50%',
+          background: '#fff',
+          border: `2px solid ${isUnlocked ? EL.green : EL.purple}`,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          zIndex: 2,
+          boxShadow: isUnlocked ? `0 0 10px rgba(26,122,74,0.35)` : 'none',
+          transform: isUnlocked ? 'scale(1.1)' : 'scale(1)',
+          transition: 'all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
+        }}>
+          {isUnlocked ? IconUnlock(EL.green, 11) : Icon.lock(EL.purple, 11)}
+        </div>
+      </div>
+
+      <div style={{
+        flex: 1,
+        background: EL.purpleL,
+        border: `1px solid ${EL.purpleBorder}`,
+        borderRadius: 14,
+        padding: '14px 14px 16px',
+        overflow: 'hidden',
+        boxShadow: 'none',
+        transition: 'all 0.5s ease',
+      }}>
+
+        {/* ── Arc animation: wallet → arc → card ── */}
+        <div style={{ position: 'relative', height: 86, marginBottom: 8, overflow: 'visible' }}>
+
+          {/* Wallet: 52px wide, 36px high. Anchored left. No white background box! */}
+          <div style={{ position: 'absolute', top: 10, left: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', zIndex: 2 }}>
+            <div style={{
+              width: 52,
+              height: 36,
+              borderRadius: 8,
+              background: 'linear-gradient(135deg, #78350F 0%, #451A03 100%)',
+              border: '1.5px solid #92400E',
+              boxShadow: '0 4px 10px rgba(69,26,3,0.25)',
+              position: 'relative',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              overflow: 'visible',
+            }}>
+              {/* Cash note peeking out */}
+              <div style={{
+                position: 'absolute',
+                top: -8,
+                left: 10,
+                width: 22,
+                height: 12,
+                borderRadius: '2px 2px 0 0',
+                background: 'linear-gradient(to bottom, #10B981, #059669)',
+                border: '0.8px solid rgba(255,255,255,0.3)',
+                boxShadow: '0 -2px 4px rgba(5,150,105,0.2)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                color: '#fff',
+                fontSize: 6,
+                fontWeight: 900,
+                zIndex: 1,
+              }}>
+                ₹
+              </div>
+
+              {/* Wallet flap & clasp */}
+              <div style={{
+                position: 'absolute',
+                right: 0,
+                top: 8,
+                width: 20,
+                height: 20,
+                background: '#451A03',
+                borderRadius: '4px 0 0 4px',
+                borderLeft: '1px solid #78350F',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                zIndex: 2,
+              }}>
+                {/* Gold metal buckle */}
+                <div style={{
+                  width: 5,
+                  height: 5,
+                  borderRadius: '50%',
+                  background: '#F5D9A0',
+                  boxShadow: '0 0 2px #E8A020',
+                }} />
+              </div>
+            </div>
+
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginTop: 4 }}>
+              <span style={{ fontSize: 7, fontWeight: 700, color: EL.muted2, letterSpacing: 0.2 }}>Your A/C</span>
+              <span style={{ fontSize: 8.5, fontWeight: 800, color: EL.green, marginTop: 1 }}>
+                ₹{walletBal === 150000 ? '1.5L' : (walletBal / 100000).toFixed(2) + 'L'}
+              </span>
+            </div>
+          </div>
+
+          {/* Dashed arc SVG path */}
+          <svg style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', overflow: 'visible', zIndex: 1, pointerEvents: 'none' }} viewBox="0 0 200 86" preserveAspectRatio="none">
+            <path d="M 26 28 Q 100 -12 174 28" fill="none" stroke="rgba(127,85,223,0.2)" strokeWidth="1.5" strokeDasharray="4 4" />
+          </svg>
+
+          {/* Staggered green Cash Note bills flying along the arc */}
+          {isPaying && [0, 1, 2, 3, 4].map(i => (
+            <div key={i} style={{
+              position: 'absolute',
+              left: 0,
+              top: 0,
+              width: 22,
+              height: 12,
+              borderRadius: 2,
+              background: 'linear-gradient(135deg, #34D399 0%, #059669 100%)',
+              border: '0.8px solid rgba(255,255,255,0.4)',
+              boxShadow: '0 2px 6px rgba(5,150,105,0.3)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              color: '#fff',
+              fontSize: 7,
+              fontWeight: 900,
+              zIndex: 5,
+              offsetPath: "path('M 26 28 Q 100 -12 174 28')",
+              animation: `flowParticle 1.4s cubic-bezier(0.4, 0, 0.2, 1) infinite`,
+              animationDelay: `${i * 0.25}s`,
+            }}>
+              ₹
+            </div>
+          ))}
+
+          {/* Card: 52px wide, 36px high. Anchored right. */}
+          <div style={{ position: 'absolute', top: 10, right: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', zIndex: 2 }}>
+            <div style={{
+              width: 52,
+              height: 36,
+              borderRadius: 8,
+              background: 'linear-gradient(135deg, #1E1B4B 0%, #312E81 100%)',
+              overflow: 'hidden',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              boxShadow: '0 4px 12px rgba(49,46,129,0.25)',
+              border: '1.5px solid #4338CA',
+              position: 'relative',
+              transition: 'all 0.5s ease',
+              animation: isPaying ? 's2CardVibrate 0.15s infinite alternate' : 'none',
+            }}>
+              {/* Realistic credit card layout */}
+              <div style={{ width: '100%', height: '100%', padding: '4px 6px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', position: 'relative' }}>
+                {/* Card chip & contact symbol */}
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <div style={{ width: 10, height: 8, background: '#F5D9A0', borderRadius: 1.5, border: '0.5px solid #E8A020' }} />
+                  <svg width="8" height="8" viewBox="0 0 24 24" fill="none" opacity="0.6">
+                    <path d="M4 12c4.4-4.4 11.6-4.4 16 0M7 12c2.8-2.8 7.2-2.8 10 0M10 12c1.1-1.1 2.9-1.1 4 0" stroke="#fff" strokeWidth="2.5" strokeLinecap="round" />
+                  </svg>
+                </div>
+                {/* Card number mock */}
+                <div style={{ display: 'flex', gap: 2 }}>
+                  <div style={{ width: 12, height: 2, background: 'rgba(255,255,255,0.25)', borderRadius: 0.5 }} />
+                  <div style={{ width: 12, height: 2, background: 'rgba(255,255,255,0.25)', borderRadius: 0.5 }} />
+                  <div style={{ width: 12, height: 2, background: 'rgba(255,255,255,0.25)', borderRadius: 0.5 }} />
+                </div>
+              </div>
+
+              {/* PAID stamp overlay */}
+              {isUnlocked && (
+                <div style={{
+                  position: 'absolute',
+                  top: '50%',
+                  left: '50%',
+                  transform: 'translate(-50%, -50%) rotate(-15deg)',
+                  border: '1.5px solid #E5484D',
+                  borderRadius: 3,
+                  color: '#E5484D',
+                  fontSize: 8.5,
+                  fontWeight: 900,
+                  padding: '1px 3px',
+                  textTransform: 'uppercase',
+                  letterSpacing: 0.5,
+                  background: 'rgba(255, 255, 255, 0.95)',
+                  boxShadow: '0 2px 5px rgba(0,0,0,0.2)',
+                  zIndex: 10,
+                  animation: 'stampPop 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.3) both',
+                }}>
+                  PAID
+                </div>
+              )}
+            </div>
+
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginTop: 4 }}>
+              <span style={{ fontSize: 7, fontWeight: 700, color: EL.purple, letterSpacing: 0.2 }}>CARD BALANCE</span>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 2, marginTop: 1 }}>
+                <span style={{ fontSize: 8.5, fontWeight: 800, color: EL.ink }}>₹{cardBal.toLocaleString('en-IN')}</span>
+                {isPaying && (
+                  <span style={{ color: '#E5484D', fontSize: 9, fontWeight: 900, animation: 's2RedArr 1.2s infinite ease-in-out', display: 'inline-block' }}>↓</span>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 4 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+            {Icon.lock(EL.purple, 10)}
+            <span style={{ fontSize: 10, fontWeight: 800, color: EL.purple, letterSpacing: 0.5 }}>UNLOCK NEXT</span>
+          </div>
+          <div style={{ textAlign: 'right' }}>
+            <div style={{ fontSize: 8.5, color: EL.muted3, fontWeight: 600, letterSpacing: 0.3 }}>TOTAL LIMIT</div>
+            <div style={{ fontSize: 11, fontWeight: 800, color: EL.purple }}>₹2,50,000</div>
+          </div>
+        </div>
+        <div style={{ fontSize: 12, color: EL.muted2, fontWeight: 600, lineHeight: 1.4 }}>
+          Pay your card bills using the same account by 4th July 2026
+        </div>
+      </div>
+    </div>
+  );
 }
 
 function Eligibility({ go }) {
@@ -71,40 +362,82 @@ function Eligibility({ go }) {
   const [unlockOpen, setUnlockOpen] = useState(false);
   const [howItWorksOpen, setHowItWorksOpen] = useState(false);
   const [activeStep, setActiveStep] = useState(0);
-  const [autoplay, setAutoplay] = useState(true);
-  const [step2Time, setStep2Time] = useState(0);
-  const [dialUnlocked, setDialUnlocked] = useState(false);
+
+  // Stage 1 state
+  const [stage1Val, setStage1Val] = useState(0);
+  const [s1Animating, setS1Animating] = useState(true);
+
+  // Permanent fade-in flags (only ever go false → true once)
+  const [hasStage2, setHasStage2] = useState(false);
+  const [hasStage3, setHasStage3] = useState(false);
+
+  // Tick counters to re-trigger animations each loop (not first-time visibility)
+  const [s2AnimTick, setS2AnimTick] = useState(0);
+  const [lockAnimKey, setLockAnimKey] = useState(0);
+
+  const seqStep = hasStage3 ? 2 : hasStage2 ? 1 : 0;
 
   useEffect(() => { const t = setTimeout(() => setAnimIn(true), 80); return () => clearTimeout(t); }, []);
 
   useEffect(() => {
-    if (activeStep !== 1 || !howItWorksOpen) {
-      setStep2Time(0);
-      return;
-    }
+    // Timing constants (ms)
+    const S1_DUR   = 2400; // Stage 1 counter counts 0 → 1.5L
+    const S2_DUR   = 1200 + 2800 + 600; // idle hold + paying + paid hold = 4600ms
+    const S3_DUR   = 1400; // lock animation display time
+    const LOOP_GAP = 800;  // brief pause before restarting
+    const LOOP_INTERVAL = S1_DUR + S2_DUR + S3_DUR + LOOP_GAP; // ~9200ms
+
+    let animFrame;
+    let timers = [];
+
+    const runCycle = () => {
+      // ── Stage 1: money flies in, counter counts up ──
+      setStage1Val(0);
+      setS1Animating(true);
+
+      const startTime = performance.now();
+      const tickS1 = (now) => {
+        const elapsed = now - startTime;
+        if (elapsed < S1_DUR) {
+          const ease = (elapsed / S1_DUR) * (2 - elapsed / S1_DUR);
+          setStage1Val(Math.round(150000 * ease));
+          animFrame = requestAnimationFrame(tickS1);
+        } else {
+          setStage1Val(150000);
+          setS1Animating(false); // stop money particles
+        }
+      };
+      animFrame = requestAnimationFrame(tickS1);
+
+      // ── Stage 2 triggers after Stage 1 finishes ──
+      const t1 = setTimeout(() => {
+        setHasStage2(true);          // first time: fades in; subsequent: already visible
+        setS2AnimTick(n => n + 1);   // always: re-runs Stage2 animation cycle
+      }, S1_DUR);
+      timers.push(t1);
+
+      // ── Stage 3 triggers after Stage 2 finishes ──
+      const t2 = setTimeout(() => {
+        setHasStage3(true);          // first time: fades in; subsequent: already visible
+        setLockAnimKey(n => n + 1);  // always: re-triggers lock CSS animation
+      }, S1_DUR + S2_DUR);
+      timers.push(t2);
+    };
+
+    runCycle();
     const interval = setInterval(() => {
-      setStep2Time(t => t + 100);
-    }, 100);
-    return () => clearInterval(interval);
-  }, [activeStep, howItWorksOpen]);
+      cancelAnimationFrame(animFrame);
+      timers.forEach(clearTimeout);
+      timers = [];
+      runCycle();
+    }, LOOP_INTERVAL);
 
-  useEffect(() => {
-    if (activeStep !== 2) {
-      setDialUnlocked(false);
-    } else {
-      const t = setTimeout(() => setDialUnlocked(true), 1500);
-      return () => clearTimeout(t);
-    }
-  }, [activeStep]);
-
-  // Flat 7-second Autoplay loop sequence
-  useEffect(() => {
-    if (!howItWorksOpen || !autoplay) return;
-    const timer = setInterval(() => {
-      setActiveStep(current => (current + 1) % 3);
-    }, 7000);
-    return () => clearInterval(timer);
-  }, [howItWorksOpen, autoplay]);
+    return () => {
+      clearInterval(interval);
+      cancelAnimationFrame(animFrame);
+      timers.forEach(clearTimeout);
+    };
+  }, []);
   useEffect(() => {
     const scr = document.getElementById('phone-scroll-viewport');
     if (!scr) return;
@@ -241,60 +574,99 @@ function Eligibility({ go }) {
           50% { opacity: 1; }
           100% { transform: translate(15px, -15px) scale(1.2); opacity: 0; }
         }
-
-        /* ── Morphing Card Keyframes ── */
-        @keyframes laserSweep {
-          0% { clip-path: inset(0 0 0 0); }
-          100% { clip-path: inset(0 0 0 100%); }
+        @keyframes liveDot {
+          0%, 100% { transform: scale(1); opacity: 1; }
+          50%       { transform: scale(1.65); opacity: 0.2; }
         }
-        @keyframes laserLine {
-          0% { left: 0%; opacity: 0; }
-          5% { opacity: 1; }
-          95% { opacity: 1; }
-          100% { left: 100%; opacity: 0; }
+        @keyframes entryParticle {
+          0% { transform: translate(-30px, -24px) scale(0.5) rotate(0deg); opacity: 0; }
+          15% { opacity: 1; }
+          85% { opacity: 1; }
+          100% { transform: translate(6px, 12px) scale(0.9) rotate(270deg); opacity: 0; }
         }
-        @keyframes stampBounce {
-          0% { transform: scale(3) rotate(-15deg); opacity: 0; }
-          70% { transform: scale(0.9) rotate(-10deg); opacity: 1; }
-          85% { transform: scale(1.1) rotate(-12deg); }
-          100% { transform: scale(1) rotate(-10deg); opacity: 1; }
+        @keyframes walletReceive {
+          0%   { transform: translateY(-16px) scale(0.8); opacity: 0; }
+          20%  { transform: translateY(0px)  scale(1);   opacity: 1; }
+          70%  { transform: translateY(0px)  scale(1);   opacity: 1; }
+          100% { transform: translateY(6px)  scale(0.9); opacity: 0; }
         }
-        @keyframes rateSlash {
-          0% { width: 0%; }
-          100% { width: 100%; }
+        /* ── Stage 2 seamless arc animation ── */
+        @keyframes flowParticle {
+          0% {
+            offset-distance: 0%;
+            opacity: 0;
+            transform: scale(0.4) rotate(0deg);
+          }
+          10% {
+            opacity: 1;
+            transform: scale(1.1) rotate(45deg);
+          }
+          90% {
+            opacity: 1;
+            transform: scale(1) rotate(315deg);
+          }
+          100% {
+            offset-distance: 100%;
+            opacity: 0;
+            transform: scale(0.4) rotate(360deg);
+          }
         }
-        @keyframes floatSparkles {
-          0% { transform: translateY(10px) scale(0.5); opacity: 0; }
-          50% { opacity: 1; }
-          100% { transform: translateY(-30px) scale(1.2); opacity: 0; }
+        @keyframes s2CardVibrate {
+          0% { transform: scale(1.02) rotate(-1.5deg); }
+          100% { transform: scale(1.02) rotate(1.5deg); }
         }
-        @keyframes cashFlowLine {
-          0% { transform: translateY(-100%); opacity: 0; }
-          30% { opacity: 0.5; }
-          70% { opacity: 0.5; }
-          100% { transform: translateY(100%); opacity: 0; }
+        @keyframes shineSweep {
+          0% { left: -100%; }
+          100% { left: 100%; }
         }
-        @keyframes glowPulse {
-          0%, 100% { box-shadow: 0 0 12px rgba(91, 63, 212, 0.4); }
-          50% { box-shadow: 0 0 24px rgba(91, 63, 212, 0.8), 0 0 8px rgba(34, 211, 238, 0.4); }
+        @keyframes stampPop {
+          0% { transform: translate(-50%, -50%) scale(2.5) rotate(-35deg); opacity: 0; }
+          100% { transform: translate(-50%, -50%) scale(1) rotate(-15deg); opacity: 1; }
         }
-        
-        /* ── Revamped timeline keyframes ── */
-        @keyframes timerCountdown {
-          from { stroke-dashoffset: 50.26; }
-          to { stroke-dashoffset: 0; }
+        @keyframes s2RedArr {
+          0%, 100% { transform: translateY(0); opacity: 0.6; }
+          50%      { transform: translateY(3px); opacity: 1; }
         }
-        @keyframes cardSlideOut {
-          0% { transform: translateY(0) scale(1) rotate(-4deg); opacity: 1; }
-          100% { transform: translateY(-180px) scale(0.85) rotate(-15deg); opacity: 0; }
+        @keyframes s2PaidIn {
+          from { transform: rotate(-18deg) scale(0.5); opacity: 0; }
+          60%  { transform: rotate(4deg)  scale(1.1); opacity: 1; }
+          to   { transform: rotate(0deg)  scale(1);   opacity: 1; }
         }
-        @keyframes cardStackUp {
-          0% { transform: translateY(14px) scale(0.92) rotate(-8deg); }
-          100% { transform: translateY(0) scale(1) rotate(-4deg); }
+        @keyframes railFlow {
+          0%   { top: 26px; opacity: 0; }
+          10%  { opacity: 1; }
+          90%  { opacity: 1; }
+          100% { top: calc(100% + 5px); opacity: 0; }
         }
-        @keyframes pulseLimitBoost {
-          0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(74, 222, 128, 0.4); }
-          50% { transform: scale(1.05); box-shadow: 0 0 12px 4px rgba(74, 222, 128, 0.1); }
+        @keyframes railFlowFast {
+          0%   { top: 26px; opacity: 0; }
+          10%  { opacity: 1; }
+          90%  { opacity: 1; }
+          100% { top: calc(100% + 5px); opacity: 0; }
+        }
+        @keyframes moneyFlyIn {
+          0%   { transform: translate(var(--fx), var(--fy)) scale(0.3) rotate(var(--fr)); opacity: 0; }
+          20%  { opacity: 1; }
+          70%  { opacity: 1; }
+          100% { transform: translate(0px, 0px) scale(0.6) rotate(0deg); opacity: 0; }
+        }
+        @keyframes blockFadeIn {
+          from { opacity: 0; transform: translateY(10px); }
+          to   { opacity: 1; transform: translateY(0px); }
+        }
+        @keyframes lockShackleOpen {
+          0%   { transform: rotate(0deg) translateY(0px); }
+          40%  { transform: rotate(-28deg) translateY(-4px); }
+          70%  { transform: rotate(-38deg) translateY(-6px); }
+          100% { transform: rotate(-38deg) translateY(-6px); }
+        }
+        @keyframes lockBodyGlow {
+          0%, 100% { box-shadow: 0 0 0 0 rgba(91,63,212,0.3); }
+          50%       { box-shadow: 0 0 12px 4px rgba(91,63,212,0.2); }
+        }
+        @keyframes walletPulse {
+          0%, 100% { transform: scale(1); }
+          50%       { transform: scale(1.06); }
         }
       `}</style>
 
@@ -418,89 +790,204 @@ function Eligibility({ go }) {
           </div>
           <div style={{ fontWeight: 800, fontSize: 20, color: EL.ink, letterSpacing: -0.3, marginBottom: 18 }}>You unlock it in stages</div>
 
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 7 }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
 
-            {/* Stage 1 — available now */}
-            <div style={{ display: 'flex', gap: 10, alignItems: 'stretch' }}>
-              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', paddingTop: 3 }}>
-                <div style={{ width: 24, height: 24, borderRadius: '50%', background: EL.green, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, boxShadow: '0 4px 12px -4px rgba(26,122,74,.6)' }}>
-                  {Icon.check('#fff', 14)}
+            {/* Stage 1 — available now: money flies into wallet */}
+            <div style={{
+              display: 'flex', gap: 10, alignItems: 'stretch',
+              animation: 'blockFadeIn 0.6s ease both',
+              animationDelay: '0.1s',
+            }}>
+              <div style={{ position: 'relative', display: 'flex', flexDirection: 'column', alignItems: 'center', paddingTop: 3, width: 26, flexShrink: 0 }}>
+                {/* Timeline rail */}
+                <div style={{ position: 'absolute', top: 24, bottom: -20, width: 2, background: '#ECEAF4' }} />
+                <div style={{ position: 'absolute', width: 5, height: 5, borderRadius: '50%', background: EL.green, zIndex: 3, animation: 'railFlow 2.5s ease-in-out infinite' }} />
+                <div style={{ position: 'relative', width: 26, height: 26, borderRadius: '50%', background: EL.green, display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 2, boxShadow: '0 4px 12px -4px rgba(26,122,74,.6)' }}>
+                  {Icon.check('#fff', 15)}
                 </div>
-                <div style={{ flex: 1, width: 0, borderLeft: `2px dashed ${EL.amber}`, margin: '4px 0 0' }} />
               </div>
-              <div style={{ flex: 1, background: EL.greenBg, border: `1px solid ${EL.greenBorder}`, borderRadius: 12, padding: '9px 12px 10px' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 3 }}>
-                  <span style={{ fontSize: 9.5, fontWeight: 800, color: EL.green, letterSpacing: 0.5 }}>AVAILABLE NOW</span>
-                  <div style={{ textAlign: 'right' }}>
-                    <div style={{ fontSize: 8.5, color: EL.muted3, fontWeight: 600, letterSpacing: 0.3 }}>TOTAL LIMIT</div>
-                    <div style={{ fontSize: 10, fontWeight: 800, color: EL.green }}>₹1,50,000</div>
+
+              <div style={{ flex: 1, background: EL.greenBg, border: `1px solid ${EL.greenBorder}`, borderRadius: 14, padding: '14px 14px 16px', overflow: 'hidden', position: 'relative' }}>
+
+                <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 14 }}>
+
+                  {/* Animated wallet — pulses while receiving money */}
+                  <div style={{ position: 'relative', flexShrink: 0 }}>
+                    <div style={{
+                      width: 54, height: 54, borderRadius: 13,
+                      background: 'rgba(255,255,255,0.75)',
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      animation: seqStep === 0 ? 'walletPulse 1s ease-in-out infinite' : 'none',
+                    }}>
+                      <div style={{
+                        width: 42, height: 30, borderRadius: 6,
+                        background: 'linear-gradient(135deg, #059669 0%, #047857 100%)',
+                        border: '1.2px solid #065f46',
+                        position: 'relative',
+                        display: 'flex', alignItems: 'center', justifyContent: 'center',
+                        boxShadow: '0 2px 6px rgba(4,120,87,0.15)',
+                      }}>
+                        {/* Cash bill slot on top */}
+                        <div style={{
+                          position: 'absolute', top: -8, left: 8,
+                          width: 18, height: 10,
+                          borderRadius: '1.5px 1.5px 0 0',
+                          background: 'linear-gradient(to bottom, #34d399, #059669)',
+                          border: '0.6px solid rgba(255,255,255,0.3)',
+                          display: 'flex', alignItems: 'center', justifyContent: 'center',
+                          color: '#fff', fontSize: 5, fontWeight: 900,
+                        }}>₹</div>
+                        {/* Flap */}
+                        <div style={{
+                          position: 'absolute', right: 0, top: 6,
+                          width: 14, height: 14,
+                          background: '#047857',
+                          borderRadius: '3px 0 0 3px',
+                          borderLeft: '1px solid #059669',
+                          display: 'flex', alignItems: 'center', justifyContent: 'center',
+                        }}>
+                          <div style={{ width: 3.5, height: 3.5, borderRadius: '50%', background: '#F5D9A0' }} />
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Money bills flying INTO wallet during seqStep 0 */}
+                    {seqStep === 0 && [
+                      { delay: '0s',   fx: '-40px', fy: '-30px', fr: '-20deg' },
+                      { delay: '0.3s', fx: '-55px', fy: '10px',  fr: '10deg'  },
+                      { delay: '0.6s', fx: '-20px', fy: '-50px', fr: '5deg'   },
+                      { delay: '0.9s', fx: '-50px', fy: '-10px', fr: '-15deg' },
+                    ].map((p, i) => (
+                      <div key={i} style={{
+                        position: 'absolute',
+                        top: '50%', left: '50%',
+                        marginTop: -6, marginLeft: -11,
+                        width: 22, height: 12,
+                        borderRadius: 2,
+                        background: 'linear-gradient(135deg, #34D399 0%, #059669 100%)',
+                        border: '0.8px solid rgba(255,255,255,0.5)',
+                        boxShadow: '0 2px 6px rgba(5,150,105,0.35)',
+                        display: 'flex', alignItems: 'center', justifyContent: 'center',
+                        color: '#fff', fontSize: 7, fontWeight: 900,
+                        zIndex: 10,
+                        '--fx': p.fx,
+                        '--fy': p.fy,
+                        '--fr': p.fr,
+                        animation: 'moneyFlyIn 1.1s ease-in-out infinite',
+                        animationDelay: p.delay,
+                      }}>₹</div>
+                    ))}
+                  </div>
+
+                  <div style={{ flex: 1 }}>
+                    <div style={{ fontSize: 9, color: EL.green, fontWeight: 700, letterSpacing: 0.6, marginBottom: 3 }}>FUNDS AVAILABLE</div>
+                    <div style={{ fontSize: 22, fontWeight: 800, color: EL.ink, letterSpacing: -0.5, lineHeight: 1 }}>
+                      ₹{stage1Val.toLocaleString('en-IN')}
+                    </div>
+                  </div>
+
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 5, background: 'rgba(255,255,255,0.75)', borderRadius: 20, padding: '3px 8px', flexShrink: 0 }}>
+                    <div style={{ width: 6, height: 6, borderRadius: '50%', background: EL.green, animation: 'liveDot 1.8s ease-in-out infinite' }} />
+                    <span style={{ fontSize: 8, fontWeight: 700, color: EL.green, letterSpacing: 0.3 }}>LIVE</span>
                   </div>
                 </div>
-                <div style={{ fontSize: 20, fontWeight: 800, color: EL.ink, letterSpacing: -0.5, lineHeight: 1 }}>₹1,50,000</div>
-                <div style={{ fontSize: 11, color: EL.muted2, marginTop: 2, fontWeight: 500 }}>Yours to use today</div>
-                <div style={{ marginTop: 7, height: 4, borderRadius: 99, background: 'rgba(26,122,74,.15)', overflow: 'hidden' }}>
-                  <div style={{ height: '100%', width: '37.5%', background: EL.green, borderRadius: 99 }} />
+
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 4 }}>
+                  <span style={{ fontSize: 10, fontWeight: 800, color: EL.green, letterSpacing: 0.5 }}>AVAILABLE NOW</span>
+                  <div style={{ textAlign: 'right' }}>
+                    <div style={{ fontSize: 8.5, color: EL.muted3, fontWeight: 600, letterSpacing: 0.3 }}>TOTAL LIMIT</div>
+                    <div style={{ fontSize: 11, fontWeight: 800, color: EL.green }}>₹1,50,000</div>
+                  </div>
                 </div>
-                <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 3 }}>
-                  <span style={{ fontSize: 9.5, color: EL.muted3, fontWeight: 500 }}>₹0</span>
-                  <span style={{ fontSize: 9.5, color: EL.muted3, fontWeight: 500 }}>of ₹4,00,000 max</span>
+                <div style={{ fontSize: 12, color: EL.muted2, fontWeight: 600, lineHeight: 1.4 }}>
+                  Funds deposited in your salaried bank account
                 </div>
               </div>
             </div>
 
-            {/* Stage 2 — unlock next */}
-            <div style={{ display: 'flex', gap: 10, alignItems: 'stretch' }}>
-              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', paddingTop: 3 }}>
-                <div style={{ width: 24, height: 24, borderRadius: '50%', background: '#fff', border: `2px solid ${EL.purple}`, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                  {Icon.lock(EL.purple, 11)}
-                </div>
-                <div style={{ flex: 1, width: 0, borderLeft: '2px dashed #D4D0E8', margin: '4px 0 0' }} />
-              </div>
-              <div style={{ flex: 1, background: EL.purpleL, border: `1px solid ${EL.purpleBorder}`, borderRadius: 12, padding: '9px 12px 10px' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 3 }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-                    {Icon.lock(EL.purple, 9)}
-                    <span style={{ fontSize: 9.5, fontWeight: 800, color: EL.purple, letterSpacing: 0.5 }}>UNLOCK NEXT</span>
-                  </div>
-                  <div style={{ textAlign: 'right' }}>
-                    <div style={{ fontSize: 8.5, color: EL.muted3, fontWeight: 600, letterSpacing: 0.3 }}>TOTAL LIMIT</div>
-                    <div style={{ fontSize: 10, fontWeight: 800, color: EL.purple }}>₹2,50,000</div>
-                  </div>
-                </div>
-                <div style={{ fontSize: 20, fontWeight: 800, color: EL.ink, letterSpacing: -0.5, lineHeight: 1 }}>+₹1,00,000</div>
-                <div style={{ fontSize: 11, color: EL.muted2, marginTop: 2, fontWeight: 500 }}>Pay off your current card bill to unlock the offer</div>
-                <div style={{ marginTop: 7, height: 4, borderRadius: 99, background: '#D4D0E8', backgroundImage: `repeating-linear-gradient(90deg, #B8B0D8 0, #B8B0D8 8px, transparent 8px, transparent 13px)` }} />
-                <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 3 }}>
-                  <span style={{ fontSize: 9.5, color: EL.muted3, fontWeight: 500 }}>Locked</span>
-                  <span style={{ fontSize: 9.5, color: EL.muted3, fontWeight: 500 }}>of ₹4,00,000 max</span>
-                </div>
-              </div>
+            {/* Stage 2 — unlock next: fades in after Stage 1 */}
+            <div style={{
+              opacity: seqStep >= 1 ? 1 : 0,
+              transform: seqStep >= 1 ? 'translateY(0)' : 'translateY(10px)',
+              transition: 'opacity 0.7s ease, transform 0.7s ease',
+              pointerEvents: seqStep >= 1 ? 'auto' : 'none',
+            }}>
+              <Stage2Section seqStep={seqStep >= 1 ? seqStep - 1 : 0} />
             </div>
 
-            {/* Stage 3 — next step */}
-            <div style={{ display: 'flex', gap: 10, alignItems: 'stretch' }}>
-              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', paddingTop: 3 }}>
-                <div style={{ width: 24, height: 24, borderRadius: '50%', background: '#fff', border: `2px solid #C8C4D8`, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+            {/* Stage 3 — next step: fades in after Stage 2, shows lock unlocking */}
+            <div style={{
+              display: 'flex', gap: 10, alignItems: 'stretch',
+              opacity: seqStep >= 2 ? 1 : 0,
+              transform: seqStep >= 2 ? 'translateY(0)' : 'translateY(10px)',
+              transition: 'opacity 0.7s ease, transform 0.7s ease',
+              pointerEvents: seqStep >= 2 ? 'auto' : 'none',
+            }}>
+              <div style={{ position: 'relative', display: 'flex', flexDirection: 'column', alignItems: 'center', paddingTop: 3, width: 26, flexShrink: 0 }}>
+                <div style={{ width: 24, height: 24, borderRadius: '50%', background: '#fff', border: `2px solid #C8C4D8`, display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 2 }}>
                   {Icon.lock('#C8C4D8', 11)}
                 </div>
               </div>
-              <div style={{ flex: 1, background: '#F4F3FA', border: '1px solid #E0DCF0', borderRadius: 12, padding: '9px 12px 10px' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 3 }}>
+
+              <div style={{ flex: 1, background: '#F4F3FA', border: '1px solid #E0DCF0', borderRadius: 14, padding: '14px 14px 16px', overflow: 'hidden', opacity: 0.85 }}>
+
+                <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 12 }}>
+                  {/* Animated lock unlocking */}
+                  <div style={{ width: 54, height: 54, borderRadius: 13, background: 'rgba(255,255,255,0.7)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, position: 'relative' }}>
+                    <div style={{
+                      width: 36, height: 36,
+                      borderRadius: '50%',
+                      background: 'rgba(200,196,216,0.15)',
+                      border: '1.5px solid #C8C4D8',
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      position: 'relative',
+                      overflow: 'visible',
+                      animation: seqStep >= 2 ? 'lockBodyGlow 2s ease-in-out infinite' : 'none',
+                    }}>
+                      {/* Lock body */}
+                      <svg width="18" height="20" viewBox="0 0 18 20" fill="none" style={{ position: 'relative', zIndex: 2 }}>
+                        <rect x="1" y="9" width="16" height="11" rx="2.5" fill="#C8C4D8" />
+                        <rect x="3.5" y="11" width="11" height="7" rx="1.5" fill="#DDD9EE" opacity="0.6" />
+                        <circle cx="9" cy="15" r="1.5" fill="#B8B4C8" />
+                      </svg>
+                      {/* Animated shackle that opens */}
+                      <svg
+                        width="12" height="10" viewBox="0 0 12 10" fill="none"
+                        style={{
+                          position: 'absolute',
+                          top: -2, left: 3,
+                          transformOrigin: 'bottom left',
+                          animation: seqStep >= 2 ? 'lockShackleOpen 1s ease-out 0.2s both' : 'none',
+                        }}
+                      >
+                        <path d="M2 9 V4 Q2 0 6 0 Q10 0 10 4 V9" stroke="#B8B4C8" strokeWidth="2.2" strokeLinecap="round" fill="none" />
+                      </svg>
+                    </div>
+                  </div>
+
+                  <div style={{ flex: 1 }}>
+                    <div style={{ fontSize: 9, color: EL.muted3, fontWeight: 700, letterSpacing: 0.6, marginBottom: 3 }}>ADDITIONAL LIMIT</div>
+                    <div style={{ fontSize: 22, fontWeight: 800, color: '#B0ADCA', letterSpacing: -0.5, lineHeight: 1 }}>₹1,50,000</div>
+                  </div>
+                  {/* 15-day badge */}
+                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', background: 'rgba(200,196,216,0.2)', border: '1px solid #DDD9EE', borderRadius: 10, padding: '5px 7px', flexShrink: 0 }}>
+                    <span style={{ fontSize: 14, fontWeight: 900, color: '#9C98B8', lineHeight: 1 }}>15</span>
+                    <span style={{ fontSize: 7, fontWeight: 700, color: EL.muted3, letterSpacing: 0.3, marginTop: 1 }}>DAYS</span>
+                  </div>
+                </div>
+
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 4 }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-                    {Icon.lock('#B8B4C8', 9)}
-                    <span style={{ fontSize: 9.5, fontWeight: 800, color: EL.muted3, letterSpacing: 0.5 }}>NEXT STEP</span>
+                    {Icon.lock('#B8B4C8', 10)}
+                    <span style={{ fontSize: 10, fontWeight: 800, color: EL.muted3, letterSpacing: 0.5 }}>NEXT STEP</span>
                   </div>
                   <div style={{ textAlign: 'right' }}>
                     <div style={{ fontSize: 8.5, color: EL.muted3, fontWeight: 600, letterSpacing: 0.3 }}>TOTAL LIMIT</div>
-                    <div style={{ fontSize: 10, fontWeight: 800, color: EL.muted2 }}>₹4,00,000</div>
+                    <div style={{ fontSize: 11, fontWeight: 800, color: '#B0ADCA' }}>₹4,00,000</div>
                   </div>
                 </div>
-                <div style={{ fontSize: 20, fontWeight: 800, color: EL.muted2, letterSpacing: -0.5, lineHeight: 1 }}>+₹1,50,000</div>
-                <div style={{ fontSize: 11, color: EL.muted3, marginTop: 2, fontWeight: 500 }}>Get the above loan, pay off the rest of your bills, and unlock more!</div>
-                <div style={{ marginTop: 7, height: 4, borderRadius: 99, background: '#D4D0E8', backgroundImage: `repeating-linear-gradient(90deg, #C4C0D8 0, #C4C0D8 8px, transparent 8px, transparent 13px)` }} />
-                <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 3 }}>
-                  <span style={{ fontSize: 9.5, color: EL.muted3, fontWeight: 500 }}>Locked</span>
-                  <span style={{ fontSize: 9.5, color: EL.muted3, fontWeight: 500 }}>of ₹4,00,000 max</span>
+                <div style={{ fontSize: 12, color: EL.muted3, fontWeight: 600, lineHeight: 1.4 }}>
+                  Unlocks 15 days after your payment reflects in credit history
                 </div>
               </div>
             </div>
@@ -682,8 +1169,8 @@ function Eligibility({ go }) {
             style={{
               width: '100%',
               maxWidth: 340,
-              background: '#0F0D2E',
-              border: '1px solid rgba(255, 255, 255, 0.15)',
+              background: '#121124',
+              border: '1px solid rgba(255, 255, 255, 0.1)',
               borderRadius: 24,
               padding: 24,
               display: 'flex',
@@ -701,54 +1188,31 @@ function Eligibility({ go }) {
                 position: 'absolute',
                 top: 16,
                 right: 16,
-                width: 30,
-                height: 30,
+                width: 32,
+                height: 32,
                 borderRadius: '50%',
                 background: 'rgba(255, 255, 255, 0.08)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                color: 'rgba(255, 255, 255, 0.6)',
+                color: '#fff',
                 fontWeight: 600,
-                fontSize: 12,
+                fontSize: 16,
                 border: 'none',
                 cursor: 'pointer',
-                transition: 'all 0.2s',
-                zIndex: 10,
               }}
-              onMouseEnter={e => { e.currentTarget.style.background = 'rgba(255, 255, 255, 0.15)'; e.currentTarget.style.color = '#fff'; }}
-              onMouseLeave={e => { e.currentTarget.style.background = 'rgba(255, 255, 255, 0.08)'; e.currentTarget.style.color = 'rgba(255, 255, 255, 0.6)'; }}
             >
               ✕
             </button>
 
-            <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 12 }}>
-              <span style={{ fontSize: 11, fontWeight: 700, letterSpacing: 1.5, color: '#A3F3C9', textTransform: 'uppercase' }}>
-                How this works?
-              </span>
-              <svg width="14" height="14" viewBox="0 0 20 20" style={{ transform: 'rotate(-90deg)', filter: 'drop-shadow(0 0 2px rgba(163,243,201,0.5))' }}>
-                <circle cx="10" cy="10" r="8" fill="none" stroke="rgba(255, 255, 255, 0.15)" strokeWidth="2" />
-                <circle
-                  cx="10"
-                  cy="10"
-                  r="8"
-                  fill="none"
-                  stroke="#A3F3C9"
-                  strokeWidth="2"
-                  strokeDasharray="50.26"
-                  strokeDashoffset="50.26"
-                  style={{
-                    animation: autoplay ? 'timerCountdown 7s linear forwards' : 'none',
-                  }}
-                  key={activeStep + '_' + autoplay}
-                />
-              </svg>
-            </div>
+            <span style={{ fontSize: 11, fontWeight: 700, letterSpacing: 1.5, color: '#CBA6FF', textTransform: 'uppercase', marginBottom: 12 }}>
+              How CCRF works
+            </span>
 
-            {/* Visual Container (Unified Morphing Card Canvas) */}
+            {/* Visual Container */}
             <div style={{
               width: '100%',
-              height: 180,
+              height: 140,
               background: 'rgba(255, 255, 255, 0.03)',
               borderRadius: 16,
               display: 'flex',
@@ -756,431 +1220,26 @@ function Eligibility({ go }) {
               justifyContent: 'center',
               marginBottom: 20,
               border: '1px solid rgba(255, 255, 255, 0.05)',
-              position: 'relative',
-              overflow: 'hidden',
             }}>
-              <div style={{
-                width: 260,
-                height: 150,
-                position: 'relative',
-                borderRadius: 16,
-                overflow: 'hidden',
-                transition: 'all 0.5s cubic-bezier(0.16, 1, 0.3, 1)',
-                boxShadow: activeStep === 2 ? '0 12px 32px rgba(91, 63, 212, 0.4)' : '0 10px 25px rgba(0,0,0,0.3)',
-                animation: activeStep === 2 ? 'glowPulse 3s infinite' : 'none',
-              }}>
-                {/* Sparkles (Step 3 only) */}
-                {activeStep === 2 && (
-                  <>
-                    <span style={{ position: 'absolute', top: 15, left: 20, fontSize: 14, animation: 'floatSparkles 2s infinite ease-out', zIndex: 20 }}>✨</span>
-                    <span style={{ position: 'absolute', bottom: 20, right: 30, fontSize: 16, animation: 'floatSparkles 2.5s infinite ease-out', animationDelay: '0.4s', zIndex: 20 }}>✨</span>
-                    <span style={{ position: 'absolute', top: 30, right: 20, fontSize: 12, animation: 'floatSparkles 1.8s infinite ease-out', animationDelay: '0.8s', zIndex: 20 }}>✨</span>
-                  </>
-                )}
-
-                {/* Layer 3: Circular Limit Dial (visible during Step 3) */}
-                {activeStep === 2 && (
-                  <div style={{
-                    position: 'absolute',
-                    inset: 0,
-                    background: 'linear-gradient(135deg, #0F0D2E 0%, #15133C 100%)',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    padding: '8px 12px 10px',
-                    color: '#fff',
-                    zIndex: 10,
-                  }}>
-                    {/* Iterative Rounds flow indicator */}
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 8 }}>
-                      <span style={{ fontSize: 8, fontWeight: 800, color: '#4ADE80', background: 'rgba(74,222,128,0.1)', padding: '2px 5px', borderRadius: 4, whiteSpace: 'nowrap' }}>ROUND 1 (₹1.5L)</span>
-                      <span style={{ fontSize: 8, color: 'rgba(255,255,255,0.4)' }}>➔</span>
-                      <span style={{ fontSize: 8, fontWeight: 800, color: dialUnlocked ? '#4ADE80' : 'rgba(255,255,255,0.3)', background: dialUnlocked ? 'rgba(74,222,128,0.15)' : 'rgba(255,255,255,0.05)', padding: '2px 5px', borderRadius: 4, whiteSpace: 'nowrap' }}>ROUND 2 (+₹1L)</span>
-                      <span style={{ fontSize: 8, color: 'rgba(255,255,255,0.2)' }}>➔</span>
-                      <span style={{ fontSize: 8, fontWeight: 800, color: 'rgba(255,255,255,0.2)', background: 'rgba(255,255,255,0.02)', padding: '2px 5px', borderRadius: 4, whiteSpace: 'nowrap' }}>ROUND 3 (+₹1.5L)</span>
-                    </div>
-
-                    {/* SVG Gauge */}
-                    <div style={{ position: 'relative', width: 84, height: 84, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                      <svg width="84" height="84" style={{ transform: 'rotate(-90deg)', position: 'absolute' }}>
-                        {/* Background track circle */}
-                        <circle cx="42" cy="42" r="37" fill="none" stroke="rgba(255,255,255,0.06)" strokeWidth="4" />
-                        {/* Foreground animated progress circle */}
-                        <circle
-                          cx="42"
-                          cy="42"
-                          r="37"
-                          fill="none"
-                          stroke="#4ADE80"
-                          strokeWidth="4"
-                          strokeLinecap="round"
-                          strokeDasharray="232.48"
-                          strokeDashoffset={dialUnlocked ? "0" : "116.24"}
-                          style={{
-                            transition: 'stroke-dashoffset 2.0s cubic-bezier(0.16, 1, 0.3, 1) 0.4s',
-                            filter: 'drop-shadow(0 0 4px rgba(74,222,128,0.5))',
-                          }}
-                        />
-                      </svg>
-                      {/* Center Content */}
-                      <div style={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        zIndex: 12,
-                        textAlign: 'center',
-                      }}>
-                        <span style={{
-                          fontSize: 14,
-                          animation: !dialUnlocked ? 'lockUnlockShake 0.8s infinite ease-in-out' : 'checkPop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) both',
-                          marginBottom: 1
-                        }}>
-                          {dialUnlocked ? '🔓' : '🔒'}
-                        </span>
-                        <div style={{ fontSize: 7, color: '#A3E2C9', fontWeight: 700, letterSpacing: 0.3 }}>ROUND 2</div>
-                        <div style={{ fontSize: 12, fontWeight: 800, color: '#fff', letterSpacing: -0.2 }}>
-                          +<AnimatedCounter from={0} to={100000} duration={2000} active={activeStep === 2} />
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Limit Boost Pulse Tag */}
-                    <div style={{
-                      marginTop: 8,
-                      background: 'rgba(74, 222, 128, 0.15)',
-                      border: '1px solid #4ADE80',
-                      borderRadius: 20,
-                      padding: '3px 10px',
-                      fontSize: 8,
-                      fontWeight: 800,
-                      color: '#4ADE80',
-                      letterSpacing: 0.8,
-                      opacity: dialUnlocked ? 1 : 0,
-                      transform: dialUnlocked ? 'scale(1)' : 'scale(0.8)',
-                      transition: 'all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.5s',
-                      animation: dialUnlocked ? 'pulseLimitBoost 2.0s infinite ease-in-out 1.2s' : 'none',
-                    }}>
-                      ROUND 2 FUNDS UNLOCKED
-                    </div>
-                  </div>
-                )}
-
-                {/* Layer 2: Card Stack (visible during Step 2) */}
-                {activeStep === 1 && (() => {
-                  const dues1 = step2Time < 500 ? 60000 : step2Time >= 1700 ? 0 : Math.round(60000 - ((step2Time - 500) / 1200) * 60000);
-                  const dues2 = step2Time < 3000 ? 90000 : step2Time >= 4200 ? 0 : Math.round(90000 - ((step2Time - 3000) / 1200) * 90000);
-
-                  const card1Transform = step2Time < 2200 ? 'translateY(0) scale(1) rotate(-4deg)' : 'translateY(-200px) scale(0.8) rotate(-15deg)';
-                  const card1Opacity = step2Time < 2200 ? 1 : 0;
-
-                  const card2Transform = step2Time < 2200 ? 'translateY(12px) scale(0.94) rotate(-2deg)' : step2Time < 4700 ? 'translateY(0) scale(1) rotate(-4deg)' : 'translateY(-200px) scale(0.8) rotate(-15deg)';
-                  const card2Opacity = step2Time < 4700 ? 1 : 0;
-
-                  const card3Transform = step2Time < 2200 ? 'translateY(24px) scale(0.88) rotate(0deg)' : step2Time < 4700 ? 'translateY(12px) scale(0.94) rotate(-2deg)' : 'translateY(0) scale(1) rotate(-4deg)';
-
-                  const card4Transform = step2Time < 2200 ? 'translateY(36px) scale(0.82) rotate(2deg)' : step2Time < 4700 ? 'translateY(24px) scale(0.88) rotate(0deg)' : 'translateY(12px) scale(0.94) rotate(-2deg)';
-
-                  return (
-                    <div style={{ position: 'absolute', inset: 0, overflow: 'hidden' }}>
-
-                      {/* Card 4 (Slate) */}
-                      <div style={{
-                        position: 'absolute',
-                        inset: 16,
-                        background: 'linear-gradient(135deg, #2C3E50 0%, #34495E 100%)',
-                        borderRadius: 12,
-                        padding: 12,
-                        display: 'flex',
-                        flexDirection: 'column',
-                        justifyContent: 'space-between',
-                        color: '#fff',
-                        boxShadow: '0 8px 20px rgba(0,0,0,0.3)',
-                        transform: card4Transform,
-                        transition: 'transform 0.5s cubic-bezier(0.16, 1, 0.3, 1)',
-                        zIndex: 1,
-                      }}>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                          <span style={{ fontSize: 8, fontWeight: 700, color: '#BDC3C7', letterSpacing: 0.8 }}>CARD 4 DUES</span>
-                          <span style={{ fontSize: 10 }}>💳</span>
-                        </div>
-                        <div>
-                          <div style={{ fontSize: 7, color: '#BDC3C7', opacity: 0.8 }}>CARD BALANCE DUES</div>
-                          <div style={{ fontSize: 18, fontWeight: 800, color: '#fff', letterSpacing: -0.3 }}>
-                            {inr(40000)}
-                          </div>
-                        </div>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }} />
-                      </div>
-
-                      {/* Card 3 (Purple) */}
-                      <div style={{
-                        position: 'absolute',
-                        inset: 16,
-                        background: 'linear-gradient(135deg, #5B3FD4 0%, #3A1C71 100%)',
-                        borderRadius: 12,
-                        padding: 12,
-                        display: 'flex',
-                        flexDirection: 'column',
-                        justifyContent: 'space-between',
-                        color: '#fff',
-                        boxShadow: '0 8px 20px rgba(0,0,0,0.3)',
-                        transform: card3Transform,
-                        transition: 'transform 0.5s cubic-bezier(0.16, 1, 0.3, 1)',
-                        zIndex: 2,
-                      }}>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                          <span style={{ fontSize: 8, fontWeight: 700, color: '#E8E8FF', letterSpacing: 0.8 }}>CARD 3 DUES</span>
-                          <span style={{ fontSize: 10 }}>💳</span>
-                        </div>
-                        <div>
-                          <div style={{ fontSize: 7, color: '#E8E8FF', opacity: 0.8 }}>CARD BALANCE DUES</div>
-                          <div style={{ fontSize: 18, fontWeight: 800, color: '#fff', letterSpacing: -0.3 }}>
-                            {inr(37400)}
-                          </div>
-                        </div>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }} />
-                      </div>
-
-                      {/* Card 2 (Orange) */}
-                      <div style={{
-                        position: 'absolute',
-                        inset: 16,
-                        background: 'linear-gradient(135deg, #E67E22 0%, #B85C00 100%)',
-                        borderRadius: 12,
-                        padding: 12,
-                        display: 'flex',
-                        flexDirection: 'column',
-                        justifyContent: 'space-between',
-                        color: '#fff',
-                        boxShadow: '0 8px 20px rgba(0,0,0,0.3)',
-                        transform: card2Transform,
-                        opacity: card2Opacity,
-                        transition: 'transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.5s ease-out',
-                        zIndex: 3,
-                      }}>
-                        {/* Laser line Card 2 */}
-                        {step2Time >= 3000 && step2Time < 4200 && (
-                          <div style={{
-                            position: 'absolute',
-                            top: 0,
-                            bottom: 0,
-                            width: 3,
-                            background: '#4ADE80',
-                            boxShadow: '0 0 10px #4ADE80, 0 0 20px #4ADE80',
-                            left: `${((step2Time - 3000) / 1200) * 100}%`,
-                            zIndex: 10,
-                          }} />
-                        )}
-
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                          <span style={{ fontSize: 8, fontWeight: 700, color: '#FFE0CC', letterSpacing: 0.8 }}>CARD 2 DUES</span>
-                          <span style={{ fontSize: 10 }}>💳</span>
-                        </div>
-                        <div>
-                          <div style={{ fontSize: 7, color: '#FFE0CC', opacity: 0.8 }}>CARD BALANCE DUES</div>
-                          <div style={{ fontSize: 18, fontWeight: 800, color: step2Time >= 4200 ? '#4ADE80' : '#fff', letterSpacing: -0.3 }}>
-                            {inr(dues2)}
-                          </div>
-                        </div>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }} />
-
-                        {/* PAID Stamp Card 2 */}
-                        {step2Time >= 4000 && (
-                          <div style={{
-                            position: 'absolute',
-                            top: '30%',
-                            left: '25%',
-                            transform: 'rotate(-10deg)',
-                            background: 'rgba(0, 0, 0, 0.2)',
-                            border: '2px solid #4ADE80',
-                            borderRadius: 4,
-                            color: '#4ADE80',
-                            padding: '3px 8px',
-                            fontSize: 12,
-                            fontWeight: 900,
-                            letterSpacing: 1,
-                            textTransform: 'uppercase',
-                            animation: 'stampBounce 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) both',
-                            zIndex: 15,
-                          }}>
-                            PAID
-                          </div>
-                        )}
-                      </div>
-
-                      {/* Card 1 (Maroon) */}
-                      <div style={{
-                        position: 'absolute',
-                        inset: 16,
-                        background: 'linear-gradient(135deg, #97144D 0%, #5F0B30 100%)',
-                        borderRadius: 12,
-                        padding: 12,
-                        display: 'flex',
-                        flexDirection: 'column',
-                        justifyContent: 'space-between',
-                        color: '#fff',
-                        boxShadow: '0 8px 20px rgba(0,0,0,0.3)',
-                        transform: card1Transform,
-                        opacity: card1Opacity,
-                        transition: 'transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.5s ease-out',
-                        zIndex: 4,
-                      }}>
-                        {/* Laser line Card 1 */}
-                        {step2Time >= 500 && step2Time < 1700 && (
-                          <div style={{
-                            position: 'absolute',
-                            top: 0,
-                            bottom: 0,
-                            width: 3,
-                            background: '#4ADE80',
-                            boxShadow: '0 0 10px #4ADE80, 0 0 20px #4ADE80',
-                            left: `${((step2Time - 500) / 1200) * 100}%`,
-                            zIndex: 10,
-                          }} />
-                        )}
-
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                          <span style={{ fontSize: 8, fontWeight: 700, color: '#FFE5EC', letterSpacing: 0.8 }}>CARD 1 DUES</span>
-                          <span style={{ fontSize: 10 }}>💳</span>
-                        </div>
-                        <div>
-                          <div style={{ fontSize: 7, color: '#FFE5EC', opacity: 0.8 }}>CARD BALANCE DUES</div>
-                          <div style={{ fontSize: 18, fontWeight: 800, color: step2Time >= 1700 ? '#4ADE80' : '#fff', letterSpacing: -0.3 }}>
-                            {inr(dues1)}
-                          </div>
-                        </div>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }} />
-
-                        {/* PAID Stamp Card 1 */}
-                        {step2Time >= 1500 && (
-                          <div style={{
-                            position: 'absolute',
-                            top: '30%',
-                            left: '25%',
-                            transform: 'rotate(-10deg)',
-                            background: 'rgba(0, 0, 0, 0.2)',
-                            border: '2px solid #4ADE80',
-                            borderRadius: 4,
-                            color: '#4ADE80',
-                            padding: '3px 8px',
-                            fontSize: 12,
-                            fontWeight: 900,
-                            letterSpacing: 1,
-                            textTransform: 'uppercase',
-                            animation: 'stampBounce 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) both',
-                            zIndex: 15,
-                          }}>
-                            PAID
-                          </div>
-                        )}
-                      </div>
-
-                    </div>
-                  );
-                })()}
-
-                {/* Layer 1: White Ledger Card (Step 1 only, fades out on transition) */}
-                <div style={{
-                  position: 'absolute',
-                  inset: 0,
-                  background: '#FFFFFF',
-                  border: '1px solid #ECEAF4',
-                  padding: 16,
-                  display: 'flex',
-                  flexDirection: 'column',
-                  justifyContent: 'space-between',
-                  color: '#1B192E',
-                  zIndex: 3,
-                  opacity: activeStep === 0 ? 1 : 0,
-                  pointerEvents: activeStep === 0 ? 'auto' : 'none',
-                  transition: 'opacity 0.6s ease-in-out',
-                }}>
-                  {/* Ledger Grid Background */}
-                  <div style={{
-                    position: 'absolute',
-                    inset: 0,
-                    backgroundImage: 'radial-gradient(#ECEAF4 1.2px, transparent 1.2px)',
-                    backgroundSize: '12px 12px',
-                    opacity: 0.4,
-                    pointerEvents: 'none',
-                  }} />
-
-                  {/* Digital Cash Flow Lines */}
-                  {activeStep === 0 && (
-                    <div style={{ position: 'absolute', inset: 0, overflow: 'hidden', pointerEvents: 'none' }}>
-                      <div style={{ position: 'absolute', left: '15%', top: 0, bottom: 0, width: 1, borderLeft: '1.5px dashed #4ADE80', animation: 'cashFlowLine 2s infinite linear' }} />
-                      <div style={{ position: 'absolute', left: '50%', top: 0, bottom: 0, width: 1, borderLeft: '1.5px dashed #4ADE80', animation: 'cashFlowLine 2.5s infinite linear', animationDelay: '0.4s' }} />
-                      <div style={{ position: 'absolute', right: '15%', top: 0, bottom: 0, width: 1, borderLeft: '1.5px dashed #4ADE80', animation: 'cashFlowLine 1.8s infinite linear', animationDelay: '0.8s' }} />
-                    </div>
-                  )}
-
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', position: 'relative', zIndex: 2 }}>
-                    <span style={{ fontSize: 8.5, fontWeight: 800, color: '#534AB7', letterSpacing: 1.2 }}>CCRF BANK TRANSFER</span>
-                    <span style={{ fontSize: 10, color: '#1A7A4A', fontWeight: 700 }}>● DIRECT DEPOSIT</span>
-                  </div>
-
-                  <div style={{ position: 'relative', zIndex: 2 }}>
-                    <div style={{ fontSize: 8, color: '#888', fontWeight: 600 }}>DISBURSED FUNDS</div>
-                    <div style={{ fontSize: 24, fontWeight: 800, color: '#1A7A4A', letterSpacing: -0.5 }}>
-                      <AnimatedCounter from={0} to={150000} duration={2500} active={activeStep === 0} />
-                    </div>
-                  </div>
-
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', position: 'relative', zIndex: 2 }}>
-                    <span style={{ fontSize: 8, color: '#888', fontWeight: 500 }}>TRANSFERRED TO ACC: *8940</span>
-                    <span style={{
-                      fontSize: 8,
-                      fontWeight: 800,
-                      color: '#1A7A4A',
-                      background: '#E8F8EE',
-                      padding: '2px 6px',
-                      borderRadius: 4,
-                      transition: 'opacity 0.3s',
-                      opacity: 1,
-                    }}>
-                      SUCCESS
-                    </span>
-                  </div>
-                </div>
-              </div>
+              {steps[activeStep].visual}
             </div>
 
-            {/* Interactive Progress Tab Bar */}
-            <div style={{ display: 'flex', width: '100%', gap: 8, marginBottom: 20 }}>
-              {steps.map((s, idx) => {
-                const isActive = activeStep === idx;
-                const isCompleted = idx < activeStep;
-                return (
-                  <button
-                    key={idx}
-                    onClick={() => {
-                      setActiveStep(idx);
-                      setAutoplay(false);
-                    }}
-                    style={{
-                      flex: 1,
-                      padding: '8px 4px',
-                      borderRadius: 10,
-                      background: isActive ? 'rgba(127, 85, 223, 0.15)' : isCompleted ? 'rgba(26, 122, 74, 0.1)' : 'rgba(255, 255, 255, 0.03)',
-                      border: isActive ? '1px solid #7F55DF' : isCompleted ? '1px solid #1A7A4A' : '1px solid rgba(255, 255, 255, 0.08)',
-                      color: isActive ? '#fff' : isCompleted ? '#4ADE80' : 'rgba(255, 255, 255, 0.4)',
-                      fontSize: 10,
-                      fontWeight: 700,
-                      textAlign: 'center',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      gap: 4,
-                      transition: 'all 0.3s ease',
-                      cursor: 'pointer',
-                    }}
-                  >
-                    {isCompleted ? '✓' : ''} {idx + 1}. {idx === 0 ? 'Transfer' : idx === 1 ? 'Melt Dues' : 'Unlock More'}
-                  </button>
-                );
-              })}
+            {/* Stepper Dots */}
+            <div style={{ display: 'flex', gap: 6, marginBottom: 16 }}>
+              {steps.map((_, idx) => (
+                <div
+                  key={idx}
+                  onClick={() => setActiveStep(idx)}
+                  style={{
+                    width: idx === activeStep ? 24 : 8,
+                    height: 8,
+                    borderRadius: 4,
+                    background: idx === activeStep ? '#7F55DF' : 'rgba(255, 255, 255, 0.2)',
+                    transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
+                    cursor: 'pointer',
+                  }}
+                />
+              ))}
             </div>
 
             {/* Title & Description */}
@@ -1193,29 +1252,57 @@ function Eligibility({ go }) {
               </p>
             </div>
 
-            {/* Got it Button */}
-            <button
-              onClick={() => setHowItWorksOpen(false)}
-              style={{
-                width: '100%',
-                height: 48,
-                borderRadius: 14,
-                background: '#7F55DF',
-                color: '#fff',
-                fontWeight: 700,
-                fontSize: 14,
-                cursor: 'pointer',
-                boxShadow: '0 8px 20px rgba(127, 85, 223, 0.3)',
-                transition: 'background 0.2s, transform 0.1s',
-                border: 'none',
-              }}
-              onMouseEnter={e => e.currentTarget.style.background = '#6B40CF'}
-              onMouseLeave={e => e.currentTarget.style.background = '#7F55DF'}
-              onMouseDown={e => e.currentTarget.style.transform = 'scale(0.98)'}
-              onMouseUp={e => e.currentTarget.style.transform = 'scale(1)'}
-            >
-              Got it!
-            </button>
+            {/* Navigation buttons */}
+            <div style={{ display: 'flex', width: '100%', gap: 12 }}>
+              {activeStep > 0 ? (
+                <button
+                  onClick={() => setActiveStep(activeStep - 1)}
+                  style={{
+                    flex: 1,
+                    height: 48,
+                    borderRadius: 14,
+                    background: 'rgba(255, 255, 255, 0.08)',
+                    color: '#fff',
+                    fontWeight: 600,
+                    fontSize: 14,
+                    cursor: 'pointer',
+                    transition: 'background 0.2s',
+                  }}
+                  onMouseEnter={e => e.currentTarget.style.background = 'rgba(255, 255, 255, 0.12)'}
+                  onMouseLeave={e => e.currentTarget.style.background = 'rgba(255, 255, 255, 0.08)'}
+                >
+                  Back
+                </button>
+              ) : null}
+
+              <button
+                onClick={() => {
+                  if (activeStep < steps.length - 1) {
+                    setActiveStep(activeStep + 1);
+                  } else {
+                    setHowItWorksOpen(false);
+                  }
+                }}
+                style={{
+                  flex: 2,
+                  height: 48,
+                  borderRadius: 14,
+                  background: '#7F55DF',
+                  color: '#fff',
+                  fontWeight: 700,
+                  fontSize: 14,
+                  cursor: 'pointer',
+                  boxShadow: '0 8px 20px rgba(127, 85, 223, 0.3)',
+                  transition: 'background 0.2s, transform 0.1s',
+                }}
+                onMouseEnter={e => e.currentTarget.style.background = '#6B40CF'}
+                onMouseLeave={e => e.currentTarget.style.background = '#7F55DF'}
+                onMouseDown={e => e.currentTarget.style.transform = 'scale(0.98)'}
+                onMouseUp={e => e.currentTarget.style.transform = 'scale(1)'}
+              >
+                {activeStep === steps.length - 1 ? 'Got it!' : 'Next'}
+              </button>
+            </div>
           </div>
         </div>
       )}
