@@ -959,99 +959,172 @@ function SavingsScreen({ go, monthly = 30000, setMonthly }) {
           </div>
         </div>
 
-        {/* 5. Three Premium Benefit Cards */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 10, padding: '16px 16px 0' }}>
-          {/* Card 1: Interest Freed */}
+        {/* 5. Key Takeaway Cards */}
+        <div style={{
+          margin: '14px 16px 0',
+          padding: '12px 10px',
+          borderRadius: 18,
+          background: 'linear-gradient(180deg, #FBFAFF 0%, #F4F2FA 100%)',
+          border: '1px solid #E0DCF0',
+          boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.95), 0 16px 40px -24px rgba(91, 63, 212, 0.22)',
+          position: 'relative',
+          overflow: 'hidden',
+          animation: 'fadeUp .75s .04s both',
+        }}>
           <div style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: 12,
-            padding: '14px 16px',
-            borderRadius: 18,
-            background: '#E8F8EE',
-            border: '1px solid #86EFAC',
-            boxShadow: '0 4px 14px rgba(26, 122, 74, 0.03)',
-          }}>
-            <div style={{
-              width: 40, height: 40, borderRadius: 12, background: '#1FA971',
-              display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0
-            }}>
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                <line x1="12" y1="1" x2="12" y2="23" />
-                <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
-              </svg>
-            </div>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-              <span style={{ fontSize: 14.5, fontWeight: 800, color: '#1A7A4A' }}>
-                ₹{savingLakh}L Freed in Interest
-              </span>
-              <span style={{ fontSize: 11.5, color: '#1FA971', fontWeight: 600 }}>
-                Melt refinance reduces interest payments by over 70%
-              </span>
-            </div>
-          </div>
-
-          {/* Card 2: Debt Free Sooner */}
-          <div style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: 12,
-            padding: '14px 16px',
-            borderRadius: 18,
-            background: '#EDE8FF',
-            border: '1px solid #C4B5FD',
-            boxShadow: '0 4px 14px rgba(91, 63, 212, 0.03)',
-          }}>
-            <div style={{
-              width: 40, height: 40, borderRadius: 12, background: '#5B3FD4',
-              display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0
-            }}>
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                <circle cx="12" cy="12" r="10" />
-                <polyline points="12 6 12 12 16 14" />
-              </svg>
-            </div>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-              <span style={{ fontSize: 14.5, fontWeight: 800, color: '#4C28D4' }}>
-                {animMonthsDiff} Months Sooner Debt-Free
-              </span>
-              <span style={{ fontSize: 11.5, color: '#5B3FD4', fontWeight: 600 }}>
-                Melt payoff: <span style={{ fontWeight: 800 }}>{nM} months</span> vs Credit Card: <span style={{ fontWeight: 800 }}>{nC >= 999 ? 'Never' : nC + ' months'}</span>
-              </span>
-            </div>
-          </div>
-
-          {/* Card 3: Credit Score Boost */}
-          <div style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: 12,
-            padding: '14px 16px',
-            borderRadius: 18,
-            background: '#FFF9F0',
-            border: '1px solid #FCD34D',
-            boxShadow: '0 4px 14px rgba(217, 119, 6, 0.03)',
-          }}>
-            <div style={{
-              width: 40, height: 40, borderRadius: 12, background: '#D97706',
-              display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0
-            }}>
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
-                <polyline points="22 4 12 14.01 9 11.01" />
-              </svg>
-            </div>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-              <span style={{ fontSize: 14.5, fontWeight: 800, color: '#B45309' }}>
-                Improve Your Credit Score
-              </span>
-              <span style={{ fontSize: 11.5, color: '#D97706', fontWeight: 600 }}>
-                Replacing high card utilisation with a structured loan boosts CIBIL rating
-              </span>
-            </div>
+            position: 'absolute',
+            top: 0,
+            left: '12%',
+            right: '12%',
+            height: 1,
+            background: 'linear-gradient(90deg, transparent, rgba(91, 63, 212, 0.35), transparent)',
+            pointerEvents: 'none',
+          }} />
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+            {[
+              {
+                highlight: <>₹{savingLakh}L</>,
+                rest: 'Freed in Interest',
+                accent: 'linear-gradient(180deg, #1FA971 0%, #0D7A52 100%)',
+                icon: (
+                  <span style={{
+                    fontSize: 30,
+                    fontWeight: 800,
+                    color: '#0F6B47',
+                    lineHeight: 1,
+                    fontFamily: 'Sora, sans-serif',
+                    letterSpacing: -1.2,
+                  }}>₹</span>
+                ),
+                iconBg: 'linear-gradient(180deg, #FFFFFF 0%, #F0FAF5 100%)',
+                iconRing: 'rgba(31, 169, 113, 0.22)',
+                iconGlow: 'rgba(31, 169, 113, 0.08)',
+                delay: '.08s',
+              },
+              {
+                highlight: <>{animMonthsDiff} Months</>,
+                rest: 'Sooner Debt-Free',
+                accent: 'linear-gradient(180deg, #7C5CE7 0%, #5B3FD4 100%)',
+                icon: (
+                  <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="#5B3FD4" strokeWidth="1.65" strokeLinecap="round" strokeLinejoin="round">
+                    <circle cx="12" cy="12" r="8.25" />
+                    <path d="M12 8v4.25l2.75 1.75" />
+                  </svg>
+                ),
+                iconBg: 'linear-gradient(180deg, #FFFFFF 0%, #F6F3FF 100%)',
+                iconRing: 'rgba(91, 63, 212, 0.2)',
+                iconGlow: 'rgba(91, 63, 212, 0.08)',
+                delay: '.14s',
+              },
+              {
+                highlight: 'Improve Your Credit Score',
+                rest: null,
+                accent: 'linear-gradient(180deg, #C9A227 0%, #9A7B1A 100%)',
+                icon: (
+                  <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="#9A7B1A" strokeWidth="1.65" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M4 16.5l4.25-5.25 3.75 2.75 4.5-6.25" />
+                    <path d="M4 19.5h16" />
+                  </svg>
+                ),
+                iconBg: 'linear-gradient(180deg, #FFFFFF 0%, #FBF8F0 100%)',
+                iconRing: 'rgba(154, 123, 26, 0.2)',
+                iconGlow: 'rgba(154, 123, 26, 0.08)',
+                delay: '.2s',
+              },
+            ].map((card, i) => (
+              <div
+                key={i}
+                style={{
+                  display: 'flex',
+                  alignItems: 'stretch',
+                  gap: 0,
+                  borderRadius: 13,
+                  background: 'linear-gradient(180deg, #FFFFFF 0%, #FDFCFF 100%)',
+                  border: '1px solid rgba(228, 224, 242, 0.95)',
+                  boxShadow: '0 1px 2px rgba(27, 25, 46, 0.03), 0 6px 16px -8px rgba(91, 63, 212, 0.1)',
+                  overflow: 'hidden',
+                  animation: `fadeUp .7s ${card.delay} both`,
+                }}
+              >
+                <div style={{
+                  width: 3,
+                  flexShrink: 0,
+                  background: card.accent,
+                }} />
+                <div style={{
+                  flex: 1,
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 13,
+                  padding: '14px 14px 14px 12px',
+                }}>
+                  <div style={{
+                    width: 46,
+                    height: 46,
+                    borderRadius: 13,
+                    background: card.iconBg,
+                    border: `1px solid ${card.iconRing}`,
+                    boxShadow: `inset 0 1px 0 rgba(255,255,255,0.95), 0 0 0 3px ${card.iconGlow}`,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    flexShrink: 0,
+                  }}>
+                    {card.icon}
+                  </div>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 1, minWidth: 0 }}>
+                    <span style={{
+                      fontSize: card.rest ? 16 : 15,
+                      fontWeight: 800,
+                      color: '#12101F',
+                      letterSpacing: -0.45,
+                      lineHeight: 1.2,
+                      fontFamily: 'Sora, sans-serif',
+                    }}>
+                      {card.highlight}
+                    </span>
+                    {card.rest && (
+                      <span style={{
+                        fontSize: 12.5,
+                        fontWeight: 600,
+                        color: '#6E6B82',
+                        letterSpacing: -0.1,
+                        lineHeight: 1.25,
+                      }}>
+                        {card.rest}
+                      </span>
+                    )}
+                  </div>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
 
+
+        {/* Visualise your debt */}
+        <div style={{ padding: '16px 20px 0', animation: 'fadeUp .85s .22s both' }}>
+          <button
+            onClick={() => go('visualise')}
+            style={{
+              width: '100%',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: 6,
+              padding: '10px 16px',
+              background: 'transparent',
+              border: 'none',
+              cursor: 'pointer',
+              fontSize: 14.5,
+              fontWeight: 700,
+              color: MELT.purple,
+              letterSpacing: -0.2,
+            }}
+          >
+            Visualise your debt {Icon.arrowR(MELT.purple, 16)}
+          </button>
+        </div>
 
         {/* 7. educational section */}
         <div style={{ padding: '18px 0 0', animation: 'fadeUp .9s .1s both' }}>
@@ -1573,7 +1646,7 @@ function SavingsScreen({ go, monthly = 30000, setMonthly }) {
 
       {/* 10. sticky CTA */}
       <BottomBar bg="#F7F7FC">
-        <button onClick={() => go('visualise')} style={{
+        <button onClick={() => go('cards')} style={{
           width: '100%', height: 56, borderRadius: 16, background: 'linear-gradient(135deg, #5B3FD4 0%, #3D3DC4 100%)', color: '#fff',
           fontWeight: 700, fontSize: 16, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 9,
           boxShadow: '0 8px 22px rgba(91, 63, 212, 0.25)', border: 'none', cursor: 'pointer', transition: 'all .15s ease',
@@ -1581,7 +1654,7 @@ function SavingsScreen({ go, monthly = 30000, setMonthly }) {
           onMouseDown={e => e.currentTarget.style.transform = 'scale(.975)'}
           onMouseUp={e => e.currentTarget.style.transform = 'scale(1)'}
           onMouseLeave={e => e.currentTarget.style.transform = 'scale(1)'}>
-          Shift to Melt & Visualise Timeline {Icon.arrowR('#fff')}
+          Select my card {Icon.arrowR('#fff')}
         </button>
       </BottomBar>
     </div>

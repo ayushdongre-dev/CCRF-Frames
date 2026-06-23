@@ -28,6 +28,17 @@ function App() {
 
   const go = useCallback((r) => { setRoute(r); localStorage.setItem('ccrf_route', r); }, []);
 
+  useEffect(() => {
+    const resetScroll = () => {
+      const scr = document.getElementById('phone-scroll-viewport');
+      if (!scr) return;
+      scr.scrollTop = 0;
+      scr.scrollLeft = 0;
+    };
+    resetScroll();
+    requestAnimationFrame(resetScroll);
+  }, [route]);
+
   // apply tweaks → CSS vars
   useEffect(() => {
     const root = document.documentElement;
