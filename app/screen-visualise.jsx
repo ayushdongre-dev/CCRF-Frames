@@ -152,10 +152,26 @@ function smoothPts(pts) {
 function CumulativeChart({ cardInt, meltInt, cardMonths, meltMonths, meltInterest, intSaved }) {
   const [hov, setHov] = React.useState(null);
   const [animPct, setAnimPct] = React.useState(0);
+  const [demoHov, setDemoHov] = React.useState(null);
+  const [isDemoActive, setIsDemoActive] = React.useState(false);
+
   const totalMonths = cardMonths;
   const maxInt = Math.max(...cardInt, 100000);
 
+  const startTimeoutRef = React.useRef(null);
+  const intervalRef = React.useRef(null);
+  const finishTimeoutRef = React.useRef(null);
+
+  const stopDemo = React.useCallback(() => {
+    setIsDemoActive(false);
+    setDemoHov(null);
+    if (startTimeoutRef.current) clearTimeout(startTimeoutRef.current);
+    if (intervalRef.current) clearInterval(intervalRef.current);
+    if (finishTimeoutRef.current) clearTimeout(finishTimeoutRef.current);
+  }, []);
+
   React.useEffect(() => {
+    // Reset drawing animation percentage
     setAnimPct(0);
     const start = performance.now();
     const dur = 1100;
@@ -165,7 +181,41 @@ function CumulativeChart({ cardInt, meltInt, cardMonths, meltMonths, meltInteres
       if (t < 1) requestAnimationFrame(step);
     }
     requestAnimationFrame(step);
-  }, [cardMonths, meltMonths]);
+
+    // Set up automated hover demo
+    setIsDemoActive(false);
+    setDemoHov(null);
+    if (startTimeoutRef.current) clearTimeout(startTimeoutRef.current);
+    if (intervalRef.current) clearInterval(intervalRef.current);
+    if (finishTimeoutRef.current) clearTimeout(finishTimeoutRef.current);
+
+    startTimeoutRef.current = setTimeout(() => {
+      setIsDemoActive(true);
+      let currentMonth = 0;
+      const endMonth = Math.round(totalMonths * 0.7);
+      
+      intervalRef.current = setInterval(() => {
+        setDemoHov(currentMonth);
+        if (currentMonth >= endMonth) {
+          if (intervalRef.current) clearInterval(intervalRef.current);
+          intervalRef.current = null;
+          
+          finishTimeoutRef.current = setTimeout(() => {
+            setIsDemoActive(false);
+            setDemoHov(null);
+          }, 1500);
+        } else {
+          currentMonth++;
+        }
+      }, 60);
+    }, 1300); // Start 200ms after drawing animation completes
+
+    return () => {
+      if (startTimeoutRef.current) clearTimeout(startTimeoutRef.current);
+      if (intervalRef.current) clearInterval(intervalRef.current);
+      if (finishTimeoutRef.current) clearTimeout(finishTimeoutRef.current);
+    };
+  }, [cardMonths, meltMonths, totalMonths]);
 
   const animMonths = Math.round(animPct * totalMonths);
 
@@ -187,12 +237,8 @@ function CumulativeChart({ cardInt, meltInt, cardMonths, meltMonths, meltInteres
   const xStep = Math.max(1, Math.round(totalMonths / 6));
   const xLabels = Array.from({ length: totalMonths + 1 }, (_, i) => i).filter(m => m % xStep === 0 || m === totalMonths);
 
-  // Savings callout badge — positioned top-left, arrow into gap
+  // Savings callout badge — positioned top-left
   const badgeX = CCPL + 2, badgeY = CCPT + 2, badgeW = 108, badgeH = 36;
-  const arrowTipX = ccX(Math.round(totalMonths * 0.52), totalMonths);
-  const arrowTipY = (ccY(cardInt[Math.round(totalMonths * 0.52)] || maxInt * 0.6, maxInt) + ccY(meltInt[Math.round(totalMonths * 0.52)] || 0, maxInt)) / 2;
-  const arrowStartX = badgeX + badgeW * 0.7;
-  const arrowStartY = badgeY + badgeH;
 
   // Hover tooltip
   function ccHover(e, isSVG) {
@@ -202,36 +248,69 @@ function CumulativeChart({ cardInt, meltInt, cardMonths, meltMonths, meltInteres
     return Math.max(0, Math.min(totalMonths, Math.round((svgX - CCPL) / (CCW - CCPL - CCPR) * totalMonths)));
   }
 
+  const activeHov = hov !== null ? hov : (isDemoActive ? demoHov : null);
+
   let tip = null;
-  if (hov !== null) {
-    const hx    = ccX(hov, totalMonths);
-    const ci    = cardInt[Math.min(hov, cardInt.length - 1)];
-    const mi    = meltInt[Math.min(hov, meltInt.length - 1)];
-    const mDone = hov >= meltMonths;
+  let handGesture = null;
+
+  if (activeHov !== null) {
+    const hx    = ccX(activeHov, totalMonths);
+    const ci    = cardInt[Math.min(activeHov, cardInt.length - 1)];
+    const mi    = meltInt[Math.min(activeHov, meltInt.length - 1)];
+    const mDone = activeHov >= meltMonths;
     const saved = Math.max(0, ci - (mDone ? meltInterest : mi));
     const tipW = 148, tipH = 66;
     const tipX = hx + 8 + tipW > CCW - CCPR ? hx - tipW - 8 : hx + 8;
     const tipY = CCH - CCPB - tipH - 4;
     tip = (
-      <g>
+      <g style={{ transition: 'opacity 0.15s' }}>
         <line x1={hx} y1={CCPT} x2={hx} y2={CCH - CCPB} stroke="#ccc" strokeWidth="1" strokeDasharray="3,2" />
         <circle cx={hx} cy={ccY(ci, maxInt)} r="3.5" fill="#E8453C" />
         <circle cx={hx} cy={ccY(mi, maxInt)} r="3.5" fill="var(--primary)" />
         <rect x={tipX} y={tipY} width={tipW} height={tipH} rx={8} fill="white" opacity="0.97" filter="url(#tc2)" />
-        <text x={tipX + 9} y={tipY + 13} fontSize="7.5" fill="#999" fontWeight="600">Month {hov}</text>
+        <text x={tipX + 9} y={tipY + 13} fontSize="7.5" fill="#999" fontWeight="600">Month {activeHov}</text>
         <text x={tipX + 9} y={tipY + 27} fontSize="8.5" fill="#E8453C" fontWeight="700">Without Melt  {fmtIN(ci)}</text>
         <text x={tipX + 9} y={tipY + 41} fontSize="8.5" fill="var(--primary)" fontWeight="700">With Melt  {mDone ? fmtIN(meltInterest) + ' ✓' : fmtIN(mi)}</text>
         <rect x={tipX + 7} y={tipY + 49} width={tipW - 14} height={13} rx={4} fill="rgba(22,163,74,.13)" />
         <text x={tipX + 11} y={tipY + 59} fontSize="7.5" fill="#15803D" fontWeight="700">Saved  {fmtIN(saved)}</text>
       </g>
     );
+
+    if (isDemoActive && demoHov !== null) {
+      const hy = ccY(mi, maxInt);
+      handGesture = (
+        <g transform={`translate(${hx}, ${hy})`} style={{ pointerEvents: 'none', transition: 'transform 0.08s ease-out' }}>
+          <circle cx="0" cy="0" r="10" fill="var(--primary)" opacity="0.4">
+            <animate attributeName="r" values="5;14" dur="1.2s" repeatCount="indefinite" />
+            <animate attributeName="opacity" values="0.6;0" dur="1.2s" repeatCount="indefinite" />
+          </circle>
+          <g transform="translate(-8.5, 0) scale(1.1)">
+            <path
+              d="M 8.5 0 C 7.67 0 7 0.67 7 1.5 L 7 8.5 C 7 8.5 6.13 7.6 5.3 6.8 C 4.7 6.2 3.8 6.2 3.2 6.8 C 2.6 7.4 2.6 8.3 3.2 8.9 L 6.8 12.5 C 8.6 14.3 11 15.3 13.5 15.3 L 15.5 15.3 C 18.5 15.3 21 12.8 21 9.8 L 21 6.5 C 21 5.67 20.33 5 19.5 5 C 19.3 5 19.1 5.04 18.9 5.12 C 18.6 4.45 17.9 4 17.1 4 C 16.9 4 16.7 4.03 16.5 4.1 C 16.1 3.44 15.4 3 14.6 3 C 14.3 3 14.1 3.03 13.9 3.1 C 13.5 2.44 12.8 2 12 2 C 11.8 2 11.6 2.03 11.4 2.1 L 11.4 1.5 C 11.4 0.67 10.73 0 9.9 0 L 8.5 0 Z"
+              fill="white"
+              stroke="#1C192E"
+              strokeWidth="1.2"
+              strokeLinejoin="round"
+            />
+          </g>
+        </g>
+      );
+    }
   }
 
   return (
     <svg viewBox={`0 0 ${CCW} ${CCH}`} style={{ width: '100%', cursor: 'crosshair', userSelect: 'none', overflow: 'visible' }}
-      onMouseMove={e => setHov(ccHover(e, true))}
+      onMouseMove={e => {
+        stopDemo();
+        setHov(ccHover(e, true));
+      }}
       onMouseLeave={() => setHov(null)}
-      onTouchMove={e => { e.preventDefault(); setHov(ccHover(e, false)); }}
+      onTouchStart={stopDemo}
+      onTouchMove={e => {
+        e.preventDefault();
+        stopDemo();
+        setHov(ccHover(e, false));
+      }}
       onTouchEnd={() => setHov(null)}
     >
       <defs>
@@ -270,17 +349,6 @@ function CumulativeChart({ cardInt, meltInt, cardMonths, meltMonths, meltInteres
       {/* savings callout badge */}
       {animPct > 0.85 && (
         <g style={{ animation: 'fadeIn .3s' }}>
-          {/* arrow */}
-          <path
-            d={`M${arrowStartX.toFixed(1)},${arrowStartY.toFixed(1)} C${arrowStartX.toFixed(1)},${(arrowStartY + 22).toFixed(1)} ${arrowTipX.toFixed(1)},${(arrowTipY - 18).toFixed(1)} ${arrowTipX.toFixed(1)},${arrowTipY.toFixed(1)}`}
-            stroke="#16A34A" strokeWidth="1.8" fill="none" strokeLinecap="round"
-            markerEnd="url(#arrowHead)"
-          />
-          <defs>
-            <marker id="arrowHead" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto">
-              <path d="M0,0 L0,6 L6,3 Z" fill="#16A34A" />
-            </marker>
-          </defs>
           {/* badge */}
           <rect x={badgeX} y={badgeY} width={badgeW} height={badgeH} rx={8} fill="#16A34A" filter="url(#badgeShadow)" />
           <text x={badgeX + badgeW / 2} y={badgeY + 13} fontSize="7" fill="rgba(255,255,255,0.85)" fontWeight="700" textAnchor="middle" letterSpacing="0.6">YOU SAVE IN INTEREST</text>
@@ -289,6 +357,7 @@ function CumulativeChart({ cardInt, meltInt, cardMonths, meltMonths, meltInteres
       )}
 
       {tip}
+      {handGesture}
     </svg>
   );
 }

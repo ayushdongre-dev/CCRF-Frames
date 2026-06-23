@@ -110,20 +110,35 @@ function SellingStories({ go, storyMs = 7000 }) {
         </div>
       </div>
 
-      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', animation: 'fadeIn .35s' }}>
-        <AnimCard playKey={playKey} />
-        <div style={{ textAlign: 'center', marginTop: 22 }}>
-          <div style={{ fontSize: 11.5, fontWeight: 700, letterSpacing: 1.5, color: 'var(--primary)' }}>CREDIT MANAGEMENT</div>
-          <div style={{ fontWeight: 800, fontSize: 33, lineHeight: 1.1, marginTop: 10, letterSpacing: -0.5 }}>
-            Clear All Your<br /><span style={{ color: 'var(--primary)' }}>Credit Card Bills</span>
-          </div>
-          <div style={{ fontSize: 14.5, color: 'var(--ink-2)', marginTop: 14, lineHeight: 1.5, padding: '0 6px' }}>
-            Lower your monthly interest rate today with our exclusive refinance offer.
-          </div>
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', padding: '0 24px', animation: 'fadeIn .35s' }}>
+        {/* Card Graphic stack */}
+        <div style={{ transform: 'scale(0.85)', margin: '-10px 0 10px', height: 180, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <AnimCard playKey={playKey} />
         </div>
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 9, justifyContent: 'center', marginTop: 22 }}>
-          <Chip tone="plain" icon={<Dot />}>Lower Interest</Chip>
-          <Chip tone="plain" icon={<Dot />}>Save thousands</Chip>
+
+        {/* Title and Tagline */}
+        <div style={{ textAlign: 'center', marginTop: 10 }}>
+          <div style={{ fontSize: 13, fontWeight: 800, letterSpacing: 1.5, color: '#5B3FD4', textTransform: 'uppercase', marginBottom: 8 }}>
+            Introducing Melt
+          </div>
+          <h1 style={{ fontWeight: 850, fontSize: 30, lineHeight: 1.15, color: '#1B192E', letterSpacing: -0.8, margin: '0 0 12px 0' }}>
+            Clear All Your<br />Credit Card Bills
+          </h1>
+          <p style={{ fontSize: 14.5, color: '#6E6B82', lineHeight: 1.5, margin: 0, padding: '0 16px' }}>
+            Consolidate your balances into a single low-interest plan.
+          </p>
+        </div>
+
+        {/* Loading dots */}
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginTop: 36, gap: 10 }}>
+          <div style={{ display: 'flex', gap: 6 }}>
+            <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#5B3FD4', opacity: 0.3, animation: 'blink 1.4s infinite both' }} />
+            <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#5B3FD4', opacity: 0.3, animation: 'blink 1.4s infinite both 0.2s' }} />
+            <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#5B3FD4', opacity: 0.3, animation: 'blink 1.4s infinite both 0.4s' }} />
+          </div>
+          <span style={{ fontSize: 11, fontWeight: 700, color: '#88859E', letterSpacing: 0.8, textTransform: 'uppercase', animation: 'blink 2s infinite' }}>
+            Loading...
+          </span>
         </div>
       </div>
 
@@ -418,6 +433,34 @@ function SavingsScreen({ go, monthly = 30000, setMonthly }) {
   const [showInterestTip, setShowInterestTip] = useState(false);
   const MIN = 25000, MAX = 100000, STEP = 5000;
 
+  const [showScrollArrow, setShowScrollArrow] = useState(true);
+  useEffect(() => {
+    const scr = document.getElementById('phone-scroll-viewport');
+    if (!scr) return;
+    const handleScroll = () => {
+      if (scr.scrollTop > 40) {
+        setShowScrollArrow(false);
+      } else {
+        setShowScrollArrow(true);
+      }
+    };
+    scr.addEventListener('scroll', handleScroll, { passive: true });
+    return () => scr.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  useEffect(() => {
+    const scr = document.getElementById('phone-scroll-viewport');
+    if (!scr) return;
+    if (sheetOpen) {
+      scr.style.overflowY = 'hidden';
+    } else {
+      scr.style.overflowY = 'auto';
+    }
+    return () => {
+      scr.style.overflowY = 'auto';
+    };
+  }, [sheetOpen]);
+
 
 
   useEffect(() => { const t = setTimeout(() => setPlayKey(k => k + 1), 90); return () => clearTimeout(t); }, []);
@@ -675,7 +718,7 @@ function SavingsScreen({ go, monthly = 30000, setMonthly }) {
                 <span style={{ fontSize: 11, fontWeight: 800, color: '#1B192E', fontFamily: 'Sora, sans-serif' }}>{inr(animCardsInt)}</span>
               </div>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                <span style={{ fontSize: 10, color: '#7C788A', fontWeight: 600 }}>Total Outflow</span>
+                <span style={{ fontSize: 10, color: '#7C788A', fontWeight: 600 }}>Total Payable </span>
                 <span style={{ fontSize: 11, fontWeight: 800, color: '#DC2626', fontFamily: 'Sora, sans-serif' }}>{inr(500000 + cardsInt)}</span>
               </div>
             </div>
@@ -1143,7 +1186,7 @@ function SavingsScreen({ go, monthly = 30000, setMonthly }) {
                 animation: 'fadeUp 1s .18s both',
               }}
             >
-              <div style={{ fontSize: 13, fontWeight: 800, color: '#15122F', lineHeight: 1.25 }}>How Credit Card Interest Works</div>
+              <div style={{ fontSize: 13, fontWeight: 800, color: '#15122F', lineHeight: 1.25 }}>How Credit Card Interest Works? </div>
               <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: 26, height: 26, borderRadius: 999, background: '#F4F1FF', flexShrink: 0 }}>
                 {Icon.chevR(MELT.purple, 16)}
               </span>
@@ -1202,17 +1245,10 @@ function SavingsScreen({ go, monthly = 30000, setMonthly }) {
             }}
           />
           <div
-            onTouchStart={(e) => onDragStart(e.touches[0].clientY)}
-            onTouchMove={(e) => onDragMove(e.touches[0].clientY)}
-            onTouchEnd={onDragEnd}
-            onMouseDown={(e) => onDragStart(e.clientY)}
-            onMouseMove={(e) => onDragMove(e.clientY)}
-            onMouseUp={onDragEnd}
-            onMouseLeave={onDragEnd}
             style={{
               position: 'absolute', left: 0, right: 0, bottom: 0,
               zIndex: 21,
-              maxHeight: '90vh',
+              maxHeight: '520px',
               background: '#fff',
               borderTopLeftRadius: 24,
               borderTopRightRadius: 24,
@@ -1221,37 +1257,48 @@ function SavingsScreen({ go, monthly = 30000, setMonthly }) {
               transform: sheetClosing ? 'translateY(100%)' : `translateY(${dragOffset}px)`,
               transition: isDragging ? 'none' : 'transform 240ms cubic-bezier(.2,.75,.2,1)',
             }}>
-            <div style={{
-              width: 52, height: 5, borderRadius: 999,
-              background: '#E7E0F8', margin: '10px auto 8px'
-            }} />
-            <div style={{
-              display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-              padding: '6px 16px 14px', borderBottom: '1px solid #F0ECFA'
-            }}>
-              <div style={{ fontSize: 16, fontWeight: 800, color: '#161331', letterSpacing: -0.2 }}>
-                {sheetOpen === 'interest'
-                  ? 'Understanding Credit Card Interest'
-                  : 'What Happens When You Pay Only the Minimum Due?'}
+            <div
+              onTouchStart={(e) => onDragStart(e.touches[0].clientY)}
+              onTouchMove={(e) => onDragMove(e.touches[0].clientY)}
+              onTouchEnd={onDragEnd}
+              onMouseDown={(e) => onDragStart(e.clientY)}
+              onMouseMove={(e) => onDragMove(e.clientY)}
+              onMouseUp={onDragEnd}
+              onMouseLeave={onDragEnd}
+              style={{ cursor: 'grab', userSelect: 'none' }}
+            >
+              <div style={{
+                width: 52, height: 5, borderRadius: 999,
+                background: '#E7E0F8', margin: '10px auto 8px'
+              }} />
+              <div style={{
+                display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                padding: '6px 16px 14px', borderBottom: '1px solid #F0ECFA'
+              }}>
+                <div style={{ fontSize: 16, fontWeight: 800, color: '#161331', letterSpacing: -0.2 }}>
+                  {sheetOpen === 'interest'
+                    ? 'Understanding Credit Card Interest'
+                    : 'What Happens When You Pay Only the Minimum Due?'}
+                </div>
+                <button onClick={dismissSheet} style={{
+                  background: 'transparent',
+                  border: 'none',
+                  cursor: 'pointer',
+                  padding: 0,
+                  flexShrink: 0,
+                  fontSize: 14,
+                  fontWeight: 700,
+                  color: MELT.purple,
+                  lineHeight: 1,
+                  transition: 'opacity 0.2s ease',
+                }}
+                  onMouseEnter={e => e.currentTarget.style.opacity = 0.8}
+                  onMouseLeave={e => e.currentTarget.style.opacity = 1}>
+                  Close
+                </button>
               </div>
-              <button onClick={dismissSheet} style={{
-                background: 'transparent',
-                border: 'none',
-                cursor: 'pointer',
-                padding: 0,
-                flexShrink: 0,
-                fontSize: 14,
-                fontWeight: 700,
-                color: MELT.purple,
-                lineHeight: 1,
-                transition: 'opacity 0.2s ease',
-              }}
-                onMouseEnter={e => e.currentTarget.style.opacity = 0.8}
-                onMouseLeave={e => e.currentTarget.style.opacity = 1}>
-                Close
-              </button>
             </div>
-            <div style={{ padding: '16px 16px 24px', overflowY: 'auto', maxHeight: 'calc(90vh - 72px)' }}>
+            <div style={{ padding: '16px 16px 24px', overflowY: 'auto', maxHeight: '440px' }}>
               {sheetOpen === 'interest' ? (
                 <>
                   {/* Premium light-themed dashboard audit card */}
@@ -1368,34 +1415,6 @@ function SavingsScreen({ go, monthly = 30000, setMonthly }) {
                             display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0
                           }}>
                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#D32F2F" strokeWidth="2.5"><circle cx="12" cy="12" r="10" /><path d="M12 6v6l4 2" /></svg>
-                          </div>
-                        )
-                      },
-                      {
-                        title: '18% GST on All Charges',
-                        desc: 'A mandatory 18% GST is added to all interest charges and penalty fees.',
-                        icon: (
-                          <div style={{
-                            width: 32, height: 32, borderRadius: 99,
-                            background: '#FFEAEA',
-                            border: '1px solid rgba(211, 47, 47, 0.08)',
-                            display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0
-                          }}>
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#D32F2F" strokeWidth="2.5"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" /></svg>
-                          </div>
-                        )
-                      },
-                      {
-                        title: 'Late Payment Penalty',
-                        desc: 'Missed or delayed payments immediately trigger penalty fees up to ₹1,300.',
-                        icon: (
-                          <div style={{
-                            width: 32, height: 32, borderRadius: 99,
-                            background: '#FFEAEA',
-                            border: '1px solid rgba(211, 47, 47, 0.08)',
-                            display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0
-                          }}>
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#D32F2F" strokeWidth="2.5"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" /><line x1="12" y1="9" x2="12" y2="13" /><line x1="12" y1="17" x2="12.01" y2="17" /></svg>
                           </div>
                         )
                       }
@@ -1531,93 +1550,6 @@ function SavingsScreen({ go, monthly = 30000, setMonthly }) {
                     </div>
                   </div>
 
-                  {/* 1 Year Grid Picture */}
-                  <div style={{
-                    marginTop: 16,
-                    background: '#FFF',
-                    borderRadius: 20,
-                    border: '1px solid #ECE8F7',
-                    padding: '16px 18px',
-                    boxShadow: '0 8px 20px -16px rgba(24, 21, 47, 0.08)',
-                  }}>
-                    <div style={{ fontSize: 10, fontWeight: 800, color: '#88859E', letterSpacing: '0.8px', textTransform: 'uppercase', marginBottom: 12 }}>
-                      THE 1-YEAR PICTURE (PAYING MINIMUMS)
-                    </div>
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
-                      <div style={{ borderRight: '1px solid #ECE8F7', paddingRight: 8 }}>
-                        <div style={{ fontSize: 11, color: '#88859E', fontWeight: 600 }}>Total Paid in Year</div>
-                        <div style={{ fontSize: 18, fontWeight: 800, color: '#1B192E', marginTop: 3 }}>₹60,000</div>
-                      </div>
-                      <div style={{ paddingLeft: 8 }}>
-                        <div style={{ fontSize: 11, color: '#88859E', fontWeight: 600 }}>Interest + GST Charged</div>
-                        <div style={{ fontSize: 18, fontWeight: 800, color: '#D32F2F', marginTop: 3 }}>₹53,100</div>
-                      </div>
-                      <div style={{ borderTop: '1px solid #ECE8F7', borderRight: '1px solid #ECE8F7', paddingTop: 10, paddingRight: 8 }}>
-                        <div style={{ fontSize: 11, color: '#88859E', fontWeight: 600 }}>Debt Remaining</div>
-                        <div style={{ fontSize: 18, fontWeight: 800, color: '#1B192E', marginTop: 3 }}>~₹93,100</div>
-                      </div>
-                      <div style={{ borderTop: '1px solid #ECE8F7', paddingTop: 10, paddingLeft: 8 }}>
-                        <div style={{ fontSize: 11, color: '#88859E', fontWeight: 600 }}>Time to Clear ₹1L</div>
-                        <div style={{ fontSize: 18, fontWeight: 800, color: '#D32F2F', marginTop: 3 }}>9–10 Years</div>
-                      </div>
-                    </div>
-
-                    <div style={{ marginTop: 14, paddingTop: 12, borderTop: '1px solid #F0ECFA', fontSize: 12.5, color: '#5C5870', lineHeight: 1.45 }}>
-                      You paid <strong>₹60,000</strong> in a year. The bank took <strong>₹53,100</strong> of it. Your debt is still <strong>₹93,100</strong>. Over 9 years, interest alone can exceed <strong>₹2,20,000</strong>.
-                    </div>
-                  </div>
-
-                  {/* Warning Points */}
-                  <div style={{ marginTop: 16, display: 'flex', flexDirection: 'column', gap: 10 }}>
-                    {[
-                      {
-                        title: 'Daily Compounding Interest',
-                        desc: 'Unpaid balances accrue interest daily, compounding the outstanding balance carried into the next billing cycle.',
-                        icon: (
-                          <div style={{
-                            width: 32, height: 32, borderRadius: 99,
-                            background: '#FFEAEA',
-                            border: '1px solid rgba(211, 47, 47, 0.08)',
-                            display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0
-                          }}>
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#D32F2F" strokeWidth="2.5"><path d="M23 6l-9.5 9.5-5-5L1 18" /><path d="M17 6h6v6" /></svg>
-                          </div>
-                        )
-                      },
-                      {
-                        title: 'Additional Late Penalty',
-                        desc: 'Missed or delayed payments immediately incur an additional late fee plus mandatory GST tax.',
-                        icon: (
-                          <div style={{
-                            width: 32, height: 32, borderRadius: 99,
-                            background: '#FFEAEA',
-                            border: '1px solid rgba(211, 47, 47, 0.08)',
-                            display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0
-                          }}>
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#D32F2F" strokeWidth="2.5"><path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
-                          </div>
-                        )
-                      }
-                    ].map((item, idx) => (
-                      <div key={idx} style={{
-                        display: 'flex',
-                        gap: 12,
-                        padding: '14px 16px',
-                        borderRadius: 16,
-                        background: '#FFF',
-                        border: '1px solid #ECE8F7',
-                        borderLeft: '4px solid #D32F2F',
-                        boxShadow: '0 8px 20px -16px rgba(24, 21, 47, 0.08)',
-                      }}>
-                        {item.icon}
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
-                          <span style={{ fontSize: 13.5, fontWeight: 800, color: '#1B192E' }}>{item.title}</span>
-                          <span style={{ fontSize: 11.5, color: '#5C5870', lineHeight: 1.5 }}>{item.desc}</span>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-
                   {/* High-Impact Advisory Block */}
                   <div style={{
                     marginTop: 14,
@@ -1646,6 +1578,35 @@ function SavingsScreen({ go, monthly = 30000, setMonthly }) {
 
       {/* 10. sticky CTA */}
       <BottomBar bg="#F7F7FC">
+        {/* Scroll Down Arrow */}
+        <div style={{
+          position: 'absolute',
+          top: -48,
+          left: '50%',
+          transform: 'translateX(-50%)',
+          zIndex: 10,
+          pointerEvents: 'none',
+          opacity: showScrollArrow ? 0.95 : 0,
+          transition: 'opacity 0.25s ease-in-out',
+        }}>
+          <div style={{
+            animation: showScrollArrow ? 'float 2s ease-in-out infinite' : 'none',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            width: 36,
+            height: 36,
+            borderRadius: '50%',
+            background: '#FFFFFF',
+            border: '1px solid #E2DDF0',
+            boxShadow: '0 4px 12px rgba(91, 63, 212, 0.15)',
+          }}>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+              <path d="M12 5v14M5 12l7 7 7-7" stroke="#5B3FD4" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </div>
+        </div>
+
         <button onClick={() => go('cards')} style={{
           width: '100%', height: 56, borderRadius: 16, background: 'linear-gradient(135deg, #5B3FD4 0%, #3D3DC4 100%)', color: '#fff',
           fontWeight: 700, fontSize: 16, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 9,

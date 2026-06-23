@@ -5,10 +5,10 @@
 // Shared card dataset (used by selection, questions, eligibility, pdf).
 const CARD_DATA = [
   { bank: 'FEDERAL', last4: '4821', limit: 100000, due: 73000, util: 0.73, date: '3rd Jan', balance: 73000, creditLimit: 100000 },
-  { bank: 'ICICI',   last4: '7290', limit: 80000,  due: 68900, util: 0.86, date: '8th Jan', balance: 68900, creditLimit: 80000 },
-  { bank: 'HDFC',    last4: '5678', limit: 150000, due: 45500, util: 0.30, date: '12th Jan', balance: 45500, creditLimit: 150000 },
-  { bank: 'SBI',     last4: '9012', limit: 120000, due: 38000, util: 0.32, date: '21st Jan', balance: 38000, creditLimit: 120000 },
-  { bank: 'AXIS',    last4: '1190', limit: 200000, due: 12400, util: 0.06, date: '15th Jan', balance: 12400, creditLimit: 200000 },
+  { bank: 'ICICI', last4: '7290', limit: 80000, due: 68900, util: 0.86, date: '8th Jan', balance: 68900, creditLimit: 80000 },
+  { bank: 'HDFC', last4: '5678', limit: 150000, due: 45500, util: 0.30, date: '12th Jan', balance: 45500, creditLimit: 150000 },
+  { bank: 'SBI', last4: '9012', limit: 120000, due: 38000, util: 0.32, date: '21st Jan', balance: 38000, creditLimit: 120000 },
+  { bank: 'AXIS', last4: '1190', limit: 200000, due: 12400, util: 0.06, date: '15th Jan', balance: 12400, creditLimit: 200000 },
 ].sort((a, b) => b.due - a.due); // ← descending by Balance Due
 
 const MAX_CARDS = 4;
@@ -27,7 +27,7 @@ function CardSelection({ go, selected, setSelected, showLogos }) {
     <div style={{ minHeight: '100%', display: 'flex', flexDirection: 'column', animation: 'fadeIn .35s' }}>
       <Header title="Select your Cards" onBack={() => go('selling')} help />
       <div style={{ padding: '6px 20px 0', flex: 1 }}>
-        <div style={{ fontWeight: 800, fontSize: 23 }}>Hey Anshul,</div>
+        <div style={{ fontWeight: 800, fontSize: 23 }}>Hey Ayush,</div>
         <div style={{ fontSize: 14, color: 'var(--ink-2)', marginTop: 2 }}>Let's reduce your credit card debt</div>
         <div style={{ fontWeight: 700, fontSize: 15.5, marginTop: 18 }}>Select your credit cards to consolidate</div>
 
