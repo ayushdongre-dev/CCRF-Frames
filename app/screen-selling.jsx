@@ -622,7 +622,7 @@ function SavingsScreen({ go, monthly = 30000, setMonthly }) {
               zIndex: 2,
             }} />
 
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', zIndex: 1 }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', zIndex: 1, height: 18 }}>
               <span style={{ fontSize: 9, fontWeight: 800, color: '#DC2626', letterSpacing: 0.8, textTransform: 'uppercase', background: 'rgba(220, 38, 38, 0.06)', padding: '2px 6px', borderRadius: 6 }}>
                 Credit Cards
               </span>
@@ -631,7 +631,7 @@ function SavingsScreen({ go, monthly = 30000, setMonthly }) {
               </span>
             </div>
 
-            <div style={{ textAlign: 'center', margin: 0, zIndex: 5, position: 'relative' }}>
+            <div style={{ textAlign: 'center', margin: 0, zIndex: 5, position: 'relative', height: 42, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 4 }}>
                 <span style={{ fontSize: 28, fontWeight: 900, color: '#DC2626', letterSpacing: -1, fontFamily: 'Sora, sans-serif' }}>54%</span>
                 <span style={{ fontSize: 10.5, fontWeight: 800, color: '#88859E', textTransform: 'uppercase', marginTop: 6 }}>p.a.</span>
@@ -664,7 +664,7 @@ function SavingsScreen({ go, monthly = 30000, setMonthly }) {
             </div>
 
             <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: 68, margin: '2px 0', zIndex: 1 }}>
-              <div style={{ transform: 'scale(0.85)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <div style={{ transform: 'scale(0.72)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 <IceCube />
               </div>
             </div>
@@ -761,7 +761,7 @@ function SavingsScreen({ go, monthly = 30000, setMonthly }) {
               zIndex: 2,
             }} />
 
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', zIndex: 1 }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', zIndex: 1, height: 18 }}>
               <span style={{ fontSize: 9, fontWeight: 800, color: '#5B3FD4', letterSpacing: 0.8, textTransform: 'uppercase', background: 'rgba(91, 63, 212, 0.08)', padding: '2px 6px', borderRadius: 6 }}>
                 With Melt
               </span>
@@ -770,12 +770,11 @@ function SavingsScreen({ go, monthly = 30000, setMonthly }) {
               </span>
             </div>
 
-            <div style={{ textAlign: 'center', margin: 0, zIndex: 1 }}>
+            <div style={{ textAlign: 'center', margin: 0, zIndex: 1, height: 42, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 2 }}>
                 <span style={{ fontSize: 28, fontWeight: 900, color: '#5B3FD4', letterSpacing: -1, fontFamily: 'Sora, sans-serif' }}>25%</span>
                 <span style={{ fontSize: 10.5, fontWeight: 800, color: '#88859E', textTransform: 'uppercase', marginTop: 6 }}>p.a.</span>
               </div>
-              <div style={{ fontSize: 8.5, fontWeight: 700, color: '#10B981', marginTop: 1 }}>flat flat flat</div>
             </div>
 
             <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: 68, margin: '2px 0', zIndex: 1 }}>
@@ -790,7 +789,7 @@ function SavingsScreen({ go, monthly = 30000, setMonthly }) {
                 <span style={{ fontSize: 11, fontWeight: 800, color: '#1B192E', fontFamily: 'Sora, sans-serif' }}>{inr(animMeltInt)}</span>
               </div>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', zIndex: 1 }}>
-                <span style={{ fontSize: 10, color: '#7C788A', fontWeight: 600 }}>Total Outflow</span>
+                <span style={{ fontSize: 10, color: '#7C788A', fontWeight: 600 }}>Total Payable</span>
                 <span style={{ fontSize: 11, fontWeight: 800, color: '#5B3FD4', fontFamily: 'Sora, sans-serif' }}>{inr(500000 + meltInt)}</span>
               </div>
             </div>
@@ -846,18 +845,7 @@ function SavingsScreen({ go, monthly = 30000, setMonthly }) {
             <rect width="100%" height="100%" fill="url(#grid)" />
           </svg>
 
-          {/* Sparkle Icon */}
-          <div style={{
-            position: 'absolute',
-            right: 14,
-            top: 14,
-            opacity: 0.2,
-            pointerEvents: 'none',
-          }}>
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="#FFFFFF">
-              <path d="M12 2l2.4 7.2 7.2 2.4-7.2 2.4-2.4 7.2-2.4-7.2-7.2-2.4 7.2-2.4z" />
-            </svg>
-          </div>
+
 
           <div style={{
             fontSize: 10,
@@ -1064,7 +1052,49 @@ function SavingsScreen({ go, monthly = 30000, setMonthly }) {
           </div>
         </div>
 
-        {/* 6. benefit pills */}
+
+        {/* 7. educational section */}
+        <div style={{ padding: '18px 0 0', animation: 'fadeUp .9s .1s both' }}>
+          <div style={{ fontSize: 11.5, fontWeight: 800, letterSpacing: 0.8, color: MELT.muted3, marginBottom: 10, padding: '0 20px', textTransform: 'uppercase' }}>
+            Understanding Credit Card Debt
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 8, width: '100%' }}>
+            <button
+              onClick={() => setSheetOpen('interest')}
+              style={{
+                display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                gap: 10, width: 'calc(100% - 40px)', borderRadius: 14,
+                background: '#fff', border: '1px solid #ECE8FB', padding: '10px 14px',
+                textAlign: 'left', cursor: 'pointer', boxShadow: '0 8px 20px -18px rgba(40,30,80,.45)',
+                marginLeft: 20, marginRight: 20,
+                animation: 'fadeUp 1s .18s both',
+              }}
+            >
+              <div style={{ fontSize: 13, fontWeight: 800, color: '#15122F', lineHeight: 1.25 }}>How Credit Card Interest Works</div>
+              <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: 26, height: 26, borderRadius: 999, background: '#F4F1FF', flexShrink: 0 }}>
+                {Icon.chevR(MELT.purple, 16)}
+              </span>
+            </button>
+            <button
+              onClick={() => setSheetOpen('minimum')}
+              style={{
+                display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                gap: 10, width: 'calc(100% - 40px)', borderRadius: 14,
+                background: '#fff', border: '1px solid #ECE8FB', padding: '10px 14px',
+                textAlign: 'left', cursor: 'pointer', boxShadow: '0 8px 20px -18px rgba(40,30,80,.45)',
+                marginLeft: 20, marginRight: 20,
+                animation: 'fadeUp 1.12s .28s both',
+              }}
+            >
+              <div style={{ fontSize: 13, fontWeight: 800, color: '#15122F', lineHeight: 1.25 }}>Paying Only the Minimum Due?</div>
+              <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: 26, height: 26, borderRadius: 999, background: '#F4F1FF', flexShrink: 0 }}>
+                {Icon.chevR(MELT.purple, 16)}
+              </span>
+            </button>
+          </div>
+        </div>
+
+        {/* benefit pills */}
         <div className="scr" style={{ display: 'flex', gap: 8, overflowX: 'auto', padding: '16px 20px 0' }}>
           {[
             { t: 'Foreclose anytime', c: MELT.purple, check: true },
@@ -1079,58 +1109,7 @@ function SavingsScreen({ go, monthly = 30000, setMonthly }) {
           ))}
         </div>
 
-        {/* 7. educational section */}
-        <div style={{ padding: '18px 0 0', animation: 'fadeUp .9s .1s both' }}>
-          <div style={{ fontSize: 11.5, fontWeight: 800, letterSpacing: 0.8, color: MELT.muted3, marginBottom: 10, padding: '0 20px', textTransform: 'uppercase' }}>
-            Understanding Credit Card Debt
-          </div>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 10, width: '100%' }}>
-            <button
-              onClick={() => setSheetOpen('interest')}
-              style={{
-                display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-                gap: 10, width: 'calc(100% - 40px)', minHeight: 84, borderRadius: 18,
-                background: '#fff', border: '1px solid #ECE8FB', padding: '14px 14px',
-                textAlign: 'left', cursor: 'pointer', boxShadow: '0 8px 20px -18px rgba(40,30,80,.45)',
-                marginLeft: 20, marginRight: 20,
-                animation: 'fadeUp 1s .18s both',
-              }}
-            >
-              <div style={{ flex: 1 }}>
-                <div style={{ fontSize: 14, fontWeight: 800, color: '#15122F', lineHeight: 1.25 }}>How Credit Card Interest Works</div>
-                <div style={{ fontSize: 12.5, color: '#5F617A', lineHeight: 1.45, marginTop: 5 }}>
-                  See how interest and GST can increase the cost of your outstanding balance.
-                </div>
-              </div>
-              <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: 30, height: 30, borderRadius: 999, background: '#F4F1FF', flexShrink: 0 }}>
-                {Icon.chevR(MELT.purple, 18)}
-              </span>
-            </button>
-            <button
-              onClick={() => setSheetOpen('minimum')}
-              style={{
-                display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-                gap: 10, width: 'calc(100% - 40px)', minHeight: 84, borderRadius: 18,
-                background: '#fff', border: '1px solid #ECE8FB', padding: '14px 14px',
-                textAlign: 'left', cursor: 'pointer', boxShadow: '0 8px 20px -18px rgba(40,30,80,.45)',
-                marginLeft: 20, marginRight: 20,
-                animation: 'fadeUp 1.12s .28s both',
-              }}
-            >
-              <div style={{ flex: 1 }}>
-                <div style={{ fontSize: 14, fontWeight: 800, color: '#15122F', lineHeight: 1.25 }}>Paying Only the Minimum Due?</div>
-                <div style={{ fontSize: 12.5, color: '#5F617A', lineHeight: 1.45, marginTop: 5 }}>
-                  Learn why minimum payments may keep debt outstanding for longer.
-                </div>
-              </div>
-              <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: 30, height: 30, borderRadius: 999, background: '#F4F1FF', flexShrink: 0 }}>
-                {Icon.chevR(MELT.purple, 18)}
-              </span>
-            </button>
-          </div>
-        </div>
-
-        {/* 8. disclaimer */}
+        {/* disclaimer */}
         <div style={{ fontSize: 12, color: MELT.muted3, textAlign: 'center', padding: '18px 28px 8px', lineHeight: 1.5 }}>
           Illustrative, based on average card balances. Your actual savings appear on the next screen.
         </div>
