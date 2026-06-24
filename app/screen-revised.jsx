@@ -33,7 +33,7 @@ function RevisedOffer({ go }) {
             </div>
 
             <div style={{ textAlign: 'center', marginTop: 16 }}>
-              <div style={{ fontWeight: 800, fontSize: 46, color: '#fff', letterSpacing: -1.5, lineHeight: 1.1, ...sora }}>₹2,50,000</div>
+              <div style={{ fontWeight: 800, fontSize: 46, color: '#fff', letterSpacing: -1.5, lineHeight: 1.1, ...sora }}>₹2,00,000</div>
               <div style={{ fontSize: 12.5, color: 'rgba(255,255,255,.82)', marginTop: 4 }}>Revised basis your banking verification</div>
             </div>
 
