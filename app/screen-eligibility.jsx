@@ -20,7 +20,7 @@ function Eligibility({ go }) {
   const STAGES = [
     { state: 'done', label: 'Available today', desc: 'Lands in your salary bank account' },
     { state: 'active', label: 'Melt your card bills', desc: 'Use it to clear your outstanding dues by 20th June' },
-    { state: 'locked', label: 'Unlock the rest', desc: 'Repay on time and the rest opens up automatically' },
+    { state: 'locked', label: 'Unlock More', desc: 'Repay on time and the rest opens up automatically' },
   ];
 
   return (

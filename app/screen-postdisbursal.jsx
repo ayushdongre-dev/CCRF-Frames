@@ -1,377 +1,500 @@
-// screen-postdisbursal.jsx — Post Disbursal Screen
-// Premium fintech milestone screen. Uses app green (#1FA971).
+// screen-postdisbursal.jsx — Melt Dashboard  (3-state hub)
+// pdState: 'action' | 'pending' | 'unlocked'
 
-var G = '#1FA971';      // app --green
-var G_DK = '#178A5E';
-var G_BG = '#E7F7EF';   // app --green-l
+var G     = '#1FA971';
+var G_DK  = '#178A5E';
+var G_BG  = '#E7F7EF';
 var G_BDR = '#A7E4C5';
-var P = '#5B5BD6';       // app purple
-var P_BG = '#EFEEFE';
+var P     = '#5B5BD6';
+var P_BG  = '#EFEEFE';
 var P_BDR = '#C7C4F2';
-var GY = '#9CA3AF';
+var GY    = '#9CA3AF';
 var GY_BG = '#F5F4FA';
-var GY_BDR = '#E2E8F0';
-var INK = '#1B192E';     // app --ink
-var INK2 = '#4B4960';    // app --ink-2
-var MUTED = '#8A879B';   // app --muted
-var LINE = '#ECEAF4';    // app --line
+var GY_BDR= '#E2E8F0';
+var INK   = '#1B192E';
+var INK2  = '#4B4960';
+var MUTED = '#8A879B';
+var LINE  = '#ECEAF4';
 
-// ── Animated success hero icon ─────────────────────────
-function SuccessHero() {
-  return (
-    <div style={{ position: 'relative', width: 72, height: 72, margin: '0 auto' }}>
-      {/* Outer glow ring */}
-      <div style={{
-        position: 'absolute', inset: -8, borderRadius: 999,
-        border: '2px solid ' + G,
-        opacity: 0.15,
-        animation: 'pulseRing 2.5s ease-out infinite',
-      }} />
-      {/* Middle glow ring */}
-      <div style={{
-        position: 'absolute', inset: -4, borderRadius: 999,
-        border: '1.5px solid ' + G,
-        opacity: 0.25,
-        animation: 'pulseRing 2.5s .4s ease-out infinite',
-      }} />
-      {/* Sparkle dots */}
-      <div style={{
-        position: 'absolute', top: -6, right: 2, width: 6, height: 6, borderRadius: 999,
-        background: '#FCD34D', animation: 'popIn .4s .6s both, gentleFloat 3s 1s infinite',
-      }} />
-      <div style={{
-        position: 'absolute', top: 8, right: -10, width: 4, height: 4, borderRadius: 999,
-        background: P, opacity: .6, animation: 'popIn .4s .8s both, gentleFloat 3.5s 1.2s infinite',
-      }} />
-      <div style={{
-        position: 'absolute', bottom: 4, left: -8, width: 5, height: 5, borderRadius: 999,
-        background: '#38BDF8', opacity: .5, animation: 'popIn .4s 1s both, gentleFloat 2.8s .8s infinite',
-      }} />
-      {/* Main circle */}
-      <div style={{
-        width: 72, height: 72, borderRadius: 999,
-        background: 'linear-gradient(145deg, ' + G + ', ' + G_DK + ')',
-        display: 'flex', alignItems: 'center', justifyContent: 'center',
-        boxShadow: '0 12px 32px -8px rgba(31,169,113,.5), 0 0 0 4px rgba(31,169,113,.08)',
-        animation: 'popIn .5s both',
-      }}>
-        <svg width="34" height="34" viewBox="0 0 24 24" fill="none">
-          <path d="M5 12.5l5 5L19 7" stroke="#fff" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round"
-            style={{ strokeDasharray: 22, animation: 'drawCheck .5s .35s both' }} />
-        </svg>
-      </div>
-    </div>
-  );
+function fmtINR(n) {
+  var s = String(Math.floor(n));
+  if (s.length <= 3) return s;
+  var last3 = s.slice(-3);
+  var rest = s.slice(0, -3);
+  var parts = [];
+  while (rest.length > 2) { parts.unshift(rest.slice(-2)); rest = rest.slice(0, -2); }
+  if (rest.length) parts.unshift(rest);
+  return parts.join(',') + ',' + last3;
 }
 
-// ── Step circle with number ────────────────────────────
-function PDStep({ num, state }) {
-  var bg = state === 'done' ? G : state === 'active' ? '#fff' : GY;
-  var bdr = state === 'done' ? G : state === 'active' ? P : GY;
-  var fg = state === 'active' ? P : '#fff';
+// ── Premium Melt offer hero card (unlocked state) ────────
+function MeltHeroCard({ go, heroCount }) {
   return (
     <div style={{
-      width: 30, height: 30, borderRadius: 999, flexShrink: 0,
-      background: bg, border: '2.5px solid ' + bdr,
-      display: 'flex', alignItems: 'center', justifyContent: 'center',
-      boxShadow: state === 'done' ? '0 3px 10px -3px rgba(31,169,113,.35)' : 'none',
-      transition: 'all .4s',
+      borderRadius: 22,
+      background: 'linear-gradient(140deg,#8B5CF6 0%,#6D28D9 45%,#4F46E5 100%)',
+      padding: '22px 20px 20px',
+      marginBottom: 12,
+      position: 'relative', overflow: 'hidden',
+      boxShadow: '0 20px 48px -12px rgba(109,40,217,.45), 0 0 0 1px rgba(255,255,255,.1) inset',
+      animation: 'popIn .45s both',
     }}>
-      <span style={{ fontSize: 12, fontWeight: 800, color: fg, lineHeight: 1, fontFamily: "'Sora',sans-serif" }}>{num}</span>
+      {/* Radial glow — top right */}
+      <div style={{ position: 'absolute', top: -44, right: -44, width: 190, height: 190, borderRadius: '50%', background: 'radial-gradient(circle,rgba(255,255,255,.13) 0%,transparent 65%)', pointerEvents: 'none' }} />
+      {/* Radial glow — bottom left */}
+      <div style={{ position: 'absolute', bottom: -24, left: -14, width: 110, height: 110, borderRadius: '50%', background: 'radial-gradient(circle,rgba(167,139,250,.22) 0%,transparent 65%)', pointerEvents: 'none' }} />
+
+      {/* Eyebrow */}
+      <div style={{ fontSize: 11.5, fontWeight: 500, color: 'rgba(255,255,255,.6)', marginBottom: 10, letterSpacing: 0.2 }}>
+        You are eligible for an exclusive offer
+      </div>
+
+      {/* MELT badge */}
+      <div style={{ display: 'inline-block', background: 'rgba(255,255,255,.16)', border: '1px solid rgba(255,255,255,.28)', borderRadius: 999, padding: '3px 12px', fontSize: 10, fontWeight: 800, color: '#fff', letterSpacing: 1.2, marginBottom: 14 }}>
+        MELT
+      </div>
+
+      {/* Amount count-up */}
+      <div style={{ fontFamily: "'Sora',sans-serif", fontSize: 44, fontWeight: 800, color: '#fff', lineHeight: 1, marginBottom: 6, letterSpacing: -1 }}>
+        ₹{fmtINR(heroCount)}
+      </div>
+
+      {/* Headline */}
+      <div style={{ fontSize: 14, fontWeight: 600, color: 'rgba(255,255,255,.82)', marginBottom: 20, lineHeight: 1.35 }}>
+        Get ₹1,25,000 extra Melt tranche now
+      </div>
+
+      {/* Bottom row */}
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 6, background: 'rgba(255,255,255,.12)', border: '1px solid rgba(255,255,255,.2)', borderRadius: 999, padding: '6px 14px', animation: 'popIn .3s .35s both' }}>
+          <div style={{ width: 7, height: 7, borderRadius: '50%', background: '#4ADE80', animation: 'blink 2s ease-in-out infinite' }} />
+          <span style={{ fontSize: 12, fontWeight: 700, color: '#fff' }}>Unlocked</span>
+        </div>
+        <button
+          onClick={function(){ go('reward'); }}
+          style={{ background: '#fff', color: '#6D28D9', fontFamily: "'Sora',sans-serif", fontWeight: 800, fontSize: 14.5, border: 'none', borderRadius: 13, padding: '11px 22px', cursor: 'pointer', boxShadow: '0 4px 16px -4px rgba(0,0,0,.28)', transition: 'transform .12s', animation: 'popIn .35s .2s both', letterSpacing: 0.1 }}
+          onMouseDown={function(e){ e.currentTarget.style.transform='scale(.96)'; }}
+          onMouseUp={function(e){ e.currentTarget.style.transform='scale(1)'; }}
+          onMouseLeave={function(e){ e.currentTarget.style.transform='scale(1)'; }}
+        >
+          Start Here →
+        </button>
+      </div>
     </div>
   );
 }
 
-// ── Main screen ─────────────────────────────────────────
-function PostDisbursal({ go }) {
-  var S = { fontFamily: "'Sora',-apple-system,system-ui,sans-serif" };
-  var st = useState(false);
-  var done = st[0];
-  var setDone = st[1];
-  var s2 = done ? 'done' : 'active';
-  var s3 = done ? 'active' : 'locked';
-
-  function dash(c) { return 'repeating-linear-gradient(to bottom,' + c + ' 0,' + c + ' 4px,transparent 4px,transparent 9px)'; }
-
+// ── Dark loan summary card ───────────────────────────────
+function LoanCard({ countVal, barFilled, showVerifiedBanner }) {
+  var M = { color: 'rgba(255,255,255,.45)', fontSize: 10, fontWeight: 600, letterSpacing: 0.4, marginBottom: 2 };
   return (
-    <div style={{ minHeight: '100%', display: 'flex', flexDirection: 'column', background: '#F7F6FC', animation: 'fadeIn .25s' }}>
+    <div style={{
+      borderRadius: 22,
+      background: 'linear-gradient(145deg,#16133A,#26215C)',
+      padding: '16px 18px',
+      boxShadow: '0 16px 40px -12px rgba(22,19,58,.55)',
+      animation: 'fadeUp .5s both',
+      position: 'relative', overflow: 'hidden', marginBottom: 4,
+    }}>
+      <div style={{ position: 'absolute', top: -40, right: -40, width: 130, height: 130, borderRadius: '50%', background: 'radial-gradient(circle,rgba(91,91,214,.22) 0%,transparent 70%)', pointerEvents: 'none' }} />
 
-      {/* Header */}
-      <div style={{ padding: '4px 18px 0', flexShrink: 0 }}>
-        <button onClick={function(){ go('revisedoffer'); }} style={{
-          width: 36, height: 36, borderRadius: 999,
-          border: '1.5px solid ' + LINE, background: '#fff',
-          display: 'flex', alignItems: 'center', justifyContent: 'center',
-        }}>
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-            <path d="M15 5l-7 7 7 7" stroke={INK} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-          </svg>
-        </button>
+      {/* Payment verified banner */}
+      {showVerifiedBanner && (
+        <div style={{ display: 'flex', alignItems: 'center', gap: 7, background: 'rgba(31,169,113,.15)', border: '1px solid rgba(31,169,113,.28)', borderRadius: 10, padding: '7px 11px', marginBottom: 14, animation: 'fadeUp .3s .2s both' }}>
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M5 13l5 5L19 7" stroke="#4ADE80" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" /></svg>
+          <span style={{ fontSize: 12, fontWeight: 700, color: '#4ADE80' }}>Your payment has been verified successfully</span>
+        </div>
+      )}
+
+      {/* Account row */}
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 14 }}>
+        <div>
+          <div style={{ fontSize: 10, fontWeight: 600, color: 'rgba(255,255,255,.38)', letterSpacing: 0.5, marginBottom: 2 }}>LOAN ACCOUNT</div>
+          <div style={{ fontSize: 13, fontWeight: 700, color: 'rgba(255,255,255,.88)', letterSpacing: 1.5, fontFamily: 'monospace' }}>CCRF ···· ···· 4521</div>
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 5, background: 'rgba(31,169,113,.18)', border: '1px solid rgba(31,169,113,.3)', borderRadius: 999, padding: '4px 10px' }}>
+          <div style={{ width: 6, height: 6, borderRadius: '50%', background: G, animation: 'blink 2s ease-in-out infinite' }} />
+          <span style={{ fontSize: 11, fontWeight: 700, color: G, fontFamily: "'Sora',sans-serif" }}>Active</span>
+        </div>
       </div>
 
-      <div style={{ flex: 1, overflowY: 'auto', overflowX: 'hidden' }}>
+      {/* Stats 2×2 */}
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px 0', marginBottom: 14 }}>
+        {[
+          { label: 'LOAN AMOUNT',  value: '₹1,50,000',  hl: false },
+          { label: 'EMI AMOUNT',   value: '₹11,285/mo', hl: false },
+          { label: 'OUTSTANDING',  value: '₹' + fmtINR(Math.max(0, 128400 - Math.round(countVal * 128400 / 150000))), hl: true },
+          { label: 'TENURE',       value: '15 months',   hl: false },
+        ].map(function(s, i) {
+          return (
+            <div key={i} style={{ paddingRight: i % 2 === 0 ? 12 : 0, borderRight: i % 2 === 0 ? '1px solid rgba(255,255,255,.07)' : 'none' }}>
+              <div style={M}>{s.label}</div>
+              <div style={{ fontSize: 15, fontWeight: 800, color: s.hl ? '#FCD34D' : '#fff', fontFamily: "'Sora',sans-serif", lineHeight: 1.1 }}>{s.value}</div>
+            </div>
+          );
+        })}
+      </div>
 
-        {/* Hero section */}
-        <div style={{ textAlign: 'center', padding: '12px 24px 16px', animation: 'fadeUp .5s both' }}>
-          <SuccessHero />
-          <div style={{ fontWeight: 800, fontSize: 23, color: INK, marginTop: 14, letterSpacing: -0.3, fontFamily: "'Sora',sans-serif" }}>
-            Congratulations!
-          </div>
-          <div style={{ fontWeight: 700, fontSize: 17, color: G, marginTop: 3, fontFamily: "'Sora',sans-serif" }}>
-            Your loan is being disbursed
-          </div>
-          <div style={{ fontSize: 12.5, fontWeight: 500, color: MUTED, marginTop: 6, lineHeight: 1.5 }}>
-            Your first tranche has been sent successfully.<br />
-            You're one step closer to becoming debt-free.
+      {/* EMI progress */}
+      <div style={{ marginBottom: 10 }}>
+        <div style={{ background: 'rgba(255,255,255,.1)', borderRadius: 999, height: 5, overflow: 'hidden' }}>
+          <div style={{ height: '100%', borderRadius: 999, background: 'linear-gradient(90deg,' + G + ',#38D988)', width: '20%', transformOrigin: 'left', animation: barFilled ? 'barFillH 1.1s .3s ease-out both' : 'none' }} />
+        </div>
+        <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 5 }}>
+          <span style={{ fontSize: 10.5, fontWeight: 600, color: 'rgba(255,255,255,.5)' }}>3 of 15 EMIs paid</span>
+          <span style={{ fontSize: 10.5, fontWeight: 700, color: G }}>20%</span>
+        </div>
+      </div>
+
+      {/* Next EMI */}
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingTop: 10, borderTop: '1px solid rgba(255,255,255,.07)' }}>
+        <div style={{ fontSize: 10.5, fontWeight: 600, color: 'rgba(255,255,255,.4)' }}>Next EMI due</div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+          <span style={{ fontSize: 13, fontWeight: 800, color: '#fff', fontFamily: "'Sora',sans-serif" }}>₹11,285</span>
+          <span style={{ fontSize: 10, color: 'rgba(255,255,255,.3)' }}>·</span>
+          <span style={{ fontSize: 11, fontWeight: 600, color: 'rgba(255,255,255,.55)' }}>04/08/2026</span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ── Tag pill ─────────────────────────────────────────────
+function Tag({ label, color, bg, border }) {
+  return (
+    <div style={{ display: 'inline-flex', alignItems: 'center', gap: 4, background: bg, border: '1px solid ' + border, borderRadius: 999, padding: '2px 9px' }}>
+      <div style={{ width: 5, height: 5, borderRadius: '50%', background: color, flexShrink: 0 }} />
+      <span style={{ fontSize: 9, fontWeight: 800, color: color, letterSpacing: 0.6, fontFamily: "'Sora',sans-serif" }}>{label}</span>
+    </div>
+  );
+}
+
+// ── Dashed connector segment ─────────────────────────────
+function Connector({ color }) {
+  var dash = 'repeating-linear-gradient(to bottom,' + color + ' 0,' + color + ' 4px,transparent 4px,transparent 9px)';
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', flex: 1, paddingTop: 3, paddingBottom: 2, transformOrigin: 'top', animation: 'lineGrow .5s .7s both' }}>
+      <div style={{ width: 2, height: 8, backgroundImage: dash, borderRadius: 9 }} />
+      <div style={{ width: 5, height: 5, background: color, transform: 'rotate(45deg)', margin: '2px 0', flexShrink: 0, borderRadius: 1 }} />
+      <div style={{ width: 2, flex: 1, backgroundImage: dash, borderRadius: 9 }} />
+    </div>
+  );
+}
+
+// ── Main component ───────────────────────────────────────
+function PostDisbursal({ go, pdState, setPdState }) {
+  var pdst     = pdState || 'action';
+  var action   = pdst === 'action';
+  var pending  = pdst === 'pending';
+  var unlocked = pdst === 'unlocked';
+
+  var aphst = useState('init');  var animPhase = aphst[0]; var setAnimPhase = aphst[1];
+  var cvst  = useState(0);       var countVal  = cvst[0];  var setCountVal  = cvst[1];
+  var snst  = useState(0);       var shimmerN  = snst[0];  var setShimmerN  = snst[1];
+  var bfst  = useState(false);   var barFilled = bfst[0];  var setBarFilled = bfst[1];
+  var hcst  = useState(0);       var heroCount = hcst[0];  var setHeroCount = hcst[1];
+  var hrst  = useRef(false);
+
+  useEffect(function() {
+    var t = setTimeout(function() { setBarFilled(true); }, 400);
+    return function() { clearTimeout(t); };
+  }, []);
+
+  useEffect(function() {
+    var outer = setTimeout(function() {
+      var startTs = null;
+      function step(ts) {
+        if (!startTs) startTs = ts;
+        var p = Math.min((ts - startTs) / 800, 1);
+        var e = 1 - Math.pow(1 - p, 3);
+        setCountVal(Math.round(e * 150000));
+        if (p < 1) { requestAnimationFrame(step); } else { setCountVal(150000); }
+      }
+      requestAnimationFrame(step);
+    }, 1200);
+    return function() { clearTimeout(outer); };
+  }, []);
+
+  useEffect(function() {
+    var t = setTimeout(function() { setAnimPhase('active'); }, 2400);
+    return function() { clearTimeout(t); };
+  }, []);
+
+  useEffect(function() {
+    if (animPhase !== 'active' || !action) return;
+    var t = setInterval(function() { setShimmerN(function(n) { return n + 1; }); }, 7000);
+    return function() { clearInterval(t); };
+  }, [animPhase, pdst]);
+
+  // Hero count-up (₹1,25,000) — fires once on unlock
+  useEffect(function() {
+    if (!unlocked || hrst.current) return;
+    hrst.current = true;
+    var startTs = null;
+    function step(ts) {
+      if (!startTs) startTs = ts;
+      var p = Math.min((ts - startTs) / 1200, 1);
+      var e = 1 - Math.pow(1 - p, 3);
+      setHeroCount(Math.round(e * 125000));
+      if (p < 1) { requestAnimationFrame(step); } else { setHeroCount(125000); }
+    }
+    requestAnimationFrame(step);
+  }, [unlocked]);
+
+  var sora = { fontFamily: "'Sora',sans-serif" };
+
+  // ════════════════════════════════════════════════════════
+  // UNLOCKED STATE — premium offer layout
+  // ════════════════════════════════════════════════════════
+  if (unlocked) {
+    return (
+      <div style={{ minHeight: '100%', display: 'flex', flexDirection: 'column', background: '#F4F3FB', animation: 'fadeIn .2s' }}>
+        {/* Header */}
+        <div style={{ padding: '10px 16px 6px', display: 'flex', alignItems: 'center', gap: 10, flexShrink: 0 }}>
+          <button onClick={function(){ go('revisedoffer'); }} style={{ width: 34, height: 34, borderRadius: 999, border: '1.5px solid ' + LINE, background: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M15 5l-7 7 7 7" stroke={INK} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>
+          </button>
+          <div>
+            <div style={{ fontSize: 16, fontWeight: 800, color: INK, ...sora, lineHeight: 1.1 }}>Melt Dashboard</div>
+            <div style={{ fontSize: 11.5, fontWeight: 500, color: G, marginTop: 1 }}>Offer unlocked — take your next step</div>
           </div>
         </div>
 
-        {/* Timeline + Cards */}
-        <div style={{ padding: '0 14px 0 18px' }}>
+        <div className="scr" style={{ flex: 1, overflowY: 'auto', overflowX: 'hidden', padding: '4px 16px 28px' }}>
 
-          {/* STEP 1 */}
-          <div style={{ display: 'flex', gap: 12 }}>
-            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: 30, flexShrink: 0, paddingTop: 14 }}>
-              <PDStep num={1} state="done" />
-              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', flex: 1, paddingTop: 3, paddingBottom: 1 }}>
-                <div style={{ width: 2, height: 10, backgroundImage: dash(G), borderRadius: 9 }} />
-                <div style={{ width: 6, height: 6, background: G, transform: 'rotate(45deg)', margin: '2px 0', flexShrink: 0, borderRadius: 1 }} />
-                <div style={{ width: 2, flex: 1, backgroundImage: dash(G), borderRadius: 9 }} />
-              </div>
+          {/* 1 — HERO CARD */}
+          <MeltHeroCard go={go} heroCount={heroCount} />
+
+          {/* 2 — LOAN DETAILS */}
+          <LoanCard countVal={countVal} barFilled={barFilled} showVerifiedBanner={true} />
+
+          {/* 3 — JOURNEY SECTION */}
+          <div style={{ marginTop: 16 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: INK, ...sora, letterSpacing: -0.1, marginBottom: 14, animation: 'fadeUp .4s .4s both' }}>
+              Your Melt Journey
             </div>
-            <div style={{
-              flex: 1, borderRadius: 18, padding: '12px 14px 13px', marginBottom: 6,
-              background: '#fff', border: '1.5px solid ' + G_BDR,
-              boxShadow: '0 2px 12px -4px rgba(31,169,113,.12), 0 0 0 1px rgba(31,169,113,.04)',
-            }}>
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                <span style={{ fontSize: 9, fontWeight: 800, letterSpacing: 0.8, color: G, fontFamily: "'Sora',sans-serif" }}>COMPLETED</span>
-                <div style={{ width: 18, height: 18, borderRadius: 999, background: G, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <svg width="10" height="10" viewBox="0 0 24 24" fill="none"><path d="M5 13l5 5L19 7" stroke="#fff" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round" /></svg>
+
+            {/* Step 1 — Tranche 1 Disbursed */}
+            <div style={{ display: 'flex', gap: 10, animation: 'fadeUp .35s .5s both' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: 28, flexShrink: 0, paddingTop: 12 }}>
+                <div style={{ width: 28, height: 28, borderRadius: 999, background: G, border: '2px solid ' + G, display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 3px 10px -3px rgba(31,169,113,.4)', flexShrink: 0 }}>
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M5 13l5 5L19 7" stroke="#fff" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" /></svg>
+                </div>
+                <Connector color={G} />
+              </div>
+              <div style={{ flex: 1, borderRadius: 16, padding: '11px 13px 13px', marginBottom: 6, background: '#fff', border: '1.5px solid ' + G_BDR }}>
+                <div style={{ marginBottom: 6 }}><Tag label="COMPLETED" color={G} bg={G_BG} border={G_BDR} /></div>
+                <div style={{ fontWeight: 700, fontSize: 13.5, color: INK, ...sora, marginBottom: 4 }}>Tranche 1 Disbursed</div>
+                <div style={{ fontSize: 11.5, color: INK2, display: 'flex', alignItems: 'center', gap: 6 }}>
+                  <span style={{ fontWeight: 800, color: G }}>₹1,50,000</span>
+                  <span style={{ color: LINE }}>·</span>
+                  <span>20 May 2025</span>
                 </div>
               </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginTop: 8 }}>
-                <div style={{
-                  width: 42, height: 42, borderRadius: 12, flexShrink: 0,
-                  background: G_BG,
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                }}>
-                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-                    <rect x="2" y="6" width="20" height="13" rx="3" stroke={G} strokeWidth="1.6" />
-                    <rect x="2" y="6" width="20" height="5" rx="3" fill={G} opacity=".15" />
-                    <rect x="14" y="12" width="6" height="4" rx="1.5" fill={G} opacity=".12" stroke={G} strokeWidth=".8" />
-                    <circle cx="17" cy="14" r="1" fill={G} />
+            </div>
+
+            {/* Step 2 — Payment Verified */}
+            <div style={{ display: 'flex', gap: 10, animation: 'fadeUp .35s .65s both' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: 28, flexShrink: 0, paddingTop: 12 }}>
+                <div style={{ width: 28, height: 28, borderRadius: 999, background: G, border: '2px solid ' + G, display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 3px 10px -3px rgba(31,169,113,.4)', flexShrink: 0 }}>
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M5 13l5 5L19 7" stroke="#fff" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" /></svg>
+                </div>
+                <Connector color={G} />
+              </div>
+              <div style={{ flex: 1, borderRadius: 16, padding: '11px 13px 13px', marginBottom: 6, background: '#fff', border: '1.5px solid ' + G_BDR }}>
+                <div style={{ marginBottom: 6 }}><Tag label="COMPLETED" color={G} bg={G_BG} border={G_BDR} /></div>
+                <div style={{ fontWeight: 700, fontSize: 13.5, color: INK, ...sora, marginBottom: 4 }}>Payment Verified</div>
+                <div style={{ fontSize: 11.5, color: INK2, lineHeight: 1.4 }}>
+                  Your card payment has been successfully verified.
+                </div>
+              </div>
+            </div>
+
+            {/* Step 3 — Extra Melt Tranche (active unlocked) */}
+            <div style={{ display: 'flex', gap: 10, animation: 'fadeUp .35s .8s both' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: 28, flexShrink: 0, paddingTop: 12 }}>
+                <div style={{ width: 28, height: 28, borderRadius: 999, background: '#fff', border: '2px solid ' + G, display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 3px 14px -3px rgba(31,169,113,.35)', flexShrink: 0, animation: 'nodePulseGentle 2s .8s ease-in-out infinite' }}>
+                  {/* Open lock */}
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none">
+                    <rect x="5" y="11" width="14" height="10" rx="2" stroke={G} strokeWidth="1.9" />
+                    <path d="M8 11V7a4 4 0 015.8-3.5" stroke={G} strokeWidth="1.9" strokeLinecap="round" />
+                    <circle cx="12" cy="15.5" r="1.3" fill={G} />
                   </svg>
                 </div>
-                <div style={{ flex: 1 }}>
-                  <div style={{ fontWeight: 700, fontSize: 14, color: INK, fontFamily: "'Sora',sans-serif" }}>First tranche disbursed</div>
-                  <div style={{ fontSize: 12, fontWeight: 500, color: INK2, marginTop: 2 }}>₹1,50,000 sent to your account</div>
-                </div>
               </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 5, marginTop: 10, paddingTop: 9, borderTop: '1px solid ' + G_BDR }}>
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none">
-                  <circle cx="12" cy="12" r="9" fill={G} />
-                  <path d="M9 12l2 2 4-4" stroke="#fff" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-                <span style={{ fontSize: 11, fontWeight: 600, color: G }}>Disbursed on 20 May 2025, 10:30 AM</span>
-              </div>
-            </div>
-          </div>
-
-          {/* STEP 2 */}
-          <div style={{ display: 'flex', gap: 12 }}>
-            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: 30, flexShrink: 0, paddingTop: 14 }}>
-              <PDStep num={2} state={s2} />
-              <div style={{ width: 2, flex: 1, backgroundImage: dash(done ? G : LINE), borderRadius: 9, marginTop: 3, marginBottom: 1, transition: 'background .5s' }} />
-            </div>
-            <div style={{
-              flex: 1, borderRadius: 18, padding: '12px 14px 14px', marginBottom: 6,
-              background: done ? '#fff' : '#fff',
-              border: done ? ('1.5px solid ' + G_BDR) : ('1.5px dashed ' + P_BDR),
-              boxShadow: done ? '0 2px 12px -4px rgba(31,169,113,.12)' : '0 4px 20px -6px rgba(91,91,214,.15), 0 0 0 1px rgba(91,91,214,.05)',
-              transition: 'all .4s',
-            }}>
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                <span style={{
-                  fontSize: 9, fontWeight: 800, letterSpacing: 0.8,
-                  color: done ? G : P, fontFamily: "'Sora',sans-serif",
-                }}>{done ? 'COMPLETED' : 'PENDING ACTION'}</span>
-                {done && (
-                  <div style={{ width: 18, height: 18, borderRadius: 999, background: G, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none"><path d="M5 13l5 5L19 7" stroke="#fff" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round" /></svg>
-                  </div>
-                )}
-              </div>
-              <div style={{ display: 'flex', alignItems: 'flex-start', gap: 10, marginTop: 8 }}>
-                <div style={{
-                  width: 42, height: 42, borderRadius: 12, flexShrink: 0,
-                  background: done ? G_BG : P_BG,
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  position: 'relative', transition: 'background .3s',
-                }}>
-                  {done ? (
-                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-                      <circle cx="12" cy="12" r="9" fill={G} />
-                      <path d="M8 12l3 3 5-5" stroke="#fff" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
-                    </svg>
-                  ) : (
-                    <React.Fragment>
-                      <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-                        <rect x="3" y="5" width="18" height="16" rx="3" stroke={P} strokeWidth="1.5" />
-                        <path d="M3 10h18" stroke={P} strokeWidth="1.5" />
-                        <path d="M8 3v4M16 3v4" stroke={P} strokeWidth="1.5" strokeLinecap="round" />
-                      </svg>
-                      <div style={{
-                        position: 'absolute', bottom: -1, right: -1,
-                        width: 16, height: 16, borderRadius: 999,
-                        background: P, border: '2px solid #fff',
-                        display: 'flex', alignItems: 'center', justifyContent: 'center',
-                      }}>
-                        <svg width="8" height="8" viewBox="0 0 24 24" fill="none">
-                          <circle cx="12" cy="12" r="8" stroke="#fff" strokeWidth="2.2" />
-                          <path d="M12 8v4l2 1.5" stroke="#fff" strokeWidth="2" strokeLinecap="round" />
-                        </svg>
-                      </div>
-                    </React.Fragment>
-                  )}
+              <div style={{
+                flex: 1, borderRadius: 16, padding: '14px 14px 16px',
+                background: '#fff',
+                border: '2px solid ' + G,
+                boxShadow: '0 0 0 4px rgba(31,169,113,.06), 0 10px 28px -8px rgba(31,169,113,.2)',
+              }}>
+                <div style={{ marginBottom: 8 }}><Tag label="UNLOCKED" color={G} bg={G_BG} border={G_BDR} /></div>
+                <div style={{ fontWeight: 800, fontSize: 15, color: INK, ...sora, marginBottom: 4 }}>Extra Melt Tranche Available</div>
+                <div style={{ fontWeight: 800, fontSize: 26, color: G, ...sora, lineHeight: 1, marginBottom: 6 }}>₹1,25,000</div>
+                <div style={{ fontSize: 12.5, color: INK2, lineHeight: 1.4, marginBottom: 14 }}>
+                  You've unlocked ₹1,25,000 extra cash. Tap below to claim your offer.
                 </div>
-                <div style={{ flex: 1 }}>
-                  <div style={{ fontWeight: 700, fontSize: 14, color: done ? G_DK : INK, fontFamily: "'Sora',sans-serif" }}>
-                    {done ? 'Payment marked done' : "I've paid my part"}
-                  </div>
-                  <div style={{ fontSize: 12, fontWeight: 500, color: done ? G : MUTED, marginTop: 2, lineHeight: 1.4 }}>
-                    {done ? 'Verified · Next step unlocked' : 'Once your payment is complete, mark it as done.'}
-                  </div>
-                </div>
-              </div>
-
-              {!done && (
-                <React.Fragment>
-                  <button onClick={function(){ setDone(true); }} style={{
-                    position: 'relative', width: '100%', height: 44, borderRadius: 13, border: 'none',
-                    background: 'linear-gradient(135deg, ' + P + ', #4F46E5)',
-                    color: '#fff', fontWeight: 700, fontSize: 14, fontFamily: "'Sora',sans-serif",
-                    display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 7,
-                    marginTop: 14, cursor: 'pointer', overflow: 'hidden',
-                    boxShadow: '0 8px 22px -6px rgba(91,91,214,.45)', transition: 'transform .1s',
-                  }}
-                    onMouseDown={function(e){ e.currentTarget.style.transform='scale(.975)'; }}
-                    onMouseUp={function(e){ e.currentTarget.style.transform='scale(1)'; }}
-                    onMouseLeave={function(e){ e.currentTarget.style.transform='scale(1)'; }}
-                  >
-                    <div style={{ position: 'absolute', inset: 0, overflow: 'hidden', borderRadius: 13 }}>
-                      <div style={{ position: 'absolute', top: 0, left: 0, width: '45%', height: '100%', background: 'linear-gradient(90deg,transparent,rgba(255,255,255,.2),transparent)', animation: 'shimmer 3s infinite' }} />
-                    </div>
-                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" style={{ position: 'relative', zIndex: 1 }}>
-                      <path d="M5 13l5 5L19 7" stroke="#fff" strokeWidth="2.8" strokeLinecap="round" strokeLinejoin="round" />
-                    </svg>
-                    <span style={{ position: 'relative', zIndex: 1 }}>Mark as Done</span>
-                  </button>
-                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 5, marginTop: 8 }}>
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
-                      <path d="M12 3l7 3v5c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6l7-3z" stroke={MUTED} strokeWidth="1.6" strokeLinejoin="round" />
-                      <path d="M9 12l2 2 4-4" stroke={MUTED} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
-                    </svg>
-                    <span style={{ fontSize: 11, fontWeight: 500, color: MUTED }}>We'll verify and move to the next step</span>
-                  </div>
-                </React.Fragment>
-              )}
-            </div>
-          </div>
-
-          {/* STEP 3 */}
-          <div style={{ display: 'flex', gap: 12 }}>
-            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: 30, flexShrink: 0, paddingTop: 14 }}>
-              <PDStep num={3} state={s3} />
-            </div>
-            <div style={{
-              flex: 1, borderRadius: 18, padding: '12px 14px 14px',
-              background: done ? '#fff' : GY_BG,
-              border: done ? ('1.5px solid ' + P_BDR) : ('1.5px solid ' + GY_BDR),
-              boxShadow: done ? '0 4px 20px -6px rgba(91,91,214,.15)' : 'none',
-              opacity: done ? 1 : 0.6,
-              transition: 'all .45s',
-            }}>
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                <span style={{
-                  fontSize: 9, fontWeight: 800, letterSpacing: 0.8,
-                  color: done ? P : GY, fontFamily: "'Sora',sans-serif",
-                }}>{done ? 'UNLOCKED' : 'LOCKED'}</span>
-              </div>
-              <div style={{ display: 'flex', alignItems: 'flex-start', gap: 10, marginTop: 8 }}>
-                <div style={{
-                  width: 42, height: 42, borderRadius: 12, flexShrink: 0,
-                  background: done ? P_BG : 'rgba(156,163,175,.08)',
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  transition: 'background .3s',
-                }}>
-                  {done ? (
-                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-                      <path d="M13 2L4 14h6l-1 8 9-12h-6l1-8z" fill={P} />
-                    </svg>
-                  ) : (
-                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" style={{ animation: 'lockShimmer 3s infinite' }}>
-                      <rect x="5" y="11" width="14" height="10" rx="2.5" stroke={GY} strokeWidth="1.7" />
-                      <path d="M8 11V8a4 4 0 018 0v3" stroke={GY} strokeWidth="1.7" strokeLinecap="round" />
-                      <circle cx="12" cy="15.5" r="1.3" fill={GY} />
-                    </svg>
-                  )}
-                </div>
-                <div style={{ flex: 1 }}>
-                  <div style={{ fontWeight: 700, fontSize: 14, color: done ? INK : INK2, fontFamily: "'Sora',sans-serif" }}>
-                    Verification &amp; next tranche
-                  </div>
-                  <div style={{ fontSize: 12, fontWeight: 500, color: done ? MUTED : GY, marginTop: 2, lineHeight: 1.4 }}>
-                    {done ? 'Verification will begin shortly' : 'Unlocks after you mark payment as done.'}
-                  </div>
-                </div>
-              </div>
-
-              {!done && (
-                <div style={{ display: 'flex', alignItems: 'center', gap: 5, marginTop: 10, paddingTop: 9, borderTop: '1px solid ' + GY_BDR }}>
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
-                    <circle cx="12" cy="12" r="9" stroke={GY} strokeWidth="1.6" />
-                    <path d="M12 11v5M12 7.5h.01" stroke={GY} strokeWidth="2" strokeLinecap="round" />
-                  </svg>
-                  <span style={{ fontSize: 11, fontWeight: 500, color: GY }}>Complete Step 2 to continue</span>
-                </div>
-              )}
-
-              {done && (
-                <button onClick={function(){ go('success'); }} style={{
-                  position: 'relative', width: '100%', height: 44, borderRadius: 13, border: 'none',
-                  background: INK, color: '#fff', fontWeight: 700, fontSize: 14,
-                  fontFamily: "'Sora',sans-serif",
-                  display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 7,
-                  marginTop: 14, cursor: 'pointer', overflow: 'hidden',
-                  boxShadow: '0 8px 22px -6px rgba(27,25,46,.35)',
-                  transition: 'transform .1s', animation: 'fadeUp .3s both',
-                }}
+                <button
+                  onClick={function(){ go('reward'); }}
+                  style={{ width: '100%', height: 46, borderRadius: 13, border: 'none', background: G, color: '#fff', fontWeight: 800, fontSize: 14, ...sora, cursor: 'pointer', boxShadow: '0 8px 22px -6px rgba(31,169,113,.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 7, transition: 'transform .12s' }}
                   onMouseDown={function(e){ e.currentTarget.style.transform='scale(.975)'; }}
                   onMouseUp={function(e){ e.currentTarget.style.transform='scale(1)'; }}
                   onMouseLeave={function(e){ e.currentTarget.style.transform='scale(1)'; }}
                 >
-                  <span style={{ position: 'relative', zIndex: 1 }}>Continue</span>
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" style={{ position: 'relative', zIndex: 1 }}>
-                    <path d="M5 12h13m0 0l-4-4m4 4l-4 4" stroke="#fff" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
-                  </svg>
+                  Continue →
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* Trust strip */}
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 5, marginTop: 20, paddingTop: 12, borderTop: '1px solid ' + LINE }}>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M12 3l7 3v5c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6l7-3z" stroke={G} strokeWidth="1.8" strokeLinejoin="round" /><path d="M9 12l2 2 4-4" stroke={G} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" /></svg>
+            <span style={{ fontSize: 10.5, fontWeight: 600, color: INK2 }}>Secure</span>
+            <span style={{ fontSize: 10.5, color: MUTED }}>·</span>
+            <span style={{ fontSize: 10.5, fontWeight: 600, color: INK2 }}>RBI regulated</span>
+            <span style={{ fontSize: 10.5, color: MUTED }}>·</span>
+            <span style={{ fontSize: 10.5, fontWeight: 600, color: INK2 }}>Data safe</span>
+          </div>
+        </div>
+
+        {/* Sticky primary CTA */}
+        <BottomBar>
+          <button
+            onClick={function(){ go('reward'); }}
+            style={{ width: '100%', height: 52, borderRadius: 15, border: 'none', cursor: 'pointer', background: G, color: '#fff', fontWeight: 800, fontSize: 15.5, ...sora, boxShadow: '0 10px 28px -8px rgba(31,169,113,.55)', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, transition: 'transform .12s' }}
+            onMouseDown={function(e){ e.currentTarget.style.transform='scale(.975)'; }}
+            onMouseUp={function(e){ e.currentTarget.style.transform='scale(1)'; }}
+            onMouseLeave={function(e){ e.currentTarget.style.transform='scale(1)'; }}
+          >
+            Start Here →
+          </button>
+        </BottomBar>
+      </div>
+    );
+  }
+
+  // ════════════════════════════════════════════════════════
+  // ACTION / PENDING STATE — standard dashboard
+  // ════════════════════════════════════════════════════════
+  return (
+    <div style={{ minHeight: '100%', display: 'flex', flexDirection: 'column', background: '#F4F3FB', animation: 'fadeIn .2s' }}>
+      <div style={{ padding: '10px 16px 6px', display: 'flex', alignItems: 'center', gap: 10, flexShrink: 0 }}>
+        <button onClick={function(){ go('revisedoffer'); }} style={{ width: 34, height: 34, borderRadius: 999, border: '1.5px solid ' + LINE, background: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M15 5l-7 7 7 7" stroke={INK} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>
+        </button>
+        <div>
+          <div style={{ fontSize: 16, fontWeight: 800, color: INK, ...sora, lineHeight: 1.1 }}>Melt Dashboard</div>
+          <div style={{ fontSize: 11.5, fontWeight: 500, color: MUTED, marginTop: 1 }}>Track your loan &amp; clear dues</div>
+        </div>
+      </div>
+
+      <div className="scr" style={{ flex: 1, overflowY: 'auto', overflowX: 'hidden', padding: '4px 16px 24px' }}>
+        <LoanCard countVal={countVal} barFilled={barFilled} showVerifiedBanner={false} />
+
+        <div style={{ marginTop: 8 }}>
+          <div style={{ fontSize: 13, fontWeight: 800, color: INK, ...sora, letterSpacing: -0.1, marginBottom: 12, animation: 'fadeUp .4s .4s both' }}>
+            Your melt journey
+          </div>
+
+          {/* Step 1 */}
+          <div style={{ display: 'flex', gap: 10, animation: 'fadeUp .4s .6s both' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: 28, flexShrink: 0, paddingTop: 12 }}>
+              <div style={{ width: 28, height: 28, borderRadius: 999, background: G, border: '2px solid ' + G, display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 3px 10px -3px rgba(31,169,113,.45)', flexShrink: 0 }}>
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M5 13l5 5L19 7" stroke="#fff" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" /></svg>
+              </div>
+              <Connector color={LINE} />
+            </div>
+            <div style={{ flex: 1, borderRadius: 16, padding: '11px 13px 12px', marginBottom: 5, background: '#fff', border: '1.5px solid ' + G_BDR }}>
+              <div style={{ marginBottom: 7 }}><Tag label="COMPLETED" color={G} bg={G_BG} border={G_BDR} /></div>
+              <div style={{ fontWeight: 700, fontSize: 13.5, color: INK, ...sora }}>Tranche 1 disbursed</div>
+              <div style={{ fontSize: 11.5, fontWeight: 500, color: INK2, marginTop: 3, display: 'flex', alignItems: 'center', gap: 6 }}>
+                <span style={{ fontWeight: 700, color: G }}>₹{countVal === 0 ? '—' : fmtINR(countVal)}</span>
+                <span style={{ color: LINE }}>·</span>
+                <span>20 May 2025, 10:30 AM</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Step 2 — Action / Pending */}
+          <div style={{ display: 'flex', gap: 10, animation: 'fadeUp .4s 1s both' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: 28, flexShrink: 0, paddingTop: 12 }}>
+              <div style={{ animation: animPhase === 'active' && action ? 'nodePulse .3s ease-out both, nodePulseGentle 1.5s .5s ease-in-out infinite' : 'none' }}>
+                <div style={{ width: 28, height: 28, borderRadius: 999, background: '#fff', border: '2px solid ' + P, display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 3px 12px -3px rgba(91,91,214,.38)' }}>
+                  {pending
+                    ? <svg width="12" height="12" viewBox="0 0 24 24" fill="none" style={{ animation: 'spin .9s linear infinite' }}><circle cx="12" cy="12" r="8" stroke="rgba(91,91,214,.25)" strokeWidth="2.5" /><path d="M12 4a8 8 0 018 8" stroke={P} strokeWidth="2.5" strokeLinecap="round" /></svg>
+                    : <span style={{ fontSize: 11, fontWeight: 800, color: P, lineHeight: 1, ...sora }}>2</span>
+                  }
+                </div>
+              </div>
+              <div style={{ width: 2, flex: 1, background: LINE, borderRadius: 9, marginTop: 3, marginBottom: 2 }} />
+            </div>
+            <div style={{ flex: 1, borderRadius: 16, padding: '11px 13px 13px', marginBottom: 5, background: '#fff', border: '1.5px dashed ' + P_BDR, boxShadow: animPhase === 'active' && action ? '0 4px 28px -6px rgba(91,91,214,.3)' : '0 3px 18px -6px rgba(91,91,214,.12)', transition: 'box-shadow .5s' }}>
+              <div style={{ marginBottom: 7 }}>
+                {pending
+                  ? <Tag label="VERIFYING" color={MUTED} bg={GY_BG} border={GY_BDR} />
+                  : <Tag label="ACTION REQUIRED" color={P} bg={P_BG} border={P_BDR} />
+                }
+              </div>
+              <div style={{ fontWeight: 700, fontSize: 13.5, color: INK, ...sora }}>
+                {pending ? 'Verification in progress' : 'Pay your card'}
+              </div>
+              <div style={{ fontSize: 11.5, fontWeight: 500, color: MUTED, marginTop: 3, lineHeight: 1.4 }}>
+                {pending
+                  ? "We're reviewing your card payment. We'll notify you the moment your offer unlocks."
+                  : 'Settle your outstanding dues to proceed.'}
+              </div>
+              {action && (
+                <React.Fragment>
+                  <button onClick={function(){ go('claim'); }} style={{ position: 'relative', width: '100%', height: 42, borderRadius: 12, border: 'none', background: 'linear-gradient(135deg,' + P + ',#4F46E5)', color: '#fff', fontWeight: 700, fontSize: 13.5, ...sora, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 7, marginTop: 12, cursor: 'pointer', overflow: 'hidden', boxShadow: '0 8px 22px -6px rgba(91,91,214,.45)', transition: 'transform .1s' }}
+                    onMouseDown={function(e){ e.currentTarget.style.transform='scale(.975)'; }}
+                    onMouseUp={function(e){ e.currentTarget.style.transform='scale(1)'; }}
+                    onMouseLeave={function(e){ e.currentTarget.style.transform='scale(1)'; }}
+                  >
+                    <div style={{ position: 'absolute', inset: 0, overflow: 'hidden', borderRadius: 12 }}>
+                      <div key={shimmerN} style={{ position: 'absolute', top: 0, left: 0, width: '45%', height: '100%', background: 'linear-gradient(90deg,transparent,rgba(255,255,255,.22),transparent)', animation: shimmerN === 0 ? 'shimmer .8s 2.6s both' : 'shimmer .8s both' }} />
+                    </div>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" style={{ position: 'relative', zIndex: 1 }}><path d="M5 13l5 5L19 7" stroke="#fff" strokeWidth="2.8" strokeLinecap="round" strokeLinejoin="round" /></svg>
+                    <span style={{ position: 'relative', zIndex: 1 }}>Mark as Done</span>
+                  </button>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 4, marginTop: 7 }}>
+                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none"><path d="M12 3l7 3v5c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6l7-3z" stroke={MUTED} strokeWidth="1.6" strokeLinejoin="round" /></svg>
+                    <span style={{ fontSize: 10.5, fontWeight: 500, color: MUTED }}>We'll verify after you mark</span>
+                  </div>
+                </React.Fragment>
+              )}
+              {pending && (
+                <button onClick={function(){ go('verifying'); }} style={{ width: '100%', height: 40, borderRadius: 12, marginTop: 10, cursor: 'pointer', background: 'none', border: '1.5px solid ' + P_BDR, color: P, fontWeight: 700, fontSize: 13, ...sora, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6 }}>
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" style={{ animation: 'spin 1.2s linear infinite' }}><circle cx="12" cy="12" r="8" stroke="rgba(91,91,214,.25)" strokeWidth="2" /><path d="M12 4a8 8 0 018 8" stroke={P} strokeWidth="2" strokeLinecap="round" /></svg>
+                  Check status
                 </button>
               )}
+            </div>
+          </div>
+
+          {/* Step 3 — Locked */}
+          <div style={{ display: 'flex', gap: 10 }}>
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: 28, flexShrink: 0, paddingTop: 12 }}>
+              <div style={{ width: 28, height: 28, borderRadius: 999, background: GY, border: '2px solid ' + GY, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><rect x="5" y="11" width="14" height="10" rx="2.5" stroke="#fff" strokeWidth="1.8" /><path d="M8 11V8a4 4 0 018 0v3" stroke="#fff" strokeWidth="1.8" strokeLinecap="round" /><circle cx="12" cy="15.5" r="1.2" fill="#fff" /></svg>
+              </div>
+            </div>
+            <div style={{ flex: 1, borderRadius: 16, padding: '11px 13px 13px', background: GY_BG, border: '1.5px solid ' + GY_BDR, opacity: 0.55 }}>
+              <div style={{ marginBottom: 7 }}><Tag label="LOCKED" color={GY} bg={GY_BG} border={GY_BDR} /></div>
+              <div style={{ fontWeight: 700, fontSize: 13.5, color: INK2, ...sora }}>Verification &amp; next tranche</div>
+              <div style={{ fontSize: 11.5, fontWeight: 500, color: GY, marginTop: 3 }}>Unlocks after step 2 is complete.</div>
             </div>
           </div>
         </div>
 
         {/* Trust strip */}
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 5, padding: '16px 0 24px' }}>
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none">
-            <path d="M12 3l7 3v5c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6l7-3z" stroke={G} strokeWidth="1.8" strokeLinejoin="round" />
-            <path d="M9 12l2 2 4-4" stroke={G} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
-          </svg>
-          <span style={{ fontSize: 11, fontWeight: 600, color: INK2 }}>Secure process</span>
-          <span style={{ fontSize: 11, color: MUTED }}>·</span>
-          <span style={{ fontSize: 11, fontWeight: 600, color: INK2 }}>RBI regulated</span>
-          <span style={{ fontSize: 11, color: MUTED }}>·</span>
-          <span style={{ fontSize: 11, fontWeight: 600, color: INK2 }}>Your data is safe</span>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 5, marginTop: 16, paddingTop: 12, borderTop: '1px solid ' + LINE }}>
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M12 3l7 3v5c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6l7-3z" stroke={G} strokeWidth="1.8" strokeLinejoin="round" /><path d="M9 12l2 2 4-4" stroke={G} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" /></svg>
+          <span style={{ fontSize: 10.5, fontWeight: 600, color: INK2 }}>Secure</span>
+          <span style={{ fontSize: 10.5, color: MUTED }}>·</span>
+          <span style={{ fontSize: 10.5, fontWeight: 600, color: INK2 }}>RBI regulated</span>
+          <span style={{ fontSize: 10.5, color: MUTED }}>·</span>
+          <span style={{ fontSize: 10.5, fontWeight: 600, color: INK2 }}>Data safe</span>
         </div>
       </div>
     </div>

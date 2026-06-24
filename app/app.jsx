@@ -6,10 +6,11 @@ const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
   "ccrfRate": 22
 }/*EDITMODE-END*/;
 
-const ORDER = ['home', 'multioffer', 'selling', 'savings', 'cards', 'eligibility', 'visualise', 'pdf', 'amountselect', 'revisedoffer', 'postdisbursal', 'success'];
+const ORDER = ['home', 'multioffer', 'selling', 'savings', 'cards', 'eligibility', 'visualise', 'pdf', 'amountselect', 'revisedoffer', 'postdisbursal', 'claim', 'verifying', 'reward', 'newloan', 'success'];
 const LABELS = {
   home: 'Home', multioffer: 'Multi Offer', selling: 'General Selling', savings: 'Savings', cards: 'Card Selection',
-  eligibility: 'Eligibility', visualise: 'Visualise', pdf: 'PDF Upload', amountselect: 'Amount', revisedoffer: 'Final Offer', postdisbursal: 'Post Disbursal', success: 'Done',
+  eligibility: 'Eligibility', visualise: 'Visualise', pdf: 'PDF Upload', amountselect: 'Amount', revisedoffer: 'Final Offer',
+  postdisbursal: 'Post Disbursal', claim: 'Cleared Cards?', verifying: 'Verifying', reward: 'Reward', newloan: 'New Loan', success: 'Done',
 };
 
 function App() {
@@ -25,6 +26,7 @@ function App() {
   });
   const [selected, setSelected] = useState(['FEDERAL', 'ICICI', 'HDFC']);
   const [monthly, setMonthly] = useState(30000);
+  const [pdState, setPdState] = useState('action');
 
   const go = useCallback((r) => { setRoute(r); localStorage.setItem('ccrf_route', r); }, []);
 
@@ -62,7 +64,11 @@ function App() {
       case 'pdf': return <PdfUpload go={go} selected={selected} showLogos={t.showLogos} />;
       case 'amountselect': return <AmountSelection go={go} ccrfRate={t.ccrfRate} />;
       case 'revisedoffer': return <RevisedOffer go={go} ccrfRate={t.ccrfRate} />;
-      case 'postdisbursal': return <PostDisbursal go={go} />;
+      case 'postdisbursal': return <PostDisbursal go={go} pdState={pdState} setPdState={setPdState} />;
+      case 'claim': return <ClaimScreen go={go} />;
+      case 'verifying': return <VerifyingScreen go={go} setPdState={setPdState} />;
+      case 'reward': return <RewardScreen go={go} />;
+      case 'newloan': return <NewLoanScreen go={go} />;
       case 'success': return <Success go={go} />;
       default: return <MultiOffer go={go} />;
     }
@@ -73,7 +79,7 @@ function App() {
     : (route === 'eligibility' || route === 'home') ? '#F7F7FB'
       : (route === 'pdf' || route === 'multioffer' || route === 'amountselect' || route === 'revisedoffer') ? '#FFFFFF'
         : (route === 'selling' || route === 'visualise' || route === 'success') ? '#EFEEFE'
-          : route === 'postdisbursal' ? '#FFFFFF'
+          : (route === 'postdisbursal' || route === 'claim' || route === 'verifying' || route === 'reward' || route === 'newloan') ? '#FFFFFF'
             : 'var(--bg)';
 
   return (
@@ -119,6 +125,10 @@ function App() {
         <TweakSection label="Savings illustration" />
         <TweakSlider label="CCRF rate" value={t.ccrfRate} min={16} max={28} step={1} unit="%"
           onChange={(v) => setTweak('ccrfRate', v)} />
+        <TweakSection label="Post Disbursal (dev)" />
+        <TweakButton label="Reset → action" onClick={() => { setPdState('action'); go('postdisbursal'); }} />
+        <TweakButton label="Set → pending" onClick={() => { setPdState('pending'); go('postdisbursal'); }} />
+        <TweakButton label="Simulate bureau confirm →" onClick={() => { setPdState('unlocked'); go('postdisbursal'); }} />
       </TweaksPanel>
     </div>
   );

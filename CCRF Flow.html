@@ -152,6 +152,22 @@
       100% { transform: translateX(100%); }
     }
 
+    @keyframes cardStampPop {
+      0%   { transform: scale(2.5) rotate(-15deg); opacity: 0; }
+      55%  { transform: scale(0.88) rotate(-8deg);  opacity: 1; }
+      75%  { transform: scale(1.06) rotate(-10deg); }
+      100% { transform: scale(1)    rotate(-10deg); opacity: 1; }
+    }
+    @keyframes dotTravel {
+      0%   { transform: translateX(0)     scale(0.4); opacity: 0; }
+      10%  { transform: translateX(0)     scale(1);   opacity: 1; }
+      90%  { transform: translateX(152px) scale(1);   opacity: 1; }
+      100% { transform: translateX(152px) scale(0.4); opacity: 0; }
+    }
+    @keyframes pendingPulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50%       { opacity: 0.7; transform: scale(1.06); }
+    }
     @keyframes drawCheck {
       0% { stroke-dashoffset: 24; }
       100% { stroke-dashoffset: 0; }
@@ -193,6 +209,40 @@
       0% { transform: scale(1); opacity: .5; }
       100% { transform: scale(1.8); opacity: 0; }
     }
+    @keyframes lineGrow {
+      from { transform: scaleY(0); }
+      to   { transform: scaleY(1); }
+    }
+    @keyframes nodePulse {
+      0%, 100% { transform: scale(1); }
+      50%       { transform: scale(1.08); }
+    }
+    @keyframes nodePulseGentle {
+      0%, 100% { transform: scale(1); }
+      50%       { transform: scale(1.03); }
+    }
+    @keyframes glowFadeGreen {
+      0%   { box-shadow: 0 2px 12px -4px rgba(31,169,113,.12); }
+      35%  { box-shadow: 0 4px 28px -4px rgba(31,169,113,.48), 0 0 0 3px rgba(31,169,113,.1); }
+      100% { box-shadow: 0 2px 12px -4px rgba(31,169,113,.12); }
+    }
+    @keyframes lockShake {
+      0%   { transform: translateX(0)   rotate(0deg); }
+      18%  { transform: translateX(-3px) rotate(-5deg); }
+      36%  { transform: translateX(3px)  rotate(4deg); }
+      54%  { transform: translateX(-2px) rotate(-2deg); }
+      72%  { transform: translateX(2px)  rotate(1deg); }
+      88%  { transform: translateX(-1px); }
+      100% { transform: translateX(0)   rotate(0deg); }
+    }
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to   { transform: rotate(360deg); }
+    }
+    @keyframes barFillH {
+      from { transform: scaleX(0); }
+      to   { transform: scaleX(1); }
+    }
   </style>
 </head>
 
@@ -220,8 +270,12 @@
   <script type="text/babel" src="app/screen-pdf.jsx?v=3"></script>
   <script type="text/babel" src="app/screen-amount.jsx"></script>
   <script type="text/babel" src="app/screen-revised.jsx"></script>
-  <script type="text/babel" src="app/screen-postdisbursal.jsx"></script>
-  <script type="text/babel" src="app/app.jsx?v=5"></script>
+  <script type="text/babel" src="app/screen-postdisbursal.jsx?v=5"></script>
+  <script type="text/babel" src="app/screen-claim.jsx?v=1"></script>
+  <script type="text/babel" src="app/screen-verifying.jsx?v=3"></script>
+  <script type="text/babel" src="app/screen-reward.jsx?v=1"></script>
+  <script type="text/babel" src="app/screen-newloan.jsx?v=1"></script>
+  <script type="text/babel" src="app/app.jsx?v=6"></script>
 </body>
 
 </html>
