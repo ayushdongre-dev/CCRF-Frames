@@ -61,7 +61,7 @@ function MeltHeroCard({ go, heroCount }) {
 
       {/* Headline */}
       <div style={{ fontSize: 14, fontWeight: 600, color: 'rgba(255,255,255,.82)', marginBottom: 20, lineHeight: 1.35 }}>
-        Get ₹1,25,000 extra Melt tranche now
+        Get ₹2,50,000 as your Melt Round 2
       </div>
 
       {/* Bottom row */}
@@ -121,9 +121,9 @@ function LoanCard({ countVal, barFilled, showVerifiedBanner }) {
       {/* Stats 2×2 */}
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px 0', marginBottom: 14 }}>
         {[
-          { label: 'LOAN AMOUNT',  value: '₹1,50,000',  hl: false },
-          { label: 'EMI AMOUNT',   value: '₹11,285/mo', hl: false },
-          { label: 'OUTSTANDING',  value: '₹' + fmtINR(Math.max(0, 128400 - Math.round(countVal * 128400 / 150000))), hl: true },
+          { label: 'LOAN AMOUNT',  value: '₹2,50,000',  hl: false },
+          { label: 'EMI AMOUNT',   value: '₹18,810/mo', hl: false },
+          { label: 'OUTSTANDING',  value: '₹' + fmtINR(Math.max(0, 228000 - Math.round(countVal * 228000 / 250000))), hl: true },
           { label: 'TENURE',       value: '15 months',   hl: false },
         ].map(function(s, i) {
           return (
@@ -150,7 +150,7 @@ function LoanCard({ countVal, barFilled, showVerifiedBanner }) {
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingTop: 10, borderTop: '1px solid rgba(255,255,255,.07)' }}>
         <div style={{ fontSize: 10.5, fontWeight: 600, color: 'rgba(255,255,255,.4)' }}>Next EMI due</div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-          <span style={{ fontSize: 13, fontWeight: 800, color: '#fff', fontFamily: "'Sora',sans-serif" }}>₹11,285</span>
+          <span style={{ fontSize: 13, fontWeight: 800, color: '#fff', fontFamily: "'Sora',sans-serif" }}>₹18,810</span>
           <span style={{ fontSize: 10, color: 'rgba(255,255,255,.3)' }}>·</span>
           <span style={{ fontSize: 11, fontWeight: 600, color: 'rgba(255,255,255,.55)' }}>04/08/2026</span>
         </div>
@@ -207,8 +207,8 @@ function PostDisbursal({ go, pdState, setPdState }) {
         if (!startTs) startTs = ts;
         var p = Math.min((ts - startTs) / 800, 1);
         var e = 1 - Math.pow(1 - p, 3);
-        setCountVal(Math.round(e * 150000));
-        if (p < 1) { requestAnimationFrame(step); } else { setCountVal(150000); }
+        setCountVal(Math.round(e * 250000));
+        if (p < 1) { requestAnimationFrame(step); } else { setCountVal(250000); }
       }
       requestAnimationFrame(step);
     }, 1200);
@@ -235,8 +235,8 @@ function PostDisbursal({ go, pdState, setPdState }) {
       if (!startTs) startTs = ts;
       var p = Math.min((ts - startTs) / 1200, 1);
       var e = 1 - Math.pow(1 - p, 3);
-      setHeroCount(Math.round(e * 125000));
-      if (p < 1) { requestAnimationFrame(step); } else { setHeroCount(125000); }
+      setHeroCount(Math.round(e * 250000));
+      if (p < 1) { requestAnimationFrame(step); } else { setHeroCount(250000); }
     }
     requestAnimationFrame(step);
   }, [unlocked]);
@@ -284,9 +284,9 @@ function PostDisbursal({ go, pdState, setPdState }) {
               </div>
               <div style={{ flex: 1, borderRadius: 16, padding: '11px 13px 13px', marginBottom: 6, background: '#fff', border: '1.5px solid ' + G_BDR }}>
                 <div style={{ marginBottom: 6 }}><Tag label="COMPLETED" color={G} bg={G_BG} border={G_BDR} /></div>
-                <div style={{ fontWeight: 700, fontSize: 13.5, color: INK, ...sora, marginBottom: 4 }}>Tranche 1 Disbursed</div>
+                <div style={{ fontWeight: 700, fontSize: 13.5, color: INK, ...sora, marginBottom: 4 }}>Round 1 Disbursed</div>
                 <div style={{ fontSize: 11.5, color: INK2, display: 'flex', alignItems: 'center', gap: 6 }}>
-                  <span style={{ fontWeight: 800, color: G }}>₹1,50,000</span>
+                  <span style={{ fontWeight: 800, color: G }}>₹2,50,000</span>
                   <span style={{ color: LINE }}>·</span>
                   <span>20 May 2025</span>
                 </div>
@@ -329,10 +329,10 @@ function PostDisbursal({ go, pdState, setPdState }) {
                 boxShadow: '0 0 0 4px rgba(31,169,113,.06), 0 10px 28px -8px rgba(31,169,113,.2)',
               }}>
                 <div style={{ marginBottom: 8 }}><Tag label="UNLOCKED" color={G} bg={G_BG} border={G_BDR} /></div>
-                <div style={{ fontWeight: 800, fontSize: 15, color: INK, ...sora, marginBottom: 4 }}>Extra Melt Tranche Available</div>
-                <div style={{ fontWeight: 800, fontSize: 26, color: G, ...sora, lineHeight: 1, marginBottom: 6 }}>₹1,25,000</div>
+                <div style={{ fontWeight: 800, fontSize: 15, color: INK, ...sora, marginBottom: 4 }}>Round 2 Available</div>
+                <div style={{ fontWeight: 800, fontSize: 26, color: G, ...sora, lineHeight: 1, marginBottom: 6 }}>₹2,50,000</div>
                 <div style={{ fontSize: 12.5, color: INK2, lineHeight: 1.4, marginBottom: 14 }}>
-                  You've unlocked ₹1,25,000 extra cash. Tap below to claim your offer.
+                  You've unlocked ₹2,50,000 for Round 2. Tap below to claim your offer.
                 </div>
                 <button
                   onClick={function(){ go('reward'); }}
@@ -407,7 +407,7 @@ function PostDisbursal({ go, pdState, setPdState }) {
             </div>
             <div style={{ flex: 1, borderRadius: 16, padding: '11px 13px 12px', marginBottom: 5, background: '#fff', border: '1.5px solid ' + G_BDR }}>
               <div style={{ marginBottom: 7 }}><Tag label="COMPLETED" color={G} bg={G_BG} border={G_BDR} /></div>
-              <div style={{ fontWeight: 700, fontSize: 13.5, color: INK, ...sora }}>Tranche 1 disbursed</div>
+              <div style={{ fontWeight: 700, fontSize: 13.5, color: INK, ...sora }}>Round 1 disbursed</div>
               <div style={{ fontSize: 11.5, fontWeight: 500, color: INK2, marginTop: 3, display: 'flex', alignItems: 'center', gap: 6 }}>
                 <span style={{ fontWeight: 700, color: G }}>₹{countVal === 0 ? '—' : fmtINR(countVal)}</span>
                 <span style={{ color: LINE }}>·</span>
@@ -481,7 +481,7 @@ function PostDisbursal({ go, pdState, setPdState }) {
             </div>
             <div style={{ flex: 1, borderRadius: 16, padding: '11px 13px 13px', background: GY_BG, border: '1.5px solid ' + GY_BDR, opacity: 0.55 }}>
               <div style={{ marginBottom: 7 }}><Tag label="LOCKED" color={GY} bg={GY_BG} border={GY_BDR} /></div>
-              <div style={{ fontWeight: 700, fontSize: 13.5, color: INK2, ...sora }}>Verification &amp; next tranche</div>
+              <div style={{ fontWeight: 700, fontSize: 13.5, color: INK2, ...sora }}>Verification &amp; Round 2</div>
               <div style={{ fontSize: 11.5, fontWeight: 500, color: GY, marginTop: 3 }}>Unlocks after step 2 is complete.</div>
             </div>
           </div>

@@ -12,9 +12,9 @@ function RevisedOffer({ go }) {
   const sora = { fontFamily: "'Sora', -apple-system, system-ui, sans-serif" };
   const [plan, setPlan] = useState(0);
   const PLANS = [
-    { months: 15, emi: 3795, rec: true },
-    { months: 10, emi: 5470 },
-    { months: 6, emi: 8826 },
+    { months: 15, emi: 6325, rec: true },
+    { months: 10, emi: 9120 },
+    { months: 6, emi: 14710 },
   ];
 
   return (
@@ -33,7 +33,7 @@ function RevisedOffer({ go }) {
             </div>
 
             <div style={{ textAlign: 'center', marginTop: 16 }}>
-              <div style={{ fontWeight: 800, fontSize: 46, color: '#fff', letterSpacing: -1.5, lineHeight: 1.1, ...sora }}>₹1,50,000</div>
+              <div style={{ fontWeight: 800, fontSize: 46, color: '#fff', letterSpacing: -1.5, lineHeight: 1.1, ...sora }}>₹2,50,000</div>
               <div style={{ fontSize: 12.5, color: 'rgba(255,255,255,.82)', marginTop: 4 }}>Revised basis your banking verification</div>
             </div>
 
@@ -53,7 +53,7 @@ function RevisedOffer({ go }) {
         {/* ── tranche notice (one line) ── */}
         <div style={{ display: 'flex', alignItems: 'center', gap: 9, background: REV.purpleL, border: `1px solid ${REV.purpleBorder}`, borderRadius: 12, padding: '10px 13px', marginTop: 14 }}>
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" style={{ flexShrink: 0 }}><circle cx="12" cy="12" r="9.2" stroke={REV.purple} strokeWidth="1.7" /><path d="M12 11v5M12 7.6h.01" stroke={REV.purple} strokeWidth="2" strokeLinecap="round" /></svg>
-          <span style={{ fontSize: 12, fontWeight: 600, color: REV.ink2, lineHeight: 1.4 }}>Tranche 1 of your <b style={{ color: REV.ink }}>₹4,00,000</b> limit — more unlocks as you repay.</span>
+          <span style={{ fontSize: 12, fontWeight: 600, color: REV.ink2, lineHeight: 1.4 }}>Round 1 of your <b style={{ color: REV.ink }}>₹5,00,000</b> limit — Round 2 unlocks once you repay.</span>
         </div>
 
         {/* ── select EMI plan ── */}
@@ -96,7 +96,7 @@ function RevisedOffer({ go }) {
           {/* savings callout (one line) */}
           <div style={{ display: 'flex', alignItems: 'center', gap: 11, background: REV.greenBg, borderLeft: `4px solid ${REV.green}`, borderRadius: '8px 12px 12px 8px', padding: '12px 14px', marginTop: 16 }}>
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" style={{ flexShrink: 0 }}><circle cx="12" cy="12" r="9" stroke={REV.green} strokeWidth="1.9" /><path d="M9 12l2 2 4-4.5" stroke={REV.green} strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" /></svg>
-            <div style={{ fontSize: 13, fontWeight: 800, color: '#065F46', ...sora }}>You save ₹24,300 in interest vs your cards</div>
+            <div style={{ fontSize: 13, fontWeight: 800, color: '#065F46', ...sora }}>You save ₹40,500 in interest vs your cards</div>
           </div>
 
           {/* customize tenure */}

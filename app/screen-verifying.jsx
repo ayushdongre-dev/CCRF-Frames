@@ -51,7 +51,7 @@ function VerifyingScreen({ go, setPdState }) {
     { label: 'Payment flagged for review', detail: 'We received your update' },
     { label: 'Statement processing',       detail: 'Extracting payment data…' },
     { label: 'Bureau confirmation',        detail: 'Awaiting CIBIL data' },
-    { label: 'Tranche unlocked',           detail: timeLeft <= 0 ? 'Approved!' : 'Offer ready for you' },
+    { label: 'Round 2 Unlocked',            detail: timeLeft <= 0 ? 'Approved!' : 'Offer ready for you' },
   ];
 
   var allDone = timeLeft <= 0;

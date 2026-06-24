@@ -1,10 +1,10 @@
 // screen-newloan.jsx — B3 "Your New Loan" (Tranche 2 top-up selection)
 
 var NL = {
-  OUTSTANDING: 128400,
-  NEW_MAX: 125000,
-  NEW_MIN: 25000,
-  STEP: 5000,
+  OUTSTANDING: 228000,
+  NEW_MAX: 250000,
+  NEW_MIN: 50000,
+  STEP: 10000,
 };
 
 function fmtNL(n) {
@@ -79,10 +79,10 @@ function NewLoanScreen({ go }) {
   var sora  = { fontFamily: "'Sora',sans-serif" };
 
   var STEPS_HIW = [
-    { title: 'Choose your amount', body: "Pick an amount between ₹25K and ₹1.25L — we'll show you EMI options next." },
-    { title: 'We handle your old balance', body: 'The ₹1,28,400 you still owe gets rolled into the new loan automatically.' },
+    { title: 'Choose your amount', body: "Pick an amount between ₹50K and ₹2.5L — we'll show you EMI options next." },
+    { title: 'We handle your old balance', body: 'The ₹2,28,000 you still owe gets rolled into the new loan automatically.' },
     { title: 'Money lands in your account', body: 'The extra cash is sent to your bank account, usually within minutes.' },
-    { title: 'Fresh start, one loan', body: 'Old Melt loan closes. New loan = ₹1,28,400 outstanding + ₹' + fmtNL(extra) + ' extra = ₹' + fmtNL(newLoanAmt) + '.' },
+    { title: 'Fresh start, one loan', body: 'Old Melt loan closes. New loan = ₹2,28,000 outstanding + ₹' + fmtNL(extra) + ' extra = ₹' + fmtNL(newLoanAmt) + '.' },
   ];
 
   return (
@@ -123,9 +123,9 @@ function NewLoanScreen({ go }) {
           <LinearSlider value={extra} min={NL.NEW_MIN} max={NL.NEW_MAX} step={NL.STEP} onChange={setExtra} />
 
           <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 11, color: muted, marginTop: 6, marginBottom: 14 }}>
-            <span>₹25K</span>
+            <span>₹50K</span>
             <span>← Drag to choose →</span>
-            <span>₹1.25L</span>
+            <span>₹2.5L</span>
           </div>
 
           {/* Borrow row */}

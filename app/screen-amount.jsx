@@ -103,8 +103,24 @@ function ArcDial({ value, min, max, cap, step, onChange }) {
 
 function AmountSelection({ go }) {
   const sora = { fontFamily: "'Sora', -apple-system, system-ui, sans-serif" };
-  const MIN = 50000, MAX = 400000, CAP = 150000, STEP = 10000;
-  const [amount, setAmount] = useState(150000);
+  const MIN = 50000, MAX = 500000, CAP = 250000, STEP = 10000;
+  const [amount, setAmount] = useState(0);
+  const introPlayed = useRef(false);
+  useEffect(() => {
+    if (introPlayed.current) return;
+    introPlayed.current = true;
+    let startTs = null;
+    const TARGET = 150000, DURATION = 950;
+    const step = (ts) => {
+      if (!startTs) startTs = ts;
+      const p = Math.min((ts - startTs) / DURATION, 1);
+      const e = 1 - Math.pow(1 - p, 3);
+      setAmount(Math.round(e * TARGET));
+      if (p < 1) requestAnimationFrame(step);
+      else setAmount(TARGET);
+    };
+    requestAnimationFrame(step);
+  }, []);
   const dec = () => setAmount(a => Math.max(MIN, a - STEP));
   const inc = () => setAmount(a => Math.min(CAP, a + STEP));
 
@@ -135,7 +151,7 @@ function AmountSelection({ go }) {
             <div style={{ fontSize: 12.5, fontWeight: 700, color: AMT.muted }}>₹50K</div>
             <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
               <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><rect x="4" y="11" width="16" height="9" rx="2" stroke={AMT.muted2} strokeWidth="1.9" /><path d="M8 11V8a4 4 0 0 1 8 0v3" stroke={AMT.muted2} strokeWidth="1.9" strokeLinecap="round" /></svg>
-              <span style={{ fontSize: 12.5, fontWeight: 700, color: AMT.muted2 }}>₹4L total</span>
+              <span style={{ fontSize: 12.5, fontWeight: 700, color: AMT.muted2 }}>₹5L total</span>
             </div>
           </div>
         </div>

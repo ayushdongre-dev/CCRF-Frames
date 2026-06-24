@@ -13,14 +13,14 @@ const ML = {
 
 function Eligibility({ go }) {
   const sora = { fontFamily: "'Sora', -apple-system, system-ui, sans-serif" };
-  const TOTAL = 400000, AVAIL = 150000;
+  const TOTAL = 500000, AVAIL = 250000;
   const availPct = (AVAIL / TOTAL) * 100;
 
   // ── 3 clean stages ──
   const STAGES = [
     { state: 'done', label: 'Available today', desc: 'Lands in your salary bank account' },
     { state: 'active', label: 'Melt your card bills', desc: 'Use it to clear your outstanding dues by 20th June' },
-    { state: 'locked', label: 'Unlock More', desc: 'Repay on time and the rest opens up automatically' },
+    { state: 'locked', label: 'Unlock Round 2', desc: 'Repay on time and Round 2 opens up automatically' },
   ];
 
   return (
@@ -44,7 +44,7 @@ function Eligibility({ go }) {
           <div style={{ position: 'absolute', top: -50, right: -30, width: 160, height: 160, borderRadius: 999, background: 'radial-gradient(circle, rgba(91,63,212,.55), transparent 70%)' }} />
           <div style={{ position: 'relative', textAlign: 'center' }}>
             <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: 1.4, color: '#A99CF0', ...sora }}>YOUR TOTAL MELT LIMIT</div>
-            <div style={{ fontWeight: 800, fontSize: 50, color: '#fff', letterSpacing: -2, lineHeight: 1.1, marginTop: 4, ...sora }}>₹4,00,000</div>
+            <div style={{ fontWeight: 800, fontSize: 50, color: '#fff', letterSpacing: -2, lineHeight: 1.1, marginTop: 4, ...sora }}>₹5,00,000</div>
 
             {/* availability bar */}
             <div style={{ marginTop: 18 }}>
@@ -52,7 +52,7 @@ function Eligibility({ go }) {
                 <div style={{ position: 'absolute', left: 0, top: 0, bottom: 0, width: availPct + '%', background: 'linear-gradient(90deg,#37B179,#5DD79E)', borderRadius: 9, transformOrigin: 'left', animation: 'growBarX .8s cubic-bezier(.4,0,.2,1) both' }} />
               </div>
               <div style={{ marginTop: 9 }}>
-                <span style={{ fontSize: 13.5, fontWeight: 800, color: '#8FE3B8', ...sora }}>₹1,50,000</span>
+                <span style={{ fontSize: 13.5, fontWeight: 800, color: '#8FE3B8', ...sora }}>₹2,50,000</span>
                 <span style={{ fontSize: 12, fontWeight: 600, color: 'rgba(255,255,255,.6)', marginLeft: 6 }}>available now</span>
               </div>
               <div style={{ fontSize: 11, fontWeight: 500, color: 'rgba(255,255,255,.45)', marginTop: 4 }}>Unlocks as you repay your credit card dues</div>
@@ -139,7 +139,7 @@ function StageReceive() {
       <CashWad color="#2D9E6B" />
       <div>
         <div style={{ fontSize: 9, fontWeight: 700, letterSpacing: 0.6, color: '#7BAE97', fontFamily: "'Sora',sans-serif" }}>STRAIGHT TO YOUR ACCOUNT</div>
-        <div style={{ fontSize: 28, fontWeight: 800, color: '#1E6B49', letterSpacing: -1, lineHeight: 1.1, fontFamily: "'Sora',sans-serif" }}>₹1,50,000</div>
+        <div style={{ fontSize: 28, fontWeight: 800, color: '#1E6B49', letterSpacing: -1, lineHeight: 1.1, fontFamily: "'Sora',sans-serif" }}>₹2,50,000</div>
       </div>
     </div>
   );
@@ -158,54 +158,89 @@ function CashWad({ color }) {
   );
 }
 
-// Stage 2 visual — cash clearing multiple cards (static)
+// Stage 2 visual — cycling card deck: front card fades fully green → rotates back → next comes forward
 function StageMelt() {
-  // fanned mini credit cards (rotated), green cash flowing in, front card marked paid
-  const CARDS = [
-    { rot: -13, x: 2, y: 7, g: 'linear-gradient(135deg,#7C6CF5,#4A2FC0)' },
-    { rot: -1, x: 18, y: 2, g: 'linear-gradient(135deg,#6A5BE0,#3D3DC4)' },
-    { rot: 11, x: 34, y: 7, g: 'linear-gradient(135deg,#4A2FC0,#2A1E72)' },
+  var CARDS = [
+    'linear-gradient(135deg,#7C6CF5,#4A2FC0)',
+    'linear-gradient(135deg,#6A5BE0,#3D3DC4)',
+    'linear-gradient(135deg,#4A2FC0,#2A1E72)',
   ];
+  var frst = useState(0); var frontIdx = frst[0]; var setFrontIdx = frst[1];
+  var gfst = useState(false); var greenFill = gfst[0]; var setGreenFill = gfst[1];
+  var ts = useRef([]);
+
+  useEffect(function() {
+    var timers = ts.current;
+    var add = function(fn, ms) { var id = setTimeout(fn, ms); timers.push(id); return id; };
+    var loop = function() {
+      setGreenFill(false);
+      add(function() {
+        setGreenFill(true);
+        add(function() {
+          setFrontIdx(function(i) { return (i + 1) % 3; });
+          setGreenFill(false);
+          add(loop, 700);
+        }, 900);
+      }, 350);
+    };
+    add(loop, 400);
+    return function() { timers.forEach(clearTimeout); timers.length = 0; };
+  }, []);
+
+  // rank 0=front, 1=mid, 2=back — clean fan spread
+  var POS = [
+    { x: 12,  y: 5,  r: 7,   s: 1,    z: 10 },
+    { x: -1,  y: 0,  r: -1,  s: 0.925, z: 5  },
+    { x: -14, y: 5,  r: -8,  s: 0.85, z: 1  },
+  ];
+
   return (
-    <div style={{ display: 'flex', alignItems: 'center', gap: 8, background: '#F4F4FC', borderRadius: 12, padding: '12px 14px', border: '1px solid #E2DFF4' }}>
-      <CashWad color="#2D9E6B" />
-      <svg width="24" height="20" viewBox="0 0 24 20" fill="none" style={{ flexShrink: 0 }}>
-        <path d="M2 10h15" stroke="#66BB88" strokeWidth="2" strokeLinecap="round" strokeDasharray="3 3" />
-        <path d="M13 5l5 5-5 5" stroke="#66BB88" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="none" />
-      </svg>
-      <div style={{ position: 'relative', width: 96, height: 54, flexShrink: 0 }}>
-        {CARDS.map((c, i) => {
-          const front = i === CARDS.length - 1;
+    <div style={{ background: '#F4F4FC', borderRadius: 14, padding: '22px 14px 18px', border: '1px solid #E2DFF4', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12 }}>
+      <div style={{ position: 'relative', width: 130, height: 82 }}>
+        {CARDS.map(function(grad, idx) {
+          var rank = (idx - frontIdx + 3) % 3;
+          var p = POS[rank];
+          var isFront = rank === 0;
           return (
-            <div key={i} style={{
-              position: 'absolute', left: c.x, top: c.y, width: 50, height: 33, borderRadius: 6,
-              background: c.g, transform: `rotate(${c.rot}deg)`, transformOrigin: 'center',
-              boxShadow: '0 4px 10px -4px rgba(40,20,90,.55)', border: '1px solid rgba(255,255,255,.3)',
-              overflow: 'hidden', zIndex: i,
+            <div key={idx} style={{
+              position: 'absolute', left: '50%', top: '50%',
+              width: 80, height: 53, borderRadius: 10,
+              background: grad,
+              transform: 'translate(calc(-50% + ' + p.x + 'px), calc(-50% + ' + p.y + 'px)) rotate(' + p.r + 'deg) scale(' + p.s + ')',
+              transformOrigin: 'center center', zIndex: p.z,
+              transition: 'transform 0.5s cubic-bezier(.4,0,.2,1)',
+              overflow: 'hidden',
+              border: '1px solid rgba(255,255,255,.3)',
+              boxShadow: isFront ? '0 10px 24px -8px rgba(40,20,90,.65)' : '0 3px 8px -3px rgba(40,20,90,.3)',
             }}>
               {/* sheen */}
-              <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(115deg, rgba(255,255,255,.22), transparent 55%)' }} />
+              <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(115deg,rgba(255,255,255,.24),transparent 55%)' }} />
               {/* chip */}
-              <div style={{ position: 'absolute', left: 5, top: 7, width: 8, height: 6, borderRadius: 1.5, background: 'linear-gradient(135deg,#F4D58A,#C99A3A)' }} />
+              <div style={{ position: 'absolute', left: 8, top: 10, width: 13, height: 9, borderRadius: 2, background: 'linear-gradient(135deg,#F4D58A,#C99A3A)' }} />
               {/* network dots */}
-              <div style={{ position: 'absolute', right: 4, top: 6, display: 'flex' }}>
-                <span style={{ width: 6, height: 6, borderRadius: 999, background: 'rgba(255,90,90,.85)' }} />
-                <span style={{ width: 6, height: 6, borderRadius: 999, background: 'rgba(255,190,70,.85)', marginLeft: -2.5 }} />
+              <div style={{ position: 'absolute', right: 8, top: 10, display: 'flex' }}>
+                <span style={{ width: 8, height: 8, borderRadius: 999, background: 'rgba(255,90,90,.85)' }} />
+                <span style={{ width: 8, height: 8, borderRadius: 999, background: 'rgba(255,190,70,.85)', marginLeft: -3.5 }} />
               </div>
-              {/* number dashes */}
-              <div style={{ position: 'absolute', left: 5, bottom: 6, display: 'flex', gap: 2.5 }}>
-                {[0, 1, 2].map(k => <span key={k} style={{ width: 6, height: 2.5, borderRadius: 2, background: 'rgba(255,255,255,.45)' }} />)}
-              </div>
-              {/* paid badge on the front card only */}
-              {front && (
-                <div style={{ position: 'absolute', right: -5, bottom: -5, width: 17, height: 17, borderRadius: 999, background: '#2D9E6B', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '2px solid #F4F4FC', boxShadow: '0 2px 5px -1px rgba(45,158,107,.6)' }}>
-                  <svg width="9" height="9" viewBox="0 0 24 24"><path d="M5 13l4 4 10-11" stroke="#fff" strokeWidth="3.4" fill="none" strokeLinecap="round" strokeLinejoin="round" /></svg>
+              {/* full-card green overlay — opacity fade, not width sweep */}
+              {isFront && (
+                <div style={{
+                  position: 'absolute', inset: 0, borderRadius: 10,
+                  background: 'rgba(45,158,107,0.93)',
+                  opacity: greenFill ? 1 : 0,
+                  transition: greenFill ? 'opacity 0.36s ease-in' : 'opacity 0.18s ease-out',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                }}>
+                  <svg width="22" height="22" viewBox="0 0 24 24" style={{ opacity: greenFill ? 1 : 0, transition: 'opacity 0.15s .18s' }}>
+                    <path d="M5 13l4 4 10-11" stroke="#fff" strokeWidth="3" fill="none" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
                 </div>
               )}
             </div>
           );
         })}
       </div>
+      <div style={{ fontSize: 11, fontWeight: 700, color: '#2D9E6B', letterSpacing: 0.4, opacity: 0.85 }}>Clearing your cards</div>
     </div>
   );
 }
@@ -298,7 +333,7 @@ function Step1Anim() {
       <WalletCash color="#2D9E6B" />
       <div style={{ flex: 1, minWidth: 0 }}>
         <div style={{ fontSize: 9, fontWeight: 700, letterSpacing: 0.6, color: '#7BAE97', marginBottom: 2, fontFamily: "'Sora', sans-serif" }}>LANDING IN YOUR ACCOUNT</div>
-        <SlotCount target={150000} color="#2D9E6B" />
+        <SlotCount target={250000} color="#2D9E6B" />
       </div>
     </div>
   );
@@ -311,7 +346,7 @@ function Step3Anim() {
       <WalletCash color="#E8A020" />
       <div style={{ flex: 1, minWidth: 0 }}>
         <div style={{ fontSize: 9, fontWeight: 700, letterSpacing: 0.6, color: '#C6A560', marginBottom: 2, fontFamily: "'Sora', sans-serif" }}>ADDITIONAL FUNDS UNLOCK</div>
-        <SlotCount target={150000} color="#B98518" />
+        <SlotCount target={250000} color="#B98518" />
       </div>
     </div>
   );

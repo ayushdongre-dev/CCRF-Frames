@@ -483,26 +483,6 @@ function SavingsScreen({ go, monthly = 30000, setMonthly }) {
     return () => { scr.style.overflowY = 'auto'; };
   }, [sheetOpen]);
 
-  const [cardAnimStep, setCardAnimStep] = useState(0);
-  useEffect(() => {
-    let t;
-    const run = () => {
-      setCardAnimStep(1);                            // show CLEARED stamp
-      t = setTimeout(() => {
-        setCardAnimStep(2);                          // dot travels
-        t = setTimeout(() => {
-          setCardAnimStep(3);                        // show PENDING badge
-          t = setTimeout(() => {
-            setCardAnimStep(0);                      // reset
-            t = setTimeout(run, 600);                // brief pause then loop
-          }, 2200);
-        }, 800);
-      }, 900);
-    };
-    t = setTimeout(run, 1200);                       // initial delay
-    return () => clearTimeout(t);
-  }, []);
-
   const { cardsInt, meltInt, saving, monthsDiff, nC, nM } = useMemo(() => calcSavings(monthly), [monthly]);
   const animMonthsDiff = useAnimatedNumber(monthsDiff);
   const animMonthly = useAnimatedNumber(monthly, 300);
@@ -589,23 +569,6 @@ function SavingsScreen({ go, monthly = 30000, setMonthly }) {
         <div style={{ fontSize: 10.5, fontWeight: 800, color: '#88859E', letterSpacing: 0.8, textTransform: 'uppercase', marginBottom: 8, paddingLeft: 2 }}>Why Melt?</div>
         <div style={{ display: 'flex', gap: 8, alignItems: 'stretch', padding: '4px 0', position: 'relative' }}>
 
-          {/* Traveling dot */}
-          {cardAnimStep === 2 && (
-            <div style={{
-              position: 'absolute',
-              left: 'calc(25% - 5px)',
-              top: '50%',
-              marginTop: -5,
-              width: 10, height: 10,
-              borderRadius: '50%',
-              background: '#5B3FD4',
-              boxShadow: '0 0 10px rgba(91,63,212,0.9), 0 0 20px rgba(91,63,212,0.4)',
-              animation: 'dotTravel 0.8s cubic-bezier(0.4,0,0.2,1) forwards',
-              zIndex: 10,
-              pointerEvents: 'none',
-            }} />
-          )}
-
           {/* Credit Cards (Red Card) */}
           <div style={{
             flex: 1,
@@ -614,9 +577,8 @@ function SavingsScreen({ go, monthly = 30000, setMonthly }) {
             WebkitBackdropFilter: 'blur(12px)',
             borderRadius: 20,
             padding: '18px 10px 10px',
-            border: cardAnimStep >= 1 ? '1px solid rgba(34,197,94,0.5)' : '1px solid rgba(252,165,165,0.5)',
+            border: '1px solid rgba(252,165,165,0.5)',
             boxShadow: 'inset 0 1.5px 0.5px rgba(255,255,255,0.85), 0 8px 24px -6px rgba(220,38,38,0.06)',
-            transition: 'border 0.3s',
             position: 'relative',
             display: 'flex',
             flexDirection: 'column',
@@ -624,18 +586,6 @@ function SavingsScreen({ go, monthly = 30000, setMonthly }) {
             textAlign: 'center',
             minHeight: 175
           }}>
-            {/* CLEARED stamp */}
-            {cardAnimStep >= 1 && (
-              <div key={cardAnimStep} style={{
-                position: 'absolute', top: 10, right: 8,
-                background: '#22C55E', borderRadius: 5,
-                padding: '2px 6px',
-                animation: 'cardStampPop 0.4s cubic-bezier(0.175,0.885,0.32,1.275) both',
-                zIndex: 5,
-              }}>
-                <span style={{ fontSize: 7.5, fontWeight: 900, color: '#fff', letterSpacing: 0.5 }}>✓ CLEARED</span>
-              </div>
-            )}
             <div style={{ fontSize: 9.5, fontWeight: 800, color: '#DC2626', letterSpacing: 0.6, textTransform: 'uppercase', marginBottom: 2 }}>Credit Cards</div>
             <div style={{ fontSize: 34, fontWeight: 900, color: '#DC2626', fontFamily: 'Sora, sans-serif', letterSpacing: -1, lineHeight: 1.1 }}>54%</div>
             <div style={{ fontSize: 9, fontWeight: 700, color: '#EF4444', marginBottom: 10 }}>p.a. interest</div>
@@ -668,11 +618,8 @@ function SavingsScreen({ go, monthly = 30000, setMonthly }) {
             WebkitBackdropFilter: 'blur(12px)',
             borderRadius: 20,
             padding: '18px 10px 10px',
-            border: cardAnimStep >= 3 ? '2px solid #F59E0B' : '2px solid #5B3FD4',
-            boxShadow: cardAnimStep >= 3
-              ? 'inset 0 1.5px 0.5px rgba(255,255,255,0.95), 0 10px 28px -6px rgba(245,158,11,0.2)'
-              : 'inset 0 1.5px 0.5px rgba(255,255,255,0.95), 0 10px 28px -6px rgba(91,63,212,0.14)',
-            transition: 'border 0.3s, box-shadow 0.3s',
+            border: '2px solid #5B3FD4',
+            boxShadow: 'inset 0 1.5px 0.5px rgba(255,255,255,0.95), 0 10px 28px -6px rgba(91,63,212,0.14)',
             position: 'relative',
             display: 'flex',
             flexDirection: 'column',
@@ -680,18 +627,6 @@ function SavingsScreen({ go, monthly = 30000, setMonthly }) {
             textAlign: 'center',
             minHeight: 175
           }}>
-            {/* PENDING badge */}
-            {cardAnimStep >= 3 && (
-              <div key={'pending-' + cardAnimStep} style={{
-                position: 'absolute', top: 10, right: 8,
-                background: '#F59E0B', borderRadius: 5,
-                padding: '2px 6px',
-                animation: 'pendingPulse 1.1s ease-in-out infinite',
-                zIndex: 5,
-              }}>
-                <span style={{ fontSize: 7.5, fontWeight: 900, color: '#fff', letterSpacing: 0.5 }}>⏳ PENDING</span>
-              </div>
-            )}
             <div style={{ fontSize: 9.5, fontWeight: 800, color: '#5B3FD4', letterSpacing: 0.6, textTransform: 'uppercase', marginBottom: 2 }}>With Melt</div>
             <div style={{ fontSize: 34, fontWeight: 900, color: '#5B3FD4', fontFamily: 'Sora, sans-serif', letterSpacing: -1, lineHeight: 1.1 }}>25%</div>
             <div style={{ fontSize: 9, fontWeight: 700, color: '#7C5CE7', marginBottom: 10 }}>p.a. interest</div>
