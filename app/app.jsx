@@ -6,10 +6,10 @@ const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
   "ccrfRate": 22
 }/*EDITMODE-END*/;
 
-const ORDER = ['home', 'multioffer', 'selling', 'savings', 'cards', 'eligibility', 'visualise', 'pdf', 'amountselect', 'revisedoffer', 'success'];
+const ORDER = ['home', 'multioffer', 'selling', 'savings', 'cards', 'eligibility', 'visualise', 'pdf', 'amountselect', 'revisedoffer', 'postdisbursal', 'success'];
 const LABELS = {
   home: 'Home', multioffer: 'Multi Offer', selling: 'General Selling', savings: 'Savings', cards: 'Card Selection',
-  eligibility: 'Eligibility', visualise: 'Visualise', pdf: 'PDF Upload', amountselect: 'Amount', revisedoffer: 'Final Offer', success: 'Done',
+  eligibility: 'Eligibility', visualise: 'Visualise', pdf: 'PDF Upload', amountselect: 'Amount', revisedoffer: 'Final Offer', postdisbursal: 'Post Disbursal', success: 'Done',
 };
 
 function App() {
@@ -62,6 +62,7 @@ function App() {
       case 'pdf': return <PdfUpload go={go} selected={selected} showLogos={t.showLogos} />;
       case 'amountselect': return <AmountSelection go={go} ccrfRate={t.ccrfRate} />;
       case 'revisedoffer': return <RevisedOffer go={go} ccrfRate={t.ccrfRate} />;
+      case 'postdisbursal': return <PostDisbursal go={go} />;
       case 'success': return <Success go={go} />;
       default: return <MultiOffer go={go} />;
     }
@@ -70,9 +71,10 @@ function App() {
   const light = route === 'selling';
   const bg = route === 'savings' ? '#F7F7FC'
     : (route === 'eligibility' || route === 'home') ? '#F7F7FB'
-    : (route === 'pdf' || route === 'multioffer' || route === 'amountselect' || route === 'revisedoffer') ? '#FFFFFF'
-    : (route === 'selling' || route === 'visualise' || route === 'success') ? '#EFEEFE'
-    : 'var(--bg)';
+      : (route === 'pdf' || route === 'multioffer' || route === 'amountselect' || route === 'revisedoffer') ? '#FFFFFF'
+        : (route === 'selling' || route === 'visualise' || route === 'success') ? '#EFEEFE'
+          : route === 'postdisbursal' ? '#FFFFFF'
+            : 'var(--bg)';
 
   return (
     <div style={{ display: 'flex', alignItems: 'center', gap: 30 }}>
@@ -156,7 +158,7 @@ function mount() {
     for (const a of document.getAnimations()) {
       try {
         if (a.playState === 'running' && a.currentTime === 0) a.finish();
-      } catch (e) {}
+      } catch (e) { }
     }
   }, 500);
 }

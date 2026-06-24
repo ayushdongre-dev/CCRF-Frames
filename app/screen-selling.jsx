@@ -541,7 +541,7 @@ function SavingsScreen({ go, monthly = 30000, setMonthly }) {
       </div>
 
       {/* ── EMI ADJUSTER ── */}
-      <div style={{ margin: '10px 16px 0', background: '#FFFFFF', borderRadius: 18, padding: '12px 16px', boxShadow: '0 2px 12px rgba(91,63,212,0.07)', border: '1px solid #EAE6F8', animation: 'fadeUp .5s both' }}>
+      <div style={{ margin: '6px 16px 0', background: '#FFFFFF', borderRadius: 18, padding: '10px 16px', boxShadow: '0 2px 12px rgba(91,63,212,0.07)', border: '1px solid #EAE6F8', animation: 'fadeUp .5s both' }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <div>
             <div style={{ fontSize: 11, color: '#6E6B82', fontWeight: 600 }}>See your savings with:</div>
@@ -565,7 +565,7 @@ function SavingsScreen({ go, monthly = 30000, setMonthly }) {
       </div>
 
       {/* ── COMPARISON ── */}
-      <div style={{ margin: '12px 16px 0', animation: 'fadeUp .55s .06s both' }}>
+      <div style={{ margin: '8px 16px 0', animation: 'fadeUp .55s .06s both' }}>
         <div style={{ fontSize: 10.5, fontWeight: 800, color: '#88859E', letterSpacing: 0.8, textTransform: 'uppercase', marginBottom: 8, paddingLeft: 2 }}>Why Melt?</div>
         <div style={{ display: 'flex', gap: 8, alignItems: 'stretch', padding: '4px 0' }}>
           {/* Credit Cards (Red Card) */}
@@ -583,13 +583,13 @@ function SavingsScreen({ go, monthly = 30000, setMonthly }) {
             flexDirection: 'column',
             alignItems: 'center',
             textAlign: 'center',
-            minHeight: 200
+            minHeight: 175
           }}>
             <div style={{ fontSize: 9.5, fontWeight: 800, color: '#DC2626', letterSpacing: 0.6, textTransform: 'uppercase', marginBottom: 2 }}>Credit Cards</div>
             <div style={{ fontSize: 34, fontWeight: 900, color: '#DC2626', fontFamily: 'Sora, sans-serif', letterSpacing: -1, lineHeight: 1.1 }}>54%</div>
             <div style={{ fontSize: 9, fontWeight: 700, color: '#EF4444', marginBottom: 10 }}>p.a. interest</div>
             <div style={{
-              height: 74, display: 'flex', alignItems: 'center', justifyContent: 'center',
+              height: 54, display: 'flex', alignItems: 'center', justifyContent: 'center',
               animation: 'float 3.5s ease-in-out infinite',
               filter: 'drop-shadow(0 4px 10px rgba(110,160,220,0.18))',
               marginBottom: 4
@@ -624,13 +624,13 @@ function SavingsScreen({ go, monthly = 30000, setMonthly }) {
             flexDirection: 'column',
             alignItems: 'center',
             textAlign: 'center',
-            minHeight: 200
+            minHeight: 175
           }}>
             <div style={{ fontSize: 9.5, fontWeight: 800, color: '#5B3FD4', letterSpacing: 0.6, textTransform: 'uppercase', marginBottom: 2 }}>With Melt</div>
             <div style={{ fontSize: 34, fontWeight: 900, color: '#5B3FD4', fontFamily: 'Sora, sans-serif', letterSpacing: -1, lineHeight: 1.1 }}>25%</div>
             <div style={{ fontSize: 9, fontWeight: 700, color: '#7C5CE7', marginBottom: 10 }}>p.a. interest</div>
             <div style={{
-              height: 74, display: 'flex', alignItems: 'center', justifyContent: 'center',
+              height: 54, display: 'flex', alignItems: 'center', justifyContent: 'center',
               animation: 'float 3.5s ease-in-out infinite 1.75s',
               filter: 'drop-shadow(0 4px 12px rgba(245,158,11,0.25))',
               marginBottom: 4
@@ -662,7 +662,7 @@ function SavingsScreen({ go, monthly = 30000, setMonthly }) {
 
       {/* ── HERO SAVINGS CARD ── */}
       <div style={{
-        margin: '12px 16px 0',
+        margin: '8px 16px 0',
         background: 'linear-gradient(135deg, #0F764E 0%, #15A26B 60%, #17B276 100%)',
         borderRadius: 22, padding: '14px 18px 12px',
         position: 'relative', overflow: 'hidden',
@@ -685,7 +685,7 @@ function SavingsScreen({ go, monthly = 30000, setMonthly }) {
       </div>
 
       {/* ── BENEFITS ── */}
-      <div style={{ margin: '10px 16px 0', animation: 'fadeUp .62s .12s both' }}>
+      <div style={{ margin: '8px 16px 0', animation: 'fadeUp .62s .12s both' }}>
         <div style={{ fontSize: 10, fontWeight: 800, color: '#88859E', letterSpacing: 0.8, textTransform: 'uppercase', marginBottom: 6, paddingLeft: 2 }}>Your Benefits</div>
         <div style={{ display: 'flex', gap: 6 }}>
           <div style={{
@@ -748,7 +748,7 @@ function SavingsScreen({ go, monthly = 30000, setMonthly }) {
       </div>
 
       {/* ── UNDERSTANDING CREDIT CARD DEBT ── */}
-      <div style={{ margin: '10px 16px 0', animation: 'fadeUp .64s .14s both' }}>
+      <div style={{ margin: '8px 16px 0', animation: 'fadeUp .64s .14s both' }}>
         <div style={{ fontSize: 10, fontWeight: 800, color: '#88859E', letterSpacing: 0.8, textTransform: 'uppercase', marginBottom: 6, paddingLeft: 2 }}>Understanding Credit Card Debt</div>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
           <button onClick={() => setSheetOpen('interest')} style={{
@@ -785,7 +785,7 @@ function SavingsScreen({ go, monthly = 30000, setMonthly }) {
       </div>
 
       {/* ── TRUST ROW ── */}
-      <div style={{ display: 'flex', justifyContent: 'center', gap: 16, margin: '8px 16px 0', animation: 'fadeUp .66s .16s both' }}>
+      <div style={{ display: 'flex', justifyContent: 'center', gap: 16, margin: '6px 16px 0', animation: 'fadeUp .66s .16s both' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M12 3l7 3v5c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6l7-3z" stroke="#5B3FD4" strokeWidth="2" strokeLinejoin="round" /><path d="M9 12l2 2 4-4" stroke="#5B3FD4" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>
           <span style={{ fontSize: 10, fontWeight: 700, color: '#5B3FD4' }}>Foreclose anytime</span>
@@ -797,7 +797,7 @@ function SavingsScreen({ go, monthly = 30000, setMonthly }) {
       </div>
 
       {/* ── DISCLAIMER ── */}
-      <div style={{ fontSize: 8.5, color: '#AAAABC', textAlign: 'center', padding: '4px 24px 80px', lineHeight: 1.35, animation: 'fadeUp .68s .18s both' }}>
+      <div style={{ fontSize: 8.5, color: '#AAAABC', textAlign: 'center', padding: '4px 24px 16px', lineHeight: 1.35, animation: 'fadeUp .68s .18s both' }}>
         Illustrative, based on ₹5L debt &amp; {inr(monthly)}/mo. Actual savings shown after card details.
       </div>
 
