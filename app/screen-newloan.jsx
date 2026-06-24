@@ -1,8 +1,8 @@
 // screen-newloan.jsx — B3 "Your New Loan" (Tranche 2 top-up selection)
 
 var NL = {
-  OUTSTANDING: 228000,
-  NEW_MAX: 250000,
+  OUTSTANDING: 182000,
+  NEW_MAX: 300000,
   NEW_MIN: 50000,
   STEP: 10000,
 };
@@ -79,8 +79,8 @@ function NewLoanScreen({ go }) {
   var sora  = { fontFamily: "'Sora',sans-serif" };
 
   var STEPS_HIW = [
-    { title: 'Choose your amount', body: "Pick an amount between ₹50K and ₹2.5L — we'll show you EMI options next." },
-    { title: 'We handle your old balance', body: 'The ₹2,28,000 you still owe gets rolled into the new loan automatically.' },
+    { title: 'Choose your amount', body: "Pick an amount between ₹50K and ₹3L — we'll show you EMI options next." },
+    { title: 'We handle your old balance', body: 'The ₹1,82,000 you still owe gets rolled into the new loan automatically.' },
     { title: 'Money lands in your account', body: 'The extra cash is sent to your bank account, usually within minutes.' },
     { title: 'Fresh start, one loan', body: 'Old Melt loan closes. New loan = ₹2,28,000 outstanding + ₹' + fmtNL(extra) + ' extra = ₹' + fmtNL(newLoanAmt) + '.' },
   ];
@@ -125,7 +125,7 @@ function NewLoanScreen({ go }) {
           <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 11, color: muted, marginTop: 6, marginBottom: 14 }}>
             <span>₹50K</span>
             <span>← Drag to choose →</span>
-            <span>₹2.5L</span>
+            <span>₹3L</span>
           </div>
 
           {/* Borrow row */}

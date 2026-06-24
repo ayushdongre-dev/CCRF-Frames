@@ -61,7 +61,7 @@ function MeltHeroCard({ go, heroCount }) {
 
       {/* Headline */}
       <div style={{ fontSize: 14, fontWeight: 600, color: 'rgba(255,255,255,.82)', marginBottom: 20, lineHeight: 1.35 }}>
-        Get ₹2,50,000 as your Melt Round 2
+        Get ₹3,00,000 as your Melt Round 2
       </div>
 
       {/* Bottom row */}
@@ -121,9 +121,9 @@ function LoanCard({ countVal, barFilled, showVerifiedBanner }) {
       {/* Stats 2×2 */}
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px 0', marginBottom: 14 }}>
         {[
-          { label: 'LOAN AMOUNT',  value: '₹2,50,000',  hl: false },
+          { label: 'LOAN AMOUNT',  value: '₹2,00,000',  hl: false },
           { label: 'EMI AMOUNT',   value: '₹18,810/mo', hl: false },
-          { label: 'OUTSTANDING',  value: '₹' + fmtINR(Math.max(0, 228000 - Math.round(countVal * 228000 / 250000))), hl: true },
+          { label: 'OUTSTANDING',  value: '₹' + fmtINR(Math.max(0, 228000 - Math.round(countVal * 228000 / 200000))), hl: true },
           { label: 'TENURE',       value: '15 months',   hl: false },
         ].map(function(s, i) {
           return (
@@ -207,8 +207,8 @@ function PostDisbursal({ go, pdState, setPdState }) {
         if (!startTs) startTs = ts;
         var p = Math.min((ts - startTs) / 800, 1);
         var e = 1 - Math.pow(1 - p, 3);
-        setCountVal(Math.round(e * 250000));
-        if (p < 1) { requestAnimationFrame(step); } else { setCountVal(250000); }
+        setCountVal(Math.round(e * 200000));
+        if (p < 1) { requestAnimationFrame(step); } else { setCountVal(200000); }
       }
       requestAnimationFrame(step);
     }, 1200);
@@ -235,8 +235,8 @@ function PostDisbursal({ go, pdState, setPdState }) {
       if (!startTs) startTs = ts;
       var p = Math.min((ts - startTs) / 1200, 1);
       var e = 1 - Math.pow(1 - p, 3);
-      setHeroCount(Math.round(e * 250000));
-      if (p < 1) { requestAnimationFrame(step); } else { setHeroCount(250000); }
+      setHeroCount(Math.round(e * 300000));
+      if (p < 1) { requestAnimationFrame(step); } else { setHeroCount(300000); }
     }
     requestAnimationFrame(step);
   }, [unlocked]);
@@ -286,7 +286,7 @@ function PostDisbursal({ go, pdState, setPdState }) {
                 <div style={{ marginBottom: 6 }}><Tag label="COMPLETED" color={G} bg={G_BG} border={G_BDR} /></div>
                 <div style={{ fontWeight: 700, fontSize: 13.5, color: INK, ...sora, marginBottom: 4 }}>Round 1 Disbursed</div>
                 <div style={{ fontSize: 11.5, color: INK2, display: 'flex', alignItems: 'center', gap: 6 }}>
-                  <span style={{ fontWeight: 800, color: G }}>₹2,50,000</span>
+                  <span style={{ fontWeight: 800, color: G }}>₹2,00,000</span>
                   <span style={{ color: LINE }}>·</span>
                   <span>20 May 2025</span>
                 </div>
@@ -330,9 +330,9 @@ function PostDisbursal({ go, pdState, setPdState }) {
               }}>
                 <div style={{ marginBottom: 8 }}><Tag label="UNLOCKED" color={G} bg={G_BG} border={G_BDR} /></div>
                 <div style={{ fontWeight: 800, fontSize: 15, color: INK, ...sora, marginBottom: 4 }}>Round 2 Available</div>
-                <div style={{ fontWeight: 800, fontSize: 26, color: G, ...sora, lineHeight: 1, marginBottom: 6 }}>₹2,50,000</div>
+                <div style={{ fontWeight: 800, fontSize: 26, color: G, ...sora, lineHeight: 1, marginBottom: 6 }}>₹3,00,000</div>
                 <div style={{ fontSize: 12.5, color: INK2, lineHeight: 1.4, marginBottom: 14 }}>
-                  You've unlocked ₹2,50,000 for Round 2. Tap below to claim your offer.
+                  You've unlocked ₹3,00,000 for Round 2. Tap below to claim your offer.
                 </div>
                 <button
                   onClick={function(){ go('reward'); }}

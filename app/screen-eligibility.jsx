@@ -1,7 +1,7 @@
 // screen-eligibility.jsx — CCRF Eligibility · tranche "melt ladder"
 // Hero shows the tranche unlocked TODAY; below, a vertical melt-journey ladder
 // where each tranche unlocks the next as the customer pays down their balance,
-// and a cumulative-limit bar visibly grows 1.5L → 2.5L → 4L.
+// and a cumulative-limit bar visibly grows 2L (Round 1) → 5L (Round 2).
 const ML = {
   bg: '#F7F7FB', card: '#FFFFFF', ink: '#1A1A2E', muted: '#8A8AA0', muted2: '#A7A4B8', line: '#ECEAF4',
   primary: '#3D3DC4', primaryL: '#ECECFA',
@@ -13,7 +13,7 @@ const ML = {
 
 function Eligibility({ go }) {
   const sora = { fontFamily: "'Sora', -apple-system, system-ui, sans-serif" };
-  const TOTAL = 500000, AVAIL = 250000;
+  const TOTAL = 500000, AVAIL = 200000;
   const availPct = (AVAIL / TOTAL) * 100;
 
   // ── 3 clean stages ──
@@ -52,7 +52,7 @@ function Eligibility({ go }) {
                 <div style={{ position: 'absolute', left: 0, top: 0, bottom: 0, width: availPct + '%', background: 'linear-gradient(90deg,#37B179,#5DD79E)', borderRadius: 9, transformOrigin: 'left', animation: 'growBarX .8s cubic-bezier(.4,0,.2,1) both' }} />
               </div>
               <div style={{ marginTop: 9 }}>
-                <span style={{ fontSize: 13.5, fontWeight: 800, color: '#8FE3B8', ...sora }}>₹2,50,000</span>
+                <span style={{ fontSize: 13.5, fontWeight: 800, color: '#8FE3B8', ...sora }}>₹2,00,000</span>
                 <span style={{ fontSize: 12, fontWeight: 600, color: 'rgba(255,255,255,.6)', marginLeft: 6 }}>available now</span>
               </div>
               <div style={{ fontSize: 11, fontWeight: 500, color: 'rgba(255,255,255,.45)', marginTop: 4 }}>Unlocks as you repay your credit card dues</div>
@@ -139,7 +139,7 @@ function StageReceive() {
       <CashWad color="#2D9E6B" />
       <div>
         <div style={{ fontSize: 9, fontWeight: 700, letterSpacing: 0.6, color: '#7BAE97', fontFamily: "'Sora',sans-serif" }}>STRAIGHT TO YOUR ACCOUNT</div>
-        <div style={{ fontSize: 28, fontWeight: 800, color: '#1E6B49', letterSpacing: -1, lineHeight: 1.1, fontFamily: "'Sora',sans-serif" }}>₹2,50,000</div>
+        <div style={{ fontSize: 28, fontWeight: 800, color: '#1E6B49', letterSpacing: -1, lineHeight: 1.1, fontFamily: "'Sora',sans-serif" }}>₹2,00,000</div>
       </div>
     </div>
   );
@@ -254,7 +254,7 @@ function StageLocked() {
       </div>
       <div>
         <div style={{ fontSize: 9, fontWeight: 700, letterSpacing: 0.6, color: '#A7A4B8', fontFamily: "'Sora',sans-serif" }}>UNLOCKS AS YOU REPAY</div>
-        <div style={{ fontSize: 24, fontWeight: 800, color: '#8A8AA0', letterSpacing: -0.8, lineHeight: 1.1, fontFamily: "'Sora',sans-serif" }}>₹2,50,000</div>
+        <div style={{ fontSize: 24, fontWeight: 800, color: '#8A8AA0', letterSpacing: -0.8, lineHeight: 1.1, fontFamily: "'Sora',sans-serif" }}>₹3,00,000</div>
       </div>
     </div>
   );
@@ -333,7 +333,7 @@ function Step1Anim() {
       <WalletCash color="#2D9E6B" />
       <div style={{ flex: 1, minWidth: 0 }}>
         <div style={{ fontSize: 9, fontWeight: 700, letterSpacing: 0.6, color: '#7BAE97', marginBottom: 2, fontFamily: "'Sora', sans-serif" }}>LANDING IN YOUR ACCOUNT</div>
-        <SlotCount target={250000} color="#2D9E6B" />
+        <SlotCount target={200000} color="#2D9E6B" />
       </div>
     </div>
   );
@@ -346,7 +346,7 @@ function Step3Anim() {
       <WalletCash color="#E8A020" />
       <div style={{ flex: 1, minWidth: 0 }}>
         <div style={{ fontSize: 9, fontWeight: 700, letterSpacing: 0.6, color: '#C6A560', marginBottom: 2, fontFamily: "'Sora', sans-serif" }}>ADDITIONAL FUNDS UNLOCK</div>
-        <SlotCount target={250000} color="#B98518" />
+        <SlotCount target={300000} color="#B98518" />
       </div>
     </div>
   );
