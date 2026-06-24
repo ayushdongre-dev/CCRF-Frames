@@ -6,10 +6,10 @@ const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
   "ccrfRate": 22
 }/*EDITMODE-END*/;
 
-const ORDER = ['home', 'multioffer', 'selling', 'savings', 'cards', 'eligibility', 'visualise', 'pdf', 'success'];
+const ORDER = ['home', 'multioffer', 'selling', 'savings', 'cards', 'eligibility', 'visualise', 'pdf', 'amountselect', 'revisedoffer', 'success'];
 const LABELS = {
   home: 'Home', multioffer: 'Multi Offer', selling: 'General Selling', savings: 'Savings', cards: 'Card Selection',
-  eligibility: 'Eligibility', visualise: 'Visualise', pdf: 'PDF Upload', success: 'Done',
+  eligibility: 'Eligibility', visualise: 'Visualise', pdf: 'PDF Upload', amountselect: 'Amount', revisedoffer: 'Final Offer', success: 'Done',
 };
 
 function App() {
@@ -60,6 +60,8 @@ function App() {
       case 'eligibility': return <Eligibility go={go} ccrfRate={t.ccrfRate} />;
       case 'visualise': return <Visualise go={go} ccrfRate={t.ccrfRate} monthly={monthly} />;
       case 'pdf': return <PdfUpload go={go} selected={selected} showLogos={t.showLogos} />;
+      case 'amountselect': return <AmountSelection go={go} ccrfRate={t.ccrfRate} />;
+      case 'revisedoffer': return <RevisedOffer go={go} ccrfRate={t.ccrfRate} />;
       case 'success': return <Success go={go} />;
       default: return <MultiOffer go={go} />;
     }
@@ -67,8 +69,8 @@ function App() {
 
   const light = route === 'selling';
   const bg = route === 'savings' ? '#F7F7FC'
-    : route === 'eligibility' ? '#F7F7FB'
-    : route === 'pdf' ? '#fff'
+    : (route === 'eligibility' || route === 'home') ? '#F7F7FB'
+    : (route === 'pdf' || route === 'multioffer' || route === 'amountselect' || route === 'revisedoffer') ? '#FFFFFF'
     : (route === 'selling' || route === 'visualise' || route === 'success') ? '#EFEEFE'
     : 'var(--bg)';
 
