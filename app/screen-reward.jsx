@@ -17,10 +17,10 @@ function RewardScreen({ go }) {
     <div style={{ minHeight: '100%', display: 'flex', flexDirection: 'column', background: '#fff', animation: 'fadeIn .25s' }}>
       <EquallHead onHome={function(){ go('home'); }} />
 
-      <div className="scr" style={{ flex: 1, overflowY: 'auto', padding: '0 22px 8px', display: 'flex', flexDirection: 'column' }}>
+      <div className="scr" style={{ flex: 1, overflowY: 'auto', padding: '0 22px 8px', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
 
         {/* ── Hero ── */}
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', paddingTop: 8, paddingBottom: 32 }}>
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', paddingTop: 8, paddingBottom: 24 }}>
           {/* Success ring + check */}
           <div style={{ position: 'relative', width: 90, height: 90, marginBottom: 22, animation: revealed ? 'popIn .45s both' : 'none' }}>
             <div style={{ position: 'absolute', inset: -10, borderRadius: 999, background: 'radial-gradient(circle,rgba(31,169,113,.12) 0%,transparent 70%)', animation: 'successGlow 2.2s ease-in-out infinite' }} />
@@ -48,21 +48,19 @@ function RewardScreen({ go }) {
               <div style={{ fontSize: 11, fontWeight: 700, color: muted, letterSpacing: 0.4, marginBottom: 3 }}>ROUND 1</div>
               <div style={{ fontSize: 13.5, fontWeight: 600, color: ink2 }}>Already disbursed</div>
             </div>
-            <div style={{ fontSize: 20, fontWeight: 800, color: '#94A3B8', ...sora }}>₹2,50,000</div>
+            <div style={{ fontSize: 20, fontWeight: 800, color: '#94A3B8', ...sora }}>₹2,00,000</div>
           </div>
 
           {/* Row 2 — Round 2 unlocked (highlighted) */}
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '18px 20px', borderBottom: '1px solid #F0EEF7', background: '#E7F7EF' }}>
+          <div style={{ position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '18px 20px', borderBottom: '1px solid #F0EEF7', background: '#E7F7EF' }}>
+            <div style={{ position: 'absolute', left: '50%', top: '50%', transform: 'translate(-50%, -50%)', background: G, borderRadius: 999, padding: '3px 10px' }}>
+              <span style={{ fontSize: 8.5, fontWeight: 900, color: '#fff', letterSpacing: 0.5 }}>NEW</span>
+            </div>
             <div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 7, marginBottom: 3 }}>
-                <div style={{ fontSize: 11, fontWeight: 800, color: G, letterSpacing: 0.4 }}>ROUND 2</div>
-                <div style={{ background: G, borderRadius: 999, padding: '1px 7px' }}>
-                  <span style={{ fontSize: 8.5, fontWeight: 900, color: '#fff', letterSpacing: 0.5 }}>NEW</span>
-                </div>
-              </div>
+              <div style={{ fontSize: 11, fontWeight: 800, color: G, letterSpacing: 0.4, marginBottom: 3 }}>ROUND 2</div>
               <div style={{ fontSize: 13.5, fontWeight: 700, color: G }}>Unlocked for you</div>
             </div>
-            <div style={{ fontSize: 20, fontWeight: 900, color: G, ...sora }}>+ ₹2,50,000</div>
+            <div style={{ fontSize: 20, fontWeight: 900, color: G, ...sora }}>+ ₹3,00,000</div>
           </div>
 
           {/* Row 3 — Total */}
