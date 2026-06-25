@@ -473,6 +473,7 @@ function SavingsScreen({ go, monthly = 30000, setMonthly }) {
   const [sheetClosing, setSheetClosing] = useState(false);
   const [dragOffset, setDragOffset] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
+  const [showRateInfo, setShowRateInfo] = useState(false);
   const dragStartY = useRef(null);
   const MIN = 25000, MAX = 100000, STEP = 5000;
 
@@ -531,6 +532,31 @@ function SavingsScreen({ go, monthly = 30000, setMonthly }) {
   return (
     <div style={{ minHeight: '100%', display: 'flex', flexDirection: 'column', background: '#F4F3FB', animation: 'fadeIn .35s', position: 'relative' }}>
 
+      {/* Rate info click-away + popup — fixed so they escape scroll-container clipping */}
+      {showRateInfo && (
+        <div onClick={function(){ setShowRateInfo(false); }} style={{ position: 'fixed', inset: 0, zIndex: 90, background: 'transparent' }} />
+      )}
+      {showRateInfo && (
+        <div style={{ position: 'fixed', left: '50%', top: '37%', transform: 'translate(-82%, 0)', zIndex: 100, background: '#fff', borderRadius: 14, padding: '14px 16px', boxShadow: '0 12px 36px rgba(220,38,38,0.13), 0 2px 10px rgba(0,0,0,0.07)', border: '1px solid #FED7D7', animation: 'fadeIn .15s', minWidth: 196 }}>
+          {/* Title */}
+          <div style={{ fontSize: 12, fontWeight: 800, color: '#1B192E', marginBottom: 10, letterSpacing: -0.2 }}>Hidden costs</div>
+          {/* Rows */}
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 5 }}>
+            <span style={{ fontSize: 11, color: '#6B7280', fontWeight: 500 }}>Monthly interest rate</span>
+            <span style={{ fontSize: 11, fontWeight: 700, color: '#374151' }}>3.75%</span>
+          </div>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
+            <span style={{ fontSize: 11, color: '#6B7280', fontWeight: 500 }}>GST on interest</span>
+            <span style={{ fontSize: 11, fontWeight: 700, color: '#374151' }}>18%</span>
+          </div>
+          {/* Total */}
+          <div style={{ background: '#FFF5F5', borderRadius: 8, padding: '8px 10px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <span style={{ fontSize: 11, fontWeight: 700, color: '#6B7280' }}>Effective p.a.</span>
+            <span style={{ fontSize: 15, fontWeight: 900, color: '#DC2626', fontFamily: 'Sora, sans-serif', letterSpacing: -0.3 }}>= 54%</span>
+          </div>
+        </div>
+      )}
+
       {/* ── NAV ── */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '6px 16px 0', flexShrink: 0 }}>
         <button onClick={() => go('selling')} style={{ width: 38, height: 38, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'transparent', border: 'none', cursor: 'pointer' }}>
@@ -540,27 +566,23 @@ function SavingsScreen({ go, monthly = 30000, setMonthly }) {
         <div style={{ width: 38 }} />
       </div>
 
-      {/* ── EMI ADJUSTER ── */}
-      <div style={{ margin: '6px 16px 0', background: '#FFFFFF', borderRadius: 18, padding: '10px 16px', boxShadow: '0 2px 12px rgba(91,63,212,0.07)', border: '1px solid #EAE6F8', animation: 'fadeUp .5s both' }}>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          <div>
-            <div style={{ fontSize: 11, color: '#6E6B82', fontWeight: 600 }}>See your savings with:</div>
-          </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-            <button onClick={() => setMonthly(m => Math.max(MIN, m - STEP))} disabled={monthly <= MIN}
-              style={{ width: 28, height: 28, borderRadius: 999, border: '1.5px solid #C4B5FD', background: '#F6F3FF', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: monthly <= MIN ? 'not-allowed' : 'pointer', opacity: monthly <= MIN ? 0.4 : 1 }}>
-              <svg width="10" height="10" viewBox="0 0 24 24" fill="none"><path d="M5 12h14" stroke="#5B3FD4" strokeWidth="3.5" strokeLinecap="round" /></svg>
-            </button>
-            <span style={{ fontWeight: 900, fontSize: 16, color: '#1B192E', fontFamily: 'Sora, sans-serif', minWidth: 72, textAlign: 'center', letterSpacing: -0.5 }}>{inr(animMonthly)}<span style={{ fontSize: 10, fontWeight: 600, color: '#88859E', marginLeft: 2 }}>/mo</span></span>
-            <button onClick={() => setMonthly(m => Math.min(MAX, m + STEP))} disabled={monthly >= MAX}
-              style={{ width: 28, height: 28, borderRadius: 999, border: '1.5px solid #C4B5FD', background: '#F6F3FF', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: monthly >= MAX ? 'not-allowed' : 'pointer', opacity: monthly >= MAX ? 0.4 : 1 }}>
-              <svg width="10" height="10" viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="#5B3FD4" strokeWidth="3.5" strokeLinecap="round" /></svg>
-            </button>
-          </div>
+      {/* ── PAGE TITLE ── */}
+      <div style={{ padding: '2px 20px 12px', flexShrink: 0, animation: 'fadeUp .4s both', textAlign: 'center' }}>
+        <div style={{ display: 'inline-flex', alignItems: 'center', gap: 5, background: 'rgba(91,63,212,0.08)', borderRadius: 20, padding: '3px 12px', marginBottom: 9 }}>
+          <svg width="7" height="7" viewBox="0 0 8 8"><circle cx="4" cy="4" r="4" fill="#5B3FD4" opacity="0.55"/></svg>
+          <span style={{ fontSize: 9, fontWeight: 800, color: '#5B3FD4', letterSpacing: 1, textTransform: 'uppercase' }}>Your card debt situation</span>
         </div>
-        <div style={{ marginTop: 6, paddingTop: 6, borderTop: '1px solid #F0ECFA', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          <span style={{ fontSize: 10, color: '#88859E', fontWeight: 600 }}>Current card debt</span>
-          <span style={{ fontSize: 12, fontWeight: 800, color: '#1B192E', fontFamily: 'Sora, sans-serif', letterSpacing: -0.3 }}>₹5,00,000</span>
+        <div style={{ fontSize: 22, fontWeight: 900, color: '#1B192E', lineHeight: 1.1, letterSpacing: -0.7, fontFamily: 'Sora, sans-serif' }}>
+          Your money is frozen<br />in card debt
+        </div>
+        <div style={{ fontSize: 12.5, fontWeight: 500, color: '#88859E', marginTop: 6, lineHeight: 1.45 }}>
+          Here's how much <span style={{ color: '#5B3FD4', fontWeight: 700 }}>Melt</span> frees for you
+        </div>
+        {/* Debt pill */}
+        <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, marginTop: 10, background: '#fff', borderRadius: 12, padding: '6px 16px', border: '1px solid #EAE6F8', boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }}>
+          <span style={{ fontSize: 10.5, color: '#88859E', fontWeight: 600 }}>Your card debt</span>
+          <div style={{ width: 1, height: 12, background: '#DDD9F0' }} />
+          <span style={{ fontSize: 14, fontWeight: 900, color: '#1B192E', fontFamily: 'Sora, sans-serif', letterSpacing: -0.4 }}>₹5,00,000</span>
         </div>
       </div>
 
@@ -607,7 +629,14 @@ function SavingsScreen({ go, monthly = 30000, setMonthly }) {
             minHeight: 175
           }}>
             <div style={{ fontSize: 9.5, fontWeight: 800, color: '#DC2626', letterSpacing: 0.6, textTransform: 'uppercase', marginBottom: 2 }}>Your Card Now</div>
-            <div style={{ fontSize: 34, fontWeight: 900, color: '#DC2626', fontFamily: 'Sora, sans-serif', letterSpacing: -1, lineHeight: 1.1 }}>54%</div>
+            <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'center', gap: 4 }}>
+              <div style={{ fontSize: 34, fontWeight: 900, color: '#DC2626', fontFamily: 'Sora, sans-serif', letterSpacing: -1, lineHeight: 1.1 }}>54%</div>
+              <button
+                onClick={function(e){ e.stopPropagation(); setShowRateInfo(function(v){ return !v; }); }}
+                style={{ marginTop: 6, width: 18, height: 18, borderRadius: '50%', border: 'none', background: '#DC2626', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', flexShrink: 0, padding: 0, boxShadow: '0 2px 6px rgba(220,38,38,0.4)' }}>
+                <span style={{ fontSize: 10, fontWeight: 900, color: '#fff', lineHeight: 1, fontStyle: 'italic', fontFamily: 'Georgia, serif' }}>i</span>
+              </button>
+            </div>
             <div style={{ fontSize: 9, fontWeight: 700, color: '#EF4444', marginBottom: 10 }}>p.a. interest</div>
             <div style={{
               height: 54, display: 'flex', alignItems: 'center', justifyContent: 'center',
@@ -702,6 +731,26 @@ function SavingsScreen({ go, monthly = 30000, setMonthly }) {
         </div>
         <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.8)', fontWeight: 600, zIndex: 1 }}>
           by switching to Melt
+        </div>
+      </div>
+
+      {/* ── EMI ADJUSTER ── */}
+      <div style={{ margin: '8px 16px 0', background: '#FFFFFF', borderRadius: 18, padding: '10px 16px', boxShadow: '0 2px 12px rgba(91,63,212,0.07)', border: '1px solid #EAE6F8', animation: 'fadeUp .58s .1s both' }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <div>
+            <div style={{ fontSize: 11, color: '#6E6B82', fontWeight: 600 }}>Visualise with monthly payment:</div>
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+            <button onClick={() => setMonthly(m => Math.max(MIN, m - STEP))} disabled={monthly <= MIN}
+              style={{ width: 28, height: 28, borderRadius: 999, border: '1.5px solid #C4B5FD', background: '#F6F3FF', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: monthly <= MIN ? 'not-allowed' : 'pointer', opacity: monthly <= MIN ? 0.4 : 1 }}>
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none"><path d="M5 12h14" stroke="#5B3FD4" strokeWidth="3.5" strokeLinecap="round" /></svg>
+            </button>
+            <span style={{ fontWeight: 900, fontSize: 16, color: '#1B192E', fontFamily: 'Sora, sans-serif', minWidth: 72, textAlign: 'center', letterSpacing: -0.5 }}>{inr(animMonthly)}<span style={{ fontSize: 10, fontWeight: 600, color: '#88859E', marginLeft: 2 }}>/mo</span></span>
+            <button onClick={() => setMonthly(m => Math.min(MAX, m + STEP))} disabled={monthly >= MAX}
+              style={{ width: 28, height: 28, borderRadius: 999, border: '1.5px solid #C4B5FD', background: '#F6F3FF', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: monthly >= MAX ? 'not-allowed' : 'pointer', opacity: monthly >= MAX ? 0.4 : 1 }}>
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="#5B3FD4" strokeWidth="3.5" strokeLinecap="round" /></svg>
+            </button>
+          </div>
         </div>
       </div>
 
