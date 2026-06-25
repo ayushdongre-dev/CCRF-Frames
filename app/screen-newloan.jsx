@@ -1,7 +1,7 @@
 // screen-newloan.jsx — B3 "Your New Loan" (Tranche 2 top-up selection)
 
 var NL = {
-  OUTSTANDING: 182000,
+  OUTSTANDING: 208000,
   NEW_MAX: 300000,
   NEW_MIN: 50000,
   STEP: 10000,
@@ -80,7 +80,7 @@ function NewLoanScreen({ go }) {
 
   var STEPS_HIW = [
     { title: 'Choose your amount', body: "Pick an amount between ₹50K and ₹3L — we'll show you EMI options next." },
-    { title: 'We handle your old balance', body: 'The ₹1,82,000 you still owe gets rolled into the new loan automatically.' },
+    { title: 'We handle your old balance', body: 'The ₹2,08,000 you still owe (₹2L + accrued interest) gets rolled into the new loan automatically.' },
     { title: 'Money lands in your account', body: 'The extra cash is sent to your bank account, usually within minutes.' },
     { title: 'Fresh start, one loan', body: 'Old Melt loan closes. New loan = ₹2,28,000 outstanding + ₹' + fmtNL(extra) + ' extra = ₹' + fmtNL(newLoanAmt) + '.' },
   ];
@@ -133,6 +133,7 @@ function NewLoanScreen({ go }) {
             <div>
               <div style={{ fontSize: 9, fontWeight: 700, color: muted, letterSpacing: 0.5, marginBottom: 3 }}>YOU CURRENTLY OWE</div>
               <div style={{ fontWeight: 800, fontSize: 17, color: ink, ...sora }}>₹{fmtNL(NL.OUTSTANDING)}</div>
+              <div style={{ fontSize: 9, color: muted, marginTop: 2 }}>₹2L + ₹8K interest</div>
             </div>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: 32, height: 32, borderRadius: 999, background: 'rgba(255,255,255,.7)', border: '1px solid #C7C4F2' }}>
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="var(--primary)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>
@@ -157,7 +158,7 @@ function NewLoanScreen({ go }) {
         <div style={{ display: 'flex', gap: 9, alignItems: 'flex-start', background: 'var(--bg)', border: '1px solid var(--line)', borderRadius: 12, padding: '11px 13px', marginBottom: 18 }}>
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" style={{ flexShrink: 0, marginTop: 1 }}><circle cx="12" cy="12" r="9" stroke="var(--muted)" strokeWidth="1.8" /><path d="M12 11v5M12 7.5h.01" stroke="var(--muted)" strokeWidth="2" strokeLinecap="round" /></svg>
           <span style={{ fontSize: 12, color: ink2, lineHeight: 1.5 }}>
-            ₹{fmtNL(extra)} will be sent to your bank. Your existing Melt loan closes and a new account is created with a total of ₹{fmtNL(newLoanAmt)}.
+            ₹{fmtNL(extra)} will be sent to your bank. Your existing Melt balance (₹2,08,000) closes and a fresh loan of ₹{fmtNL(newLoanAmt)} is created.
           </span>
         </div>
 

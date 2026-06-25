@@ -158,7 +158,7 @@ function CashWad({ color }) {
   );
 }
 
-// Stage 2 visual — cycling card deck: front card fades fully green → rotates back → next comes forward
+// Stage 2 visual — cycling card deck: coin flies in → card turns green → rotates back → next card
 function StageMelt() {
   var CARDS = [
     'linear-gradient(135deg,#7C6CF5,#4A2FC0)',
@@ -167,6 +167,7 @@ function StageMelt() {
   ];
   var frst = useState(0); var frontIdx = frst[0]; var setFrontIdx = frst[1];
   var gfst = useState(false); var greenFill = gfst[0]; var setGreenFill = gfst[1];
+  var cast = useState(false); var coinActive = cast[0]; var setCoinActive = cast[1];
   var ts = useRef([]);
 
   useEffect(function() {
@@ -174,73 +175,93 @@ function StageMelt() {
     var add = function(fn, ms) { var id = setTimeout(fn, ms); timers.push(id); return id; };
     var loop = function() {
       setGreenFill(false);
+      setCoinActive(false);
       add(function() {
-        setGreenFill(true);
+        setCoinActive(true);
         add(function() {
-          setFrontIdx(function(i) { return (i + 1) % 3; });
-          setGreenFill(false);
-          add(loop, 700);
-        }, 900);
+          setCoinActive(false);
+          setGreenFill(true);
+          add(function() {
+            setFrontIdx(function(i) { return (i + 1) % 3; });
+            setGreenFill(false);
+            add(loop, 700);
+          }, 900);
+        }, 520);
       }, 350);
     };
     add(loop, 400);
     return function() { timers.forEach(clearTimeout); timers.length = 0; };
   }, []);
 
-  // rank 0=front, 1=mid, 2=back — clean fan spread
   var POS = [
-    { x: 12,  y: 5,  r: 7,   s: 1,    z: 10 },
+    { x: 12,  y: 5,  r: 7,   s: 1,     z: 10 },
     { x: -1,  y: 0,  r: -1,  s: 0.925, z: 5  },
-    { x: -14, y: 5,  r: -8,  s: 0.85, z: 1  },
+    { x: -14, y: 5,  r: -8,  s: 0.85,  z: 1  },
   ];
 
   return (
-    <div style={{ background: '#F4F4FC', borderRadius: 14, padding: '22px 14px 18px', border: '1px solid #E2DFF4', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12 }}>
-      <div style={{ position: 'relative', width: 130, height: 82 }}>
-        {CARDS.map(function(grad, idx) {
-          var rank = (idx - frontIdx + 3) % 3;
-          var p = POS[rank];
-          var isFront = rank === 0;
-          return (
-            <div key={idx} style={{
+    <div style={{ background: '#F4F4FC', borderRadius: 14, padding: '22px 14px 18px', border: '1px solid #E2DFF4', position: 'relative', overflow: 'visible' }}>
+      <style>{`
+        @keyframes coinFlyIntoCard {
+          0%   { transform: translate(-110px, -50%) scale(0);    opacity: 0; }
+          10%  { transform: translate(-110px, -56%) scale(1.15); opacity: 1; }
+          65%  { transform: translate(-4px,   -58%) scale(1.05); opacity: 1; }
+          82%  { transform: translate(4px,    -52%) scale(0.7);  opacity: 0.5; }
+          100% { transform: translate(10px,   -50%) scale(0);    opacity: 0; }
+        }
+      `}</style>
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12 }}>
+        <div style={{ position: 'relative', width: 130, height: 82 }}>
+          {coinActive && (
+            <div style={{
               position: 'absolute', left: '50%', top: '50%',
-              width: 80, height: 53, borderRadius: 10,
-              background: grad,
-              transform: 'translate(calc(-50% + ' + p.x + 'px), calc(-50% + ' + p.y + 'px)) rotate(' + p.r + 'deg) scale(' + p.s + ')',
-              transformOrigin: 'center center', zIndex: p.z,
-              transition: 'transform 0.5s cubic-bezier(.4,0,.2,1)',
-              overflow: 'hidden',
-              border: '1px solid rgba(255,255,255,.3)',
-              boxShadow: isFront ? '0 10px 24px -8px rgba(40,20,90,.65)' : '0 3px 8px -3px rgba(40,20,90,.3)',
+              animation: 'coinFlyIntoCard 0.52s cubic-bezier(.2,.8,.2,1) forwards',
+              zIndex: 20, pointerEvents: 'none',
             }}>
-              {/* sheen */}
-              <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(115deg,rgba(255,255,255,.24),transparent 55%)' }} />
-              {/* chip */}
-              <div style={{ position: 'absolute', left: 8, top: 10, width: 13, height: 9, borderRadius: 2, background: 'linear-gradient(135deg,#F4D58A,#C99A3A)' }} />
-              {/* network dots */}
-              <div style={{ position: 'absolute', right: 8, top: 10, display: 'flex' }}>
-                <span style={{ width: 8, height: 8, borderRadius: 999, background: 'rgba(255,90,90,.85)' }} />
-                <span style={{ width: 8, height: 8, borderRadius: 999, background: 'rgba(255,190,70,.85)', marginLeft: -3.5 }} />
-              </div>
-              {/* full-card green overlay — opacity fade, not width sweep */}
-              {isFront && (
-                <div style={{
-                  position: 'absolute', inset: 0, borderRadius: 10,
-                  background: 'rgba(45,158,107,0.93)',
-                  opacity: greenFill ? 1 : 0,
-                  transition: greenFill ? 'opacity 0.36s ease-in' : 'opacity 0.18s ease-out',
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                }}>
-                  <svg width="22" height="22" viewBox="0 0 24 24" style={{ opacity: greenFill ? 1 : 0, transition: 'opacity 0.15s .18s' }}>
-                    <path d="M5 13l4 4 10-11" stroke="#fff" strokeWidth="3" fill="none" strokeLinecap="round" strokeLinejoin="round" />
-                  </svg>
-                </div>
-              )}
+              <Coin />
             </div>
-          );
-        })}
+          )}
+          {CARDS.map(function(grad, idx) {
+            var rank = (idx - frontIdx + 3) % 3;
+            var p = POS[rank];
+            var isFront = rank === 0;
+            return (
+              <div key={idx} style={{
+                position: 'absolute', left: '50%', top: '50%',
+                width: 80, height: 53, borderRadius: 10,
+                background: grad,
+                transform: 'translate(calc(-50% + ' + p.x + 'px), calc(-50% + ' + p.y + 'px)) rotate(' + p.r + 'deg) scale(' + p.s + ')',
+                transformOrigin: 'center center', zIndex: p.z,
+                transition: 'transform 0.5s cubic-bezier(.4,0,.2,1)',
+                overflow: 'hidden',
+                border: '1px solid rgba(255,255,255,.3)',
+                boxShadow: isFront ? '0 10px 24px -8px rgba(40,20,90,.65)' : '0 3px 8px -3px rgba(40,20,90,.3)',
+              }}>
+                <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(115deg,rgba(255,255,255,.24),transparent 55%)' }} />
+                <div style={{ position: 'absolute', left: 8, top: 10, width: 13, height: 9, borderRadius: 2, background: 'linear-gradient(135deg,#F4D58A,#C99A3A)' }} />
+                <div style={{ position: 'absolute', right: 8, top: 10, display: 'flex' }}>
+                  <span style={{ width: 8, height: 8, borderRadius: 999, background: 'rgba(255,90,90,.85)' }} />
+                  <span style={{ width: 8, height: 8, borderRadius: 999, background: 'rgba(255,190,70,.85)', marginLeft: -3.5 }} />
+                </div>
+                {isFront && (
+                  <div style={{
+                    position: 'absolute', inset: 0, borderRadius: 10,
+                    background: 'rgba(45,158,107,0.93)',
+                    opacity: greenFill ? 1 : 0,
+                    transition: greenFill ? 'opacity 0.36s ease-in' : 'opacity 0.18s ease-out',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  }}>
+                    <svg width="22" height="22" viewBox="0 0 24 24" style={{ opacity: greenFill ? 1 : 0, transition: 'opacity 0.15s .18s' }}>
+                      <path d="M5 13l4 4 10-11" stroke="#fff" strokeWidth="3" fill="none" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+        <div style={{ fontSize: 11, fontWeight: 700, color: '#2D9E6B', letterSpacing: 0.4, opacity: 0.85 }}>Clearing your cards</div>
       </div>
-      <div style={{ fontSize: 11, fontWeight: 700, color: '#2D9E6B', letterSpacing: 0.4, opacity: 0.85 }}>Clearing your cards</div>
     </div>
   );
 }
@@ -432,21 +453,32 @@ function Step2Anim() {
   );
 }
 
-// small ₹ coin with shine
+// ₹ coin — large, gold, clearly visible
 function Coin() {
   return (
-    <svg width="20" height="20" viewBox="0 0 24 24" style={{ display: 'block', filter: 'drop-shadow(0 2px 3px rgba(61,61,196,.35))' }}>
-      <circle cx="12" cy="12" r="10" fill="#E8A020" />
-      <circle cx="12" cy="12" r="10" fill="url(#coinG)" />
-      <circle cx="12" cy="12" r="7.5" fill="none" stroke="rgba(255,255,255,.55)" strokeWidth="1" />
-      <text x="12" y="16" textAnchor="middle" fontSize="11" fontWeight="800" fill="#fff" fontFamily="sans-serif">₹</text>
+    <svg width="34" height="34" viewBox="0 0 48 48" style={{ display: 'block', filter: 'drop-shadow(0 3px 6px rgba(180,110,0,.55))' }}>
       <defs>
-        <radialGradient id="coinG" cx="0.35" cy="0.3" r="0.8">
-          <stop offset="0" stopColor="rgba(255,255,255,.5)" />
-          <stop offset="0.5" stopColor="rgba(255,255,255,0)" />
-          <stop offset="1" stopColor="rgba(0,0,0,.15)" />
+        <radialGradient id="coinOuter" cx="0.38" cy="0.3" r="0.75">
+          <stop offset="0%" stopColor="#FFE066" />
+          <stop offset="55%" stopColor="#F5A623" />
+          <stop offset="100%" stopColor="#C77C00" />
+        </radialGradient>
+        <radialGradient id="coinInner" cx="0.38" cy="0.3" r="0.75">
+          <stop offset="0%" stopColor="#FFD84D" />
+          <stop offset="100%" stopColor="#D4890A" />
         </radialGradient>
       </defs>
+      {/* outer disc */}
+      <circle cx="24" cy="24" r="22" fill="url(#coinOuter)" />
+      {/* rim highlight */}
+      <circle cx="24" cy="24" r="22" fill="none" stroke="rgba(255,255,255,.35)" strokeWidth="1.5" />
+      {/* inner ring */}
+      <circle cx="24" cy="24" r="16" fill="url(#coinInner)" />
+      <circle cx="24" cy="24" r="16" fill="none" stroke="rgba(255,255,255,.4)" strokeWidth="1" />
+      {/* ₹ symbol */}
+      <text x="24" y="31" textAnchor="middle" fontSize="17" fontWeight="900" fill="#fff" fontFamily="'Plus Jakarta Sans',sans-serif" style={{ filter: 'drop-shadow(0 1px 2px rgba(0,0,0,.25))' }}>₹</text>
+      {/* shine glint */}
+      <ellipse cx="17" cy="17" rx="5" ry="3.5" fill="rgba(255,255,255,.3)" transform="rotate(-30 17 17)" />
     </svg>
   );
 }
