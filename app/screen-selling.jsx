@@ -633,8 +633,8 @@ function SavingsScreen({ go, monthly = 30000, setMonthly }) {
               <div style={{ fontSize: 34, fontWeight: 900, color: '#DC2626', fontFamily: 'Sora, sans-serif', letterSpacing: -1, lineHeight: 1.1 }}>54%</div>
               <button
                 onClick={function(e){ e.stopPropagation(); setShowRateInfo(function(v){ return !v; }); }}
-                style={{ marginTop: 6, width: 18, height: 18, borderRadius: '50%', border: 'none', background: '#DC2626', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', flexShrink: 0, padding: 0, boxShadow: '0 2px 6px rgba(220,38,38,0.4)' }}>
-                <span style={{ fontSize: 10, fontWeight: 900, color: '#fff', lineHeight: 1, fontStyle: 'italic', fontFamily: 'Georgia, serif' }}>i</span>
+                style={{ marginTop: 6, width: 18, height: 18, borderRadius: '50%', border: '1.5px solid #DC2626', background: 'rgba(220,38,38,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', flexShrink: 0, padding: 0 }}>
+                <span style={{ fontSize: 11, fontWeight: 900, color: '#DC2626', lineHeight: 1, fontStyle: 'italic', fontFamily: 'Georgia, serif' }}>i</span>
               </button>
             </div>
             <div style={{ fontSize: 9, fontWeight: 700, color: '#EF4444', marginBottom: 10 }}>p.a. interest</div>
