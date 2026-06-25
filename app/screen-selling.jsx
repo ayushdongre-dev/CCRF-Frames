@@ -5,7 +5,7 @@
 // ── Animated credit-card stack: shuffles in, number + name type in ──
 function AnimCard({ playKey }) {
   const full = '1221 3677 8210 0223';
-  const name = 'KAMALA K.';
+  const name = 'AYUSH D.';
   const [numShown, setNumShown] = useState(0);
   const [nameShown, setNameShown] = useState(0);
   const [shuffled, setShuffled] = useState(false);
@@ -586,7 +586,7 @@ function SavingsScreen({ go, monthly = 30000, setMonthly }) {
             textAlign: 'center',
             minHeight: 175
           }}>
-            <div style={{ fontSize: 9.5, fontWeight: 800, color: '#DC2626', letterSpacing: 0.6, textTransform: 'uppercase', marginBottom: 2 }}>Credit Cards</div>
+            <div style={{ fontSize: 9.5, fontWeight: 800, color: '#DC2626', letterSpacing: 0.6, textTransform: 'uppercase', marginBottom: 2 }}>Your Card Now</div>
             <div style={{ fontSize: 34, fontWeight: 900, color: '#DC2626', fontFamily: 'Sora, sans-serif', letterSpacing: -1, lineHeight: 1.1 }}>54%</div>
             <div style={{ fontSize: 9, fontWeight: 700, color: '#EF4444', marginBottom: 10 }}>p.a. interest</div>
             <div style={{
@@ -895,7 +895,7 @@ function SavingsScreen({ go, monthly = 30000, setMonthly }) {
 
                     <div style={{ marginTop: 12, background: '#FFF9F0', borderRadius: 14, padding: '12px 14px', fontSize: 12.5, color: '#8A5A00', lineHeight: 1.5, fontWeight: 600, border: '1px solid #FFE4C4', display: 'flex', alignItems: 'flex-start', gap: 8 }}>
                       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#8A5A00" strokeWidth="2.5" style={{ flexShrink: 0, marginTop: 1 }}><circle cx="12" cy="12" r="10" /><path d="M12 16v-4M12 8h.01" /></svg>
-                      Interest accrues daily from the transaction date — the longer it stays, the more expensive it gets.
+                      Interest accrues daily from the transaction date. The longer it stays, the more expensive it gets.
                     </div>
                   </>
                 ) : (
@@ -946,7 +946,7 @@ function SavingsScreen({ go, monthly = 30000, setMonthly }) {
 
                     <div style={{ marginTop: 12, background: 'linear-gradient(90deg, #F3F1FA, #FAFAFD)', borderRadius: 14, padding: '14px 16px', borderLeft: '4px solid #5B3FD4', fontSize: 12.5, color: '#4B4960', lineHeight: 1.5, fontWeight: 600 }}>
                       <span style={{ fontSize: 10, fontWeight: 800, color: '#5B3FD4', letterSpacing: 0.8, textTransform: 'uppercase', display: 'block', marginBottom: 4 }}>Advisory</span>
-                      With Melt at 25% p.a., a much larger share of your {inr(monthly)} pays down your actual debt — clearing it <strong>{monthsDiff} months sooner</strong>.
+                      With Melt at 25% p.a., a much larger share of your {inr(monthly)} pays down your actual debt, clearing it <strong>{monthsDiff} months sooner</strong>.
                     </div>
                   </>
                 )}

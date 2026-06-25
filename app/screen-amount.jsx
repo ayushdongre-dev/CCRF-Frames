@@ -176,7 +176,7 @@ function AmountSelection({ go }) {
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><rect x="4" y="11" width="16" height="9" rx="2" stroke={AMT.purple} strokeWidth="1.8" /><path d="M8 11V8a4 4 0 0 1 8 0v3" stroke={AMT.purple} strokeWidth="1.8" strokeLinecap="round" /></svg>
           </div>
           <div style={{ fontSize: 12.3, color: AMT.ink2, lineHeight: 1.5 }}>
-            Pay your card bills, then come back to unlock the remaining <b style={{ color: AMT.ink }}>₹2,50,000</b>.
+            Pay your card bills, then come back to unlock the remaining <b style={{ color: AMT.ink }}>₹3,00,000</b>.
           </div>
         </div>
       </div>

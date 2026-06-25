@@ -110,7 +110,7 @@ function LoanCard({ countVal, barFilled, showVerifiedBanner }) {
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 14 }}>
         <div>
           <div style={{ fontSize: 10, fontWeight: 600, color: 'rgba(255,255,255,.38)', letterSpacing: 0.5, marginBottom: 2 }}>LOAN ACCOUNT</div>
-          <div style={{ fontSize: 13, fontWeight: 700, color: 'rgba(255,255,255,.88)', letterSpacing: 1.5, fontFamily: 'monospace' }}>CCRF ···· ···· 4521</div>
+          <div style={{ fontSize: 13, fontWeight: 700, color: 'rgba(255,255,255,.88)', letterSpacing: 1.5, fontFamily: 'monospace' }}>Ayush ···· ···· 4521</div>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 5, background: 'rgba(31,169,113,.18)', border: '1px solid rgba(31,169,113,.3)', borderRadius: 999, padding: '4px 10px' }}>
           <div style={{ width: 6, height: 6, borderRadius: '50%', background: G, animation: 'blink 2s ease-in-out infinite' }} />
