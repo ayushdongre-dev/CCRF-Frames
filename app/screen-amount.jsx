@@ -103,14 +103,14 @@ function ArcDial({ value, min, max, cap, step, onChange }) {
 
 function AmountSelection({ go }) {
   const sora = { fontFamily: "'Sora', -apple-system, system-ui, sans-serif" };
-  const MIN = 50000, MAX = 500000, CAP = 250000, STEP = 10000;
+  const MIN = 50000, MAX = 500000, CAP = 200000, STEP = 10000;
   const [amount, setAmount] = useState(0);
   const introPlayed = useRef(false);
   useEffect(() => {
     if (introPlayed.current) return;
     introPlayed.current = true;
     let startTs = null;
-    const TARGET = 250000, DURATION = 1200;
+    const TARGET = 200000, DURATION = 1200;
     const step = (ts) => {
       if (!startTs) startTs = ts;
       const p = Math.min((ts - startTs) / DURATION, 1);
