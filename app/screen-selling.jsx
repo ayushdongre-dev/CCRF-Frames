@@ -567,7 +567,27 @@ function SavingsScreen({ go, monthly = 30000, setMonthly }) {
       {/* ── COMPARISON ── */}
       <div style={{ margin: '8px 16px 0', animation: 'fadeUp .55s .06s both' }}>
         <div style={{ fontSize: 10.5, fontWeight: 800, color: '#88859E', letterSpacing: 0.8, textTransform: 'uppercase', marginBottom: 8, paddingLeft: 2 }}>Why Melt?</div>
+        <style>{`
+          @keyframes softGlow {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(91,63,212,0.08), 0 2px 6px rgba(91,63,212,0.12); }
+            50%       { box-shadow: 0 0 10px 3px rgba(91,63,212,0.26), 0 2px 6px rgba(91,63,212,0.12); }
+          }
+        `}</style>
         <div style={{ display: 'flex', gap: 8, alignItems: 'stretch', padding: '4px 0', position: 'relative' }}>
+          {/* Arrow circle */}
+          <div style={{
+            position: 'absolute', left: '50%', top: '50%',
+            transform: 'translate(-50%, -50%)',
+            width: 30, height: 30, borderRadius: '50%',
+            background: '#fff',
+            animation: 'softGlow 2.4s ease-in-out infinite',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            zIndex: 3,
+          }}>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none">
+              <path d="M5 12h14M13 6l6 6-6 6" stroke="#5B3FD4" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+          </div>
 
           {/* Credit Cards (Red Card) */}
           <div style={{
@@ -834,7 +854,7 @@ function SavingsScreen({ go, monthly = 30000, setMonthly }) {
                 <div style={{ width: 44, height: 5, borderRadius: 999, background: '#E0DCF0', margin: '10px auto 8px' }} />
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '4px 18px 12px', borderBottom: '1px solid #F0ECFA' }}>
                   <div style={{ fontSize: 15, fontWeight: 800, color: '#161331', letterSpacing: -0.3 }}>
-                    {sheetOpen === 'interest' ? 'How Card Interest Grows' : 'Paying Only Minimum Due?'}
+                    {sheetOpen === 'interest' ? 'How Credit Card Interest Grows' : 'Paying Only Minimum Due?'}
                   </div>
                   <button onClick={dismissSheet} style={{ fontSize: 13, fontWeight: 700, color: '#5B3FD4', background: '#F4F1FF', border: 'none', cursor: 'pointer', padding: '4px 10px', borderRadius: 8 }}>Close</button>
                 </div>
@@ -847,14 +867,14 @@ function SavingsScreen({ go, monthly = 30000, setMonthly }) {
                     <div style={{ background: '#F4F1FF', borderRadius: 14, padding: '10px 14px', marginBottom: 14, display: 'flex', alignItems: 'center', gap: 8, border: '1px solid #DDD6FE' }}>
                       {purpleCalcIcon}
                       <span style={{ fontSize: 12, fontWeight: 700, color: '#5B3FD4', lineHeight: 1.4 }}>
-                        Your example: <strong>₹5L debt</strong> · <strong>{inr(monthly)}/mo</strong> EMI · <strong>54% p.a.</strong>
+                        Considering:  <strong>₹5L debt</strong>,  <strong>{inr(monthly)}/mo</strong>  EMI
                       </span>
                     </div>
 
                     {/* Receipt ledger */}
                     <div style={{ background: '#FAFAFA', borderRadius: 18, padding: '18px 16px', border: '1px solid #E8E4F5' }}>
                       <div style={{ fontSize: 10, fontWeight: 800, color: '#88859E', letterSpacing: 0.8, textTransform: 'uppercase', marginBottom: 12, textAlign: 'center' }}>
-                        What You Pay Over {nC} Months
+                        With your Current Credit Cards you Pay
                       </div>
                       <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -904,7 +924,7 @@ function SavingsScreen({ go, monthly = 30000, setMonthly }) {
                     <div style={{ background: '#F4F1FF', borderRadius: 14, padding: '10px 14px', marginBottom: 14, display: 'flex', alignItems: 'center', gap: 8, border: '1px solid #DDD6FE' }}>
                       {purpleCalcIcon}
                       <span style={{ fontSize: 12, fontWeight: 700, color: '#5B3FD4', lineHeight: 1.4 }}>
-                        Your example: <strong>₹5L debt</strong> · <strong>{inr(monthly)}/mo</strong> payment · <strong>54% p.a.</strong>
+                        Considering:  <strong>₹5L debt</strong>,  <strong>{inr(monthly)}/mo</strong> payment
                       </span>
                     </div>
 

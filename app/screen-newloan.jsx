@@ -181,7 +181,7 @@ function NewLoanScreen({ go }) {
 
       {/* Bottom CTAs */}
       <BottomBar>
-        <button onClick={function(){ go('revisedoffer'); }} style={{
+        <button onClick={function(){ go('topupcontinues'); }} style={{
           width: '100%', height: 52, borderRadius: 15, border: 'none', cursor: 'pointer',
           background: 'linear-gradient(135deg,var(--primary),#4F46E5)',
           color: '#fff', fontWeight: 700, fontSize: 15, ...sora,
@@ -194,7 +194,7 @@ function NewLoanScreen({ go }) {
         >
           Select EMI &amp; Tenure
         </button>
-        <button style={{ width: '100%', height: 44, borderRadius: 13, border: '1.5px solid var(--line)', background: '#fff', color: 'var(--primary)', fontWeight: 600, fontSize: 13.5, cursor: 'pointer' }}>
+        <button onClick={function(){ go('topupcontinues'); }} style={{ width: '100%', height: 44, borderRadius: 13, border: '1.5px solid var(--line)', background: '#fff', color: 'var(--primary)', fontWeight: 600, fontSize: 13.5, cursor: 'pointer' }}>
           View Details
         </button>
       </BottomBar>
@@ -202,4 +202,28 @@ function NewLoanScreen({ go }) {
   );
 }
 
+function TopupContinues({ go }) {
+  var sora = { fontFamily: "'Sora',sans-serif" };
+  return (
+    <div style={{ minHeight: '100%', display: 'flex', flexDirection: 'column', background: '#fff', animation: 'fadeIn .25s' }}>
+      <EquallHead onHome={function(){ go('home'); }} />
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '0 32px 40px', textAlign: 'center' }}>
+        {/* Icon */}
+        <div style={{ width: 72, height: 72, borderRadius: 22, background: 'linear-gradient(135deg,#EDE9FE,#DDD6FE)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 24, boxShadow: '0 12px 32px -10px rgba(127,85,223,.28)' }}>
+          <svg width="34" height="34" viewBox="0 0 24 24" fill="none">
+            <path d="M12 2L2 7l10 5 10-5-10-5z" stroke="#7F55DF" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+            <path d="M2 17l10 5 10-5" stroke="#7F55DF" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+            <path d="M2 12l10 5 10-5" stroke="#7F55DF" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
+        </div>
+        {/* Heading */}
+        <div style={{ fontWeight: 800, fontSize: 22, color: '#1B192E', letterSpacing: -0.4, lineHeight: 1.15, ...sora }}>
+          Top-up journey continues
+        </div>
+      </div>
+    </div>
+  );
+}
+
 window.NewLoanScreen = NewLoanScreen;
+window.TopupContinues = TopupContinues;

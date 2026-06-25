@@ -90,8 +90,8 @@ function PdfUpload({ go, selected, showLogos }) {
           <div style={{ height: '100%', width: (doneCount / cards.length * 100) + '%', background: 'var(--primary)', borderRadius: 9, transition: 'width .3s' }} />
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
-          <button onClick={() => go('success')} style={{ fontSize: 14, fontWeight: 700, color: 'var(--ink-2)', whiteSpace: 'nowrap' }}>I'll provide later</button>
-          <Btn variant="dark" onClick={() => go('success')} style={{ flex: 1, opacity: doneCount === cards.length ? 1 : 0.92 }}>Continue</Btn>
+          <button onClick={() => go('amountselect')} style={{ fontSize: 14, fontWeight: 700, color: 'var(--ink-2)', whiteSpace: 'nowrap' }}>I'll provide later</button>
+          <Btn variant="dark" onClick={() => go('amountselect')} style={{ flex: 1, opacity: doneCount === cards.length ? 1 : 0.92 }}>Continue</Btn>
         </div>
       </div>
     </div>

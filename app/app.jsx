@@ -69,6 +69,7 @@ function App() {
       case 'verifying': return <VerifyingScreen go={go} setPdState={setPdState} />;
       case 'reward': return <RewardScreen go={go} />;
       case 'newloan': return <NewLoanScreen go={go} />;
+      case 'topupcontinues': return <TopupContinues go={go} />;
       case 'success': return <Success go={go} />;
       default: return <MultiOffer go={go} />;
     }

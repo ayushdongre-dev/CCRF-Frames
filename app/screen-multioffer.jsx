@@ -28,7 +28,7 @@ function MultiOffer({ go }) {
               <path d="M12 3l7 3v5c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6l7-3z" fill={P} />
               <path d="M9 12l2 2 4-4" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
-            <span style={{ fontSize: 14, fontWeight: 800, color: P, ...sora }}>Approved for ₹2,50,000</span>
+            <span style={{ fontSize: 14, fontWeight: 800, color: P, ...sora }}>Approved for ₹2,00,000</span>
           </div>
           <div style={{ fontSize: 13, color: muted, marginTop: 10, fontWeight: 500 }}>Pick what works best for you</div>
         </div>

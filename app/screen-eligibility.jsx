@@ -158,109 +158,125 @@ function CashWad({ color }) {
   );
 }
 
-// Stage 2 visual — cycling card deck: coin flies in → card turns green → rotates back → next card
+// Stage 2 visual — CashWad (same as Stage 1) + bold animated arrow + card deck melts one by one
 function StageMelt() {
   var CARDS = [
     'linear-gradient(135deg,#7C6CF5,#4A2FC0)',
-    'linear-gradient(135deg,#6A5BE0,#3D3DC4)',
+    'linear-gradient(135deg,#5A4BD1,#3630A8)',
     'linear-gradient(135deg,#4A2FC0,#2A1E72)',
   ];
   var frst = useState(0); var frontIdx = frst[0]; var setFrontIdx = frst[1];
   var gfst = useState(false); var greenFill = gfst[0]; var setGreenFill = gfst[1];
-  var cast = useState(false); var coinActive = cast[0]; var setCoinActive = cast[1];
+  var efst = useState(false); var cardExit = efst[0]; var setCardExit = efst[1];
   var ts = useRef([]);
 
   useEffect(function() {
     var timers = ts.current;
     var add = function(fn, ms) { var id = setTimeout(fn, ms); timers.push(id); return id; };
     var loop = function() {
-      setGreenFill(false);
-      setCoinActive(false);
+      setGreenFill(false); setCardExit(false);
       add(function() {
-        setCoinActive(true);
+        setGreenFill(true);
         add(function() {
-          setCoinActive(false);
-          setGreenFill(true);
+          setCardExit(true); setGreenFill(false);
           add(function() {
             setFrontIdx(function(i) { return (i + 1) % 3; });
-            setGreenFill(false);
-            add(loop, 700);
-          }, 900);
-        }, 520);
-      }, 350);
+            setCardExit(false);
+            add(loop, 520);
+          }, 460);
+        }, 680);
+      }, 900);
     };
-    add(loop, 400);
+    add(loop, 600);
     return function() { timers.forEach(clearTimeout); timers.length = 0; };
   }, []);
 
   var POS = [
-    { x: 12,  y: 5,  r: 7,   s: 1,     z: 10 },
-    { x: -1,  y: 0,  r: -1,  s: 0.925, z: 5  },
-    { x: -14, y: 5,  r: -8,  s: 0.85,  z: 1  },
+    { x: 8,  y: 0,  r: 3,   s: 1,    z: 10 },
+    { x: 0,  y: 4,  r: -2,  s: 0.93, z: 5  },
+    { x: -8, y: 8,  r: -6,  s: 0.86, z: 1  },
   ];
 
   return (
-    <div style={{ background: '#F4F4FC', borderRadius: 14, padding: '22px 14px 18px', border: '1px solid #E2DFF4', position: 'relative', overflow: 'visible' }}>
+    <div style={{ display: 'flex', alignItems: 'center', background: '#F0F8F4', borderRadius: 14, border: '1px solid #D7EEDF', padding: '14px 12px', gap: 0 }}>
       <style>{`
-        @keyframes coinFlyIntoCard {
-          0%   { transform: translate(-110px, -50%) scale(0);    opacity: 0; }
-          10%  { transform: translate(-110px, -56%) scale(1.15); opacity: 1; }
-          65%  { transform: translate(-4px,   -58%) scale(1.05); opacity: 1; }
-          82%  { transform: translate(4px,    -52%) scale(0.7);  opacity: 0.5; }
-          100% { transform: translate(10px,   -50%) scale(0);    opacity: 0; }
+        @keyframes arrowFlow {
+          0%   { opacity: 0.35; transform: translateX(-3px); }
+          50%  { opacity: 1;    transform: translateX(2px); }
+          100% { opacity: 0.35; transform: translateX(-3px); }
+        }
+        @keyframes chevSeq {
+          0%, 100% { opacity: 0.18; }
+          33%      { opacity: 1; }
         }
       `}</style>
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12 }}>
-        <div style={{ position: 'relative', width: 130, height: 82 }}>
-          {coinActive && (
-            <div style={{
-              position: 'absolute', left: '50%', top: '50%',
-              animation: 'coinFlyIntoCard 0.52s cubic-bezier(.2,.8,.2,1) forwards',
-              zIndex: 20, pointerEvents: 'none',
-            }}>
-              <Coin />
-            </div>
-          )}
-          {CARDS.map(function(grad, idx) {
-            var rank = (idx - frontIdx + 3) % 3;
-            var p = POS[rank];
-            var isFront = rank === 0;
+
+      {/* LEFT — same CashWad as Stage 1 */}
+      <div style={{ flexShrink: 0 }}>
+        <CashWad color="#2D9E6B" />
+      </div>
+
+      {/* CENTER — bold arrow with sequential chevrons to make direction unmistakable */}
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 4, padding: '0 6px' }}>
+        {/* Three sequential chevrons — each pulses in turn left→right */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+          {[0, 1, 2].map(function(k) {
             return (
-              <div key={idx} style={{
-                position: 'absolute', left: '50%', top: '50%',
-                width: 80, height: 53, borderRadius: 10,
-                background: grad,
-                transform: 'translate(calc(-50% + ' + p.x + 'px), calc(-50% + ' + p.y + 'px)) rotate(' + p.r + 'deg) scale(' + p.s + ')',
-                transformOrigin: 'center center', zIndex: p.z,
-                transition: 'transform 0.5s cubic-bezier(.4,0,.2,1)',
-                overflow: 'hidden',
-                border: '1px solid rgba(255,255,255,.3)',
-                boxShadow: isFront ? '0 10px 24px -8px rgba(40,20,90,.65)' : '0 3px 8px -3px rgba(40,20,90,.3)',
-              }}>
-                <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(115deg,rgba(255,255,255,.24),transparent 55%)' }} />
-                <div style={{ position: 'absolute', left: 8, top: 10, width: 13, height: 9, borderRadius: 2, background: 'linear-gradient(135deg,#F4D58A,#C99A3A)' }} />
-                <div style={{ position: 'absolute', right: 8, top: 10, display: 'flex' }}>
-                  <span style={{ width: 8, height: 8, borderRadius: 999, background: 'rgba(255,90,90,.85)' }} />
-                  <span style={{ width: 8, height: 8, borderRadius: 999, background: 'rgba(255,190,70,.85)', marginLeft: -3.5 }} />
-                </div>
-                {isFront && (
-                  <div style={{
-                    position: 'absolute', inset: 0, borderRadius: 10,
-                    background: 'rgba(45,158,107,0.93)',
-                    opacity: greenFill ? 1 : 0,
-                    transition: greenFill ? 'opacity 0.36s ease-in' : 'opacity 0.18s ease-out',
-                    display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  }}>
-                    <svg width="22" height="22" viewBox="0 0 24 24" style={{ opacity: greenFill ? 1 : 0, transition: 'opacity 0.15s .18s' }}>
-                      <path d="M5 13l4 4 10-11" stroke="#fff" strokeWidth="3" fill="none" strokeLinecap="round" strokeLinejoin="round" />
-                    </svg>
-                  </div>
-                )}
-              </div>
+              <svg key={k} width="18" height="18" viewBox="0 0 24 24" fill="none"
+                style={{ animation: 'chevSeq 1.2s ease-in-out ' + (k * 0.32) + 's infinite' }}>
+                <path d="M9 6l6 6-6 6" stroke="#2D9E6B" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
             );
           })}
         </div>
-        <div style={{ fontSize: 11, fontWeight: 700, color: '#2D9E6B', letterSpacing: 0.4, opacity: 0.85 }}>Clearing your cards</div>
+        <span style={{ fontSize: 9, fontWeight: 700, color: '#2D9E6B', letterSpacing: 0.5, opacity: 0.75, fontFamily: "'Sora',sans-serif" }}>pays off</span>
+      </div>
+
+      {/* RIGHT — card deck */}
+      <div style={{ position: 'relative', width: 96, height: 70, flexShrink: 0 }}>
+        {CARDS.map(function(grad, idx) {
+          var rank = (idx - frontIdx + 3) % 3;
+          var p = POS[rank];
+          var isFront = rank === 0;
+          var isExiting = isFront && cardExit;
+          return (
+            <div key={idx} style={{
+              position: 'absolute', left: '50%', top: '50%',
+              width: 84, height: 56, borderRadius: 10,
+              background: grad,
+              transform: 'translate(calc(-50% + ' + p.x + 'px), calc(-50% + ' + p.y + 'px)) rotate(' + p.r + 'deg) scale(' + (isExiting ? 0.05 : p.s) + ')',
+              opacity: isExiting ? 0 : 1,
+              transformOrigin: 'center center',
+              zIndex: p.z,
+              transition: isExiting
+                ? 'transform 0.42s cubic-bezier(.6,0,1,.85), opacity 0.36s 0.04s ease-out'
+                : 'transform 0.52s cubic-bezier(.4,0,.2,1), opacity 0.4s ease-in',
+              overflow: 'hidden',
+              border: '1px solid rgba(255,255,255,.3)',
+              boxShadow: isFront ? '0 12px 28px -8px rgba(40,20,90,.72)' : '0 4px 10px -4px rgba(40,20,90,.28)',
+            }}>
+              <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(120deg,rgba(255,255,255,.26),transparent 55%)' }} />
+              <div style={{ position: 'absolute', left: 8, top: 9, width: 13, height: 9, borderRadius: 2, background: 'linear-gradient(135deg,#F4D58A,#C99A3A)' }} />
+              <div style={{ position: 'absolute', right: 8, top: 9, display: 'flex' }}>
+                <span style={{ width: 8, height: 8, borderRadius: 999, background: 'rgba(255,90,90,.85)' }} />
+                <span style={{ width: 8, height: 8, borderRadius: 999, background: 'rgba(255,190,70,.85)', marginLeft: -3.5 }} />
+              </div>
+              {isFront && (
+                <div style={{
+                  position: 'absolute', inset: 0, borderRadius: 10,
+                  background: 'rgba(45,158,107,0.94)',
+                  opacity: greenFill ? 1 : 0,
+                  transition: greenFill ? 'opacity 0.3s ease-in' : 'opacity 0.14s ease-out',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                }}>
+                  <svg width="24" height="24" viewBox="0 0 24 24" style={{ opacity: greenFill ? 1 : 0, transition: 'opacity 0.16s .1s' }}>
+                    <path d="M5 13l4 4 10-11" stroke="#fff" strokeWidth="3.2" fill="none" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                </div>
+              )}
+            </div>
+          );
+        })}
       </div>
     </div>
   );

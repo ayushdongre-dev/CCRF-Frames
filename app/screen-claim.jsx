@@ -34,7 +34,7 @@ function ClaimScreen({ go }) {
           Cleared your cards?
         </div>
         <div style={sub}>
-          Help us verify faster by uploading a bank statement — or sit tight, we'll detect it automatically.
+          Upload a recent bank statement to get verified in minutes — or skip it, we'll auto-detect your cleared cards within a few days.
         </div>
 
         {/* Divider */}
