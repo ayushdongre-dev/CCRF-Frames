@@ -19,7 +19,7 @@ function Eligibility({ go }) {
   // ── 3 clean stages ──
   const STAGES = [
     { state: 'done', label: 'Available today', desc: 'Lands in your salary bank account' },
-    { state: 'active', label: 'Melt your card bills', desc: 'Use it to clear your outstanding dues by 20th June' },
+    { state: 'active', label: 'Melt your card bills', desc: 'Pay your card dues within 10 days of disbursal' },
     { state: 'locked', label: 'Unlock Round 2', desc: 'Repay on time and Round 2 opens up automatically' },
   ];
 
@@ -103,11 +103,11 @@ function Eligibility({ go }) {
 
         {/* savings + tenure summary (bottom) */}
         <div style={{ display: 'flex', gap: 12, marginTop: 18 }}>
-          <div style={{ flex: 1, background: ML.greenL, borderRadius: 14, padding: '13px 15px' }}>
+          <div style={{ flex: 1, background: 'linear-gradient(145deg, #E8F8F1 0%, #D4F0E3 100%)', borderRadius: 14, padding: '13px 15px', border: '1px solid rgba(31,169,113,0.18)', boxShadow: '0 4px 0 rgba(31,169,113,0.14), 0 8px 18px rgba(31,169,113,0.10), inset 0 1px 0 rgba(255,255,255,0.7)' }}>
             <div style={{ fontWeight: 800, fontSize: 21, color: ML.green, letterSpacing: -0.5, ...sora }}>₹28,080</div>
             <div style={{ fontSize: 11.5, color: '#3F7A66', fontWeight: 600, marginTop: 2 }}>saved in interest</div>
           </div>
-          <div style={{ flex: 1, background: ML.greenL, borderRadius: 14, padding: '13px 15px' }}>
+          <div style={{ flex: 1, background: 'linear-gradient(145deg, #E8F8F1 0%, #D4F0E3 100%)', borderRadius: 14, padding: '13px 15px', border: '1px solid rgba(31,169,113,0.18)', boxShadow: '0 4px 0 rgba(31,169,113,0.14), 0 8px 18px rgba(31,169,113,0.10), inset 0 1px 0 rgba(255,255,255,0.7)' }}>
             <div style={{ fontWeight: 800, fontSize: 21, color: ML.green, letterSpacing: -0.5, ...sora }}>3 months</div>
             <div style={{ fontSize: 11.5, color: '#3F7A66', fontWeight: 600, marginTop: 2 }}>shorter tenure</div>
           </div>

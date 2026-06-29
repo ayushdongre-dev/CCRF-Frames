@@ -455,7 +455,7 @@ function PostDisbursal({ go, pdState, setPdState }) {
                       <div key={shimmerN} style={{ position: 'absolute', top: 0, left: 0, width: '45%', height: '100%', background: 'linear-gradient(90deg,transparent,rgba(255,255,255,.22),transparent)', animation: shimmerN === 0 ? 'shimmer .8s 2.6s both' : 'shimmer .8s both' }} />
                     </div>
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" style={{ position: 'relative', zIndex: 1 }}><path d="M5 13l5 5L19 7" stroke="#fff" strokeWidth="2.8" strokeLinecap="round" strokeLinejoin="round" /></svg>
-                    <span style={{ position: 'relative', zIndex: 1 }}>Mark as Done</span>
+                    <span style={{ position: 'relative', zIndex: 1 }}>Unlock More</span>
                   </button>
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 4, marginTop: 7 }}>
                     <svg width="11" height="11" viewBox="0 0 24 24" fill="none"><path d="M12 3l7 3v5c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6l7-3z" stroke={MUTED} strokeWidth="1.6" strokeLinejoin="round" /></svg>

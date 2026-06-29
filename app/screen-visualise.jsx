@@ -364,45 +364,48 @@ function CumulativeChart({ cardInt, meltInt, cardMonths, meltMonths, meltInteres
 
 // ── UI Components ─────────────────────────────────────────────────
 function Card({ children }) {
-  return <div style={{ background: '#fff', borderRadius: 18, padding: '16px 16px 14px', marginTop: 14, boxShadow: '0 10px 26px -22px rgba(40,30,80,.5)' }}>{children}</div>;
-}
-function CardTitle({ children }) {
-  return <div style={{ fontWeight: 700, fontSize: 15, lineHeight: 1.25, marginBottom: 14 }}>{children}</div>;
-}
-function Caption({ children }) {
-  return <div style={{ fontSize: 11, color: 'var(--muted)', textAlign: 'center', marginTop: 8 }}>{children}</div>;
+  return (
+    <div style={{ background: '#fff', borderRadius: 22, padding: '18px 16px 16px', marginTop: 14, border: '1px solid rgba(0,0,0,0.05)', boxShadow: '0 2px 12px rgba(0,0,0,0.06), 0 8px 32px rgba(0,0,0,0.05)' }}>
+      {children}
+    </div>
+  );
 }
 function Row({ label, value }) {
   return (
-    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px 0' }}>
-      <span style={{ fontSize: 14, color: 'var(--ink-2)' }}>{label}</span>
-      <span style={{ fontWeight: 800, fontSize: 18, color: 'var(--green)', whiteSpace: 'nowrap' }}>{value}</span>
+    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px 0' }}>
+      <span style={{ fontSize: 13.5, color: '#1A5C3A', fontWeight: 600 }}>{label}</span>
+      <span style={{ fontWeight: 900, fontSize: 20, color: '#16A34A', whiteSpace: 'nowrap', fontFamily: 'Sora, sans-serif', letterSpacing: -0.5 }}>{value}</span>
     </div>
   );
 }
 function Mini({ tone, label, rate, time, interest }) {
   const isRed = tone === 'red';
-  const c      = isRed ? 'var(--red)'     : 'var(--primary)';
-  const bg     = isRed ? '#FDEDE8'        : '#EDE8FF';
-  const border = isRed ? '#F5BDB5'        : '#C4B5FD';
-  const muted  = '#666';
+  const accent  = isRed ? '#E8453C'                        : 'var(--primary)';
+  const c       = isRed ? '#C0392B'                        : '#5B3FD4';
+  const border  = isRed ? 'rgba(232,69,60,0.14)'          : 'rgba(91,63,212,0.14)';
+  const shadow  = isRed ? '0 4px 16px rgba(212,79,72,.07)': '0 4px 16px rgba(91,63,212,.08)';
+  const divider = isRed ? 'rgba(232,69,60,0.10)'          : 'rgba(91,63,212,0.10)';
   return (
-    <div style={{ flex: 1, background: bg, border: `1px solid ${border}`, borderRadius: 14, padding: '12px 13px', textAlign: 'center' }}>
-      <div style={{ fontWeight: 700, fontSize: 14, color: c }}>{label}</div>
-      <div style={{ fontSize: 11, fontWeight: 600, color: muted, marginTop: 2 }}>{rate}</div>
-      <div style={{ fontSize: 10, fontWeight: 700, color: muted, letterSpacing: 0.5, marginTop: 10 }}>TOTAL INTEREST</div>
-      <div style={{ fontWeight: 800, fontSize: 18, color: c, marginTop: 1 }}>{interest}</div>
-      <div style={{ fontSize: 10, fontWeight: 700, color: muted, letterSpacing: 0.5, marginTop: 8 }}>TIMEFRAME</div>
-      <div style={{ fontWeight: 800, fontSize: 18, color: c, marginTop: 1 }}>{time}</div>
+    <div style={{ flex: 1, background: '#fff', border: `1px solid ${border}`, borderRadius: 16, overflow: 'hidden', boxShadow: shadow }}>
+      <div style={{ height: 4, background: accent }} />
+      <div style={{ padding: '11px 12px 14px' }}>
+        <div style={{ fontWeight: 700, fontSize: 12.5, color: c, lineHeight: 1.25, marginBottom: 3, minHeight: 30 }}>{label}</div>
+        <div style={{ fontSize: 9.5, fontWeight: 500, color: '#999', marginBottom: 11 }}>{rate}</div>
+        <div style={{ fontSize: 9, fontWeight: 700, color: '#bbb', letterSpacing: 0.6, marginBottom: 3 }}>TOTAL INTEREST</div>
+        <div style={{ fontWeight: 900, fontSize: 17, color: c, fontFamily: 'Sora, sans-serif', letterSpacing: -0.3 }}>{interest}</div>
+        <div style={{ height: 1, background: divider, margin: '9px 0' }} />
+        <div style={{ fontSize: 9, fontWeight: 700, color: '#bbb', letterSpacing: 0.6, marginBottom: 3 }}>TIMEFRAME</div>
+        <div style={{ fontWeight: 900, fontSize: 17, color: c, fontFamily: 'Sora, sans-serif', letterSpacing: -0.3 }}>{time}</div>
+      </div>
     </div>
   );
 }
 function Legend({ items }) {
   return (
-    <div style={{ display: 'flex', gap: 18, justifyContent: 'center', marginTop: 12 }}>
+    <div style={{ display: 'flex', gap: 20, justifyContent: 'center', marginTop: 14, flexWrap: 'wrap' }}>
       {items.map(([c, l], i) => (
-        <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12, color: 'var(--ink-2)', fontWeight: 600 }}>
-          <span style={{ width: 9, height: 9, borderRadius: 999, background: c }} />{l}
+        <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 7, fontSize: 11, color: 'var(--ink-2)', fontWeight: 600 }}>
+          <span style={{ width: 22, height: 3.5, borderRadius: 999, background: c, flexShrink: 0 }} />{l}
         </div>
       ))}
     </div>
@@ -428,42 +431,73 @@ function Visualise({ go, ccrfRate = 22, monthly = 30000 }) {
   const meltIntPadded = [...meltAmort.intArr, ...Array(Math.max(0, cardMonths - meltAmort.months)).fill(meltInterest)];
 
   return (
-    <div style={{ minHeight: '100%', background: 'linear-gradient(180deg,#EFEEFE,#E7E3FA)', animation: 'fadeIn .35s' }}>
-      <Header title="Savings illustration" onBack={() => go('eligibility')} />
-      <div style={{ padding: '4px 18px 30px' }}>
-        <Chip tone="plain" icon={Icon.shield('var(--primary)')}>Eligibility + Savings</Chip>
-        <div style={{ fontSize: 13.5, color: 'var(--ink-2)', marginTop: 14 }}>Your Outstanding Credit Card Due</div>
-        <div style={{ fontWeight: 800, fontSize: 34, color: 'var(--primary)', letterSpacing: -0.5 }}>{inr(VIZ_DUE)}</div>
-        <div style={{ fontSize: 12.5, color: 'var(--muted)', marginTop: 4 }}>based on a monthly credit card payment of {inr(monthly)}</div>
+    <div style={{ minHeight: '100%', background: '#F4F3FB', animation: 'fadeIn .35s' }}>
+      <Header title="Savings Illustration" onBack={() => go('eligibility')} />
+      <div style={{ padding: '2px 18px 32px' }}>
 
+        {/* ── Hero card ── */}
+        <div style={{
+          background: 'linear-gradient(140deg, #5B3FD4 0%, #3E2B9E 100%)',
+          borderRadius: 22, padding: '22px 20px 20px', marginTop: 8,
+          overflow: 'hidden', position: 'relative',
+          boxShadow: '0 8px 32px rgba(91,63,212,0.30), 0 2px 8px rgba(0,0,0,0.12)'
+        }}>
+          <div style={{ position: 'absolute', top: -40, right: -28, width: 140, height: 140, borderRadius: '50%', background: 'radial-gradient(circle, rgba(255,255,255,0.13) 0%, transparent 70%)', pointerEvents: 'none' }} />
+          <div style={{ position: 'absolute', bottom: -30, left: 10, width: 110, height: 110, borderRadius: '50%', background: 'radial-gradient(circle, rgba(255,255,255,0.07) 0%, transparent 70%)', pointerEvents: 'none' }} />
+          <div style={{ position: 'relative', zIndex: 1 }}>
+            <div style={{ fontSize: 11.5, fontWeight: 600, color: 'rgba(255,255,255,0.65)', letterSpacing: 0.2, marginBottom: 6 }}>Outstanding Credit Card Due</div>
+            <div style={{ fontWeight: 900, fontSize: 38, color: '#fff', letterSpacing: -1.5, fontFamily: 'Sora, sans-serif', lineHeight: 1 }}>{inr(VIZ_DUE)}</div>
+            <div style={{ fontSize: 11.5, color: 'rgba(255,255,255,0.55)', marginTop: 7 }}>Monthly payment · {inr(monthly)}</div>
+            <div style={{ display: 'inline-flex', alignItems: 'center', gap: 5, background: 'rgba(22,163,74,0.88)', borderRadius: 999, padding: '6px 13px', marginTop: 16 }}>
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="3"><polyline points="20 6 9 17 4 12"/></svg>
+              <span style={{ fontSize: 12, fontWeight: 700, color: '#fff' }}>Save {inr(intSaved)} with Melt</span>
+            </div>
+          </div>
+        </div>
+
+        {/* ── Comparison mini cards ── */}
         <div style={{ display: 'flex', gap: 10, marginTop: 14 }}>
-          <Mini tone="red"  label="On Your Current Credit Card" rate={`${CARD_RATE_PCT}%(45% p.a.+18% GST)`} time={`${cardMonths} months`} interest={inr(cardInterest)} />
+          <Mini tone="red"  label="On Your Current Credit Card" rate={`${CARD_RATE_PCT}% (45% p.a. + 18% GST)`} time={`${cardMonths} months`} interest={inr(cardInterest)} />
           <Mini tone="blue" label="With Melt" rate={`${MELT_RATE_PCT}% p.a.`} time={`${meltMonths} months`} interest={inr(meltInterest)} />
         </div>
 
-        <div style={{ background: 'var(--green-l)', borderRadius: 18, padding: '16px 17px', marginTop: 14 }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 9 }}>
-            <div style={{ width: 26, height: 26, borderRadius: 999, background: 'var(--green)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>{Icon.check('#fff', 16)}</div>
-            <span style={{ fontWeight: 800, fontSize: 16 }}>Total Potential Savings With Melt</span>
+        {/* ── Savings banner ── */}
+        <div style={{
+          background: 'linear-gradient(135deg, #F0FDF4, #DCFCE7)',
+          borderRadius: 20, padding: '17px 18px', marginTop: 14,
+          border: '1px solid rgba(22,163,74,0.18)',
+          boxShadow: '0 4px 18px rgba(22,163,74,0.10)'
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 9, marginBottom: 13 }}>
+            <div style={{ width: 30, height: 30, borderRadius: 999, background: 'var(--green)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, boxShadow: '0 2px 8px rgba(22,163,74,0.3)' }}>{Icon.check('#fff', 17)}</div>
+            <span style={{ fontWeight: 800, fontSize: 15.5, color: '#14532D', lineHeight: 1.2 }}>Total Potential Savings With Melt</span>
           </div>
           <Row label="Interest Saved" value={inr(intSaved)} />
-          <div style={{ height: 1, background: 'rgba(31,169,113,.18)', margin: '2px 0' }} />
+          <div style={{ height: 1, background: 'rgba(22,163,74,0.16)', margin: '1px 0' }} />
           <Row label="Time Saved" value={`${moSaved} months`} />
         </div>
 
+        {/* ── Cumulative interest chart ── */}
         <Card>
-          <div style={{ fontWeight: 800, fontSize: 16, color: 'var(--ink)', lineHeight: 1.25, marginBottom: 4 }}>Interest paid over time: On Your Current Credit Card vs With Melt</div>
+          <div style={{ marginBottom: 12 }}>
+            <div style={{ fontWeight: 800, fontSize: 15, color: 'var(--ink)', lineHeight: 1.3 }}>Interest Paid Over Time</div>
+            <div style={{ fontSize: 11.5, color: 'var(--muted)', marginTop: 3, fontWeight: 500 }}>Credit Card vs Melt · drag to explore</div>
+          </div>
           <CumulativeChart cardInt={cardAmort.intArr} meltInt={meltIntPadded} cardMonths={cardMonths} meltMonths={meltMonths} meltInterest={meltInterest} intSaved={intSaved} />
           <Legend items={[['#E8453C', `Credit Card (${CARD_RATE_PCT}% p.a.)`], ['var(--primary)', `With Melt (${MELT_RATE_PCT}% p.a.)`]]} />
         </Card>
 
+        {/* ── Balance repayment chart ── */}
         <Card>
-          <CardTitle>Repayment Journey Over Time: On Your Current Credit Card v/s With Melt</CardTitle>
+          <div style={{ marginBottom: 12 }}>
+            <div style={{ fontWeight: 800, fontSize: 15, color: 'var(--ink)', lineHeight: 1.3 }}>Repayment Journey Over Time</div>
+            <div style={{ fontSize: 11.5, color: 'var(--muted)', marginTop: 3, fontWeight: 500 }}>Outstanding balance month by month</div>
+          </div>
           <BalanceChart cardBal={cardAmort.balArr} meltBal={meltBalPadded} cardMonths={cardMonths} meltMonths={meltMonths} />
           <Legend items={[['var(--red)', `Credit Card (${CARD_RATE_PCT}% p.a.)`], ['var(--primary)', `Melt (${MELT_RATE_PCT}% p.a.)`]]} />
         </Card>
 
-        <div style={{ fontSize: 11.5, color: 'var(--muted)', textAlign: 'center', marginTop: 16, lineHeight: 1.4, padding: '0 10px' }}>
+        <div style={{ fontSize: 11, color: 'var(--muted)', textAlign: 'center', marginTop: 16, lineHeight: 1.5, padding: '0 8px' }}>
           Estimated interest is calculated assuming an annual rate of 54%, including 3–4% monthly interest (up to 45% p.a.) and 18% GST on the interest charged. Actual charges may vary.
         </div>
       </div>

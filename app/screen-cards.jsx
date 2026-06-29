@@ -28,18 +28,9 @@ function CardSelection({ go, selected, setSelected, showLogos }) {
       <Header title="Select your Cards" onBack={() => go('selling')} help />
       <div style={{ padding: '6px 20px 0', flex: 1 }}>
         <div style={{ fontWeight: 800, fontSize: 23 }}>Hey Ayush,</div>
-        <div style={{ fontSize: 14, color: 'var(--ink-2)', marginTop: 2 }}>Let's reduce your credit card debt</div>
+        
         <div style={{ fontWeight: 700, fontSize: 15.5, marginTop: 18 }}>Select your credit cards to consolidate</div>
 
-        <div style={{
-          display: 'flex', gap: 10, alignItems: 'flex-start', background: 'var(--primary-l)',
-          borderRadius: 14, padding: '13px 14px', marginTop: 12,
-        }}>
-          <div style={{ width: 22, height: 22, borderRadius: 999, background: 'var(--primary)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>{Icon.check('#fff', 14)}</div>
-          <div style={{ fontSize: 12.8, color: 'var(--ink-2)', lineHeight: 1.45 }}>
-            Convert your card debt to a lower-interest EMI and save thousands on interest.
-          </div>
-        </div>
 
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', margin: '22px 0 12px' }}>
           <span style={{ fontSize: 11.5, fontWeight: 700, letterSpacing: 1, color: 'var(--muted)' }}>MY CREDIT CARDS</span>
@@ -55,18 +46,21 @@ function CardSelection({ go, selected, setSelected, showLogos }) {
             const atMax = !active && selected.length >= MAX_CARDS;
             return (
               <button key={c.bank} onClick={() => toggle(c.bank)} disabled={atMax} style={{
-                width: '100%', textAlign: 'left', borderRadius: 16, background: '#fff', padding: '14px 15px 13px',
-                boxShadow: active ? '0 0 0 2px var(--primary), 0 14px 26px -18px rgba(127,85,223,.5)' : '0 0 0 1px var(--line)',
-                opacity: atMax ? 0.5 : 1, transition: 'box-shadow .15s', position: 'relative',
+                width: '100%', textAlign: 'left', borderRadius: 16,
+                background: active ? '#FDFCFF' : '#fff',
+                padding: '14px 15px 13px',
+                boxShadow: active
+                  ? '0 0 0 2px #5B3FD4, 0 3px 0 rgba(91,63,212,0.12), 0 10px 22px -6px rgba(91,63,212,0.16), 0 20px 40px -12px rgba(91,63,212,0.09), inset 0 1px 0 rgba(255,255,255,1)'
+                  : '0 0 0 1px var(--line)',
+                opacity: atMax ? 0.5 : 1, transition: 'box-shadow .18s, background .18s', position: 'relative',
               }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 11 }}>
                   <BankLogo id={c.bank} size={34} show={showLogos} />
                   <div style={{ flex: 1, minWidth: 0 }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 7 }}>
                       <span style={{ fontWeight: 700, fontSize: 14, letterSpacing: 0.2 }}>{b.name}</span>
-                      {active && <span style={{ background: 'var(--primary)', color: '#fff', fontSize: 9.5, fontWeight: 700, padding: '2px 7px', borderRadius: 999 }}>SELECTED</span>}
                     </div>
-                    <div style={{ fontSize: 11, color: 'var(--muted)', marginTop: 2 }}>LIMIT: {inr(c.limit)} · •••• {c.last4}</div>
+                    <div style={{ fontSize: 11, color: 'var(--muted)', marginTop: 2 }}>LIMIT: {inr(c.limit)}</div>
                   </div>
                   <div style={{
                     width: 22, height: 22, borderRadius: 999, flexShrink: 0,

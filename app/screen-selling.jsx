@@ -207,109 +207,105 @@ function IceCube({ size = 112, style }) {
   return (
     <svg width={size} height={size} viewBox="0 0 120 120" fill="none" aria-hidden="true" style={style}>
       <defs>
-        <linearGradient id="iceTop" x1="20" y1="16" x2="100" y2="62" gradientUnits="userSpaceOnUse">
-          <stop offset="0" stopColor="#F4FAFF" /><stop offset="1" stopColor="#CBE3FF" />
+        <linearGradient id="iceTp" x1="20" y1="16" x2="100" y2="56" gradientUnits="userSpaceOnUse">
+          <stop offset="0" stopColor="#EBF6FF"/><stop offset="1" stopColor="#B8DCFA"/>
         </linearGradient>
-        <linearGradient id="iceLeft" x1="20" y1="39" x2="60" y2="106" gradientUnits="userSpaceOnUse">
-          <stop offset="0" stopColor="#A9CDF2" /><stop offset="1" stopColor="#6E9FDD" />
+        <linearGradient id="iceLt" x1="20" y1="40" x2="60" y2="104" gradientUnits="userSpaceOnUse">
+          <stop offset="0" stopColor="#72ACD9"/><stop offset="1" stopColor="#3E80BC"/>
         </linearGradient>
-        <linearGradient id="iceRight" x1="100" y1="39" x2="60" y2="106" gradientUnits="userSpaceOnUse">
-          <stop offset="0" stopColor="#D2E7FC" /><stop offset="1" stopColor="#90BAEC" />
+        <linearGradient id="iceRt" x1="100" y1="40" x2="60" y2="104" gradientUnits="userSpaceOnUse">
+          <stop offset="0" stopColor="#A4C8EC"/><stop offset="1" stopColor="#6CA4D6"/>
         </linearGradient>
-        <radialGradient id="iceGlow" cx="50%" cy="34%" r="62%">
-          <stop offset="0" stopColor="#ffffff" stopOpacity="0.9" /><stop offset="1" stopColor="#ffffff" stopOpacity="0" />
-        </radialGradient>
-        <filter id="iceShadow" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="3.4" /></filter>
-        <filter id="iceRefract" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="0.6" /></filter>
+        <filter id="iceSh" x="-40%" y="-30%" width="180%" height="180%"><feGaussianBlur stdDeviation="3.2"/></filter>
       </defs>
-      <ellipse cx="60" cy="111" rx="38" ry="6.5" fill="#0B1E3A" opacity="0.30" filter="url(#iceShadow)" />
-      <polygon points="60,16 100,39 60,62 20,39" fill="url(#iceTop)" opacity="0.97" />
-      <polygon points="20,39 60,62 60,106 20,83" fill="url(#iceLeft)" opacity="0.93" />
-      <polygon points="100,39 60,62 60,106 100,83" fill="url(#iceRight)" opacity="0.95" />
-      <polygon points="60,24 90,40 60,56 30,40" fill="url(#iceGlow)" />
-      <g filter="url(#iceRefract)">
-        <g transform="translate(60 73) skewX(-7) rotate(-5)">
-          <rect x="-22" y="-13" width="44" height="30" rx="5" fill="#2C568F" opacity="0.35" />
-          <rect x="-23" y="-15" width="44" height="30" rx="5" fill="#DCEEFF" opacity="0.92" />
-          <rect x="-16" y="-7" width="10" height="8" rx="1.8" fill="#AFD0EE" />
-          <rect x="-16" y="5" width="28" height="2.6" rx="1.3" fill="#9FC0E4" />
-          <rect x="-16" y="10" width="17" height="2.6" rx="1.3" fill="#9FC0E4" />
-          <polygon points="-23,-15 -8,-15 -18,15 -23,15" fill="#ffffff" opacity="0.18" />
-          <rect x="-23" y="-15" width="44" height="30" rx="5" fill="none" stroke="#ffffff" strokeOpacity="0.65" strokeWidth="1" />
-        </g>
+      {/* Drop shadow */}
+      <ellipse cx="60" cy="110" rx="32" ry="5.5" fill="#1A3F7A" opacity="0.22" filter="url(#iceSh)"/>
+      {/* Cube faces */}
+      <polygon points="20,40 60,60 60,104 20,84" fill="url(#iceLt)"/>
+      <polygon points="100,40 60,60 60,104 100,84" fill="url(#iceRt)"/>
+      <polygon points="20,40 60,18 100,40 60,60" fill="url(#iceTp)"/>
+      {/* Top highlight */}
+      <polygon points="34,38 60,22 86,38 60,52" fill="white" opacity="0.28"/>
+      {/* Credit card frozen inside — large, clear, prominent */}
+      <g transform="translate(60,76) rotate(-4)">
+        <rect x="-22" y="-14" width="44" height="28" rx="5" fill="#DAEEFB"/>
+        <rect x="-22" y="-14" width="44" height="28" rx="5" fill="rgba(170,215,250,0.35)"/>
+        <rect x="-22" y="-14" width="44" height="28" rx="5" fill="none" stroke="rgba(110,170,220,0.55)" strokeWidth="1.5"/>
+        {/* Chip */}
+        <rect x="-14" y="-8" width="11" height="8" rx="2" fill="#88B8D8"/>
+        <rect x="-14" y="-8" width="11" height="8" rx="2" fill="none" stroke="#6AA2CC" strokeWidth="1"/>
+        {/* Rupee — large and unmistakable */}
+        <text x="10" y="8" textAnchor="middle" fontSize="16" fontWeight="900" fill="#2E6EA8" fontFamily="sans-serif" opacity="0.82">₹</text>
+        {/* Freeze cracks */}
+        <rect x="-14" y="8" width="30" height="2.5" rx="1.2" fill="#88B8D8" opacity="0.75"/>
+        {/* Shine */}
+        <polygon points="-22,-14 -8,-14 -18,14 -22,14" fill="white" opacity="0.15"/>
       </g>
-      <polygon points="60,16 100,39 60,62 20,39" fill="none" stroke="#ffffff" strokeOpacity="0.7" strokeWidth="1.3" strokeLinejoin="round" />
-      <line x1="60" y1="62" x2="60" y2="106" stroke="#ffffff" strokeOpacity="0.45" strokeWidth="1.2" />
-      <line x1="20" y1="39" x2="20" y2="83" stroke="#ffffff" strokeOpacity="0.32" strokeWidth="1" />
-      <line x1="100" y1="39" x2="100" y2="83" stroke="#ffffff" strokeOpacity="0.32" strokeWidth="1" />
-      <circle cx="82" cy="50" r="2" fill="#ffffff" opacity="0.5" />
-      <circle cx="34" cy="52" r="1.4" fill="#ffffff" opacity="0.4" />
+      {/* Cube edges */}
+      <polygon points="20,40 60,18 100,40 60,60" fill="none" stroke="white" strokeOpacity="0.65" strokeWidth="1.5" strokeLinejoin="round"/>
+      <line x1="60" y1="60" x2="60" y2="104" stroke="white" strokeOpacity="0.40" strokeWidth="1.2"/>
+      <line x1="20" y1="40" x2="20" y2="84" stroke="white" strokeOpacity="0.26" strokeWidth="1"/>
+      <line x1="100" y1="40" x2="100" y2="84" stroke="white" strokeOpacity="0.26" strokeWidth="1"/>
+      {/* Ice sparkles */}
+      <circle cx="82" cy="47" r="2.2" fill="white" opacity="0.72"/>
+      <circle cx="36" cy="52" r="1.6" fill="white" opacity="0.60"/>
+      <circle cx="72" cy="28" r="1.5" fill="white" opacity="0.55"/>
+      <circle cx="42" cy="30" r="1" fill="white" opacity="0.50"/>
     </svg>
   );
 }
 
-// ── HERO ILLUSTRATION 2: half-melted cube, credit card emerging ──
+// ── HERO ILLUSTRATION 2: melted puddle, credit card freed and gleaming ──
 function Puddle({ size = 112, style }) {
   return (
     <svg width={size} height={size} viewBox="0 0 120 120" fill="none" aria-hidden="true" style={style}>
       <defs>
-        <radialGradient id="meltWater" cx="50%" cy="50%" r="50%">
-          <stop offset="0%" stopColor="#A5F3FC" />
-          <stop offset="70%" stopColor="#38BDF8" />
-          <stop offset="100%" stopColor="#0284C7" />
+        <radialGradient id="pudWater" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stopColor="#93D7F8"/><stop offset="60%" stopColor="#38B2ED"/><stop offset="100%" stopColor="#0B82C4"/>
         </radialGradient>
-        <linearGradient id="cardWarm" x1="36" y1="36" x2="84" y2="68" gradientUnits="userSpaceOnUse">
-          <stop offset="0%" stopColor="#FFEAA7" />
-          <stop offset="40%" stopColor="#FFD700" />
-          <stop offset="100%" stopColor="#E2A900" />
+        <linearGradient id="goldCard" x1="34" y1="30" x2="86" y2="68" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stopColor="#FFF4BB"/><stop offset="45%" stopColor="#FFD700"/><stop offset="100%" stopColor="#C88E00"/>
         </linearGradient>
-        <filter id="cardShadow" x="-20%" y="-20%" width="140%" height="140%">
-          <feDropShadow dx="0" dy="1.5" stdDeviation="1.2" floodColor="#000000" floodOpacity="0.15" />
+        <filter id="cardHalo" x="-30%" y="-30%" width="160%" height="160%">
+          <feDropShadow dx="0" dy="3" stdDeviation="4" floodColor="#F59E0B" floodOpacity="0.52"/>
         </filter>
+        <filter id="pudSh" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="3"/></filter>
       </defs>
-      
-      {/* Bottom Puddle (Water) */}
-      <ellipse cx="60" cy="101" rx="46" ry="11" fill="none" stroke="#8FC5F2" strokeOpacity="0.22" strokeWidth="1.4" />
-      <ellipse cx="60" cy="101" rx="42" ry="10" fill="#38BDF8" opacity="0.15" />
-      <ellipse cx="60" cy="100" rx="36" ry="8.5" fill="url(#meltWater)" />
-      <ellipse cx="50" cy="97" rx="10" ry="2.3" fill="#ffffff" opacity="0.4" />
-      
-      {/* 50% Melted Ice Block (Rendered Behind) */}
-      <g opacity="0.85">
-        {/* Ice top face */}
-        <polygon points="60,62 86,72 60,82 34,72" fill="#EAF7FF" />
-        {/* Ice left face */}
-        <polygon points="34,72 60,82 60,98 34,88" fill="#A9D2EE" />
-        {/* Ice right face */}
-        <polygon points="86,72 60,82 60,98 86,88" fill="#7FB8DF" />
-        {/* Ice lines */}
-        <path d="M32,72 L60,82 L88,72" fill="none" stroke="#ffffff" strokeOpacity="0.65" strokeWidth="1.1" strokeLinejoin="round" />
-        <path d="M60,82 L60,98" stroke="#ffffff" strokeOpacity="0.38" strokeWidth="1" />
+      {/* Puddle glow */}
+      <ellipse cx="60" cy="106" rx="38" ry="8" fill="#38B2ED" opacity="0.16" filter="url(#pudSh)"/>
+      {/* Puddle */}
+      <ellipse cx="60" cy="101" rx="44" ry="11" fill="url(#pudWater)"/>
+      <ellipse cx="47" cy="97.5" rx="14" ry="3.5" fill="white" opacity="0.36"/>
+      {/* Small melting ice remnant */}
+      <polygon points="46,88 60,80 74,88 60,96" fill="#C4E8F8" opacity="0.65"/>
+      <polygon points="46,88 60,96 60,108 46,100" fill="#88C0E0" opacity="0.55"/>
+      <polygon points="74,88 60,96 60,108 74,100" fill="#A0CCEA" opacity="0.55"/>
+      <path d="M44,88 L60,80 L76,88" fill="none" stroke="white" strokeOpacity="0.6" strokeWidth="1.1" strokeLinejoin="round"/>
+      {/* Freed credit card — bold gold, prominent */}
+      <g filter="url(#cardHalo)">
+        <g transform="rotate(-17, 60, 50)">
+          <rect x="34" y="28" width="52" height="34" rx="5.5" fill="url(#goldCard)"/>
+          <rect x="34" y="28" width="52" height="34" rx="5.5" fill="none" stroke="#B8860B" strokeWidth="1.2" strokeOpacity="0.75"/>
+          {/* Chip */}
+          <rect x="41" y="36" width="11" height="8" rx="2" fill="rgba(255,255,255,0.88)"/>
+          <rect x="43" y="38" width="7" height="4" rx="1" fill="#D4A017" opacity="0.35"/>
+          {/* Rupee — large, clear */}
+          <text x="70" y="52" textAnchor="middle" fontSize="14" fontWeight="900" fill="#7A4A08" fontFamily="sans-serif">₹</text>
+          {/* Emboss lines */}
+          <rect x="41" y="50" width="38" height="2.2" rx="1.1" fill="#FBBF24" opacity="0.72"/>
+          <rect x="41" y="54.5" width="24" height="2.2" rx="1.1" fill="#FBBF24" opacity="0.62"/>
+          {/* Card shine */}
+          <polygon points="34,28 50,28 40,62 34,62" fill="white" opacity="0.17"/>
+        </g>
       </g>
-      
-      {/* Golden Credit Card - Free, sharp, and on top */}
-      <g transform="rotate(-15 60 52)" filter="url(#cardShadow)">
-        {/* Card Body - Warm Golden gradient */}
-        <rect x="36" y="36" width="48" height="32" rx="4.5" fill="url(#cardWarm)" />
-        {/* Card Border - Crisp Gold border */}
-        <rect x="36" y="36" width="48" height="32" rx="4.5" fill="none" stroke="#D4AF37" strokeWidth="1" strokeOpacity="0.9" />
-        
-        {/* Chip - Crisp white/gold metallic rect */}
-        <rect x="42" y="42" width="10" height="7.5" rx="1.5" fill="#FFFBEB" />
-        <rect x="44" y="44" width="6" height="3.5" rx="0.5" fill="#E2A900" opacity="0.3" />
-        
-        {/* Embossed Text/Lines */}
-        <rect x="42" y="54" width="36" height="2" rx="1" fill="#FDE68A" />
-        <rect x="42" y="58.5" width="20" height="2" rx="1" fill="#FDE68A" />
-      </g>
-
-      <path d="M52,96 q2,7 0,10 q-2,-3 0,-10 Z" fill="#CFEFFF" opacity="0.85" />
-      <path d="M66,96 q1.8,6 0,9 q-1.8,-3 0,-9 Z" fill="#BDE7FF" opacity="0.74" />
-      <circle cx="76" cy="97" r="2.4" fill="#CFEFFF" opacity="0.8" />
-      
-      {/* Sparkling stars indicating the card is freed & premium */}
-      <path d="M86 30 l1.2 3 3 1.2 -3 1.2 -1.2 3 -1.2-3 -3-1.2 3-1.2z" fill="#F59E0B" opacity="0.85" />
-      <path d="M26 24 l1.2 3 3 1.2 -3 1.2 -1.2 3 -1.2-3 -3-1.2 3-1.2z" fill="#F59E0B" opacity="0.85" />
+      {/* Water drops */}
+      <path d="M54,97 q-1,6 0,10 q1,-4 0,-10 Z" fill="#7DD3FC" opacity="0.88"/>
+      <path d="M68,97 q-1,5 0,9 q1,-4 0,-9 Z" fill="#7DD3FC" opacity="0.78"/>
+      {/* Freedom sparkles */}
+      <path d="M89 24 l1.2 3 3 1.2 -3 1.2 -1.2 3 -1.2-3 -3-1.2 3-1.2z" fill="#FCD34D" opacity="0.92"/>
+      <path d="M23 20 l1.2 3 3 1.2 -3 1.2 -1.2 3 -1.2-3 -3-1.2 3-1.2z" fill="#FCD34D" opacity="0.90"/>
+      <circle cx="95" cy="38" r="2.2" fill="#FCD34D" opacity="0.78"/>
+      <circle cx="18" cy="36" r="1.6" fill="#FCD34D" opacity="0.65"/>
     </svg>
   );
 }
@@ -567,144 +563,91 @@ function SavingsScreen({ go, monthly = 30000, setMonthly }) {
       </div>
 
       {/* ── PAGE TITLE ── */}
-      <div style={{ padding: '2px 20px 12px', flexShrink: 0, animation: 'fadeUp .4s both', textAlign: 'center' }}>
-        <div style={{ display: 'inline-flex', alignItems: 'center', gap: 5, background: 'rgba(91,63,212,0.08)', borderRadius: 20, padding: '3px 12px', marginBottom: 9 }}>
-          <svg width="7" height="7" viewBox="0 0 8 8"><circle cx="4" cy="4" r="4" fill="#5B3FD4" opacity="0.55"/></svg>
-          <span style={{ fontSize: 9, fontWeight: 800, color: '#5B3FD4', letterSpacing: 1, textTransform: 'uppercase' }}>Your card debt situation</span>
+      <div style={{ padding: '0 20px 8px', flexShrink: 0, animation: 'fadeUp .4s both', textAlign: 'center' }}>
+        <div style={{ fontSize: 20, fontWeight: 900, color: '#1B192E', lineHeight: 1.18, letterSpacing: -0.6, fontFamily: 'Sora, sans-serif' }}>
+          Your Money is <span style={{ color: '#5B3FD4' }}>Frozen</span><br />in Card Debt
         </div>
-        <div style={{ fontSize: 22, fontWeight: 900, color: '#1B192E', lineHeight: 1.1, letterSpacing: -0.7, fontFamily: 'Sora, sans-serif' }}>
-          Your money is frozen<br />in card debt
-        </div>
-        <div style={{ fontSize: 12.5, fontWeight: 500, color: '#88859E', marginTop: 6, lineHeight: 1.45 }}>
-          Here's how much <span style={{ color: '#5B3FD4', fontWeight: 700 }}>Melt</span> frees for you
-        </div>
-        {/* Debt pill */}
-        <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, marginTop: 10, background: '#fff', borderRadius: 12, padding: '6px 16px', border: '1px solid #EAE6F8', boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }}>
-          <span style={{ fontSize: 10.5, color: '#88859E', fontWeight: 600 }}>Your card debt</span>
-          <div style={{ width: 1, height: 12, background: '#DDD9F0' }} />
-          <span style={{ fontSize: 14, fontWeight: 900, color: '#1B192E', fontFamily: 'Sora, sans-serif', letterSpacing: -0.4 }}>₹5,00,000</span>
+        <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6, marginTop: 8, background: 'rgba(237,232,255,0.55)', borderRadius: 10, padding: '4px 14px', border: '1px solid rgba(196,181,253,0.35)' }}>
+          <span style={{ fontSize: 10, color: '#9896B0', fontWeight: 600 }}>Card debt</span>
+          <div style={{ width: 1, height: 10, background: 'rgba(196,181,253,0.5)' }} />
+          <span style={{ fontSize: 13.5, fontWeight: 900, color: '#1B192E', fontFamily: 'Sora, sans-serif', letterSpacing: -0.4 }}>₹5,00,000</span>
         </div>
       </div>
 
       {/* ── COMPARISON ── */}
-      <div style={{ margin: '8px 16px 0', animation: 'fadeUp .55s .06s both' }}>
-        <div style={{ fontSize: 10.5, fontWeight: 800, color: '#88859E', letterSpacing: 0.8, textTransform: 'uppercase', marginBottom: 8, paddingLeft: 2 }}>Why Melt?</div>
-        <style>{`
-          @keyframes softGlow {
-            0%, 100% { box-shadow: 0 0 0 0 rgba(91,63,212,0.08), 0 2px 6px rgba(91,63,212,0.12); }
-            50%       { box-shadow: 0 0 10px 3px rgba(91,63,212,0.26), 0 2px 6px rgba(91,63,212,0.12); }
-          }
-        `}</style>
-        <div style={{ display: 'flex', gap: 8, alignItems: 'stretch', padding: '4px 0', position: 'relative' }}>
-          {/* Arrow circle */}
+      <div style={{ margin: '12px 16px 0', animation: 'fadeUp .55s .06s both' }}>
+        <div style={{ fontSize: 9.5, fontWeight: 700, color: '#AEACC4', letterSpacing: 1.1, textTransform: 'uppercase', marginBottom: 10, paddingLeft: 2 }}>Why Melt?</div>
+        <div style={{ display: 'flex', gap: 10, alignItems: 'flex-start', padding: '4px 0 6px', position: 'relative' }}>
+
+          {/* Arrow — clean, centred */}
           <div style={{
-            position: 'absolute', left: '50%', top: '50%',
+            position: 'absolute', left: '50%', top: '46%',
             transform: 'translate(-50%, -50%)',
-            width: 30, height: 30, borderRadius: '50%',
-            background: '#fff',
-            animation: 'softGlow 2.4s ease-in-out infinite',
+            width: 26, height: 26, borderRadius: '50%',
+            background: '#fff', zIndex: 3,
+            boxShadow: '0 2px 10px rgba(91,63,212,0.16)',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
-            zIndex: 3,
           }}>
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
               <path d="M5 12h14M13 6l6 6-6 6" stroke="#5B3FD4" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
           </div>
 
-          {/* Credit Cards (Red Card) */}
+          {/* Current card — muted, recedes */}
           <div style={{
-            flex: 1,
-            background: 'linear-gradient(145deg, rgba(255,232,232,0.85) 0%, rgba(255,245,245,0.5) 50%, rgba(255,255,255,0.96) 100%)',
-            backdropFilter: 'blur(12px)',
-            WebkitBackdropFilter: 'blur(12px)',
-            borderRadius: 20,
-            padding: '18px 10px 10px',
-            border: '1px solid rgba(252,165,165,0.5)',
-            boxShadow: 'inset 0 1.5px 0.5px rgba(255,255,255,0.85), 0 8px 24px -6px rgba(220,38,38,0.06)',
-            position: 'relative',
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            textAlign: 'center',
-            minHeight: 175
+            flex: 1, borderRadius: 20, padding: '16px 10px 10px',
+            background: 'rgba(255,242,242,0.6)',
+            border: '1px solid rgba(252,165,165,0.22)',
+            boxShadow: '0 6px 22px -4px rgba(220,38,38,0.12), 0 2px 6px rgba(0,0,0,0.05)',
+            display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center',
+            minHeight: 168, opacity: 0.88,
           }}>
-            <div style={{ fontSize: 9.5, fontWeight: 800, color: '#DC2626', letterSpacing: 0.6, textTransform: 'uppercase', marginBottom: 2 }}>Your Card Now</div>
-            <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'center', gap: 4 }}>
-              <div style={{ fontSize: 34, fontWeight: 900, color: '#DC2626', fontFamily: 'Sora, sans-serif', letterSpacing: -1, lineHeight: 1.1 }}>54%</div>
+            <div style={{ fontSize: 9, fontWeight: 700, color: '#EF4444', letterSpacing: 0.5, textTransform: 'uppercase', marginBottom: 2 }}>Your Card Now</div>
+            <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'center', gap: 3 }}>
+              <div style={{ fontSize: 32, fontWeight: 900, color: '#DC2626', fontFamily: 'Sora, sans-serif', letterSpacing: -1, lineHeight: 1.1 }}>54%</div>
               <button
                 onClick={function(e){ e.stopPropagation(); setShowRateInfo(function(v){ return !v; }); }}
-                style={{ marginTop: 6, width: 18, height: 18, borderRadius: '50%', border: '1.5px solid #DC2626', background: 'rgba(220,38,38,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', flexShrink: 0, padding: 0 }}>
-                <span style={{ fontSize: 11, fontWeight: 900, color: '#DC2626', lineHeight: 1, fontStyle: 'italic', fontFamily: 'Georgia, serif' }}>i</span>
+                style={{ marginTop: 5, width: 16, height: 16, borderRadius: '50%', border: '1px solid rgba(220,38,38,0.35)', background: 'rgba(220,38,38,0.08)', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', flexShrink: 0, padding: 0 }}>
+                <span style={{ fontSize: 10, fontWeight: 900, color: '#DC2626', lineHeight: 1, fontStyle: 'italic', fontFamily: 'Georgia, serif' }}>i</span>
               </button>
             </div>
-            <div style={{ fontSize: 9, fontWeight: 700, color: '#EF4444', marginBottom: 10 }}>p.a. interest</div>
-            <div style={{
-              height: 54, display: 'flex', alignItems: 'center', justifyContent: 'center',
-              animation: 'float 3.5s ease-in-out infinite',
-              filter: 'drop-shadow(0 4px 10px rgba(110,160,220,0.18))',
-              marginBottom: 4
-            }}>
-              <IceCube size={70} />
+            <div style={{ fontSize: 8.5, fontWeight: 600, color: '#EF4444', marginBottom: 10, opacity: 0.75 }}>p.a. interest</div>
+            <div style={{ height: 52, display: 'flex', alignItems: 'center', justifyContent: 'center', animation: 'float 3.5s ease-in-out infinite', marginBottom: 4 }}>
+              <IceCube size={66} />
             </div>
-            <div style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: 3, borderTop: '1px solid rgba(220,38,38,0.12)', marginTop: 'auto', paddingTop: 6 }}>
-              <div style={{ fontSize: 10, color: '#7C788A', fontWeight: 600, display: 'flex', justifyContent: 'space-between' }}>
-                <span>Interest</span>
-                <span style={{ color: '#1B192E', fontWeight: 700, fontFamily: 'Sora, sans-serif' }}>{lakh(cardsInt)}</span>
+            <div style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: 3, borderTop: '1px solid rgba(220,38,38,0.08)', marginTop: 'auto', paddingTop: 6 }}>
+              <div style={{ fontSize: 9.5, color: '#AEAAB8', fontWeight: 600, display: 'flex', justifyContent: 'space-between' }}>
+                <span>Interest</span><span style={{ color: '#7C788A', fontFamily: 'Sora, sans-serif' }}>{lakh(cardsInt)}</span>
               </div>
-              <div style={{ fontSize: 10, color: '#7C788A', fontWeight: 600, display: 'flex', justifyContent: 'space-between' }}>
-                <span>Total Pay</span>
-                <span style={{ color: '#DC2626', fontWeight: 800, fontFamily: 'Sora, sans-serif' }}>{lakh(500000 + cardsInt)}</span>
+              <div style={{ fontSize: 9.5, color: '#AEAAB8', fontWeight: 600, display: 'flex', justifyContent: 'space-between' }}>
+                <span>Total Pay</span><span style={{ color: '#EF4444', fontWeight: 700, fontFamily: 'Sora, sans-serif' }}>{lakh(500000 + cardsInt)}</span>
               </div>
             </div>
           </div>
 
-
-          {/* With Melt (Purple Card — identical size) */}
+          {/* Melt card — elevated winner */}
           <div style={{
-            flex: 1,
-            background: 'linear-gradient(145deg, rgba(246,243,255,0.92) 0%, rgba(250,248,255,0.6) 50%, rgba(255,255,255,0.98) 100%)',
-            backdropFilter: 'blur(12px)',
-            WebkitBackdropFilter: 'blur(12px)',
-            borderRadius: 20,
-            padding: '18px 10px 10px',
+            flex: 1, borderRadius: 20, padding: '16px 10px 10px',
+            background: 'linear-gradient(145deg, #EDE8FF 0%, #F5F3FF 55%, #fff 100%)',
             border: '2px solid #5B3FD4',
-            boxShadow: 'inset 0 1.5px 0.5px rgba(255,255,255,0.95), 0 10px 28px -6px rgba(91,63,212,0.14)',
-            position: 'relative',
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            textAlign: 'center',
-            minHeight: 175
+            boxShadow: '0 12px 36px -8px rgba(91,63,212,0.30), 0 0 0 1px rgba(91,63,212,0.07)',
+            transform: 'translateY(-4px)',
+            display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center',
+            position: 'relative', minHeight: 168,
           }}>
-            <div style={{ fontSize: 9.5, fontWeight: 800, color: '#5B3FD4', letterSpacing: 0.6, textTransform: 'uppercase', marginBottom: 2 }}>With Melt</div>
-            <div style={{ fontSize: 34, fontWeight: 900, color: '#5B3FD4', fontFamily: 'Sora, sans-serif', letterSpacing: -1, lineHeight: 1.1 }}>25%</div>
-            <div style={{ fontSize: 9, fontWeight: 700, color: '#7C5CE7', marginBottom: 10 }}>p.a. interest</div>
-            <div style={{
-              height: 54, display: 'flex', alignItems: 'center', justifyContent: 'center',
-              animation: 'float 3.5s ease-in-out infinite 1.75s',
-              filter: 'drop-shadow(0 4px 12px rgba(245,158,11,0.25))',
-              marginBottom: 4
-            }}>
-              <Puddle size={70} />
+            <div style={{ fontSize: 9, fontWeight: 700, color: '#5B3FD4', letterSpacing: 0.5, textTransform: 'uppercase', marginBottom: 2 }}>With Melt</div>
+            <div style={{ fontSize: 32, fontWeight: 900, color: '#5B3FD4', fontFamily: 'Sora, sans-serif', letterSpacing: -1, lineHeight: 1.1 }}>25%</div>
+            <div style={{ fontSize: 8.5, fontWeight: 700, color: '#7C5CE7', marginBottom: 10 }}>p.a. interest</div>
+            <div style={{ height: 52, display: 'flex', alignItems: 'center', justifyContent: 'center', animation: 'float 3.5s ease-in-out infinite 1.75s', filter: 'drop-shadow(0 4px 12px rgba(245,158,11,0.25))', marginBottom: 4 }}>
+              <Puddle size={66} />
             </div>
-            <div style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: 3, borderTop: '1px solid rgba(91,63,212,0.15)', marginTop: 'auto', paddingTop: 6 }}>
-              <div style={{ fontSize: 10, color: '#7C788A', fontWeight: 600, display: 'flex', justifyContent: 'space-between' }}>
-                <span>Interest</span>
-                <span style={{ color: '#1B192E', fontWeight: 700, fontFamily: 'Sora, sans-serif' }}>{lakh(meltInt)}</span>
+            <div style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: 3, borderTop: '1px solid rgba(91,63,212,0.10)', marginTop: 'auto', paddingTop: 6 }}>
+              <div style={{ fontSize: 9.5, color: '#9896B0', fontWeight: 600, display: 'flex', justifyContent: 'space-between' }}>
+                <span>Interest</span><span style={{ color: '#1B192E', fontWeight: 700, fontFamily: 'Sora, sans-serif' }}>{lakh(meltInt)}</span>
               </div>
-              <div style={{ fontSize: 10, color: '#7C788A', fontWeight: 600, display: 'flex', justifyContent: 'space-between' }}>
-                <span>Total Pay</span>
-                <span style={{ color: '#5B3FD4', fontWeight: 800, fontFamily: 'Sora, sans-serif' }}>{lakh(500000 + meltInt)}</span>
+              <div style={{ fontSize: 9.5, color: '#9896B0', fontWeight: 600, display: 'flex', justifyContent: 'space-between' }}>
+                <span>Total Pay</span><span style={{ color: '#5B3FD4', fontWeight: 800, fontFamily: 'Sora, sans-serif' }}>{lakh(500000 + meltInt)}</span>
               </div>
-            </div>
-            {/* RECOMMENDED tag — top-right corner */}
-            <div style={{
-              position: 'absolute', top: -12, right: -6,
-              background: 'linear-gradient(135deg, #22C55E 0%, #16A34A 100%)',
-              borderRadius: 5, padding: '2px 6px',
-              boxShadow: '0 2px 6px rgba(22,163,74,0.3)'
-            }}>
-              <span style={{ fontSize: 6.5, fontWeight: 900, color: '#fff', letterSpacing: 0.5 }}>RECOMMENDED</span>
             </div>
           </div>
         </div>
@@ -713,119 +656,91 @@ function SavingsScreen({ go, monthly = 30000, setMonthly }) {
       {/* ── HERO SAVINGS CARD ── */}
       <div style={{
         margin: '8px 16px 0',
-        background: 'linear-gradient(135deg, #0F764E 0%, #15A26B 60%, #17B276 100%)',
-        borderRadius: 22, padding: '14px 18px 12px',
+        background: 'linear-gradient(145deg, #0A6640 0%, #0F8A56 55%, #13A86A 100%)',
+        borderRadius: 24, padding: '18px 16px 14px',
         position: 'relative', overflow: 'hidden',
-        boxShadow: '0 10px 30px rgba(16,185,129,0.22)',
+        boxShadow: '0 16px 40px -6px rgba(10,102,64,0.30), 0 6px 14px rgba(10,102,64,0.10)',
         animation: 'fadeUp .6s .1s both',
-        display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center'
       }}>
-        <div style={{ position: 'absolute', top: -30, right: -20, width: 120, height: 120, borderRadius: '50%', background: 'radial-gradient(circle, rgba(255,255,255,0.12) 0%, transparent 70%)', pointerEvents: 'none' }} />
-        <div style={{ fontSize: 10, fontWeight: 800, color: 'rgba(255,255,255,0.75)', letterSpacing: 1.2, textTransform: 'uppercase', marginBottom: 2, zIndex: 1 }}>
-          Total Interest Saved
+        <div style={{ position: 'absolute', top: -40, right: -20, width: 150, height: 150, borderRadius: '50%', background: 'radial-gradient(circle, rgba(255,255,255,0.09) 0%, transparent 65%)', pointerEvents: 'none' }} />
+
+        {/* Amount */}
+        <div style={{ textAlign: 'center', marginBottom: 14, position: 'relative', zIndex: 1 }}>
+          <div style={{ fontSize: 9.5, fontWeight: 800, color: 'rgba(255,255,255,0.58)', letterSpacing: 1.5, textTransform: 'uppercase', marginBottom: 6 }}>You'll Save</div>
+          <div style={{ fontSize: 40, fontWeight: 900, color: '#fff', fontFamily: 'Sora, sans-serif', letterSpacing: -2, lineHeight: 1 }}>{inr(countedSaving)}</div>
+          <div style={{ fontSize: 11.5, color: 'rgba(255,255,255,0.55)', fontWeight: 500, marginTop: 6 }}>Throughout your repayment journey</div>
         </div>
-        <div style={{ zIndex: 1, margin: '2px 0 1px' }}>
-          <span style={{ fontSize: 36, fontWeight: 900, color: '#FFFFFF', fontFamily: 'Sora, sans-serif', letterSpacing: -1, lineHeight: 1 }}>
-            {inr(countedSaving)}
-          </span>
-        </div>
-        <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.8)', fontWeight: 600, zIndex: 1 }}>
-          by switching to Melt
+
+        {/* Inline benefit blocks */}
+        <div style={{ display: 'flex', alignItems: 'center', position: 'relative', zIndex: 1 }}>
+          <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 3, textAlign: 'center', padding: '0 8px' }}>
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.75)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+            </svg>
+            <div style={{ fontWeight: 800, fontSize: 13, color: '#fff', fontFamily: 'Sora, sans-serif', letterSpacing: -0.3, lineHeight: 1.2 }}>{animMonthsDiff} Months Earlier</div>
+            <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.48)', fontWeight: 500 }}>Debt-Free</div>
+          </div>
+          <div style={{ width: 1, height: 36, background: 'rgba(255,255,255,0.18)', flexShrink: 0 }} />
+          <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 3, textAlign: 'center', padding: '0 8px' }}>
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.75)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <polyline points="22 7 13.5 15.5 8.5 10.5 1 18"/><polyline points="16 7 22 7 22 13"/>
+            </svg>
+            <div style={{ fontWeight: 800, fontSize: 13, color: '#fff', fontFamily: 'Sora, sans-serif', letterSpacing: -0.3, lineHeight: 1.2 }}>Improve Credit Score</div>
+            <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.48)', fontWeight: 500 }}>With timely repayments</div>
+          </div>
         </div>
       </div>
 
       {/* ── EMI ADJUSTER ── */}
-      <div style={{ margin: '8px 16px 0', background: '#FFFFFF', borderRadius: 18, padding: '10px 16px', boxShadow: '0 2px 12px rgba(91,63,212,0.07)', border: '1px solid #EAE6F8', animation: 'fadeUp .58s .1s both' }}>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          <div>
-            <div style={{ fontSize: 11, color: '#6E6B82', fontWeight: 600 }}>Visualise with monthly payment:</div>
-          </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-            <button onClick={() => setMonthly(m => Math.max(MIN, m - STEP))} disabled={monthly <= MIN}
-              style={{ width: 28, height: 28, borderRadius: 999, border: '1.5px solid #C4B5FD', background: '#F6F3FF', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: monthly <= MIN ? 'not-allowed' : 'pointer', opacity: monthly <= MIN ? 0.4 : 1 }}>
-              <svg width="10" height="10" viewBox="0 0 24 24" fill="none"><path d="M5 12h14" stroke="#5B3FD4" strokeWidth="3.5" strokeLinecap="round" /></svg>
-            </button>
-            <span style={{ fontWeight: 900, fontSize: 16, color: '#1B192E', fontFamily: 'Sora, sans-serif', minWidth: 72, textAlign: 'center', letterSpacing: -0.5 }}>{inr(animMonthly)}<span style={{ fontSize: 10, fontWeight: 600, color: '#88859E', marginLeft: 2 }}>/mo</span></span>
-            <button onClick={() => setMonthly(m => Math.min(MAX, m + STEP))} disabled={monthly >= MAX}
-              style={{ width: 28, height: 28, borderRadius: 999, border: '1.5px solid #C4B5FD', background: '#F6F3FF', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: monthly >= MAX ? 'not-allowed' : 'pointer', opacity: monthly >= MAX ? 0.4 : 1 }}>
-              <svg width="10" height="10" viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="#5B3FD4" strokeWidth="3.5" strokeLinecap="round" /></svg>
-            </button>
-          </div>
+      <div style={{ margin: '12px 16px 0', background: '#fff', borderRadius: 14, padding: '10px 16px', border: '1px solid rgba(196,181,253,0.28)', boxShadow: '0 4px 14px rgba(91,63,212,0.07)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10, animation: 'fadeUp .58s .1s both' }}>
+        <div style={{ fontSize: 11, fontWeight: 600, color: '#6E6B82', flex: 1, lineHeight: 1.3 }}>Visualise with monthly payment:</div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexShrink: 0 }}>
+          <button onClick={() => setMonthly(m => Math.max(MIN, m - STEP))} disabled={monthly <= MIN}
+            style={{ width: 28, height: 28, borderRadius: 999, border: '1px solid rgba(196,181,253,0.5)', background: '#F6F3FF', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: monthly <= MIN ? 'not-allowed' : 'pointer', opacity: monthly <= MIN ? 0.35 : 1 }}>
+            <svg width="9" height="9" viewBox="0 0 24 24" fill="none"><path d="M5 12h14" stroke="#5B3FD4" strokeWidth="3" strokeLinecap="round" /></svg>
+          </button>
+          <span style={{ fontWeight: 900, fontSize: 15, color: '#1B192E', fontFamily: 'Sora, sans-serif', letterSpacing: -0.5, minWidth: 64, textAlign: 'center' }}>{inr(animMonthly)}<span style={{ fontSize: 10, fontWeight: 500, color: '#AEACC4', marginLeft: 2 }}>/mo</span></span>
+          <button onClick={() => setMonthly(m => Math.min(MAX, m + STEP))} disabled={monthly >= MAX}
+            style={{ width: 28, height: 28, borderRadius: 999, border: '1px solid rgba(196,181,253,0.5)', background: '#F6F3FF', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: monthly >= MAX ? 'not-allowed' : 'pointer', opacity: monthly >= MAX ? 0.35 : 1 }}>
+            <svg width="9" height="9" viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="#5B3FD4" strokeWidth="3" strokeLinecap="round" /></svg>
+          </button>
         </div>
       </div>
 
-      {/* ── BENEFITS ── */}
-      <div style={{ margin: '8px 16px 0', animation: 'fadeUp .62s .12s both' }}>
-        <div style={{ fontSize: 10, fontWeight: 800, color: '#88859E', letterSpacing: 0.8, textTransform: 'uppercase', marginBottom: 6, paddingLeft: 2 }}>Your Benefits</div>
-        <div style={{ display: 'flex', gap: 6 }}>
-          <div style={{
-            flex: 1, background: '#FFFFFF', borderRadius: 14, padding: '10px 8px 8px',
-            border: '1px solid #D1FAE5', textAlign: 'center',
-            boxShadow: '0 2px 8px rgba(16,185,129,0.06)',
-            display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2
-          }}>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-              <rect x="2" y="6" width="20" height="12" rx="2" stroke="#10B981" strokeWidth="2" />
-              <circle cx="12" cy="12" r="3" stroke="#10B981" strokeWidth="2" />
-            </svg>
-            <div style={{ fontSize: 12.5, fontWeight: 800, color: '#065F46', lineHeight: 1.15, letterSpacing: -0.3 }}>{lakh(saving)}</div>
-            <div style={{ fontSize: 8.5, fontWeight: 600, color: '#6B7280' }}>Interest Saved</div>
-          </div>
-          <div style={{
-            flex: 1, background: '#FFFFFF', borderRadius: 14, padding: '10px 8px 8px',
-            border: '1px solid #DDD6FE', textAlign: 'center',
-            boxShadow: '0 2px 8px rgba(91,63,212,0.04)',
-            display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2
-          }}>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-              <circle cx="12" cy="12" r="9" stroke="#7C3AED" strokeWidth="2" />
-              <polyline points="12 7 12 12 15.5 14" stroke="#7C3AED" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-            <div style={{ fontSize: 12.5, fontWeight: 800, color: '#4C1D95', lineHeight: 1.15, letterSpacing: -0.3 }}>{monthsDiff} months</div>
-            <div style={{ fontSize: 8.5, fontWeight: 600, color: '#6B7280' }}>Debt-Free Faster</div>
-          </div>
-          <div style={{
-            flex: 1, background: '#FFFFFF', borderRadius: 14, padding: '10px 8px 8px',
-            border: '1px solid #BFDBFE', textAlign: 'center',
-            boxShadow: '0 2px 8px rgba(59,130,246,0.04)',
-            display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2
-          }}>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-              <polyline points="22 7 13.5 15.5 8.5 10.5 2 17" stroke="#3B82F6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-              <polyline points="16 7 22 7 22 13" stroke="#3B82F6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-            <div style={{ fontSize: 12.5, fontWeight: 800, color: '#1E3A8A', lineHeight: 1.15, letterSpacing: -0.3 }}>Better</div>
-            <div style={{ fontSize: 8.5, fontWeight: 600, color: '#6B7280' }}>Credit Score</div>
-          </div>
-        </div>
-        {/* Visualise button */}
+      {/* ── VISUALISE BUTTON ── */}
+      <div style={{ margin: '10px 16px 0' }}>
         <button onClick={() => go('visualise')} style={{
-          width: '100%', marginTop: 10, padding: '6px 0',
-          background: 'none', border: 'none', cursor: 'pointer',
-          display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 4,
-          transition: 'transform 0.15s, opacity 0.15s'
+          width: '100%', padding: '12px 16px',
+          background: 'linear-gradient(135deg, #EDE8FF 0%, #F3F0FF 100%)',
+          border: '1.5px solid #C4B5FD',
+          borderRadius: 14, cursor: 'pointer',
+          display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
+          boxShadow: '0 4px 14px rgba(91,63,212,0.10)',
+          transition: 'transform .12s, box-shadow .12s',
         }}
-          onMouseDown={e => e.currentTarget.style.transform = 'scale(0.96)'}
-          onMouseUp={e => e.currentTarget.style.transform = 'scale(1)'}
-          onMouseEnter={e => e.currentTarget.style.opacity = '0.82'}
-          onMouseLeave={e => e.currentTarget.style.opacity = '1'}
+          onMouseDown={e => { e.currentTarget.style.transform='scale(.98)'; e.currentTarget.style.boxShadow='0 2px 8px rgba(91,63,212,0.08)'; }}
+          onMouseUp={e => { e.currentTarget.style.transform='scale(1)'; e.currentTarget.style.boxShadow='0 4px 14px rgba(91,63,212,0.10)'; }}
+          onMouseLeave={e => { e.currentTarget.style.transform='scale(1)'; e.currentTarget.style.boxShadow='0 4px 14px rgba(91,63,212,0.10)'; }}
         >
-          <span style={{ fontSize: 13, fontWeight: 700, color: '#5B3FD4', letterSpacing: -0.2 }}>Visualise My Savings</span>
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" style={{ marginTop: 1.5 }}>
-            <path d="M5 12h14m0 0l-5-5m5 5l-5 5" stroke="#5B3FD4" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#5B3FD4" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/>
+          </svg>
+          <span style={{ fontSize: 13.5, fontWeight: 700, color: '#5B3FD4', letterSpacing: -0.2 }}>Visualise My Savings</span>
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none">
+            <path d="M5 12h14m0 0l-5-5m5 5l-5 5" stroke="#5B3FD4" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
         </button>
       </div>
 
       {/* ── UNDERSTANDING CREDIT CARD DEBT ── */}
-      <div style={{ margin: '8px 16px 0', animation: 'fadeUp .64s .14s both' }}>
+      <div style={{ margin: '10px 16px 0', animation: 'fadeUp .64s .14s both' }}>
         <div style={{ fontSize: 10, fontWeight: 800, color: '#88859E', letterSpacing: 0.8, textTransform: 'uppercase', marginBottom: 6, paddingLeft: 2 }}>Understanding Credit Card Debt</div>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
           <button onClick={() => setSheetOpen('interest')} style={{
             display: 'flex', alignItems: 'center', gap: 10, width: '100%',
             background: '#FFFFFF', padding: '10px 12px', borderRadius: 14,
             border: '1px solid #EAE6F8', cursor: 'pointer', textAlign: 'left',
-            boxShadow: '0 2px 8px rgba(91,63,212,0.04)'
+            boxShadow: '0 4px 14px rgba(91,63,212,0.07), 0 1px 3px rgba(0,0,0,0.04)'
           }}>
             <div style={{ width: 30, height: 30, borderRadius: 8, background: '#FFF0F0', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="#DC2626" strokeWidth="2" /><path d="M12 7v5l3 2" stroke="#DC2626" strokeWidth="2" strokeLinecap="round" /></svg>
@@ -840,7 +755,7 @@ function SavingsScreen({ go, monthly = 30000, setMonthly }) {
             display: 'flex', alignItems: 'center', gap: 10, width: '100%',
             background: '#FFFFFF', padding: '10px 12px', borderRadius: 14,
             border: '1px solid #EAE6F8', cursor: 'pointer', textAlign: 'left',
-            boxShadow: '0 2px 8px rgba(91,63,212,0.04)'
+            boxShadow: '0 4px 14px rgba(91,63,212,0.07), 0 1px 3px rgba(0,0,0,0.04)'
           }}>
             <div style={{ width: 30, height: 30, borderRadius: 8, background: '#FFF8EC', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><rect x="2" y="5" width="20" height="14" rx="2" stroke="#D97706" strokeWidth="2" /><path d="M2 10h20" stroke="#D97706" strokeWidth="2" /></svg>
@@ -854,22 +769,7 @@ function SavingsScreen({ go, monthly = 30000, setMonthly }) {
         </div>
       </div>
 
-      {/* ── TRUST ROW ── */}
-      <div style={{ display: 'flex', justifyContent: 'center', gap: 16, margin: '6px 16px 0', animation: 'fadeUp .66s .16s both' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M12 3l7 3v5c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6l7-3z" stroke="#5B3FD4" strokeWidth="2" strokeLinejoin="round" /><path d="M9 12l2 2 4-4" stroke="#5B3FD4" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>
-          <span style={{ fontSize: 10, fontWeight: 700, color: '#5B3FD4' }}>Foreclose anytime</span>
-        </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><rect x="5" y="10" width="14" height="10" rx="2" stroke="#5B3FD4" strokeWidth="2" /><path d="M8 10V7a4 4 0 018 0v3" stroke="#5B3FD4" strokeWidth="2" /><circle cx="12" cy="15" r="1.5" fill="#5B3FD4" /></svg>
-          <span style={{ fontSize: 10, fontWeight: 700, color: '#5B3FD4' }}>No hidden charges</span>
-        </div>
-      </div>
 
-      {/* ── DISCLAIMER ── */}
-      <div style={{ fontSize: 8.5, color: '#AAAABC', textAlign: 'center', padding: '4px 24px 16px', lineHeight: 1.35, animation: 'fadeUp .68s .18s both' }}>
-        Illustrative, based on ₹5L debt &amp; {inr(monthly)}/mo. Actual savings shown after card details.
-      </div>
 
       {/* ── BOTTOM SHEETS ── */}
       {sheetOpen && (() => {
@@ -883,7 +783,7 @@ function SavingsScreen({ go, monthly = 30000, setMonthly }) {
             />
             <div style={{
               position: 'absolute', left: 0, right: 0, bottom: 0, zIndex: 21,
-              height: '58%', display: 'flex', flexDirection: 'column', background: '#fff',
+              height: sheetOpen === 'interest' ? '74%' : '58%', display: 'flex', flexDirection: 'column', background: '#fff',
               borderTopLeftRadius: 24, borderTopRightRadius: 24,
               boxShadow: '0 -18px 40px -18px rgba(20,14,57,0.45)',
               overflow: 'hidden',
@@ -903,7 +803,7 @@ function SavingsScreen({ go, monthly = 30000, setMonthly }) {
                 <div style={{ width: 44, height: 5, borderRadius: 999, background: '#E0DCF0', margin: '10px auto 8px' }} />
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '4px 18px 12px', borderBottom: '1px solid #F0ECFA' }}>
                   <div style={{ fontSize: 15, fontWeight: 800, color: '#161331', letterSpacing: -0.3 }}>
-                    {sheetOpen === 'interest' ? 'How Credit Card Interest Grows' : 'Paying Only Minimum Due?'}
+                    {sheetOpen === 'interest' ? 'Compare Your Repayment' : 'Paying Only Minimum Due?'}
                   </div>
                   <button onClick={dismissSheet} style={{ fontSize: 13, fontWeight: 700, color: '#5B3FD4', background: '#F4F1FF', border: 'none', cursor: 'pointer', padding: '4px 10px', borderRadius: 8 }}>Close</button>
                 </div>
@@ -912,59 +812,79 @@ function SavingsScreen({ go, monthly = 30000, setMonthly }) {
               <div key={sheetOpen} style={{ flex: 1, overflowY: 'auto', overscrollBehavior: 'contain', padding: '16px 18px 32px' }}>
                 {sheetOpen === 'interest' ? (
                   <>
-                    {/* Scenario context */}
-                    <div style={{ background: '#F4F1FF', borderRadius: 14, padding: '10px 14px', marginBottom: 14, display: 'flex', alignItems: 'center', gap: 8, border: '1px solid #DDD6FE' }}>
-                      {purpleCalcIcon}
-                      <span style={{ fontSize: 12, fontWeight: 700, color: '#5B3FD4', lineHeight: 1.4 }}>
-                        Considering:  <strong>₹5L debt</strong>,  <strong>{inr(monthly)}/mo</strong>  EMI
-                      </span>
+                    {/* Subtitle */}
+                    <div style={{ fontSize: 11, color: '#A09DB8', fontWeight: 500, marginBottom: 16, textAlign: 'center', letterSpacing: 0.1 }}>
+                      ₹5,00,000 balance · {inr(monthly)}/mo EMI
                     </div>
 
-                    {/* Receipt ledger */}
-                    <div style={{ background: '#FAFAFA', borderRadius: 18, padding: '18px 16px', border: '1px solid #E8E4F5' }}>
-                      <div style={{ fontSize: 10, fontWeight: 800, color: '#88859E', letterSpacing: 0.8, textTransform: 'uppercase', marginBottom: 12, textAlign: 'center' }}>
-                        With your Current Credit Cards you Pay
+                    {/* Column headers */}
+                    <div style={{ display: 'flex', alignItems: 'flex-end', gap: 8, marginBottom: 10, paddingLeft: 82 }}>
+                      <div style={{ flex: 1, textAlign: 'center', paddingBottom: 3 }}>
+                        <span style={{ fontSize: 9, fontWeight: 700, color: '#B4B2C8', letterSpacing: 0.8, textTransform: 'uppercase' }}>Current Card</span>
                       </div>
-                      <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                          <span style={{ fontSize: 13, fontWeight: 600, color: '#5C5870' }}>Your Debt (Principal)</span>
-                          <span style={{ fontSize: 14, fontWeight: 750, color: '#1B192E', fontFamily: 'Sora, sans-serif' }}>₹5,00,000</span>
-                        </div>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                          <span style={{ fontSize: 13, fontWeight: 700, color: '#D32F2F', display: 'flex', alignItems: 'center', gap: 6 }}>
-                            <span style={{ width: 6, height: 6, borderRadius: 99, background: '#D32F2F', display: 'inline-block' }} />
-                            Interest (54% p.a.)
-                          </span>
-                          <span style={{ fontSize: 14, fontWeight: 850, color: '#D32F2F', fontFamily: 'Sora, sans-serif' }}>+ {lakh(cardsInt)}</span>
-                        </div>
-                        <div style={{ borderTop: '1.5px dashed #E2DDF0', paddingTop: 10 }}>
-                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                            <span style={{ fontSize: 14, fontWeight: 800, color: '#1B192E' }}>Total You Pay</span>
-                            <span style={{ fontSize: 18, fontWeight: 900, color: '#1B192E', fontFamily: 'Sora, sans-serif' }}>{lakh(500000 + cardsInt)}</span>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div style={{ display: 'flex', height: 8, borderRadius: 99, overflow: 'hidden', marginTop: 16, background: '#EAE6F5' }}>
-                        <div style={{ width: `${Math.round((500000 / (500000 + cardsInt)) * 100)}%`, background: 'linear-gradient(90deg, #7C5CE7, #5B3FD4)' }} />
-                        <div style={{ flex: 1, background: 'linear-gradient(90deg, #E54B4B, #F06A6A)' }} />
-                      </div>
-                      <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 8, fontSize: 10.5, fontWeight: 700 }}>
-                        <span style={{ color: '#5B3FD4', display: 'flex', alignItems: 'center', gap: 4 }}><span style={{ width: 6, height: 6, borderRadius: 99, background: '#5B3FD4', display: 'inline-block' }} /> Principal</span>
-                        <span style={{ color: '#E54B4B', display: 'flex', alignItems: 'center', gap: 4 }}><span style={{ width: 6, height: 6, borderRadius: 99, background: '#E54B4B', display: 'inline-block' }} /> Interest {lakh(cardsInt)}</span>
-                      </div>
-
-                      <div style={{ marginTop: 14, background: '#F0FDF4', borderRadius: 12, padding: '10px 12px', border: '1px solid #A3E2C9', fontSize: 12, color: '#047857', fontWeight: 600, lineHeight: 1.4, display: 'flex', alignItems: 'flex-start', gap: 8 }}>
-                        {lightbulbIcon('#047857')}
-                        <span>
-                          With Melt at 25% p.a., you'd pay <strong>{lakh(500000 + meltInt)}</strong> total — saving <strong>{lakh(saving)}</strong> in interest.
+                      <div style={{ flex: 1, display: 'flex', justifyContent: 'center' }}>
+                        <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5, background: 'linear-gradient(135deg, #5B3FD4 0%, #7C5CFC 100%)', color: '#fff', fontSize: 9.5, fontWeight: 800, letterSpacing: 0.5, textTransform: 'uppercase', padding: '5px 13px', borderRadius: 999, boxShadow: '0 4px 14px rgba(91,63,212,0.42)' }}>
+                          <svg width="5" height="5" viewBox="0 0 8 8" fill="currentColor"><circle cx="4" cy="4" r="4"/></svg>
+                          With Melt
                         </span>
                       </div>
                     </div>
 
-                    <div style={{ marginTop: 12, background: '#FFF9F0', borderRadius: 14, padding: '12px 14px', fontSize: 12.5, color: '#8A5A00', lineHeight: 1.5, fontWeight: 600, border: '1px solid #FFE4C4', display: 'flex', alignItems: 'flex-start', gap: 8 }}>
-                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#8A5A00" strokeWidth="2.5" style={{ flexShrink: 0, marginTop: 1 }}><circle cx="12" cy="12" r="10" /><path d="M12 16v-4M12 8h.01" /></svg>
-                      Interest accrues daily from the transaction date. The longer it stays, the more expensive it gets.
+                    {/* Row: Interest Rate */}
+                    <div style={{ display: 'flex', alignItems: 'stretch', gap: 8, marginBottom: 7 }}>
+                      <div style={{ width: 82, flexShrink: 0, display: 'flex', alignItems: 'center' }}>
+                        <div style={{ fontSize: 10.5, fontWeight: 600, color: '#88859E', lineHeight: 1.35 }}>Interest<br/>Rate</div>
+                      </div>
+                      <div style={{ flex: 1, background: '#F8F7FA', borderRadius: 14, padding: '14px 10px', textAlign: 'center', boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }}>
+                        <div style={{ fontSize: 22, fontWeight: 900, color: '#E03E3E', fontFamily: 'Sora, sans-serif', letterSpacing: -0.8 }}>54%</div>
+                        <div style={{ fontSize: 9, color: '#B8B6CC', fontWeight: 500, marginTop: 2 }}>per annum</div>
+                      </div>
+                      <div style={{ flex: 1, background: 'linear-gradient(145deg, #EDE8FF 0%, #E8E2FF 100%)', borderRadius: 14, padding: '14px 10px', textAlign: 'center', border: '1.5px solid rgba(91,63,212,0.18)', boxShadow: '0 6px 20px rgba(91,63,212,0.15)' }}>
+                        <div style={{ fontSize: 22, fontWeight: 900, color: '#5B3FD4', fontFamily: 'Sora, sans-serif', letterSpacing: -0.8 }}>25%</div>
+                        <div style={{ fontSize: 9, color: '#9896C4', fontWeight: 500, marginTop: 2 }}>per annum</div>
+                      </div>
+                    </div>
+
+                    {/* Row: Interest Paid */}
+                    <div style={{ display: 'flex', alignItems: 'stretch', gap: 8, marginBottom: 7 }}>
+                      <div style={{ width: 82, flexShrink: 0, display: 'flex', alignItems: 'center' }}>
+                        <div style={{ fontSize: 10.5, fontWeight: 600, color: '#88859E', lineHeight: 1.35 }}>Interest<br/>Paid</div>
+                      </div>
+                      <div style={{ flex: 1, background: '#F8F7FA', borderRadius: 14, padding: '14px 10px', textAlign: 'center', boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }}>
+                        <div style={{ fontSize: 22, fontWeight: 900, color: '#374151', fontFamily: 'Sora, sans-serif', letterSpacing: -0.8 }}>{lakh(cardsInt)}</div>
+                        <div style={{ fontSize: 9, color: '#B8B6CC', fontWeight: 500, marginTop: 2 }}>total interest</div>
+                      </div>
+                      <div style={{ flex: 1, background: 'linear-gradient(145deg, #EDE8FF 0%, #E8E2FF 100%)', borderRadius: 14, padding: '14px 10px', textAlign: 'center', border: '1.5px solid rgba(91,63,212,0.18)', boxShadow: '0 6px 20px rgba(91,63,212,0.15)' }}>
+                        <div style={{ fontSize: 22, fontWeight: 900, color: '#5B3FD4', fontFamily: 'Sora, sans-serif', letterSpacing: -0.8 }}>{lakh(meltInt)}</div>
+                        <div style={{ fontSize: 9, color: '#9896C4', fontWeight: 500, marginTop: 2 }}>total interest</div>
+                      </div>
+                    </div>
+
+                    {/* Row: Total You Pay — visual hero */}
+                    <div style={{ display: 'flex', alignItems: 'stretch', gap: 8, marginBottom: 16 }}>
+                      <div style={{ width: 82, flexShrink: 0, display: 'flex', alignItems: 'center' }}>
+                        <div style={{ fontSize: 10.5, fontWeight: 700, color: '#1B192E', lineHeight: 1.35 }}>Total<br/>You Pay</div>
+                      </div>
+                      <div style={{ flex: 1, background: '#ECEBED', borderRadius: 14, padding: '18px 10px', textAlign: 'center', boxShadow: '0 3px 10px rgba(0,0,0,0.06)' }}>
+                        <div style={{ fontSize: 26, fontWeight: 900, color: '#1B192E', fontFamily: 'Sora, sans-serif', letterSpacing: -1 }}>{lakh(500000 + cardsInt)}</div>
+                      </div>
+                      <div style={{ flex: 1, background: 'linear-gradient(145deg, #DDD8FF 0%, #E4DDFF 100%)', borderRadius: 14, padding: '18px 10px', textAlign: 'center', border: '2px solid rgba(91,63,212,0.28)', boxShadow: '0 10px 30px rgba(91,63,212,0.22)' }}>
+                        <div style={{ fontSize: 26, fontWeight: 900, color: '#5B3FD4', fontFamily: 'Sora, sans-serif', letterSpacing: -1 }}>{lakh(500000 + meltInt)}</div>
+                      </div>
+                    </div>
+
+                    {/* Savings takeaway — premium two-part */}
+                    <div style={{ background: 'linear-gradient(135deg, #16133A 0%, #1E1B42 100%)', borderRadius: 18, padding: '18px 20px', display: 'flex', alignItems: 'center', boxShadow: '0 14px 36px -8px rgba(10,8,32,0.45)' }}>
+                      <div style={{ flex: 1 }}>
+                        <div style={{ fontSize: 9, fontWeight: 800, color: 'rgba(255,255,255,0.30)', letterSpacing: 1.5, textTransform: 'uppercase', marginBottom: 5 }}>You'll Save</div>
+                        <div style={{ fontSize: 36, fontWeight: 900, color: '#fff', fontFamily: 'Sora, sans-serif', letterSpacing: -1.5, lineHeight: 1 }}>{lakh(saving)}</div>
+                        <div style={{ fontSize: 10.5, color: 'rgba(255,255,255,0.26)', fontWeight: 500, marginTop: 7 }}>in total interest with Melt</div>
+                      </div>
+                      <div style={{ width: 1, height: 58, background: 'rgba(255,255,255,0.08)', margin: '0 18px', flexShrink: 0 }}/>
+                      <div style={{ textAlign: 'center', minWidth: 68 }}>
+                        <div style={{ fontSize: 30, fontWeight: 900, color: '#A5F3B0', fontFamily: 'Sora, sans-serif', letterSpacing: -1, lineHeight: 1 }}>{animMonthsDiff}</div>
+                        <div style={{ fontSize: 9, fontWeight: 600, color: 'rgba(255,255,255,0.30)', marginTop: 6, lineHeight: 1.55 }}>months<br/>sooner</div>
+                      </div>
                     </div>
                   </>
                 ) : (
