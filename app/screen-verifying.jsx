@@ -2,7 +2,7 @@
 
 var VERIFY_DURATION = 5; // seconds
 
-function VerifyingScreen({ go, setPdState }) {
+function VerifyingScreen({ go, setPdState, verifyAttempt, setVerifyAttempt, setMeltState }) {
   var ink  = '#1B192E';
   var ink2 = '#4B4960';
   var muted= '#8A879B';
@@ -25,9 +25,16 @@ function VerifyingScreen({ go, setPdState }) {
   useEffect(function() {
     if (timeLeft > 0) return;
     var t = setTimeout(function() {
-      if (setPdState) setPdState('unlocked');
-      go('reward');
-    }, 400); // brief pause so final "done" state is visible
+      if (verifyAttempt === 0) {
+        // First attempt always fails
+        if (setMeltState) setMeltState('txn_not_found');
+        if (setVerifyAttempt) setVerifyAttempt(1);
+        go('meltnotfound');
+      } else {
+        // Retry always goes to verification review
+        go('verreview');
+      }
+    }, 400);
     return function() { clearTimeout(t); };
   }, [timeLeft]);
 
@@ -37,7 +44,7 @@ function VerifyingScreen({ go, setPdState }) {
     // idx 1: active 0-6s, done after 7s
     // idx 2: active 7-14s, done after 15s
     // idx 3: active 15s+, done at end
-    var thresholds = [-1, 2, 4, VERIFY_DURATION];
+    var thresholds = [-1, 2, VERIFY_DURATION];
     var prevDone = elapsed >= thresholds[idx];
     var nextActive = elapsed >= thresholds[idx - 1 < 0 ? 0 : idx - 1];
 
@@ -50,8 +57,7 @@ function VerifyingScreen({ go, setPdState }) {
   var STEPS = [
     { label: 'Payment flagged for review', detail: 'We received your update' },
     { label: 'Statement processing',       detail: 'Extracting payment data…' },
-    { label: 'Bureau confirmation',        detail: 'Awaiting CIBIL data' },
-    { label: 'Round 2 Unlocked',            detail: timeLeft <= 0 ? 'Approved!' : 'Offer ready for you' },
+    { label: verifyAttempt === 0 ? 'Checking AA records' : 'Round 2 Verification', detail: timeLeft <= 0 ? 'Processing result…' : 'Verification in progress' },
   ];
 
   var allDone = timeLeft <= 0;
@@ -90,7 +96,7 @@ function VerifyingScreen({ go, setPdState }) {
           </div>
           <div style={{ fontSize: 13, fontWeight: 500, color: muted, textAlign: 'center', lineHeight: 1.5, maxWidth: 280, marginBottom: 16 }}>
             {allDone
-              ? 'Your tranche is approved. Taking you there…'
+              ? (verifyAttempt === 0 ? 'Checking results…' : 'Review complete. Taking you there…')
               : 'Auto-verifying your payment. Please wait.'}
           </div>
 

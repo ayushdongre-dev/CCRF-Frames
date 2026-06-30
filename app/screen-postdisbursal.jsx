@@ -1,20 +1,20 @@
 // screen-postdisbursal.jsx — Melt Dashboard  (3-state hub)
 // pdState: 'action' | 'pending' | 'unlocked'
 
-var G     = '#1FA971';
-var G_DK  = '#178A5E';
-var G_BG  = '#E7F7EF';
+var G = '#1FA971';
+var G_DK = '#178A5E';
+var G_BG = '#E7F7EF';
 var G_BDR = '#A7E4C5';
-var P     = '#5B5BD6';
-var P_BG  = '#EFEEFE';
+var P = '#5B5BD6';
+var P_BG = '#EFEEFE';
 var P_BDR = '#C7C4F2';
-var GY    = '#9CA3AF';
+var GY = '#9CA3AF';
 var GY_BG = '#F5F4FA';
-var GY_BDR= '#E2E8F0';
-var INK   = '#1B192E';
-var INK2  = '#4B4960';
+var GY_BDR = '#E2E8F0';
+var INK = '#1B192E';
+var INK2 = '#4B4960';
 var MUTED = '#8A879B';
-var LINE  = '#ECEAF4';
+var LINE = '#ECEAF4';
 
 function fmtINR(n) {
   var s = String(Math.floor(n));
@@ -71,11 +71,11 @@ function MeltHeroCard({ go, heroCount }) {
           <span style={{ fontSize: 12, fontWeight: 700, color: '#fff' }}>Unlocked</span>
         </div>
         <button
-          onClick={function(){ go('reward'); }}
+          onClick={function () { go('reward'); }}
           style={{ background: '#fff', color: '#6D28D9', fontFamily: "'Sora',sans-serif", fontWeight: 800, fontSize: 14.5, border: 'none', borderRadius: 13, padding: '11px 22px', cursor: 'pointer', boxShadow: '0 4px 16px -4px rgba(0,0,0,.28)', transition: 'transform .12s', animation: 'popIn .35s .2s both', letterSpacing: 0.1 }}
-          onMouseDown={function(e){ e.currentTarget.style.transform='scale(.96)'; }}
-          onMouseUp={function(e){ e.currentTarget.style.transform='scale(1)'; }}
-          onMouseLeave={function(e){ e.currentTarget.style.transform='scale(1)'; }}
+          onMouseDown={function (e) { e.currentTarget.style.transform = 'scale(.96)'; }}
+          onMouseUp={function (e) { e.currentTarget.style.transform = 'scale(1)'; }}
+          onMouseLeave={function (e) { e.currentTarget.style.transform = 'scale(1)'; }}
         >
           Start Here →
         </button>
@@ -121,11 +121,11 @@ function LoanCard({ countVal, barFilled, showVerifiedBanner }) {
       {/* Stats 2×2 */}
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px 0', marginBottom: 14 }}>
         {[
-          { label: 'LOAN AMOUNT',  value: '₹2,00,000',  hl: false },
-          { label: 'EMI AMOUNT',   value: '₹18,810/mo', hl: false },
-          { label: 'OUTSTANDING',  value: '₹' + fmtINR(Math.max(0, 228000 - Math.round(countVal * 228000 / 200000))), hl: true },
-          { label: 'TENURE',       value: '15 months',   hl: false },
-        ].map(function(s, i) {
+          { label: 'LOAN AMOUNT', value: '₹2,00,000', hl: false },
+          { label: 'EMI AMOUNT', value: '₹18,810/mo', hl: false },
+          { label: 'OUTSTANDING', value: '₹' + fmtINR(Math.max(0, 228000 - Math.round(countVal * 228000 / 200000))), hl: true },
+          { label: 'TENURE', value: '15 months', hl: false },
+        ].map(function (s, i) {
           return (
             <div key={i} style={{ paddingRight: i % 2 === 0 ? 12 : 0, borderRight: i % 2 === 0 ? '1px solid rgba(255,255,255,.07)' : 'none' }}>
               <div style={M}>{s.label}</div>
@@ -182,26 +182,26 @@ function Connector({ color }) {
 }
 
 // ── Main component ───────────────────────────────────────
-function PostDisbursal({ go, pdState, setPdState }) {
-  var pdst     = pdState || 'action';
-  var action   = pdst === 'action';
-  var pending  = pdst === 'pending';
+function PostDisbursal({ go, pdState, setPdState, setVerifyAttempt }) {
+  var pdst = pdState || 'action';
+  var action = pdst === 'action';
+  var pending = pdst === 'pending';
   var unlocked = pdst === 'unlocked';
 
-  var aphst = useState('init');  var animPhase = aphst[0]; var setAnimPhase = aphst[1];
-  var cvst  = useState(0);       var countVal  = cvst[0];  var setCountVal  = cvst[1];
-  var snst  = useState(0);       var shimmerN  = snst[0];  var setShimmerN  = snst[1];
-  var bfst  = useState(false);   var barFilled = bfst[0];  var setBarFilled = bfst[1];
-  var hcst  = useState(0);       var heroCount = hcst[0];  var setHeroCount = hcst[1];
-  var hrst  = useRef(false);
+  var aphst = useState('init'); var animPhase = aphst[0]; var setAnimPhase = aphst[1];
+  var cvst = useState(0); var countVal = cvst[0]; var setCountVal = cvst[1];
+  var snst = useState(0); var shimmerN = snst[0]; var setShimmerN = snst[1];
+  var bfst = useState(false); var barFilled = bfst[0]; var setBarFilled = bfst[1];
+  var hcst = useState(0); var heroCount = hcst[0]; var setHeroCount = hcst[1];
+  var hrst = useRef(false);
 
-  useEffect(function() {
-    var t = setTimeout(function() { setBarFilled(true); }, 400);
-    return function() { clearTimeout(t); };
+  useEffect(function () {
+    var t = setTimeout(function () { setBarFilled(true); }, 400);
+    return function () { clearTimeout(t); };
   }, []);
 
-  useEffect(function() {
-    var outer = setTimeout(function() {
+  useEffect(function () {
+    var outer = setTimeout(function () {
       var startTs = null;
       function step(ts) {
         if (!startTs) startTs = ts;
@@ -212,22 +212,22 @@ function PostDisbursal({ go, pdState, setPdState }) {
       }
       requestAnimationFrame(step);
     }, 1200);
-    return function() { clearTimeout(outer); };
+    return function () { clearTimeout(outer); };
   }, []);
 
-  useEffect(function() {
-    var t = setTimeout(function() { setAnimPhase('active'); }, 2400);
-    return function() { clearTimeout(t); };
+  useEffect(function () {
+    var t = setTimeout(function () { setAnimPhase('active'); }, 2400);
+    return function () { clearTimeout(t); };
   }, []);
 
-  useEffect(function() {
+  useEffect(function () {
     if (animPhase !== 'active' || !action) return;
-    var t = setInterval(function() { setShimmerN(function(n) { return n + 1; }); }, 7000);
-    return function() { clearInterval(t); };
+    var t = setInterval(function () { setShimmerN(function (n) { return n + 1; }); }, 7000);
+    return function () { clearInterval(t); };
   }, [animPhase, pdst]);
 
   // Hero count-up (₹1,25,000) — fires once on unlock
-  useEffect(function() {
+  useEffect(function () {
     if (!unlocked || hrst.current) return;
     hrst.current = true;
     var startTs = null;
@@ -251,7 +251,7 @@ function PostDisbursal({ go, pdState, setPdState }) {
       <div style={{ minHeight: '100%', display: 'flex', flexDirection: 'column', background: '#F4F3FB', animation: 'fadeIn .2s' }}>
         {/* Header */}
         <div style={{ padding: '10px 16px 6px', display: 'flex', alignItems: 'center', gap: 10, flexShrink: 0 }}>
-          <button onClick={function(){ go('revisedoffer'); }} style={{ width: 34, height: 34, borderRadius: 999, border: '1.5px solid ' + LINE, background: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+          <button onClick={function () { go('revisedoffer'); }} style={{ width: 34, height: 34, borderRadius: 999, border: '1.5px solid ' + LINE, background: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M15 5l-7 7 7 7" stroke={INK} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>
           </button>
           <div>
@@ -335,11 +335,11 @@ function PostDisbursal({ go, pdState, setPdState }) {
                   You've unlocked ₹3,00,000 for Round 2. Tap below to claim your offer.
                 </div>
                 <button
-                  onClick={function(){ go('reward'); }}
+                  onClick={function () { go('reward'); }}
                   style={{ width: '100%', height: 46, borderRadius: 13, border: 'none', background: G, color: '#fff', fontWeight: 800, fontSize: 14, ...sora, cursor: 'pointer', boxShadow: '0 8px 22px -6px rgba(31,169,113,.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 7, transition: 'transform .12s' }}
-                  onMouseDown={function(e){ e.currentTarget.style.transform='scale(.975)'; }}
-                  onMouseUp={function(e){ e.currentTarget.style.transform='scale(1)'; }}
-                  onMouseLeave={function(e){ e.currentTarget.style.transform='scale(1)'; }}
+                  onMouseDown={function (e) { e.currentTarget.style.transform = 'scale(.975)'; }}
+                  onMouseUp={function (e) { e.currentTarget.style.transform = 'scale(1)'; }}
+                  onMouseLeave={function (e) { e.currentTarget.style.transform = 'scale(1)'; }}
                 >
                   Continue →
                 </button>
@@ -361,11 +361,11 @@ function PostDisbursal({ go, pdState, setPdState }) {
         {/* Sticky primary CTA */}
         <BottomBar>
           <button
-            onClick={function(){ go('reward'); }}
+            onClick={function () { go('reward'); }}
             style={{ width: '100%', height: 52, borderRadius: 15, border: 'none', cursor: 'pointer', background: G, color: '#fff', fontWeight: 800, fontSize: 15.5, ...sora, boxShadow: '0 10px 28px -8px rgba(31,169,113,.55)', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, transition: 'transform .12s' }}
-            onMouseDown={function(e){ e.currentTarget.style.transform='scale(.975)'; }}
-            onMouseUp={function(e){ e.currentTarget.style.transform='scale(1)'; }}
-            onMouseLeave={function(e){ e.currentTarget.style.transform='scale(1)'; }}
+            onMouseDown={function (e) { e.currentTarget.style.transform = 'scale(.975)'; }}
+            onMouseUp={function (e) { e.currentTarget.style.transform = 'scale(1)'; }}
+            onMouseLeave={function (e) { e.currentTarget.style.transform = 'scale(1)'; }}
           >
             Start Here →
           </button>
@@ -380,7 +380,7 @@ function PostDisbursal({ go, pdState, setPdState }) {
   return (
     <div style={{ minHeight: '100%', display: 'flex', flexDirection: 'column', background: '#F4F3FB', animation: 'fadeIn .2s' }}>
       <div style={{ padding: '10px 16px 6px', display: 'flex', alignItems: 'center', gap: 10, flexShrink: 0 }}>
-        <button onClick={function(){ go('revisedoffer'); }} style={{ width: 34, height: 34, borderRadius: 999, border: '1.5px solid ' + LINE, background: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+        <button onClick={function () { go('revisedoffer'); }} style={{ width: 34, height: 34, borderRadius: 999, border: '1.5px solid ' + LINE, background: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M15 5l-7 7 7 7" stroke={INK} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>
         </button>
         <div>
@@ -446,10 +446,10 @@ function PostDisbursal({ go, pdState, setPdState }) {
               </div>
               {action && (
                 <React.Fragment>
-                  <button onClick={function(){ go('claim'); }} style={{ position: 'relative', width: '100%', height: 42, borderRadius: 12, border: 'none', background: 'linear-gradient(135deg,' + P + ',#4F46E5)', color: '#fff', fontWeight: 700, fontSize: 13.5, ...sora, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 7, marginTop: 12, cursor: 'pointer', overflow: 'hidden', boxShadow: '0 8px 22px -6px rgba(91,91,214,.45)', transition: 'transform .1s' }}
-                    onMouseDown={function(e){ e.currentTarget.style.transform='scale(.975)'; }}
-                    onMouseUp={function(e){ e.currentTarget.style.transform='scale(1)'; }}
-                    onMouseLeave={function(e){ e.currentTarget.style.transform='scale(1)'; }}
+                  <button onClick={function () { if (setVerifyAttempt) setVerifyAttempt(0); go('meltbank'); }} style={{ position: 'relative', width: '100%', height: 42, borderRadius: 12, border: 'none', background: 'linear-gradient(135deg,' + P + ',#4F46E5)', color: '#fff', fontWeight: 700, fontSize: 13.5, ...sora, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 7, marginTop: 12, cursor: 'pointer', overflow: 'hidden', boxShadow: '0 8px 22px -6px rgba(91,91,214,.45)', transition: 'transform .1s' }}
+                    onMouseDown={function (e) { e.currentTarget.style.transform = 'scale(.975)'; }}
+                    onMouseUp={function (e) { e.currentTarget.style.transform = 'scale(1)'; }}
+                    onMouseLeave={function (e) { e.currentTarget.style.transform = 'scale(1)'; }}
                   >
                     <div style={{ position: 'absolute', inset: 0, overflow: 'hidden', borderRadius: 12 }}>
                       <div key={shimmerN} style={{ position: 'absolute', top: 0, left: 0, width: '45%', height: '100%', background: 'linear-gradient(90deg,transparent,rgba(255,255,255,.22),transparent)', animation: shimmerN === 0 ? 'shimmer .8s 2.6s both' : 'shimmer .8s both' }} />
@@ -464,7 +464,7 @@ function PostDisbursal({ go, pdState, setPdState }) {
                 </React.Fragment>
               )}
               {pending && (
-                <button onClick={function(){ go('verifying'); }} style={{ width: '100%', height: 40, borderRadius: 12, marginTop: 10, cursor: 'pointer', background: 'none', border: '1.5px solid ' + P_BDR, color: P, fontWeight: 700, fontSize: 13, ...sora, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6 }}>
+                <button onClick={function () { go('verifying'); }} style={{ width: '100%', height: 40, borderRadius: 12, marginTop: 10, cursor: 'pointer', background: 'none', border: '1.5px solid ' + P_BDR, color: P, fontWeight: 700, fontSize: 13, ...sora, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6 }}>
                   <svg width="13" height="13" viewBox="0 0 24 24" fill="none" style={{ animation: 'spin 1.2s linear infinite' }}><circle cx="12" cy="12" r="8" stroke="rgba(91,91,214,.25)" strokeWidth="2" /><path d="M12 4a8 8 0 018 8" stroke={P} strokeWidth="2" strokeLinecap="round" /></svg>
                   Check status
                 </button>

@@ -35,12 +35,12 @@ function MultiOffer({ go }) {
         <div style={{ width: 38 }}/>
       </div>
 
-      <div style={{ flex: 1, padding: '0 20px' }}>
+      <div style={{ flex: 1, padding: '0 20px 20px' }}>
 
         {/* ── Hero ── */}
-        <div style={{ marginBottom: 30, paddingTop: 4, textAlign: 'center' }}>
-          <div style={{ fontWeight: 900, fontSize: 26, color: ink, ...sora, letterSpacing: -0.8, lineHeight: 1.2 }}>Your offer is ready.</div>
-          <div style={{ fontSize: 13.5, color: muted, fontWeight: 500, marginTop: 8 }}>Choose how you'd like to use it.</div>
+        <div style={{ marginBottom: 16, textAlign: 'center' }}>
+          <div style={{ fontWeight: 900, fontSize: 24, color: ink, ...sora, letterSpacing: -0.8, lineHeight: 1.2 }}>Your offer is ready.</div>
+          <div style={{ fontSize: 13, color: muted, fontWeight: 500, marginTop: 6 }}>Choose how you'd like to use it.</div>
         </div>
 
         {/* ── Card 1: Clear Card Debt ── */}
@@ -53,25 +53,40 @@ function MultiOffer({ go }) {
             boxShadow: meltOn ? '0 8px 28px -10px rgba(91,63,212,.28)' : '0 1px 6px rgba(0,0,0,.05)',
             transition: 'box-shadow .2s, border-color .2s, background .2s',
           }}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '16px 16px' }}>
+            {/* exclusive strip */}
+            <div style={{
+              background: 'linear-gradient(90deg, #4B2EC2, #6D28D9)',
+              padding: '6px 16px', display: 'flex', alignItems: 'center', gap: 6,
+            }}>
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
+                <polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26" fill="#FFD700"/>
+              </svg>
+              <span style={{ fontSize: 10.5, fontWeight: 700, color: '#fff', letterSpacing: 0.3 }}>You're in the top 5% of customers</span>
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '14px 16px 12px' }}>
               <div>
-                <div style={{ fontWeight: 800, fontSize: 16, color: meltOn ? P : ink, ...sora, transition: 'color .2s' }}>Clear Card Debt</div>
-                <div style={{ fontSize: 12, color: muted, fontWeight: 500, marginTop: 3 }}>Melt handles your card dues</div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 3 }}>
+                  <div style={{ fontWeight: 800, fontSize: 16, color: meltOn ? P : ink, ...sora, transition: 'color .2s' }}>Clear Card Debt</div>
+                  <div style={{
+                    background: '#1FA971', borderRadius: 6, padding: '2px 8px',
+                    fontSize: 9.5, fontWeight: 700, color: '#fff', letterSpacing: 0.4, flexShrink: 0,
+                  }}>Recommended</div>
+                </div>
+                <div style={{ fontSize: 12, color: muted, fontWeight: 500 }}>Melt handles your card dues</div>
               </div>
               {Radio(meltOn)}
             </div>
 
-            {meltOn && (
-              <div style={{ padding: '0 16px 18px' }}>
-                <div style={{ height: 1, background: 'rgba(91,63,212,0.10)', marginBottom: 16 }}/>
-                <div style={{ fontSize: 9.5, fontWeight: 700, color: 'rgba(91,63,212,0.45)', letterSpacing: 0.9, marginBottom: 7 }}>SANCTIONED AMOUNT</div>
-                <div style={{ fontWeight: 900, fontSize: 38, color: P, ...sora, letterSpacing: -1.5, lineHeight: 1 }}>₹5,00,000</div>
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: 14, background: 'rgba(91,63,212,0.07)', borderRadius: 10, padding: '8px 12px' }}>
-                  <span style={{ fontSize: 11.5, fontWeight: 600, color: muted }}>Your card debt</span>
-                  <span style={{ fontSize: 12, fontWeight: 800, color: P, ...sora }}>₹5,00,000</span>
-                </div>
+            {/* Always expanded */}
+            <div style={{ padding: '0 16px 18px' }}>
+              <div style={{ height: 1, background: 'rgba(91,63,212,0.10)', marginBottom: 16 }}/>
+              <div style={{ fontSize: 9.5, fontWeight: 700, color: 'rgba(91,63,212,0.45)', letterSpacing: 0.9, marginBottom: 7 }}>SANCTIONED AMOUNT</div>
+              <div style={{ fontWeight: 900, fontSize: 38, color: P, ...sora, letterSpacing: -1.5, lineHeight: 1 }}>₹5,00,000</div>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: 14, background: 'rgba(91,63,212,0.07)', borderRadius: 10, padding: '8px 12px' }}>
+                <span style={{ fontSize: 11.5, fontWeight: 600, color: muted }}>Your card debt</span>
+                <span style={{ fontSize: 12, fontWeight: 800, color: P, ...sora }}>₹5,00,000</span>
               </div>
-            )}
+            </div>
           </div>
         </button>
 
@@ -92,7 +107,7 @@ function MultiOffer({ go }) {
             boxShadow: cashOn ? '0 8px 28px -10px rgba(91,63,212,.28)' : '0 1px 6px rgba(0,0,0,.05)',
             transition: 'box-shadow .2s, border-color .2s, background .2s',
           }}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '16px 16px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '16px 16px 12px' }}>
               <div>
                 <div style={{ fontWeight: 800, fontSize: 16, color: cashOn ? P : ink, ...sora, transition: 'color .2s' }}>Cash Loan</div>
                 <div style={{ fontSize: 12, color: muted, fontWeight: 500, marginTop: 3 }}>Transferred directly to your bank</div>
@@ -100,14 +115,13 @@ function MultiOffer({ go }) {
               {Radio(cashOn)}
             </div>
 
-            {cashOn && (
-              <div style={{ padding: '0 16px 18px' }}>
-                <div style={{ height: 1, background: 'rgba(91,63,212,0.10)', marginBottom: 16 }}/>
-                <div style={{ fontSize: 9.5, fontWeight: 700, color: 'rgba(91,63,212,0.45)', letterSpacing: 0.9, marginBottom: 7 }}>SANCTIONED AMOUNT</div>
-                <div style={{ fontWeight: 900, fontSize: 38, color: P, ...sora, letterSpacing: -1.5, lineHeight: 1 }}>₹2,00,000</div>
-                <div style={{ fontSize: 12, color: muted, fontWeight: 500, marginTop: 10 }}>Transferred to your salary account</div>
-              </div>
-            )}
+            {/* Always expanded */}
+            <div style={{ padding: '0 16px 18px' }}>
+              <div style={{ height: 1, background: 'rgba(91,63,212,0.10)', marginBottom: 16 }}/>
+              <div style={{ fontSize: 9.5, fontWeight: 700, color: 'rgba(91,63,212,0.45)', letterSpacing: 0.9, marginBottom: 7 }}>SANCTIONED AMOUNT</div>
+              <div style={{ fontWeight: 900, fontSize: 38, color: P, ...sora, letterSpacing: -1.5, lineHeight: 1 }}>₹2,00,000</div>
+              <div style={{ fontSize: 12, color: muted, fontWeight: 500, marginTop: 10 }}>Transferred to your salary account</div>
+            </div>
           </div>
         </button>
       </div>

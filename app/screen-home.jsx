@@ -1,5 +1,6 @@
 // screen-home.jsx — EQUALL Home Dashboard
-function HomeScreen({ go }) {
+function HomeScreen({ go, meltState }) {
+  var inMeltHold = meltState === 'txn_not_found' || meltState === 'retry_exhausted' || meltState === 'bureau_fallback';
   const steps = [
     { label: 'Apply',            done: false, active: true },
     { label: 'Your Offer',       done: false, active: false },
@@ -159,20 +160,29 @@ function HomeScreen({ go }) {
           <div style={{ fontWeight: 800, fontSize: 17, color: '#1A1A2E', marginBottom: 12 }}>Products For You</div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
             {/* Melt */}
-            <button onClick={() => go('multioffer')} style={{
-              width: '100%', borderRadius: 18, background: '#1A1740', padding: '16px 18px',
-              display: 'flex', alignItems: 'center', gap: 14, textAlign: 'left',
-              boxShadow: '0 10px 28px -14px rgba(15,13,46,.6)',
-            }}>
+            <div
+              onClick={() => go(inMeltHold ? 'meltstatus' : 'multioffer')}
+              style={{
+                width: '100%', borderRadius: 18, background: '#1A1740', padding: '16px 18px',
+                display: 'flex', alignItems: 'center', gap: 14, textAlign: 'left',
+                boxShadow: '0 10px 28px -14px rgba(15,13,46,.6)', cursor: 'pointer',
+              }}
+            >
               <div style={{ width: 44, height: 44, borderRadius: 14, background: 'rgba(91,63,212,.35)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 2C8 8 5 10 5 14a7 7 0 0 0 14 0c0-4-3-6-7-12Z" fill="#60A5FA" opacity=".85"/><path d="M12 14c-1.5-2-2-3-2-4.5a2 2 0 0 1 4 0C14 11 13.5 12 12 14Z" fill="#fff" opacity=".5"/></svg>
               </div>
               <div style={{ flex: 1 }}>
                 <div style={{ fontWeight: 700, fontSize: 14.5, color: '#fff' }}>Melt · Card Debt Relief</div>
-                <div style={{ fontSize: 12, color: 'rgba(255,255,255,.55)', marginTop: 3 }}>Manage card debt smarter, with lower monthly payments</div>
+                {inMeltHold
+                  ? <div style={{ fontSize: 12, color: 'rgba(255,255,255,.55)', marginTop: 3 }}>Verification in progress · Round 2</div>
+                  : <div style={{ fontSize: 12, color: 'rgba(255,255,255,.55)', marginTop: 3 }}>Manage card debt smarter, with lower monthly payments</div>
+                }
               </div>
-              <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M6 4l5 5-5 5" stroke="rgba(255,255,255,.4)" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/></svg>
-            </button>
+              {inMeltHold
+                ? <div style={{ fontSize: 11, fontWeight: 700, color: '#fff', background: 'rgba(127,85,223,.5)', border: '1px solid rgba(255,255,255,.2)', borderRadius: 999, padding: '5px 11px', flexShrink: 0, whiteSpace: 'nowrap' }}>See status →</div>
+                : <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M6 4l5 5-5 5" stroke="rgba(255,255,255,.4)" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/></svg>
+              }
+            </div>
 
             {/* Instant Cash */}
             <button style={{
