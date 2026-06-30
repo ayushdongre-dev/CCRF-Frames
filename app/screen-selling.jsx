@@ -668,8 +668,8 @@ function SavingsScreen({ go, monthly = 30000, setMonthly }) {
         <div style={{ textAlign: 'center', marginBottom: 14, position: 'relative', zIndex: 1 }}>
           <div style={{ fontSize: 9.5, fontWeight: 800, color: 'rgba(255,255,255,0.58)', letterSpacing: 1.5, textTransform: 'uppercase', marginBottom: 6 }}>You'll Save</div>
           <div style={{ fontSize: 40, fontWeight: 900, color: '#fff', fontFamily: 'Sora, sans-serif', letterSpacing: -2, lineHeight: 1 }}>{inr(countedSaving)}</div>
-          <div style={{ fontSize: 11.5, color: 'rgba(255,255,255,0.55)', fontWeight: 500, marginTop: 6 }}>Throughout your repayment journey</div>
-        </div>
+          
+        </div>  
 
         {/* Inline benefit blocks */}
         <div style={{ display: 'flex', alignItems: 'center', position: 'relative', zIndex: 1 }}>
@@ -783,7 +783,7 @@ function SavingsScreen({ go, monthly = 30000, setMonthly }) {
             />
             <div style={{
               position: 'absolute', left: 0, right: 0, bottom: 0, zIndex: 21,
-              height: sheetOpen === 'interest' ? '74%' : '58%', display: 'flex', flexDirection: 'column', background: '#fff',
+              height: sheetOpen === 'interest' ? '74%' : '76%', display: 'flex', flexDirection: 'column', background: '#fff',
               borderTopLeftRadius: 24, borderTopRightRadius: 24,
               boxShadow: '0 -18px 40px -18px rgba(20,14,57,0.45)',
               overflow: 'hidden',
@@ -812,132 +812,186 @@ function SavingsScreen({ go, monthly = 30000, setMonthly }) {
               <div key={sheetOpen} style={{ flex: 1, overflowY: 'auto', overscrollBehavior: 'contain', padding: '16px 18px 32px' }}>
                 {sheetOpen === 'interest' ? (
                   <>
-                    {/* Subtitle */}
-                    <div style={{ fontSize: 11, color: '#A09DB8', fontWeight: 500, marginBottom: 16, textAlign: 'center', letterSpacing: 0.1 }}>
-                      ₹5,00,000 balance · {inr(monthly)}/mo EMI
+                    <div style={{ textAlign: 'center', fontSize: 11.5, color: '#A09DB8', fontWeight: 500, marginBottom: 18 }}>
+                      ₹5,00,000 balance , {inr(monthly)}/mo payment
                     </div>
 
-                    {/* Column headers */}
-                    <div style={{ display: 'flex', alignItems: 'flex-end', gap: 8, marginBottom: 10, paddingLeft: 82 }}>
-                      <div style={{ flex: 1, textAlign: 'center', paddingBottom: 3 }}>
-                        <span style={{ fontSize: 9, fontWeight: 700, color: '#B4B2C8', letterSpacing: 0.8, textTransform: 'uppercase' }}>Current Card</span>
+                    {/* ── Comparison table ── */}
+                    <div style={{ borderRadius: 20, overflow: 'hidden', border: '1.5px solid #ECEAF4', marginBottom: 16, boxShadow: '0 4px 20px rgba(0,0,0,.06)' }}>
+
+                      {/* Column headers */}
+                      <div style={{ display: 'grid', gridTemplateColumns: '110px 1fr 1fr', background: '#FAFAFA' }}>
+                        <div style={{ padding: '12px 14px', borderRight: '1px solid #F0EEF8' }} />
+                        <div style={{ padding: '12px 8px', textAlign: 'center', borderRight: '1px solid #F0EEF8' }}>
+                          <div style={{ fontSize: 10, fontWeight: 700, color: '#9896B0', letterSpacing: 0.5, textTransform: 'uppercase' }}>Credit Card</div>
+                        </div>
+                        <div style={{ padding: '12px 8px', textAlign: 'center', background: '#F0ECFF' }}>
+                          <div style={{ display: 'inline-flex', alignItems: 'center', gap: 4, background: '#5B3FD4', borderRadius: 999, padding: '4px 11px' }}>
+                            <svg width="8" height="8" viewBox="0 0 10 10" fill="none">
+                              <path d="M2 5.5l2.5 2.5L8 3" stroke="#fff" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
+                            </svg>
+                            <span style={{ fontSize: 9.5, fontWeight: 800, color: '#fff', letterSpacing: 0.3 }}>With Melt</span>
+                          </div>
+                        </div>
                       </div>
-                      <div style={{ flex: 1, display: 'flex', justifyContent: 'center' }}>
-                        <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5, background: 'linear-gradient(135deg, #5B3FD4 0%, #7C5CFC 100%)', color: '#fff', fontSize: 9.5, fontWeight: 800, letterSpacing: 0.5, textTransform: 'uppercase', padding: '5px 13px', borderRadius: 999, boxShadow: '0 4px 14px rgba(91,63,212,0.42)' }}>
-                          <svg width="5" height="5" viewBox="0 0 8 8" fill="currentColor"><circle cx="4" cy="4" r="4"/></svg>
-                          With Melt
-                        </span>
+
+                      {/* Row 1 — Interest Rate */}
+                      <div style={{ display: 'grid', gridTemplateColumns: '110px 1fr 1fr', borderTop: '1px solid #F0EEF8', background: '#fff' }}>
+                        <div style={{ padding: '16px 14px', borderRight: '1px solid #F0EEF8', display: 'flex', alignItems: 'center' }}>
+                          <div style={{ fontSize: 10.5, fontWeight: 600, color: '#6B6883', lineHeight: 1.3 }}>Interest Rate</div>
+                        </div>
+                        <div style={{ padding: '16px 8px', borderRight: '1px solid #F0EEF8', textAlign: 'center' }}>
+                          <div style={{ fontSize: 28, fontWeight: 900, color: '#DC2626', fontFamily: 'Sora, sans-serif', letterSpacing: -1, lineHeight: 1 }}>54%</div>
+                          <div style={{ fontSize: 9, color: '#C4C2D8', marginTop: 3, fontWeight: 500 }}>per annum</div>
+                        </div>
+                        <div style={{ padding: '16px 8px', textAlign: 'center', background: '#F5F2FF' }}>
+                          <div style={{ fontSize: 28, fontWeight: 900, color: '#5B3FD4', fontFamily: 'Sora, sans-serif', letterSpacing: -1, lineHeight: 1 }}>25%</div>
+                          <div style={{ fontSize: 9, color: '#A89FD4', marginTop: 3, fontWeight: 500 }}>per annum</div>
+                        </div>
+                      </div>
+
+                      {/* Row 2 — Interest Paid */}
+                      <div style={{ display: 'grid', gridTemplateColumns: '110px 1fr 1fr', borderTop: '1px solid #F0EEF8', background: '#FAFAFA' }}>
+                        <div style={{ padding: '16px 14px', borderRight: '1px solid #F0EEF8', display: 'flex', alignItems: 'center' }}>
+                          <div style={{ fontSize: 10.5, fontWeight: 600, color: '#6B6883', lineHeight: 1.3 }}>Interest Paid</div>
+                        </div>
+                        <div style={{ padding: '16px 8px', borderRight: '1px solid #F0EEF8', textAlign: 'center' }}>
+                          <div style={{ fontSize: 20, fontWeight: 900, color: '#374151', fontFamily: 'Sora, sans-serif', letterSpacing: -0.6, lineHeight: 1 }}>{lakh(cardsInt)}</div>
+                          <div style={{ fontSize: 9, color: '#C4C2D8', marginTop: 3, fontWeight: 500 }}>total</div>
+                        </div>
+                        <div style={{ padding: '16px 8px', textAlign: 'center', background: '#F0ECFF' }}>
+                          <div style={{ fontSize: 20, fontWeight: 900, color: '#5B3FD4', fontFamily: 'Sora, sans-serif', letterSpacing: -0.6, lineHeight: 1 }}>{lakh(meltInt)}</div>
+                          <div style={{ fontSize: 9, color: '#A89FD4', marginTop: 3, fontWeight: 500 }}>total</div>
+                        </div>
+                      </div>
+
+                      {/* Row 3 — Total You Pay */}
+                      <div style={{ display: 'grid', gridTemplateColumns: '110px 1fr 1fr', borderTop: '1.5px solid #E4E2F0', background: '#fff' }}>
+                        <div style={{ padding: '18px 14px', borderRight: '1px solid #F0EEF8', display: 'flex', alignItems: 'center' }}>
+                          <div style={{ fontSize: 10.5, fontWeight: 800, color: '#1B192E', lineHeight: 1.3 }}>Total You Pay</div>
+                        </div>
+                        <div style={{ padding: '18px 8px', borderRight: '1px solid #F0EEF8', textAlign: 'center' }}>
+                          <div style={{ fontSize: 22, fontWeight: 900, color: '#1B192E', fontFamily: 'Sora, sans-serif', letterSpacing: -0.8, lineHeight: 1 }}>{lakh(500000 + cardsInt)}</div>
+                        </div>
+                        <div style={{ padding: '18px 8px', textAlign: 'center', background: '#EDE8FF' }}>
+                          <div style={{ fontSize: 22, fontWeight: 900, color: '#4B2FBE', fontFamily: 'Sora, sans-serif', letterSpacing: -0.8, lineHeight: 1 }}>{lakh(500000 + meltInt)}</div>
+                        </div>
                       </div>
                     </div>
 
-                    {/* Row: Interest Rate */}
-                    <div style={{ display: 'flex', alignItems: 'stretch', gap: 8, marginBottom: 7 }}>
-                      <div style={{ width: 82, flexShrink: 0, display: 'flex', alignItems: 'center' }}>
-                        <div style={{ fontSize: 10.5, fontWeight: 600, color: '#88859E', lineHeight: 1.35 }}>Interest<br/>Rate</div>
+                    {/* ── Savings card — light & eye-catching ── */}
+                    <div style={{ background: 'linear-gradient(135deg, #ECFDF5 0%, #D1FAE5 100%)', borderRadius: 20, padding: '18px 20px', border: '1.5px solid #6EE7B7', display: 'flex', alignItems: 'center', boxShadow: '0 8px 28px -8px rgba(16,185,129,0.28)' }}>
+                      <div style={{ width: 46, height: 46, borderRadius: 14, background: '#10B981', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, marginRight: 14, boxShadow: '0 6px 18px -4px rgba(16,185,129,0.55)' }}>
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+                          <path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z" fill="#fff"/>
+                        </svg>
                       </div>
-                      <div style={{ flex: 1, background: '#F8F7FA', borderRadius: 14, padding: '14px 10px', textAlign: 'center', boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }}>
-                        <div style={{ fontSize: 22, fontWeight: 900, color: '#E03E3E', fontFamily: 'Sora, sans-serif', letterSpacing: -0.8 }}>54%</div>
-                        <div style={{ fontSize: 9, color: '#B8B6CC', fontWeight: 500, marginTop: 2 }}>per annum</div>
-                      </div>
-                      <div style={{ flex: 1, background: 'linear-gradient(145deg, #EDE8FF 0%, #E8E2FF 100%)', borderRadius: 14, padding: '14px 10px', textAlign: 'center', border: '1.5px solid rgba(91,63,212,0.18)', boxShadow: '0 6px 20px rgba(91,63,212,0.15)' }}>
-                        <div style={{ fontSize: 22, fontWeight: 900, color: '#5B3FD4', fontFamily: 'Sora, sans-serif', letterSpacing: -0.8 }}>25%</div>
-                        <div style={{ fontSize: 9, color: '#9896C4', fontWeight: 500, marginTop: 2 }}>per annum</div>
-                      </div>
-                    </div>
-
-                    {/* Row: Interest Paid */}
-                    <div style={{ display: 'flex', alignItems: 'stretch', gap: 8, marginBottom: 7 }}>
-                      <div style={{ width: 82, flexShrink: 0, display: 'flex', alignItems: 'center' }}>
-                        <div style={{ fontSize: 10.5, fontWeight: 600, color: '#88859E', lineHeight: 1.35 }}>Interest<br/>Paid</div>
-                      </div>
-                      <div style={{ flex: 1, background: '#F8F7FA', borderRadius: 14, padding: '14px 10px', textAlign: 'center', boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }}>
-                        <div style={{ fontSize: 22, fontWeight: 900, color: '#374151', fontFamily: 'Sora, sans-serif', letterSpacing: -0.8 }}>{lakh(cardsInt)}</div>
-                        <div style={{ fontSize: 9, color: '#B8B6CC', fontWeight: 500, marginTop: 2 }}>total interest</div>
-                      </div>
-                      <div style={{ flex: 1, background: 'linear-gradient(145deg, #EDE8FF 0%, #E8E2FF 100%)', borderRadius: 14, padding: '14px 10px', textAlign: 'center', border: '1.5px solid rgba(91,63,212,0.18)', boxShadow: '0 6px 20px rgba(91,63,212,0.15)' }}>
-                        <div style={{ fontSize: 22, fontWeight: 900, color: '#5B3FD4', fontFamily: 'Sora, sans-serif', letterSpacing: -0.8 }}>{lakh(meltInt)}</div>
-                        <div style={{ fontSize: 9, color: '#9896C4', fontWeight: 500, marginTop: 2 }}>total interest</div>
-                      </div>
-                    </div>
-
-                    {/* Row: Total You Pay — visual hero */}
-                    <div style={{ display: 'flex', alignItems: 'stretch', gap: 8, marginBottom: 16 }}>
-                      <div style={{ width: 82, flexShrink: 0, display: 'flex', alignItems: 'center' }}>
-                        <div style={{ fontSize: 10.5, fontWeight: 700, color: '#1B192E', lineHeight: 1.35 }}>Total<br/>You Pay</div>
-                      </div>
-                      <div style={{ flex: 1, background: '#ECEBED', borderRadius: 14, padding: '18px 10px', textAlign: 'center', boxShadow: '0 3px 10px rgba(0,0,0,0.06)' }}>
-                        <div style={{ fontSize: 26, fontWeight: 900, color: '#1B192E', fontFamily: 'Sora, sans-serif', letterSpacing: -1 }}>{lakh(500000 + cardsInt)}</div>
-                      </div>
-                      <div style={{ flex: 1, background: 'linear-gradient(145deg, #DDD8FF 0%, #E4DDFF 100%)', borderRadius: 14, padding: '18px 10px', textAlign: 'center', border: '2px solid rgba(91,63,212,0.28)', boxShadow: '0 10px 30px rgba(91,63,212,0.22)' }}>
-                        <div style={{ fontSize: 26, fontWeight: 900, color: '#5B3FD4', fontFamily: 'Sora, sans-serif', letterSpacing: -1 }}>{lakh(500000 + meltInt)}</div>
-                      </div>
-                    </div>
-
-                    {/* Savings takeaway — premium two-part */}
-                    <div style={{ background: 'linear-gradient(135deg, #16133A 0%, #1E1B42 100%)', borderRadius: 18, padding: '18px 20px', display: 'flex', alignItems: 'center', boxShadow: '0 14px 36px -8px rgba(10,8,32,0.45)' }}>
                       <div style={{ flex: 1 }}>
-                        <div style={{ fontSize: 9, fontWeight: 800, color: 'rgba(255,255,255,0.30)', letterSpacing: 1.5, textTransform: 'uppercase', marginBottom: 5 }}>You'll Save</div>
-                        <div style={{ fontSize: 36, fontWeight: 900, color: '#fff', fontFamily: 'Sora, sans-serif', letterSpacing: -1.5, lineHeight: 1 }}>{lakh(saving)}</div>
-                        <div style={{ fontSize: 10.5, color: 'rgba(255,255,255,0.26)', fontWeight: 500, marginTop: 7 }}>in total interest with Melt</div>
-                      </div>
-                      <div style={{ width: 1, height: 58, background: 'rgba(255,255,255,0.08)', margin: '0 18px', flexShrink: 0 }}/>
-                      <div style={{ textAlign: 'center', minWidth: 68 }}>
-                        <div style={{ fontSize: 30, fontWeight: 900, color: '#A5F3B0', fontFamily: 'Sora, sans-serif', letterSpacing: -1, lineHeight: 1 }}>{animMonthsDiff}</div>
-                        <div style={{ fontSize: 9, fontWeight: 600, color: 'rgba(255,255,255,0.30)', marginTop: 6, lineHeight: 1.55 }}>months<br/>sooner</div>
+                        <div style={{ fontSize: 9.5, fontWeight: 800, color: '#059669', letterSpacing: 1, textTransform: 'uppercase', marginBottom: 4 }}>You Save with Melt</div>
+                        <div style={{ fontSize: 32, fontWeight: 900, color: '#064E3B', fontFamily: 'Sora, sans-serif', letterSpacing: -1.5, lineHeight: 1, marginBottom: 4 }}>{lakh(saving)}</div>
+                        <div style={{ fontSize: 11, color: '#059669', fontWeight: 600 }}>in total interest · {animMonthsDiff} months sooner</div>
                       </div>
                     </div>
                   </>
                 ) : (
-                  <>
-                    {/* Scenario context */}
-                    <div style={{ background: '#F4F1FF', borderRadius: 14, padding: '10px 14px', marginBottom: 14, display: 'flex', alignItems: 'center', gap: 8, border: '1px solid #DDD6FE' }}>
-                      {purpleCalcIcon}
-                      <span style={{ fontSize: 12, fontWeight: 700, color: '#5B3FD4', lineHeight: 1.4 }}>
-                        Considering:  <strong>₹5L debt</strong>,  <strong>{inr(monthly)}/mo</strong> payment
-                      </span>
-                    </div>
+                  /* ── MINIMUM PAY — single unified card ── */
+                  (() => {
+                    var meltMonthlyInt = Math.round(500000 * 0.25 / 12);
+                    var ccInt = monthlyInterestOnDebt;
+                    var ccPrin = Math.max(0, monthly - ccInt);
+                    var meltPrin = Math.max(0, monthly - meltMonthlyInt);
+                    var extraPrin = meltPrin - ccPrin;
+                    var ccIntPct = Math.min(98, Math.round(ccInt / monthly * 100));
+                    var meltIntPct = Math.min(98, Math.round(meltMonthlyInt / monthly * 100));
+                    return (
+                      <>
+                        {/* Subtitle */}
+                        <div style={{ textAlign: 'center', fontSize: 11.5, color: '#A09DB8', fontWeight: 500, marginBottom: 18 }}>
+                          Where your {inr(monthly)} goes each month
+                        </div>
 
-                    <div style={{ background: '#FAFAFA', borderRadius: 18, padding: '18px 16px', border: '1px solid #E8E4F5' }}>
-                      <div style={{ fontSize: 10, fontWeight: 800, color: '#88859E', letterSpacing: 0.8, textTransform: 'uppercase', marginBottom: 14, textAlign: 'center' }}>
-                        Where your {inr(monthly)} goes each month
-                      </div>
-                      {(() => {
-                        const principalPaid = Math.max(0, monthly - monthlyInterestOnDebt);
-                        const interestPct = Math.min(100, Math.round((monthlyInterestOnDebt / monthly) * 100));
-                        return (
-                          <>
-                            <div style={{ display: 'flex', gap: 10, marginBottom: 14 }}>
-                              <div style={{ flex: 1, background: '#FFF5F5', border: '1.5px solid #FECACA', borderRadius: 14, padding: '12px 10px', textAlign: 'center' }}>
-                                <div style={{ fontSize: 9, fontWeight: 800, color: '#DC2626', letterSpacing: 0.5, textTransform: 'uppercase', marginBottom: 4 }}>Goes to Interest</div>
-                                <div style={{ fontSize: 20, fontWeight: 900, color: '#DC2626', fontFamily: 'Sora, sans-serif' }}>{inr(monthlyInterestOnDebt)}</div>
-                                <div style={{ fontSize: 9.5, color: '#EF4444', fontWeight: 700, marginTop: 2 }}>{interestPct}% of payment</div>
-                              </div>
-                              <div style={{ display: 'flex', alignItems: 'center', color: '#88859E', fontSize: 18, fontWeight: 700 }}>+</div>
-                              <div style={{ flex: 1, background: '#F0FDF4', border: '1.5px solid #A3E2C9', borderRadius: 14, padding: '12px 10px', textAlign: 'center' }}>
-                                <div style={{ fontSize: 9, fontWeight: 800, color: '#1FA971', letterSpacing: 0.5, textTransform: 'uppercase', marginBottom: 4 }}>Reduces Debt</div>
-                                <div style={{ fontSize: 20, fontWeight: 900, color: '#1FA971', fontFamily: 'Sora, sans-serif' }}>{inr(principalPaid)}</div>
-                                <div style={{ fontSize: 9.5, color: '#1FA971', fontWeight: 700, marginTop: 2 }}>{100 - interestPct}% of payment</div>
-                              </div>
-                            </div>
-                            <div style={{ height: 10, borderRadius: 99, overflow: 'hidden', background: '#EAE6F5', marginBottom: 10 }}>
-                              <div style={{ height: '100%', width: `${interestPct}%`, background: 'linear-gradient(90deg, #E54B4B, #F06A6A)' }} />
-                            </div>
-                            <div style={{ background: '#FFF0F0', borderRadius: 12, padding: '10px 12px', border: '1px solid #FCA5A5', fontSize: 12, color: '#B91C1C', fontWeight: 600, lineHeight: 1.4, display: 'flex', alignItems: 'flex-start', gap: 8 }}>
-                              {lightbulbIcon('#B91C1C')}
-                              <span>
-                                At 54% p.a., <strong>{interestPct}% of your {inr(monthly)}</strong> goes straight to interest — your ₹5L debt barely shrinks.
-                              </span>
-                            </div>
-                          </>
-                        );
-                      })()}
-                    </div>
+                        {/* ── Unified comparison card ── */}
+                        <div style={{ background: '#fff', borderRadius: 20, overflow: 'hidden', border: '1.5px solid #ECEAF4', marginBottom: 14, boxShadow: '0 2px 16px rgba(0,0,0,.07)' }}>
 
-                    <div style={{ marginTop: 12, background: 'linear-gradient(90deg, #F3F1FA, #FAFAFD)', borderRadius: 14, padding: '14px 16px', borderLeft: '4px solid #5B3FD4', fontSize: 12.5, color: '#4B4960', lineHeight: 1.5, fontWeight: 600 }}>
-                      <span style={{ fontSize: 10, fontWeight: 800, color: '#5B3FD4', letterSpacing: 0.8, textTransform: 'uppercase', display: 'block', marginBottom: 4 }}>Advisory</span>
-                      With Melt at 25% p.a., a much larger share of your {inr(monthly)} pays down your actual debt, clearing it <strong>{monthsDiff} months sooner</strong>.
-                    </div>
-                  </>
+                          {/* ─ Credit Card row ─ */}
+                          <div style={{ padding: '16px 16px 15px' }}>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
+                              <span style={{ fontSize: 12, fontWeight: 700, color: '#6B7280' }}>Credit Card</span>
+                              <span style={{ fontSize: 9.5, fontWeight: 600, color: '#D1D5DB' }}>54% p.a.</span>
+                            </div>
+                            {/* Bar */}
+                            <div style={{ height: 30, borderRadius: 8, overflow: 'hidden', display: 'flex', marginBottom: 9 }}>
+                              <div style={{ flex: ccIntPct, background: '#FECACA', display: 'flex', alignItems: 'center', paddingLeft: 10 }}>
+                                <span style={{ fontSize: 10.5, fontWeight: 800, color: '#DC2626' }}>{ccIntPct}%</span>
+                              </div>
+                              <div style={{ width: 2, background: '#fff', flexShrink: 0 }} />
+                              <div style={{ flex: 100 - ccIntPct, background: '#EAE8F8', display: 'flex', alignItems: 'center', justifyContent: 'flex-end', paddingRight: 8 }}>
+                                <span style={{ fontSize: 10.5, fontWeight: 800, color: '#B0ABCC' }}>{100 - ccIntPct}%</span>
+                              </div>
+                            </div>
+                            {/* Amounts */}
+                            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                              <div>
+                                <span style={{ fontSize: 15, fontWeight: 900, color: '#DC2626', fontFamily: 'Sora, sans-serif', letterSpacing: -0.4 }}>{inr(ccInt)}</span>
+                                <div style={{ fontSize: 9, color: '#F87171', fontWeight: 600, marginTop: 1 }}>interest</div>
+                              </div>
+                              <div style={{ textAlign: 'right' }}>
+                                <span style={{ fontSize: 15, fontWeight: 900, color: '#9CA3AF', fontFamily: 'Sora, sans-serif', letterSpacing: -0.4 }}>{inr(ccPrin)}</span>
+                                <div style={{ fontSize: 9, color: '#C4C2D8', fontWeight: 600, marginTop: 1 }}>reduces debt</div>
+                              </div>
+                            </div>
+                          </div>
+
+                          {/* ─ Divider ─ */}
+                          <div style={{ height: 1, background: '#F0EEF8', margin: '0 16px' }} />
+
+                          {/* ─ With Melt row ─ */}
+                          <div style={{ padding: '16px 16px 15px', background: '#FAFAFF' }}>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
+                              <div style={{ display: 'flex', alignItems: 'center', gap: 7 }}>
+                                <span style={{ fontSize: 12, fontWeight: 700, color: '#5B3FD4' }}>With Melt</span>
+                                <span style={{ background: '#5B3FD4', borderRadius: 999, padding: '2px 7px', fontSize: 7.5, fontWeight: 800, color: '#fff', letterSpacing: 0.3 }}>BETTER</span>
+                              </div>
+                              <span style={{ fontSize: 9.5, fontWeight: 600, color: '#A89FD4' }}>25% p.a.</span>
+                            </div>
+                            <div style={{ height: 30, borderRadius: 8, overflow: 'hidden', display: 'flex', marginBottom: 9 }}>
+                              <div style={{ flex: meltIntPct, background: '#DDD6FE', display: 'flex', alignItems: 'center', paddingLeft: 8 }}>
+                                <span style={{ fontSize: 10.5, fontWeight: 800, color: '#7C3AED' }}>{meltIntPct}%</span>
+                              </div>
+                              <div style={{ width: 2, background: '#fff', flexShrink: 0 }} />
+                              <div style={{ flex: 100 - meltIntPct, background: '#5B3FD4', display: 'flex', alignItems: 'center', justifyContent: 'flex-end', paddingRight: 8 }}>
+                                <span style={{ fontSize: 10.5, fontWeight: 800, color: '#fff' }}>{100 - meltIntPct}%</span>
+                              </div>
+                            </div>
+                            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                              <div>
+                                <span style={{ fontSize: 15, fontWeight: 900, color: '#7C3AED', fontFamily: 'Sora, sans-serif', letterSpacing: -0.4 }}>{inr(meltMonthlyInt)}</span>
+                                <div style={{ fontSize: 9, color: '#A78BFA', fontWeight: 600, marginTop: 1 }}>interest</div>
+                              </div>
+                              <div style={{ textAlign: 'right' }}>
+                                <span style={{ fontSize: 15, fontWeight: 900, color: '#5B3FD4', fontFamily: 'Sora, sans-serif', letterSpacing: -0.4 }}>{inr(meltPrin)}</span>
+                                <div style={{ fontSize: 9, color: '#818CF8', fontWeight: 600, marginTop: 1 }}>reduces debt</div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* ── Green takeaway ── */}
+                        <div style={{ background: 'linear-gradient(135deg, #ECFDF5, #D1FAE5)', borderRadius: 18, padding: '16px 18px', border: '1.5px solid #6EE7B7', display: 'flex', alignItems: 'center', gap: 13, boxShadow: '0 6px 20px -6px rgba(16,185,129,0.22)' }}>
+                          <div style={{ width: 42, height: 42, borderRadius: 13, background: '#10B981', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, boxShadow: '0 5px 14px -4px rgba(16,185,129,0.55)' }}>
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                              <polyline points="23 6 13.5 15.5 8.5 10.5 1 18" stroke="#fff" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"/>
+                              <polyline points="17 6 23 6 23 12" stroke="#fff" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"/>
+                            </svg>
+                          </div>
+                          <div>
+                            <div style={{ fontSize: 22, fontWeight: 900, color: '#065F46', fontFamily: 'Sora, sans-serif', letterSpacing: -0.8, lineHeight: 1, marginBottom: 4 }}>{inr(extraPrin)} more/mo</div>
+                            <div style={{ fontSize: 12, color: '#047857', fontWeight: 600, lineHeight: 1.4 }}>reduces your actual debt, not the bank's profit.</div>
+                          </div>
+                        </div>
+                      </>
+                    );
+                  })()
                 )}
               </div>
             </div>
