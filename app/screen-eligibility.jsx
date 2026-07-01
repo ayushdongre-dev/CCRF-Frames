@@ -40,7 +40,7 @@ function Eligibility({ go }) {
 
       <div style={{ flex: 1, padding: '6px 18px 0' }}>
         {/* ── HERO — total limit prominent ── */}
-        <div style={{ background: ML.hero, borderRadius: 24, padding: '22px 22px 20px', position: 'relative', overflow: 'hidden', boxShadow: '0 18px 40px -22px rgba(26,20,56,.8)' }}>
+        <div style={{ background: ML.hero, borderRadius: 24, padding: '22px 22px 20px', position: 'relative', overflow: 'hidden', boxShadow: '0 8px 0 rgba(0,0,0,.24), 0 18px 40px -22px rgba(26,20,56,.8)' }}>
           <div style={{ position: 'absolute', top: -50, right: -30, width: 160, height: 160, borderRadius: 999, background: 'radial-gradient(circle, rgba(91,63,212,.55), transparent 70%)' }} />
           <div style={{ position: 'relative', textAlign: 'center' }}>
             <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: 1.4, color: '#A99CF0', ...sora }}>YOUR TOTAL MELT LIMIT</div>
@@ -61,7 +61,7 @@ function Eligibility({ go }) {
         </div>
 
         {/* ── 3 STAGES ── */}
-        <div style={{ background: ML.card, borderRadius: 20, padding: '18px 18px 10px', marginTop: 14, boxShadow: '0 12px 32px -22px rgba(40,30,80,.5)' }}>
+        <div style={{ background: ML.card, borderRadius: 20, padding: '18px 18px 10px', marginTop: 14, boxShadow: '0 8px 0 rgba(0,0,0,.17), 0 12px 32px -22px rgba(40,30,80,.5)' }}>
           <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: 1.1, color: ML.muted2, ...sora }}>HOW IT WORKS</div>
           <div style={{ fontWeight: 800, fontSize: 20, color: ML.ink, letterSpacing: -0.4, marginTop: 6, ...sora }}>Three simple steps</div>
 
@@ -103,11 +103,11 @@ function Eligibility({ go }) {
 
         {/* savings + tenure summary (bottom) */}
         <div style={{ display: 'flex', gap: 12, marginTop: 18 }}>
-          <div style={{ flex: 1, background: 'linear-gradient(145deg, #E8F8F1 0%, #D4F0E3 100%)', borderRadius: 14, padding: '13px 15px', border: '1px solid rgba(31,169,113,0.18)', boxShadow: '0 4px 0 rgba(31,169,113,0.14), 0 8px 18px rgba(31,169,113,0.10), inset 0 1px 0 rgba(255,255,255,0.7)' }}>
+          <div style={{ flex: 1, background: 'linear-gradient(145deg, #E8F8F1 0%, #D4F0E3 100%)', borderRadius: 14, padding: '13px 15px', border: '1px solid rgba(31,169,113,0.18)', boxShadow: '0 5px 0 rgba(31,169,113,0.22), 0 12px 28px rgba(31,169,113,0.14), inset 0 1px 0 rgba(255,255,255,0.7)' }}>
             <div style={{ fontWeight: 800, fontSize: 21, color: ML.green, letterSpacing: -0.5, ...sora }}>₹28,080</div>
             <div style={{ fontSize: 11.5, color: '#3F7A66', fontWeight: 600, marginTop: 2 }}>saved in interest</div>
           </div>
-          <div style={{ flex: 1, background: 'linear-gradient(145deg, #E8F8F1 0%, #D4F0E3 100%)', borderRadius: 14, padding: '13px 15px', border: '1px solid rgba(31,169,113,0.18)', boxShadow: '0 4px 0 rgba(31,169,113,0.14), 0 8px 18px rgba(31,169,113,0.10), inset 0 1px 0 rgba(255,255,255,0.7)' }}>
+          <div style={{ flex: 1, background: 'linear-gradient(145deg, #E8F8F1 0%, #D4F0E3 100%)', borderRadius: 14, padding: '13px 15px', border: '1px solid rgba(31,169,113,0.18)', boxShadow: '0 5px 0 rgba(31,169,113,0.22), 0 12px 28px rgba(31,169,113,0.14), inset 0 1px 0 rgba(255,255,255,0.7)' }}>
             <div style={{ fontWeight: 800, fontSize: 21, color: ML.green, letterSpacing: -0.5, ...sora }}>3 months</div>
             <div style={{ fontSize: 11.5, color: '#3F7A66', fontWeight: 600, marginTop: 2 }}>shorter tenure</div>
           </div>

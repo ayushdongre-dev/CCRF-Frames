@@ -23,7 +23,7 @@ function RevisedOffer({ go }) {
 
       <div style={{ flex: 1, padding: '2px 18px 0' }}>
         {/* ── confirmed offer hero ── */}
-        <div style={{ position: 'relative', borderRadius: 22, padding: '18px 20px 20px', overflow: 'hidden', background: 'linear-gradient(150deg,#3B0764,#5B5BD6)', boxShadow: '0 18px 40px -20px rgba(59,7,100,.7)' }}>
+        <div style={{ position: 'relative', borderRadius: 22, padding: '18px 20px 20px', overflow: 'hidden', background: 'linear-gradient(150deg,#3B0764,#5B5BD6)', boxShadow: '0 8px 0 rgba(0,0,0,.22), 0 18px 40px -20px rgba(59,7,100,.7)' }}>
           {/* glow */}
           <div style={{ position: 'absolute', top: -40, right: -30, width: 150, height: 150, borderRadius: 999, background: 'radial-gradient(circle, rgba(255,255,255,.18), transparent 70%)' }} />
           <div style={{ position: 'relative' }}>

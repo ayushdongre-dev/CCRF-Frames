@@ -44,7 +44,7 @@ function MeltVerReviewScreen({ go, meltSelBank, meltPayDate, meltPayAmount, setM
             padding: '18px 20px', borderRadius: 18, marginBottom: 12,
             border: '2px solid ' + G_BDR, background: G_L,
             cursor: 'pointer', textAlign: 'left',
-            boxShadow: '0 4px 18px -6px rgba(31,169,113,.18)', transition: 'transform .12s',
+            boxShadow: '0 6px 0 rgba(31,169,113,.28), 0 10px 28px -6px rgba(31,169,113,.18)', transition: 'transform .12s',
             animation: 'fadeUp .35s both',
           }}
           onMouseDown={function(e){ e.currentTarget.style.transform='scale(.985)'; }}
@@ -73,7 +73,7 @@ function MeltVerReviewScreen({ go, meltSelBank, meltPayDate, meltPayAmount, setM
             padding: '18px 20px', borderRadius: 18,
             border: '2px solid #FCA5A5', background: '#FFF5F5',
             cursor: 'pointer', textAlign: 'left',
-            boxShadow: '0 2px 12px rgba(0,0,0,.05)', transition: 'transform .12s',
+            boxShadow: '0 6px 0 rgba(239,68,68,.18), 0 10px 24px rgba(0,0,0,.08)', transition: 'transform .12s',
             animation: 'fadeUp .35s .08s both',
           }}
           onMouseDown={function(e){ e.currentTarget.style.transform='scale(.985)'; }}

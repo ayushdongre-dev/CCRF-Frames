@@ -38,7 +38,7 @@ function AnimCard({ playKey }) {
       <div style={{
         position: 'relative', width: 256, height: 158, borderRadius: 18,
         background: 'linear-gradient(135deg,#6E51D8 0%,#4B3596 100%)',
-        boxShadow: '0 24px 44px -18px rgba(75,53,150,.85)', overflow: 'hidden',
+        boxShadow: '0 9px 0 rgba(0,0,0,.24), 0 24px 44px -18px rgba(75,53,150,.85)', overflow: 'hidden',
         padding: '16px 18px', color: '#fff',
         transform: shuffled ? 'translate(8px,6px) rotate(2deg)' : 'translate(0,0)',
         transition: 'transform .7s cubic-bezier(.2,.8,.2,1) .08s',
@@ -817,7 +817,7 @@ function SavingsScreen({ go, monthly = 30000, setMonthly }) {
                     </div>
 
                     {/* ── Comparison table ── */}
-                    <div style={{ borderRadius: 20, overflow: 'hidden', border: '1.5px solid #ECEAF4', marginBottom: 16, boxShadow: '0 4px 20px rgba(0,0,0,.06)' }}>
+                    <div style={{ borderRadius: 20, overflow: 'hidden', border: '1.5px solid #ECEAF4', marginBottom: 16, boxShadow: '0 2px 6px rgba(0,0,0,.07), 0 6px 0 #D8D4EC, 0 18px 44px rgba(0,0,0,.14)' }}>
 
                       {/* Column headers */}
                       <div style={{ display: 'grid', gridTemplateColumns: '110px 1fr 1fr', background: '#FAFAFA' }}>
@@ -911,7 +911,7 @@ function SavingsScreen({ go, monthly = 30000, setMonthly }) {
                         </div>
 
                         {/* ── Unified comparison card ── */}
-                        <div style={{ background: '#fff', borderRadius: 20, overflow: 'hidden', border: '1.5px solid #ECEAF4', marginBottom: 14, boxShadow: '0 2px 16px rgba(0,0,0,.07)' }}>
+                        <div style={{ background: '#fff', borderRadius: 20, overflow: 'hidden', border: '1.5px solid #ECEAF4', marginBottom: 14, boxShadow: '0 2px 6px rgba(0,0,0,.07), 0 6px 0 #D8D4EC, 0 18px 44px rgba(0,0,0,.14)' }}>
 
                           {/* ─ Credit Card row ─ */}
                           <div style={{ padding: '16px 16px 15px' }}>

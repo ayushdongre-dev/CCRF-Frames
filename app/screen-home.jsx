@@ -87,7 +87,7 @@ function HomeScreen({ go, meltState }) {
         </div>
 
         {/* steps */}
-        <div style={{ background: '#fff', borderRadius: 20, padding: '18px 18px 16px', boxShadow: '0 6px 20px -14px rgba(40,30,80,.3)' }}>
+        <div style={{ background: '#fff', borderRadius: 20, padding: '18px 18px 16px', boxShadow: '0 2px 6px rgba(0,0,0,.07), 0 6px 0 #D8D4EC, 0 18px 44px rgba(0,0,0,.14)' }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
             <div style={{ fontWeight: 700, fontSize: 15, color: '#1A1A2E' }}>Steps to get the loan</div>
             <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: 0.5, color: '#E8A020', background: '#FFF8EC', border: '1px solid #F5D9A0', borderRadius: 20, padding: '3px 9px' }}>IN PROGRESS</div>
@@ -116,7 +116,7 @@ function HomeScreen({ go, meltState }) {
         </div>
 
         {/* TrustIQ */}
-        <div style={{ background: '#fff', borderRadius: 20, padding: '16px 18px', boxShadow: '0 6px 20px -14px rgba(40,30,80,.3)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        <div style={{ background: '#fff', borderRadius: 20, padding: '16px 18px', boxShadow: '0 2px 6px rgba(0,0,0,.07), 0 6px 0 #D8D4EC, 0 18px 44px rgba(0,0,0,.14)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: 0.8, color: '#999', position: 'absolute', marginTop: -38 }} />
           <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
             {/* semicircle gauge */}
@@ -144,7 +144,7 @@ function HomeScreen({ go, meltState }) {
           <div style={{ fontWeight: 800, fontSize: 17, color: '#1A1A2E', marginBottom: 12 }}>Ways to use EQUALL loans</div>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
             {useCases.map((u, i) => (
-              <div key={i} style={{ background: '#fff', borderRadius: 16, padding: '16px 14px', boxShadow: '0 4px 14px -10px rgba(40,30,80,.25)' }}>
+              <div key={i} style={{ background: '#fff', borderRadius: 16, padding: '16px 14px', boxShadow: '0 2px 6px rgba(0,0,0,.07), 0 6px 0 #D8D4EC, 0 18px 44px rgba(0,0,0,.14)' }}>
                 <div style={{ width: 42, height: 42, borderRadius: 12, background: '#EDEAFA', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 10 }}>
                   {u.icon}
                 </div>
@@ -165,7 +165,7 @@ function HomeScreen({ go, meltState }) {
               style={{
                 width: '100%', borderRadius: 18, background: '#1A1740', padding: '16px 18px',
                 display: 'flex', alignItems: 'center', gap: 14, textAlign: 'left',
-                boxShadow: '0 10px 28px -14px rgba(15,13,46,.6)', cursor: 'pointer',
+                boxShadow: '0 8px 0 rgba(0,0,0,.22), 0 10px 28px -14px rgba(15,13,46,.6)', cursor: 'pointer',
               }}
             >
               <div style={{ width: 44, height: 44, borderRadius: 14, background: 'rgba(91,63,212,.35)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
@@ -188,7 +188,7 @@ function HomeScreen({ go, meltState }) {
             <button style={{
               width: '100%', borderRadius: 18, background: '#0D3D2B', padding: '16px 18px',
               display: 'flex', alignItems: 'center', gap: 14, textAlign: 'left',
-              boxShadow: '0 10px 28px -14px rgba(13,61,43,.6)',
+              boxShadow: '0 8px 0 rgba(0,0,0,.20), 0 10px 28px -14px rgba(13,61,43,.6)',
             }}>
               <div style={{ width: 44, height: 44, borderRadius: 14, background: 'rgba(26,122,74,.35)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M13 2L4 14h7l-1 8 9-12h-7l1-8Z" fill="#4ADE80"/></svg>

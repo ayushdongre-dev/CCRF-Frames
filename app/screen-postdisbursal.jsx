@@ -92,7 +92,7 @@ function LoanCard({ countVal, barFilled, showVerifiedBanner }) {
       borderRadius: 22,
       background: 'linear-gradient(145deg,#16133A,#26215C)',
       padding: '16px 18px',
-      boxShadow: '0 16px 40px -12px rgba(22,19,58,.55)',
+      boxShadow: '0 8px 0 rgba(0,0,0,.22), 0 16px 40px -12px rgba(22,19,58,.55)',
       animation: 'fadeUp .5s both',
       position: 'relative', overflow: 'hidden', marginBottom: 4,
     }}>

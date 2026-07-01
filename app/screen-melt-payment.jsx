@@ -76,7 +76,7 @@ function MeltPaymentScreen({ go, setMeltPayDate, setMeltPayAmount }) {
         </div>
 
         {/* ── Date card ── */}
-        <div style={{ background: '#fff', borderRadius: 20, padding: '18px 20px', boxShadow: '0 2px 16px rgba(0,0,0,.06)', marginBottom: 12, animation: 'fadeUp .35s .08s both' }}>
+        <div style={{ background: '#fff', borderRadius: 20, padding: '18px 20px', boxShadow: '0 2px 6px rgba(0,0,0,.07), 0 6px 0 #D8D4EC, 0 18px 44px rgba(0,0,0,.14)', marginBottom: 12, animation: 'fadeUp .35s .08s both' }}>
           <div style={{ fontSize: 10.5, fontWeight: 700, color: muted, letterSpacing: 0.7, textTransform: 'uppercase', marginBottom: 14 }}>Date of Payment</div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
             <div style={{ flex: 1 }}>
@@ -110,7 +110,7 @@ function MeltPaymentScreen({ go, setMeltPayDate, setMeltPayAmount }) {
         </div>
 
         {/* ── Amount card — hero input ── */}
-        <div style={{ background: '#fff', borderRadius: 20, padding: '18px 20px', boxShadow: '0 2px 16px rgba(0,0,0,.06)', marginBottom: 14, animation: 'fadeUp .35s .14s both' }}>
+        <div style={{ background: '#fff', borderRadius: 20, padding: '18px 20px', boxShadow: '0 2px 6px rgba(0,0,0,.07), 0 6px 0 #D8D4EC, 0 18px 44px rgba(0,0,0,.14)', marginBottom: 14, animation: 'fadeUp .35s .14s both' }}>
           <div style={{ fontSize: 10.5, fontWeight: 700, color: muted, letterSpacing: 0.7, textTransform: 'uppercase', marginBottom: 16 }}>Amount Repaid</div>
           <div style={{ display: 'flex', alignItems: 'baseline', gap: 3, marginBottom: 12 }}>
             <span style={{ fontSize: 30, fontWeight: 900, color: rawAmount ? P : '#D4D0E8', ...sora, lineHeight: 1, transition: 'color .2s', flexShrink: 0 }}>₹</span>

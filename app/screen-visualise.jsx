@@ -365,7 +365,7 @@ function CumulativeChart({ cardInt, meltInt, cardMonths, meltMonths, meltInteres
 // ── UI Components ─────────────────────────────────────────────────
 function Card({ children }) {
   return (
-    <div style={{ background: '#fff', borderRadius: 22, padding: '18px 16px 16px', marginTop: 14, border: '1px solid rgba(0,0,0,0.05)', boxShadow: '0 2px 12px rgba(0,0,0,0.06), 0 8px 32px rgba(0,0,0,0.05)' }}>
+    <div style={{ background: '#fff', borderRadius: 22, padding: '18px 16px 16px', marginTop: 14, border: '1px solid rgba(0,0,0,0.05)', boxShadow: '0 2px 6px rgba(0,0,0,.07), 0 6px 0 #D8D4EC, 0 18px 44px rgba(0,0,0,.14)' }}>
       {children}
     </div>
   );
