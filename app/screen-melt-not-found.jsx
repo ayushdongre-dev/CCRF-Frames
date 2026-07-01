@@ -53,7 +53,7 @@ function MeltNotFoundScreen({ go, retryCount, setRetryCount, setMeltState }) {
 
         {/* ── Retry card ── */}
         {retryAvailable ? (
-          <div style={{ background: '#fff', borderRadius: 20, overflow: 'hidden', boxShadow: '0 2px 6px rgba(0,0,0,.07), 0 6px 0 #D8D4EC, 0 18px 44px rgba(0,0,0,.14)', marginBottom: 12, animation: 'fadeUp .38s .09s both' }}>
+          <div style={{ background: '#fff', borderRadius: 20, overflow: 'hidden', boxShadow: '0 1px 3px rgba(0,0,0,.05), 0 4px 14px rgba(0,0,0,.07)', marginBottom: 12, animation: 'fadeUp .38s .09s both' }}>
             <div style={{ background: '#FFFBEB', borderBottom: '1px solid #FDE68A', padding: '8px 16px', display: 'flex', alignItems: 'center', gap: 6 }}>
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" stroke="#D97706" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/><line x1="12" y1="9" x2="12" y2="13" stroke="#D97706" strokeWidth="2" strokeLinecap="round"/><line x1="12" y1="17" x2="12.01" y2="17" stroke="#D97706" strokeWidth="2.2" strokeLinecap="round"/></svg>
               <span style={{ fontSize: 11.5, fontWeight: 700, color: '#92400E' }}>Last attempt</span>
@@ -102,7 +102,7 @@ function MeltNotFoundScreen({ go, retryCount, setRetryCount, setMeltState }) {
             width: '100%', display: 'flex', alignItems: 'center', gap: 13,
             padding: '15px 16px', borderRadius: 16,
             background: '#fff', border: '1.5px solid #ECEAF4',
-            boxShadow: '0 2px 6px rgba(0,0,0,.07), 0 6px 0 #D8D4EC, 0 18px 44px rgba(0,0,0,.14)', marginBottom: 20,
+            boxShadow: '0 1px 3px rgba(0,0,0,.05), 0 4px 14px rgba(0,0,0,.07)', marginBottom: 20,
             cursor: 'pointer', textAlign: 'left', transition: 'transform .12s',
             animation: 'fadeUp .38s .14s both',
           }}

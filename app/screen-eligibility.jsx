@@ -11,20 +11,109 @@ const ML = {
   hero: '#1A1438', heroCard: 'rgba(255,255,255,.07)',
 };
 
+function HowItWorksModal({ onClose }) {
+  var sora = { fontFamily: "'Sora', -apple-system, system-ui, sans-serif" };
+  var st = useState(0); var step = st[0]; var setStep = st[1];
+  var ak = useState(0); var animKey = ak[0]; var setAnimKey = ak[1];
+
+  var STEPS = [
+    {
+      num: '01', color: '#2D9E6B', bg: '#E7F6EF',
+      title: 'Money lands instantly',
+      sub: '₹2,00,000 goes straight to your salary account the same day.',
+      Visual: StageReceive,
+    },
+    {
+      num: '02', color: '#3D3DC4', bg: '#ECECFA',
+      title: 'Clear your card dues',
+      sub: 'Use the funds to pay off your credit card bills within 10 days.',
+      Visual: StageMelt,
+    },
+    {
+      num: '03', color: '#8A8AA0', bg: '#F4F4FB',
+      title: 'Phase 2 unlocks itself',
+      sub: 'Repay on time and ₹3,00,000 more opens automatically — no new application.',
+      Visual: StageLocked,
+    },
+  ];
+
+  var s = STEPS[step];
+  var isLast = step === STEPS.length - 1;
+
+  function advance() {
+    if (isLast) { onClose(); return; }
+    setStep(function(n) { return n + 1; });
+    setAnimKey(function(k) { return k + 1; });
+  }
+
+  return (
+    <div style={{ position: 'absolute', inset: 0, zIndex: 999, display: 'flex', flexDirection: 'column', justifyContent: 'flex-end', background: 'rgba(12,10,30,0.55)' }}
+      onClick={function(e) { if (e.target === e.currentTarget) onClose(); }}>
+      <div style={{ background: '#fff', borderRadius: '26px 26px 0 0', padding: '22px 20px 28px', animation: 'fadeUp .28s both' }}>
+
+        {/* header row */}
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20 }}>
+          <span style={{ fontSize: 10.5, fontWeight: 700, letterSpacing: 1.3, color: '#A7A4B8', ...sora }}>HOW IT WORKS</span>
+          <button onClick={onClose} style={{ width: 28, height: 28, borderRadius: 999, background: '#F4F3FB', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M18 6L6 18M6 6l12 12" stroke="#888" strokeWidth="2.2" strokeLinecap="round"/></svg>
+          </button>
+        </div>
+
+        {/* step number + progress bar */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 14 }}>
+          <span style={{ fontSize: 38, fontWeight: 900, color: s.color, lineHeight: 1, minWidth: 54, ...sora }}>{s.num}</span>
+          <div style={{ flex: 1, height: 3, background: '#ECEAF4', borderRadius: 999, overflow: 'hidden' }}>
+            <div style={{ height: '100%', background: s.color, borderRadius: 999, width: ((step + 1) / 3 * 100) + '%', transition: 'width .4s cubic-bezier(.4,0,.2,1)' }} />
+          </div>
+        </div>
+
+        {/* title + sub */}
+        <div style={{ fontSize: 21, fontWeight: 800, color: '#1A1A2E', letterSpacing: -0.4, lineHeight: 1.2, marginBottom: 6, ...sora }}>{s.title}</div>
+        <div style={{ fontSize: 13, color: '#8A8AA0', lineHeight: 1.55, marginBottom: 18 }}>{s.sub}</div>
+
+        {/* animated visual */}
+        <div key={animKey} style={{ marginBottom: 22 }}><s.Visual /></div>
+
+        {/* dots + CTA */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+          <div style={{ display: 'flex', gap: 5 }}>
+            {STEPS.map(function(_, i) {
+              return <div key={i} style={{ width: i === step ? 20 : 6, height: 6, borderRadius: 999, background: i === step ? s.color : '#E0DDF0', transition: 'all .25s' }} />;
+            })}
+          </div>
+          <button onClick={advance} style={{
+            flex: 1, height: 48, borderRadius: 13, border: 'none', cursor: 'pointer',
+            background: s.color, color: '#fff', fontWeight: 700, fontSize: 15, ...sora,
+            display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 7,
+            transition: 'transform .1s',
+          }}
+            onMouseDown={function(e){ e.currentTarget.style.transform='scale(.975)'; }}
+            onMouseUp={function(e){ e.currentTarget.style.transform='scale(1)'; }}
+            onMouseLeave={function(e){ e.currentTarget.style.transform='scale(1)'; }}>
+            {isLast ? 'Got it' : 'Next'}
+            {!isLast && <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function Eligibility({ go }) {
   const sora = { fontFamily: "'Sora', -apple-system, system-ui, sans-serif" };
   const TOTAL = 500000, AVAIL = 200000;
   const availPct = (AVAIL / TOTAL) * 100;
+  const [showHIW, setShowHIW] = useState(false);
 
   // ── 3 clean stages ──
   const STAGES = [
     { state: 'done', label: 'Available today', desc: 'Lands in your salary bank account' },
     { state: 'active', label: 'Melt your card bills', desc: 'Pay your card dues within 10 days of disbursal' },
-    { state: 'locked', label: 'Unlock Round 2', desc: 'Repay on time and Round 2 opens up automatically' },
+    { state: 'locked', label: 'Unlock Phase 2', desc: 'Repay on time and Phase 2 opens up automatically' },
   ];
 
   return (
-    <div style={{ minHeight: '100%', display: 'flex', flexDirection: 'column', background: ML.bg, ...sora }}>
+    <div style={{ minHeight: '100%', display: 'flex', flexDirection: 'column', background: ML.bg, ...sora, position: 'relative' }}>
       <style>{`@keyframes meltPulse{0%{box-shadow:0 0 0 0 rgba(61,61,196,.30)}70%{box-shadow:0 0 0 8px rgba(61,61,196,0)}100%{box-shadow:0 0 0 0 rgba(61,61,196,0)}}
         @keyframes cashFall{0%{transform:translateY(-4px);opacity:0}25%{opacity:1}100%{transform:translateY(22px);opacity:0}}
         @keyframes paidDrop{0%{transform:rotate(-12deg) scale(1.7);opacity:0}55%{opacity:1}100%{transform:rotate(-12deg) scale(1);opacity:1}}
@@ -35,12 +124,12 @@ function Eligibility({ go }) {
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '2px 14px 4px', flexShrink: 0 }}>
         <button onClick={() => go('cards')} style={{ width: 38, height: 38, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>{Icon.back('#333')}</button>
         <span style={{ fontWeight: 700, fontSize: 19, color: ML.primary, letterSpacing: -0.3, ...sora }}>melt</span>
-        <div style={{ width: 38 }} />
+        <button onClick={() => setShowHIW(true)} style={{ fontSize: 11.5, fontWeight: 700, color: ML.primary, background: ML.primaryL, borderRadius: 999, padding: '5px 11px', border: 'none', cursor: 'pointer', letterSpacing: 0.1, ...sora }}>How it works</button>
       </div>
 
       <div style={{ flex: 1, padding: '6px 18px 0' }}>
         {/* ── HERO — total limit prominent ── */}
-        <div style={{ background: ML.hero, borderRadius: 24, padding: '22px 22px 20px', position: 'relative', overflow: 'hidden', boxShadow: '0 8px 0 rgba(0,0,0,.24), 0 18px 40px -22px rgba(26,20,56,.8)' }}>
+        <div style={{ background: ML.hero, borderRadius: 24, padding: '22px 22px 20px', position: 'relative', overflow: 'hidden', boxShadow: '0 2px 10px rgba(0,0,0,.16), 0 8px 24px rgba(26,20,56,.30)' }}>
           <div style={{ position: 'absolute', top: -50, right: -30, width: 160, height: 160, borderRadius: 999, background: 'radial-gradient(circle, rgba(91,63,212,.55), transparent 70%)' }} />
           <div style={{ position: 'relative', textAlign: 'center' }}>
             <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: 1.4, color: '#A99CF0', ...sora }}>YOUR TOTAL MELT LIMIT</div>
@@ -61,7 +150,7 @@ function Eligibility({ go }) {
         </div>
 
         {/* ── 3 STAGES ── */}
-        <div style={{ background: ML.card, borderRadius: 20, padding: '18px 18px 10px', marginTop: 14, boxShadow: '0 8px 0 rgba(0,0,0,.17), 0 12px 32px -22px rgba(40,30,80,.5)' }}>
+        <div style={{ background: ML.card, borderRadius: 20, padding: '18px 18px 10px', marginTop: 14, boxShadow: '0 1px 4px rgba(0,0,0,.08), 0 4px 14px rgba(40,30,80,.14)' }}>
           <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: 1.1, color: ML.muted2, ...sora }}>HOW IT WORKS</div>
           <div style={{ fontWeight: 800, fontSize: 20, color: ML.ink, letterSpacing: -0.4, marginTop: 6, ...sora }}>Three simple steps</div>
 
@@ -103,11 +192,11 @@ function Eligibility({ go }) {
 
         {/* savings + tenure summary (bottom) */}
         <div style={{ display: 'flex', gap: 12, marginTop: 18 }}>
-          <div style={{ flex: 1, background: 'linear-gradient(145deg, #E8F8F1 0%, #D4F0E3 100%)', borderRadius: 14, padding: '13px 15px', border: '1px solid rgba(31,169,113,0.18)', boxShadow: '0 5px 0 rgba(31,169,113,0.22), 0 12px 28px rgba(31,169,113,0.14), inset 0 1px 0 rgba(255,255,255,0.7)' }}>
+          <div style={{ flex: 1, background: 'linear-gradient(145deg, #E8F8F1 0%, #D4F0E3 100%)', borderRadius: 14, padding: '13px 15px', border: '1px solid rgba(31,169,113,0.18)', boxShadow: '0 1px 4px rgba(31,169,113,.10), 0 4px 14px rgba(31,169,113,.08), inset 0 1px 0 rgba(255,255,255,0.7)' }}>
             <div style={{ fontWeight: 800, fontSize: 21, color: ML.green, letterSpacing: -0.5, ...sora }}>₹28,080</div>
             <div style={{ fontSize: 11.5, color: '#3F7A66', fontWeight: 600, marginTop: 2 }}>saved in interest</div>
           </div>
-          <div style={{ flex: 1, background: 'linear-gradient(145deg, #E8F8F1 0%, #D4F0E3 100%)', borderRadius: 14, padding: '13px 15px', border: '1px solid rgba(31,169,113,0.18)', boxShadow: '0 5px 0 rgba(31,169,113,0.22), 0 12px 28px rgba(31,169,113,0.14), inset 0 1px 0 rgba(255,255,255,0.7)' }}>
+          <div style={{ flex: 1, background: 'linear-gradient(145deg, #E8F8F1 0%, #D4F0E3 100%)', borderRadius: 14, padding: '13px 15px', border: '1px solid rgba(31,169,113,0.18)', boxShadow: '0 1px 4px rgba(31,169,113,.10), 0 4px 14px rgba(31,169,113,.08), inset 0 1px 0 rgba(255,255,255,0.7)' }}>
             <div style={{ fontWeight: 800, fontSize: 21, color: ML.green, letterSpacing: -0.5, ...sora }}>3 months</div>
             <div style={{ fontSize: 11.5, color: '#3F7A66', fontWeight: 600, marginTop: 2 }}>shorter tenure</div>
           </div>
@@ -117,7 +206,7 @@ function Eligibility({ go }) {
 
       {/* CTA */}
       <div style={{ position: 'sticky', bottom: 0, padding: '14px 20px 26px', background: ML.bg, borderTop: `1px solid ${ML.line}`, marginTop: 8 }}>
-        <button onClick={() => go('pdf')} style={{
+        <button onClick={() => go('amountselect')} style={{
           width: '100%', height: 56, borderRadius: 16, background: ML.primary, color: '#fff',
           fontWeight: 700, fontSize: 16.5, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 9,
           boxShadow: '0 16px 32px -10px rgba(61,61,196,.55)', transition: 'transform .12s', ...sora,
@@ -128,6 +217,8 @@ function Eligibility({ go }) {
           Continue {Icon.arrowR('#fff')}
         </button>
       </div>
+
+      {showHIW && <HowItWorksModal onClose={() => setShowHIW(false)} />}
     </div>
   );
 }

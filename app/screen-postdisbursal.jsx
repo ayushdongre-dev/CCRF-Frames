@@ -61,7 +61,7 @@ function MeltHeroCard({ go, heroCount }) {
 
       {/* Headline */}
       <div style={{ fontSize: 14, fontWeight: 600, color: 'rgba(255,255,255,.82)', marginBottom: 20, lineHeight: 1.35 }}>
-        Get ₹3,00,000 as your Melt Round 2
+        Paid your card?
       </div>
 
       {/* Bottom row */}
@@ -92,7 +92,7 @@ function LoanCard({ countVal, barFilled, showVerifiedBanner }) {
       borderRadius: 22,
       background: 'linear-gradient(145deg,#16133A,#26215C)',
       padding: '16px 18px',
-      boxShadow: '0 8px 0 rgba(0,0,0,.22), 0 16px 40px -12px rgba(22,19,58,.55)',
+      boxShadow: '0 2px 10px rgba(0,0,0,.14), 0 8px 24px rgba(22,19,58,.26)',
       animation: 'fadeUp .5s both',
       position: 'relative', overflow: 'hidden', marginBottom: 4,
     }}>
@@ -329,10 +329,10 @@ function PostDisbursal({ go, pdState, setPdState, setVerifyAttempt }) {
                 boxShadow: '0 0 0 4px rgba(31,169,113,.06), 0 10px 28px -8px rgba(31,169,113,.2)',
               }}>
                 <div style={{ marginBottom: 8 }}><Tag label="UNLOCKED" color={G} bg={G_BG} border={G_BDR} /></div>
-                <div style={{ fontWeight: 800, fontSize: 15, color: INK, ...sora, marginBottom: 4 }}>Round 2 Available</div>
+                <div style={{ fontWeight: 800, fontSize: 15, color: INK, ...sora, marginBottom: 4 }}>Phase 2 Available</div>
                 <div style={{ fontWeight: 800, fontSize: 26, color: G, ...sora, lineHeight: 1, marginBottom: 6 }}>₹3,00,000</div>
                 <div style={{ fontSize: 12.5, color: INK2, lineHeight: 1.4, marginBottom: 14 }}>
-                  You've unlocked ₹3,00,000 for Round 2. Tap below to claim your offer.
+                  You've unlocked ₹3,00,000 for Phase 2. Tap below to claim your offer.
                 </div>
                 <button
                   onClick={function () { go('reward'); }}
@@ -437,7 +437,7 @@ function PostDisbursal({ go, pdState, setPdState, setVerifyAttempt }) {
                 }
               </div>
               <div style={{ fontWeight: 700, fontSize: 13.5, color: INK, ...sora }}>
-                {pending ? 'Verification in progress' : 'Pay your card'}
+                {pending ? 'Verification in progress' : 'Paid your card?'}
               </div>
               <div style={{ fontSize: 11.5, fontWeight: 500, color: MUTED, marginTop: 3, lineHeight: 1.4 }}>
                 {pending
@@ -481,7 +481,7 @@ function PostDisbursal({ go, pdState, setPdState, setVerifyAttempt }) {
             </div>
             <div style={{ flex: 1, borderRadius: 16, padding: '11px 13px 13px', background: GY_BG, border: '1.5px solid ' + GY_BDR, opacity: 0.55 }}>
               <div style={{ marginBottom: 7 }}><Tag label="LOCKED" color={GY} bg={GY_BG} border={GY_BDR} /></div>
-              <div style={{ fontWeight: 700, fontSize: 13.5, color: INK2, ...sora }}>Verification &amp; Round 2</div>
+              <div style={{ fontWeight: 700, fontSize: 13.5, color: INK2, ...sora }}>Verification &amp; Phase 2</div>
               <div style={{ fontSize: 11.5, fontWeight: 500, color: GY, marginTop: 3 }}>Unlocks after step 2 is complete.</div>
             </div>
           </div>

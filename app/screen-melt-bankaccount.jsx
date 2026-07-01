@@ -76,7 +76,7 @@ function MeltBankAccountScreen({ go, setMeltSelBank }) {
         {/* ── Grouped account list ── */}
         <div style={{
           background: '#fff', borderRadius: 20, overflow: 'hidden',
-          boxShadow: '0 2px 6px rgba(0,0,0,.07), 0 6px 0 #D8D4EC, 0 18px 44px rgba(0,0,0,.14)',
+          boxShadow: '0 1px 3px rgba(0,0,0,.05), 0 4px 14px rgba(0,0,0,.07)',
           marginBottom: 14,
           animation: 'fadeUp .35s .08s both',
         }}>

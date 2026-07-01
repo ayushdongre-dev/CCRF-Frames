@@ -365,7 +365,7 @@ function CumulativeChart({ cardInt, meltInt, cardMonths, meltMonths, meltInteres
 // ── UI Components ─────────────────────────────────────────────────
 function Card({ children }) {
   return (
-    <div style={{ background: '#fff', borderRadius: 22, padding: '18px 16px 16px', marginTop: 14, border: '1px solid rgba(0,0,0,0.05)', boxShadow: '0 2px 6px rgba(0,0,0,.07), 0 6px 0 #D8D4EC, 0 18px 44px rgba(0,0,0,.14)' }}>
+    <div style={{ background: '#fff', borderRadius: 22, padding: '18px 16px 16px', marginTop: 14, border: '1px solid rgba(0,0,0,0.05)', boxShadow: '0 1px 3px rgba(0,0,0,.05), 0 4px 14px rgba(0,0,0,.07)' }}>
       {children}
     </div>
   );
@@ -391,11 +391,6 @@ function Mini({ tone, label, rate, time, interest }) {
       <div style={{ padding: '11px 12px 14px' }}>
         <div style={{ fontWeight: 700, fontSize: 12.5, color: c, lineHeight: 1.25, marginBottom: 3, minHeight: 30 }}>{label}</div>
         <div style={{ fontSize: 9.5, fontWeight: 500, color: '#999', marginBottom: 11 }}>{rate}</div>
-        <div style={{ fontSize: 9, fontWeight: 700, color: '#bbb', letterSpacing: 0.6, marginBottom: 3 }}>TOTAL INTEREST</div>
-        <div style={{ fontWeight: 900, fontSize: 17, color: c, fontFamily: 'Sora, sans-serif', letterSpacing: -0.3 }}>{interest}</div>
-        <div style={{ height: 1, background: divider, margin: '9px 0' }} />
-        <div style={{ fontSize: 9, fontWeight: 700, color: '#bbb', letterSpacing: 0.6, marginBottom: 3 }}>TIMEFRAME</div>
-        <div style={{ fontWeight: 900, fontSize: 17, color: c, fontFamily: 'Sora, sans-serif', letterSpacing: -0.3 }}>{time}</div>
       </div>
     </div>
   );
@@ -440,7 +435,7 @@ function Visualise({ go, ccrfRate = 22, monthly = 30000 }) {
           background: 'linear-gradient(140deg, #5B3FD4 0%, #3E2B9E 100%)',
           borderRadius: 22, padding: '22px 20px 20px', marginTop: 8,
           overflow: 'hidden', position: 'relative',
-          boxShadow: '0 8px 32px rgba(91,63,212,0.30), 0 2px 8px rgba(0,0,0,0.12)'
+          boxShadow: '0 2px 10px rgba(91,63,212,.16), 0 1px 4px rgba(0,0,0,.08)'
         }}>
           <div style={{ position: 'absolute', top: -40, right: -28, width: 140, height: 140, borderRadius: '50%', background: 'radial-gradient(circle, rgba(255,255,255,0.13) 0%, transparent 70%)', pointerEvents: 'none' }} />
           <div style={{ position: 'absolute', bottom: -30, left: 10, width: 110, height: 110, borderRadius: '50%', background: 'radial-gradient(circle, rgba(255,255,255,0.07) 0%, transparent 70%)', pointerEvents: 'none' }} />

@@ -44,7 +44,7 @@ function MeltVerReviewScreen({ go, meltSelBank, meltPayDate, meltPayAmount, setM
             padding: '18px 20px', borderRadius: 18, marginBottom: 12,
             border: '2px solid ' + G_BDR, background: G_L,
             cursor: 'pointer', textAlign: 'left',
-            boxShadow: '0 6px 0 rgba(31,169,113,.28), 0 10px 28px -6px rgba(31,169,113,.18)', transition: 'transform .12s',
+            boxShadow: '0 1px 4px rgba(31,169,113,.12), 0 4px 14px rgba(31,169,113,.09)', transition: 'transform .12s',
             animation: 'fadeUp .35s both',
           }}
           onMouseDown={function(e){ e.currentTarget.style.transform='scale(.985)'; }}
@@ -58,7 +58,7 @@ function MeltVerReviewScreen({ go, meltSelBank, meltPayDate, meltPayAmount, setM
           </div>
           <div style={{ flex: 1 }}>
             <div style={{ fontSize: 16, fontWeight: 800, color: G, ...sora, marginBottom: 3 }}>Approve</div>
-            <div style={{ fontSize: 12.5, color: ink2 }}>Unlock Round 2 &amp; disburse ₹3,00,000</div>
+            <div style={{ fontSize: 12.5, color: ink2 }}>Unlock Phase 2 &amp; disburse ₹3,00,000</div>
           </div>
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
             <path d="M9 6l6 6-6 6" stroke={G} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
@@ -73,7 +73,7 @@ function MeltVerReviewScreen({ go, meltSelBank, meltPayDate, meltPayAmount, setM
             padding: '18px 20px', borderRadius: 18,
             border: '2px solid #FCA5A5', background: '#FFF5F5',
             cursor: 'pointer', textAlign: 'left',
-            boxShadow: '0 6px 0 rgba(239,68,68,.18), 0 10px 24px rgba(0,0,0,.08)', transition: 'transform .12s',
+            boxShadow: '0 1px 4px rgba(239,68,68,.10), 0 4px 14px rgba(0,0,0,.06)', transition: 'transform .12s',
             animation: 'fadeUp .35s .08s both',
           }}
           onMouseDown={function(e){ e.currentTarget.style.transform='scale(.985)'; }}

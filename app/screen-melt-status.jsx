@@ -98,7 +98,7 @@ function MeltStatusScreen({ go, meltState, retryCount, setRetryCount }) {
       <div className="scr" style={{ flex: 1, overflowY: 'auto', padding: '20px 20px 8px' }}>
 
         {/* ── Status hero card ── */}
-        <div style={{ background: c.bg, borderRadius: 22, padding: '20px', marginBottom: 16, boxShadow: '0 8px 0 rgba(0,0,0,.18), 0 12px 32px -8px rgba(0,0,0,.25)', animation: 'fadeUp .35s both' }}>
+        <div style={{ background: c.bg, borderRadius: 22, padding: '20px', marginBottom: 16, boxShadow: '0 1px 4px rgba(0,0,0,.08), 0 4px 14px rgba(0,0,0,.12)', animation: 'fadeUp .35s both' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 16 }}>
             <div style={{ width: 46, height: 46, borderRadius: 14, background: c.iconBg, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
               {c.icon}
@@ -150,7 +150,7 @@ function MeltStatusScreen({ go, meltState, retryCount, setRetryCount }) {
         )}
 
         {/* ── Batch dates — timeline ── */}
-        <div style={{ background: '#fff', borderRadius: 20, padding: '18px 18px', boxShadow: '0 2px 6px rgba(0,0,0,.07), 0 6px 0 #D8D4EC, 0 18px 44px rgba(0,0,0,.14)', marginBottom: 14, animation: 'fadeUp .35s .12s both' }}>
+        <div style={{ background: '#fff', borderRadius: 20, padding: '18px 18px', boxShadow: '0 1px 3px rgba(0,0,0,.05), 0 4px 14px rgba(0,0,0,.07)', marginBottom: 14, animation: 'fadeUp .35s .12s both' }}>
           <div style={{ fontSize: 11, fontWeight: 700, color: muted, letterSpacing: 0.6, textTransform: 'uppercase', marginBottom: 18 }}>Upcoming Batch Runs</div>
           <div style={{ position: 'relative', paddingLeft: 16 }}>
             {/* Vertical line */}
@@ -193,7 +193,7 @@ function MeltStatusScreen({ go, meltState, retryCount, setRetryCount }) {
         </div>
 
         {/* ── Loan summary ── */}
-        <div style={{ background: '#fff', borderRadius: 20, padding: '16px 18px', boxShadow: '0 2px 6px rgba(0,0,0,.07), 0 6px 0 #D8D4EC, 0 18px 44px rgba(0,0,0,.14)', animation: 'fadeUp .35s .2s both' }}>
+        <div style={{ background: '#fff', borderRadius: 20, padding: '16px 18px', boxShadow: '0 1px 3px rgba(0,0,0,.05), 0 4px 14px rgba(0,0,0,.07)', animation: 'fadeUp .35s .2s both' }}>
           <div style={{ fontSize: 10.5, fontWeight: 700, color: muted, letterSpacing: 0.7, textTransform: 'uppercase', marginBottom: 12 }}>Your Active Loan</div>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
             <div>

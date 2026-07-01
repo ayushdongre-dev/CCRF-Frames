@@ -36,7 +36,7 @@ function RewardScreen({ go }) {
             You have earned this!
           </div>
           <div style={{ fontSize: 14, color: muted, textAlign: 'center', lineHeight: 1.55, maxWidth: 260, animation: 'fadeUp .4s .3s both' }}>
-            Your payment is verified. Round 2 is now unlocked.
+            Your payment is verified. Your next phase is now unlocked.
           </div>
         </div>
 
@@ -57,7 +57,7 @@ function RewardScreen({ go }) {
               <span style={{ fontSize: 8.5, fontWeight: 900, color: '#fff', letterSpacing: 0.5 }}>NEW</span>
             </div>
             <div>
-              <div style={{ fontSize: 11, fontWeight: 800, color: G, letterSpacing: 0.4, marginBottom: 3 }}>ROUND 2</div>
+              <div style={{ fontSize: 11, fontWeight: 800, color: G, letterSpacing: 0.4, marginBottom: 3 }}>PHASE 2</div>
               <div style={{ fontSize: 13.5, fontWeight: 700, color: G }}>Unlocked for you</div>
             </div>
             <div style={{ fontSize: 20, fontWeight: 900, color: G, ...sora }}>+ ₹3,00,000</div>

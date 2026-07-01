@@ -38,7 +38,7 @@ function AnimCard({ playKey }) {
       <div style={{
         position: 'relative', width: 256, height: 158, borderRadius: 18,
         background: 'linear-gradient(135deg,#6E51D8 0%,#4B3596 100%)',
-        boxShadow: '0 9px 0 rgba(0,0,0,.24), 0 24px 44px -18px rgba(75,53,150,.85)', overflow: 'hidden',
+        boxShadow: '0 2px 12px rgba(0,0,0,.14), 0 8px 24px rgba(75,53,150,.28)', overflow: 'hidden',
         padding: '16px 18px', color: '#fff',
         transform: shuffled ? 'translate(8px,6px) rotate(2deg)' : 'translate(0,0)',
         transition: 'transform .7s cubic-bezier(.2,.8,.2,1) .08s',
@@ -595,12 +595,12 @@ function SavingsScreen({ go, monthly = 30000, setMonthly }) {
 
           {/* Current card — muted, recedes */}
           <div style={{
-            flex: 1, borderRadius: 20, padding: '16px 10px 10px',
+            flex: 1, borderRadius: 20, padding: '16px 10px 16px',
             background: 'rgba(255,242,242,0.6)',
             border: '1px solid rgba(252,165,165,0.22)',
-            boxShadow: '0 6px 22px -4px rgba(220,38,38,0.12), 0 2px 6px rgba(0,0,0,0.05)',
+            boxShadow: '0 1px 3px rgba(0,0,0,.04), 0 4px 12px rgba(220,38,38,.07)',
             display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center',
-            minHeight: 168, opacity: 0.88,
+            opacity: 0.88,
           }}>
             <div style={{ fontSize: 9, fontWeight: 700, color: '#EF4444', letterSpacing: 0.5, textTransform: 'uppercase', marginBottom: 2 }}>Your Card Now</div>
             <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'center', gap: 3 }}>
@@ -612,42 +612,26 @@ function SavingsScreen({ go, monthly = 30000, setMonthly }) {
               </button>
             </div>
             <div style={{ fontSize: 8.5, fontWeight: 600, color: '#EF4444', marginBottom: 10, opacity: 0.75 }}>p.a. interest</div>
-            <div style={{ height: 52, display: 'flex', alignItems: 'center', justifyContent: 'center', animation: 'float 3.5s ease-in-out infinite', marginBottom: 4 }}>
+            <div style={{ height: 52, display: 'flex', alignItems: 'center', justifyContent: 'center', animation: 'float 3.5s ease-in-out infinite' }}>
               <IceCube size={66} />
-            </div>
-            <div style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: 3, borderTop: '1px solid rgba(220,38,38,0.08)', marginTop: 'auto', paddingTop: 6 }}>
-              <div style={{ fontSize: 9.5, color: '#AEAAB8', fontWeight: 600, display: 'flex', justifyContent: 'space-between' }}>
-                <span>Interest</span><span style={{ color: '#7C788A', fontFamily: 'Sora, sans-serif' }}>{lakh(cardsInt)}</span>
-              </div>
-              <div style={{ fontSize: 9.5, color: '#AEAAB8', fontWeight: 600, display: 'flex', justifyContent: 'space-between' }}>
-                <span>Total Pay</span><span style={{ color: '#EF4444', fontWeight: 700, fontFamily: 'Sora, sans-serif' }}>{lakh(500000 + cardsInt)}</span>
-              </div>
             </div>
           </div>
 
           {/* Melt card — elevated winner */}
           <div style={{
-            flex: 1, borderRadius: 20, padding: '16px 10px 10px',
+            flex: 1, borderRadius: 20, padding: '16px 10px 16px',
             background: 'linear-gradient(145deg, #EDE8FF 0%, #F5F3FF 55%, #fff 100%)',
             border: '2px solid #5B3FD4',
-            boxShadow: '0 12px 36px -8px rgba(91,63,212,0.30), 0 0 0 1px rgba(91,63,212,0.07)',
+            boxShadow: '0 1px 4px rgba(91,63,212,.10), 0 4px 16px rgba(91,63,212,.12)',
             transform: 'translateY(-4px)',
             display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center',
-            position: 'relative', minHeight: 168,
+            position: 'relative',
           }}>
             <div style={{ fontSize: 9, fontWeight: 700, color: '#5B3FD4', letterSpacing: 0.5, textTransform: 'uppercase', marginBottom: 2 }}>With Melt</div>
             <div style={{ fontSize: 32, fontWeight: 900, color: '#5B3FD4', fontFamily: 'Sora, sans-serif', letterSpacing: -1, lineHeight: 1.1 }}>25%</div>
             <div style={{ fontSize: 8.5, fontWeight: 700, color: '#7C5CE7', marginBottom: 10 }}>p.a. interest</div>
-            <div style={{ height: 52, display: 'flex', alignItems: 'center', justifyContent: 'center', animation: 'float 3.5s ease-in-out infinite 1.75s', filter: 'drop-shadow(0 4px 12px rgba(245,158,11,0.25))', marginBottom: 4 }}>
+            <div style={{ height: 52, display: 'flex', alignItems: 'center', justifyContent: 'center', animation: 'float 3.5s ease-in-out infinite 1.75s', filter: 'drop-shadow(0 4px 12px rgba(245,158,11,0.25))' }}>
               <Puddle size={66} />
-            </div>
-            <div style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: 3, borderTop: '1px solid rgba(91,63,212,0.10)', marginTop: 'auto', paddingTop: 6 }}>
-              <div style={{ fontSize: 9.5, color: '#9896B0', fontWeight: 600, display: 'flex', justifyContent: 'space-between' }}>
-                <span>Interest</span><span style={{ color: '#1B192E', fontWeight: 700, fontFamily: 'Sora, sans-serif' }}>{lakh(meltInt)}</span>
-              </div>
-              <div style={{ fontSize: 9.5, color: '#9896B0', fontWeight: 600, display: 'flex', justifyContent: 'space-between' }}>
-                <span>Total Pay</span><span style={{ color: '#5B3FD4', fontWeight: 800, fontFamily: 'Sora, sans-serif' }}>{lakh(500000 + meltInt)}</span>
-              </div>
             </div>
           </div>
         </div>
@@ -664,29 +648,19 @@ function SavingsScreen({ go, monthly = 30000, setMonthly }) {
       }}>
         <div style={{ position: 'absolute', top: -40, right: -20, width: 150, height: 150, borderRadius: '50%', background: 'radial-gradient(circle, rgba(255,255,255,0.09) 0%, transparent 65%)', pointerEvents: 'none' }} />
 
-        {/* Amount */}
-        <div style={{ textAlign: 'center', marginBottom: 14, position: 'relative', zIndex: 1 }}>
-          <div style={{ fontSize: 9.5, fontWeight: 800, color: 'rgba(255,255,255,0.58)', letterSpacing: 1.5, textTransform: 'uppercase', marginBottom: 6 }}>You'll Save</div>
-          <div style={{ fontSize: 40, fontWeight: 900, color: '#fff', fontFamily: 'Sora, sans-serif', letterSpacing: -2, lineHeight: 1 }}>{inr(countedSaving)}</div>
-          
-        </div>  
+        {/* Amount — primary */}
+        <div style={{ textAlign: 'center', marginBottom: 12, position: 'relative', zIndex: 1 }}>
+          <div style={{ fontSize: 10, fontWeight: 700, color: 'rgba(255,255,255,0.52)', letterSpacing: 1.8, textTransform: 'uppercase', marginBottom: 6 }}>You'll Save</div>
+          <div style={{ fontSize: 54, fontWeight: 900, color: '#fff', fontFamily: 'Sora, sans-serif', letterSpacing: -2.5, lineHeight: 1 }}>{inr(countedSaving)}</div>
+        </div>
 
-        {/* Inline benefit blocks */}
-        <div style={{ display: 'flex', alignItems: 'center', position: 'relative', zIndex: 1 }}>
-          <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 3, textAlign: 'center', padding: '0 8px' }}>
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.75)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        {/* Months — secondary pill */}
+        <div style={{ display: 'flex', justifyContent: 'center', position: 'relative', zIndex: 1 }}>
+          <div style={{ display: 'inline-flex', alignItems: 'center', gap: 5, background: 'rgba(255,255,255,0.13)', borderRadius: 999, padding: '5px 12px 5px 9px', border: '1px solid rgba(255,255,255,0.14)' }}>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.65)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
             </svg>
-            <div style={{ fontWeight: 800, fontSize: 13, color: '#fff', fontFamily: 'Sora, sans-serif', letterSpacing: -0.3, lineHeight: 1.2 }}>{animMonthsDiff} Months Earlier</div>
-            <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.48)', fontWeight: 500 }}>Debt-Free</div>
-          </div>
-          <div style={{ width: 1, height: 36, background: 'rgba(255,255,255,0.18)', flexShrink: 0 }} />
-          <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 3, textAlign: 'center', padding: '0 8px' }}>
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.75)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <polyline points="22 7 13.5 15.5 8.5 10.5 1 18"/><polyline points="16 7 22 7 22 13"/>
-            </svg>
-            <div style={{ fontWeight: 800, fontSize: 13, color: '#fff', fontFamily: 'Sora, sans-serif', letterSpacing: -0.3, lineHeight: 1.2 }}>Improve Credit Score</div>
-            <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.48)', fontWeight: 500 }}>With timely repayments</div>
+            <span style={{ fontSize: 11.5, fontWeight: 600, color: 'rgba(255,255,255,0.78)', letterSpacing: 0.1 }}>{animMonthsDiff} months earlier · debt-free</span>
           </div>
         </div>
       </div>
@@ -817,7 +791,7 @@ function SavingsScreen({ go, monthly = 30000, setMonthly }) {
                     </div>
 
                     {/* ── Comparison table ── */}
-                    <div style={{ borderRadius: 20, overflow: 'hidden', border: '1.5px solid #ECEAF4', marginBottom: 16, boxShadow: '0 2px 6px rgba(0,0,0,.07), 0 6px 0 #D8D4EC, 0 18px 44px rgba(0,0,0,.14)' }}>
+                    <div style={{ borderRadius: 20, overflow: 'hidden', border: '1.5px solid #ECEAF4', marginBottom: 16, boxShadow: '0 1px 3px rgba(0,0,0,.05), 0 4px 14px rgba(0,0,0,.07)' }}>
 
                       {/* Column headers */}
                       <div style={{ display: 'grid', gridTemplateColumns: '110px 1fr 1fr', background: '#FAFAFA' }}>
@@ -911,7 +885,7 @@ function SavingsScreen({ go, monthly = 30000, setMonthly }) {
                         </div>
 
                         {/* ── Unified comparison card ── */}
-                        <div style={{ background: '#fff', borderRadius: 20, overflow: 'hidden', border: '1.5px solid #ECEAF4', marginBottom: 14, boxShadow: '0 2px 6px rgba(0,0,0,.07), 0 6px 0 #D8D4EC, 0 18px 44px rgba(0,0,0,.14)' }}>
+                        <div style={{ background: '#fff', borderRadius: 20, overflow: 'hidden', border: '1.5px solid #ECEAF4', marginBottom: 14, boxShadow: '0 1px 3px rgba(0,0,0,.05), 0 4px 14px rgba(0,0,0,.07)' }}>
 
                           {/* ─ Credit Card row ─ */}
                           <div style={{ padding: '16px 16px 15px' }}>

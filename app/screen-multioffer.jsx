@@ -50,7 +50,7 @@ function MultiOffer({ go }) {
             borderRadius: 18, overflow: 'hidden',
             background: meltOn ? Pl : '#fff',
             border: meltOn ? ('2px solid ' + P) : '1.5px solid #E8E4FA',
-            boxShadow: meltOn ? '0 2px 6px rgba(0,0,0,.07), 0 6px 0 #D8D4EC, 0 18px 44px rgba(0,0,0,.14)' : '0 2px 6px rgba(0,0,0,.07), 0 6px 0 #D8D4EC, 0 18px 44px rgba(0,0,0,.14)',
+            boxShadow: meltOn ? '0 1px 3px rgba(0,0,0,.05), 0 4px 14px rgba(0,0,0,.07)' : '0 1px 3px rgba(0,0,0,.05), 0 4px 14px rgba(0,0,0,.07)',
             transition: 'box-shadow .2s, border-color .2s, background .2s',
           }}>
             {/* exclusive strip */}
@@ -104,7 +104,7 @@ function MultiOffer({ go }) {
             borderRadius: 18, overflow: 'hidden',
             background: cashOn ? Pl : '#fff',
             border: cashOn ? ('2px solid ' + P) : '1.5px solid #E8E4FA',
-            boxShadow: cashOn ? '0 2px 6px rgba(0,0,0,.07), 0 6px 0 #D8D4EC, 0 18px 44px rgba(0,0,0,.14)' : '0 2px 6px rgba(0,0,0,.07), 0 6px 0 #D8D4EC, 0 18px 44px rgba(0,0,0,.14)',
+            boxShadow: cashOn ? '0 1px 3px rgba(0,0,0,.05), 0 4px 14px rgba(0,0,0,.07)' : '0 1px 3px rgba(0,0,0,.05), 0 4px 14px rgba(0,0,0,.07)',
             transition: 'box-shadow .2s, border-color .2s, background .2s',
           }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '16px 16px 12px' }}>

@@ -6,11 +6,11 @@ const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
   "ccrfRate": 22
 }/*EDITMODE-END*/;
 
-const ORDER = ['home', 'multioffer', 'selling', 'savings', 'cards', 'eligibility', 'visualise', 'pdf', 'amountselect', 'revisedoffer', 'postdisbursal', 'meltbank', 'meltpayment', 'verifying', 'meltnotfound', 'verreview', 'meltstatus', 'reward', 'newloan', 'success'];
+const ORDER = ['home', 'multioffer', 'selling', 'savings', 'cards', 'eligibility', 'visualise', 'amountselect', 'revisedoffer', 'journeycontinues', 'postdisbursal', 'meltbank', 'meltpayment', 'verifying', 'meltnotfound', 'verreview', 'meltstatus', 'reward', 'newloan', 'success'];
 const LABELS = {
   home: 'Home', multioffer: 'Multi Offer', selling: 'General Selling', savings: 'Savings', cards: 'Card Selection',
-  eligibility: 'Eligibility', visualise: 'Visualise', pdf: 'PDF Upload', amountselect: 'Amount', revisedoffer: 'Final Offer',
-  postdisbursal: 'Post Disbursal', meltbank: 'Bank Account', meltpayment: 'Payment Details',
+  eligibility: 'Eligibility', visualise: 'Visualise', amountselect: 'Amount', revisedoffer: 'Final Offer',
+  journeycontinues: 'Journey', postdisbursal: 'Post Disbursal', meltbank: 'Bank Account', meltpayment: 'Payment Details',
   verifying: 'Verifying', meltnotfound: 'Not Found', verreview: 'Ver. Review', meltstatus: 'Melt Status', reward: 'Reward', newloan: 'New Loan', success: 'Done',
 };
 
@@ -68,9 +68,9 @@ function App() {
       case 'cards': return <CardSelection go={go} selected={selected} setSelected={setSelected} showLogos={t.showLogos} />;
       case 'eligibility': return <Eligibility go={go} ccrfRate={t.ccrfRate} />;
       case 'visualise': return <Visualise go={go} ccrfRate={t.ccrfRate} monthly={monthly} />;
-      case 'pdf': return <PdfUpload go={go} selected={selected} showLogos={t.showLogos} />;
       case 'amountselect': return <AmountSelection go={go} ccrfRate={t.ccrfRate} />;
       case 'revisedoffer': return <RevisedOffer go={go} ccrfRate={t.ccrfRate} />;
+      case 'journeycontinues': return <JourneyContinues go={go} />;
       case 'postdisbursal': return <PostDisbursal go={go} pdState={pdState} setPdState={setPdState} setVerifyAttempt={setVerifyAttempt} />;
       case 'meltbank': return <MeltBankAccountScreen go={go} setMeltSelBank={setMeltSelBank} />;
       case 'meltpayment': return <MeltPaymentScreen go={go} setMeltPayDate={setMeltPayDate} setMeltPayAmount={setMeltPayAmount} />;
@@ -80,7 +80,6 @@ function App() {
       case 'verreview': return <MeltVerReviewScreen go={go} meltSelBank={meltSelBank} meltPayDate={meltPayDate} meltPayAmount={meltPayAmount} setMeltState={setMeltState} setPdState={setPdState} />;
       case 'reward': return <RewardScreen go={go} />;
       case 'newloan': return <NewLoanScreen go={go} />;
-      case 'topupcontinues': return <TopupContinues go={go} />;
       case 'success': return <Success go={go} />;
       default: return <MultiOffer go={go} />;
     }
@@ -89,7 +88,7 @@ function App() {
   const light = route === 'selling';
   const bg = route === 'savings' ? '#F7F7FC'
     : (route === 'eligibility' || route === 'home') ? '#F7F7FB'
-      : (route === 'pdf' || route === 'multioffer' || route === 'amountselect' || route === 'revisedoffer') ? '#FFFFFF'
+      : (route === 'multioffer' || route === 'amountselect' || route === 'revisedoffer') ? '#FFFFFF'
         : (route === 'selling' || route === 'visualise' || route === 'success') ? '#EFEEFE'
           : (route === 'postdisbursal' || route === 'meltbank' || route === 'meltpayment' || route === 'verifying' || route === 'meltnotfound' || route === 'verreview' || route === 'meltstatus' || route === 'reward' || route === 'newloan') ? '#FFFFFF'
             : 'var(--bg)';
@@ -122,7 +121,7 @@ function App() {
         })}
       </div>
 
-      <Phone light={light} bg={bg} clean={route === 'pdf'}>{screen}</Phone>
+      <Phone light={light} bg={bg}>{screen}</Phone>
 
       <TweaksPanel title="Tweaks">
         <TweakSection label="Brand" />
