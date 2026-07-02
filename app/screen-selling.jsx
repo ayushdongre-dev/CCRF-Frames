@@ -682,65 +682,45 @@ function SavingsScreen({ go, monthly = 30000, setMonthly }) {
       </div>
 
       {/* ── VISUALISE BUTTON ── */}
-      <div style={{ margin: '10px 16px 0' }}>
+      <div style={{ margin: '10px 16px 0', textAlign: 'center' }}>
         <button onClick={() => go('visualise')} style={{
-          width: '100%', padding: '12px 16px',
-          background: 'linear-gradient(135deg, #EDE8FF 0%, #F3F0FF 100%)',
-          border: '1.5px solid #C4B5FD',
-          borderRadius: 14, cursor: 'pointer',
-          display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
-          boxShadow: '0 4px 14px rgba(91,63,212,0.10)',
-          transition: 'transform .12s, box-shadow .12s',
-        }}
-          onMouseDown={e => { e.currentTarget.style.transform='scale(.98)'; e.currentTarget.style.boxShadow='0 2px 8px rgba(91,63,212,0.08)'; }}
-          onMouseUp={e => { e.currentTarget.style.transform='scale(1)'; e.currentTarget.style.boxShadow='0 4px 14px rgba(91,63,212,0.10)'; }}
-          onMouseLeave={e => { e.currentTarget.style.transform='scale(1)'; e.currentTarget.style.boxShadow='0 4px 14px rgba(91,63,212,0.10)'; }}
-        >
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#5B3FD4" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          background: 'transparent', border: 'none', cursor: 'pointer',
+          display: 'inline-flex', alignItems: 'center', gap: 6, padding: '4px 0',
+        }}>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#5B3FD4" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/>
           </svg>
-          <span style={{ fontSize: 13.5, fontWeight: 700, color: '#5B3FD4', letterSpacing: -0.2 }}>Visualise My Savings</span>
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none">
-            <path d="M5 12h14m0 0l-5-5m5 5l-5 5" stroke="#5B3FD4" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
+          <span style={{ fontSize: 14, fontWeight: 700, color: '#5B3FD4', textDecoration: 'underline', textDecorationColor: 'rgba(91,63,212,0.3)', textUnderlineOffset: '3px' }}>Visualise My Savings</span>
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
+            <path d="M5 12h14m0 0l-5-5m5 5l-5 5" stroke="#5B3FD4" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"/>
           </svg>
         </button>
       </div>
 
-      {/* ── UNDERSTANDING CREDIT CARD DEBT ── */}
+      {/* ── LEARN MORE ── */}
       <div style={{ margin: '10px 16px 0', animation: 'fadeUp .64s .14s both' }}>
-        <div style={{ fontSize: 10, fontWeight: 800, color: '#88859E', letterSpacing: 0.8, textTransform: 'uppercase', marginBottom: 6, paddingLeft: 2 }}>Understanding Credit Card Debt</div>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-          <button onClick={() => setSheetOpen('interest')} style={{
-            display: 'flex', alignItems: 'center', gap: 10, width: '100%',
-            background: '#FFFFFF', padding: '10px 12px', borderRadius: 14,
-            border: '1px solid #EAE6F8', cursor: 'pointer', textAlign: 'left',
-            boxShadow: '0 4px 14px rgba(91,63,212,0.07), 0 1px 3px rgba(0,0,0,0.04)'
-          }}>
-            <div style={{ width: 30, height: 30, borderRadius: 8, background: '#FFF0F0', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="#DC2626" strokeWidth="2" /><path d="M12 7v5l3 2" stroke="#DC2626" strokeWidth="2" strokeLinecap="round" /></svg>
-            </div>
-            <div style={{ flex: 1 }}>
-              <div style={{ fontSize: 12, fontWeight: 700, color: '#15122F', letterSpacing: -0.2 }}>How credit card interest works</div>
-              <div style={{ fontSize: 9.5, color: '#88859E', fontWeight: 500, marginTop: 1 }}>Why 54% p.a. makes your debt grow fast</div>
-            </div>
-            <span style={{ flexShrink: 0 }}>{Icon.chevR('#C4B5FD', 14)}</span>
-          </button>
-          <button onClick={() => setSheetOpen('minimum')} style={{
-            display: 'flex', alignItems: 'center', gap: 10, width: '100%',
-            background: '#FFFFFF', padding: '10px 12px', borderRadius: 14,
-            border: '1px solid #EAE6F8', cursor: 'pointer', textAlign: 'left',
-            boxShadow: '0 4px 14px rgba(91,63,212,0.07), 0 1px 3px rgba(0,0,0,0.04)'
-          }}>
-            <div style={{ width: 30, height: 30, borderRadius: 8, background: '#FFF8EC', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><rect x="2" y="5" width="20" height="14" rx="2" stroke="#D97706" strokeWidth="2" /><path d="M2 10h20" stroke="#D97706" strokeWidth="2" /></svg>
-            </div>
-            <div style={{ flex: 1 }}>
-              <div style={{ fontSize: 12, fontWeight: 700, color: '#15122F', letterSpacing: -0.2 }}>What if you just pay minimum?</div>
-              <div style={{ fontSize: 9.5, color: '#88859E', fontWeight: 500, marginTop: 1 }}>See where your money actually goes</div>
-            </div>
-            <span style={{ flexShrink: 0 }}>{Icon.chevR('#C4B5FD', 14)}</span>
-          </button>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 6 }}>
+          <div style={{ width: 3, height: 13, borderRadius: 2, background: 'linear-gradient(180deg,#C4B5FD,#A89FD4)' }} />
+          <span style={{ fontSize: 10, fontWeight: 800, color: '#88859E', letterSpacing: 0.8, textTransform: 'uppercase' }}>Learn more</span>
         </div>
+        <button onClick={() => setSheetOpen('interest')} style={{
+          display: 'flex', alignItems: 'center', gap: 10, width: '100%',
+          background: 'transparent', padding: '10px 0', border: 'none', outline: 'none',
+          cursor: 'pointer', textAlign: 'left',
+        }}>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="#9B96C8" strokeWidth="1.8"/><path d="M12 7v5l3 2" stroke="#9B96C8" strokeWidth="1.8" strokeLinecap="round"/></svg>
+          <span style={{ fontSize: 12.5, fontWeight: 600, color: '#4B4960', flex: 1 }}>How credit card interest works</span>
+          {Icon.chevR('#A89FD4', 12)}
+        </button>
+        <button onClick={() => setSheetOpen('minimum')} style={{
+          display: 'flex', alignItems: 'center', gap: 10, width: '100%',
+          background: 'transparent', padding: '10px 0', border: 'none', outline: 'none',
+          cursor: 'pointer', textAlign: 'left',
+        }}>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><rect x="2" y="5" width="20" height="14" rx="2" stroke="#9B96C8" strokeWidth="1.8"/></svg>
+          <span style={{ fontSize: 12.5, fontWeight: 600, color: '#4B4960', flex: 1 }}>What if you just pay minimum?</span>
+          {Icon.chevR('#A89FD4', 12)}
+        </button>
       </div>
 
 
