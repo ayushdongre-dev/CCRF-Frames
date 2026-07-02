@@ -699,14 +699,11 @@ function SavingsScreen({ go, monthly = 30000, setMonthly }) {
 
       {/* ── LEARN MORE ── */}
       <div style={{ margin: '10px 16px 0', animation: 'fadeUp .64s .14s both' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 6 }}>
-          <div style={{ width: 3, height: 13, borderRadius: 2, background: 'linear-gradient(180deg,#C4B5FD,#A89FD4)' }} />
-          <span style={{ fontSize: 10, fontWeight: 800, color: '#88859E', letterSpacing: 0.8, textTransform: 'uppercase' }}>Learn more</span>
-        </div>
+        <span style={{ fontSize: 10, fontWeight: 800, color: '#88859E', letterSpacing: 0.8, textTransform: 'uppercase', display: 'block', marginBottom: 8 }}>Learn more</span>
         <button onClick={() => setSheetOpen('interest')} style={{
           display: 'flex', alignItems: 'center', gap: 10, width: '100%',
-          background: 'transparent', padding: '10px 0', border: 'none', outline: 'none',
-          cursor: 'pointer', textAlign: 'left',
+          background: '#F5F3FF', padding: '11px 12px', border: '1px solid rgba(196,181,253,0.35)',
+          borderRadius: 12, outline: 'none', cursor: 'pointer', textAlign: 'left', marginBottom: 8,
         }}>
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="#9B96C8" strokeWidth="1.8"/><path d="M12 7v5l3 2" stroke="#9B96C8" strokeWidth="1.8" strokeLinecap="round"/></svg>
           <span style={{ fontSize: 12.5, fontWeight: 600, color: '#4B4960', flex: 1 }}>How credit card interest works</span>
@@ -714,8 +711,8 @@ function SavingsScreen({ go, monthly = 30000, setMonthly }) {
         </button>
         <button onClick={() => setSheetOpen('minimum')} style={{
           display: 'flex', alignItems: 'center', gap: 10, width: '100%',
-          background: 'transparent', padding: '10px 0', border: 'none', outline: 'none',
-          cursor: 'pointer', textAlign: 'left',
+          background: '#F5F3FF', padding: '11px 12px', border: '1px solid rgba(196,181,253,0.35)',
+          borderRadius: 12, outline: 'none', cursor: 'pointer', textAlign: 'left',
         }}>
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><rect x="2" y="5" width="20" height="14" rx="2" stroke="#9B96C8" strokeWidth="1.8"/></svg>
           <span style={{ fontSize: 12.5, fontWeight: 600, color: '#4B4960', flex: 1 }}>What if you just pay minimum?</span>

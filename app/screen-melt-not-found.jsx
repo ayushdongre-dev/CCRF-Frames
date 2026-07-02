@@ -19,7 +19,10 @@ function MeltNotFoundScreen({ go, retryCount, setRetryCount, setMeltState }) {
   var nextStr = nextBatch.getDate() + ' ' + MONTHS[nextBatch.getMonth()];
 
   function handleRetry()  { setRetryCount(retryCount + 1); go('meltbank'); }
-  function handleWait()   { if (setMeltState) setMeltState('retry_exhausted'); go('meltstatus'); }
+  function handleWait()   {
+    if (setMeltState) setMeltState(retryAvailable ? 'bureau_fallback' : 'retry_exhausted');
+    go('meltstatus');
+  }
 
   return (
     <div style={{ minHeight: '100%', display: 'flex', flexDirection: 'column', background: '#F9F8FC', animation: 'fadeIn .25s' }}>
