@@ -84,7 +84,7 @@ function MultiOffer({ go }) {
               <div style={{ fontWeight: 900, fontSize: 38, color: P, ...sora, letterSpacing: -1.5, lineHeight: 1 }}>₹5,00,000</div>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: 14, background: 'rgba(91,63,212,0.07)', borderRadius: 10, padding: '8px 12px' }}>
                 <span style={{ fontSize: 11.5, fontWeight: 600, color: muted }}>Your card debt</span>
-                <span style={{ fontSize: 12, fontWeight: 800, color: P, ...sora }}>₹2,37,900</span>
+                <span style={{ fontSize: 12, fontWeight: 800, color: P, ...sora }}>₹4,37,900</span>
               </div>
             </div>
           </div>
