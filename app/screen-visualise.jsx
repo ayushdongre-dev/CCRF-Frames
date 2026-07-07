@@ -115,12 +115,12 @@ function BalanceChart({ cardBal, meltBal, cardMonths, meltMonths }) {
       {yLabels.map((v, i) => {
         const y = cY(v, maxBal);
         return <g key={i}>
-          <line x1={CPL} y1={y} x2={CW - CPR} y2={y} stroke="#EEE" strokeWidth="1" />
-          <text x={CPL - 5} y={y + 3} fontSize="7.5" fill="#A9A6B8" textAnchor="end">{fmtShort(v)}</text>
+          <line x1={CPL} y1={y} x2={CW - CPR} y2={y} stroke="#E8E6F2" strokeWidth="1" />
+          <text x={CPL - 5} y={y + 3} fontSize="9.5" fill="#5E5C7A" textAnchor="end" fontWeight="600">{fmtShort(v)}</text>
         </g>;
       })}
       {xLabels.map((m, i) => (
-        <text key={i} x={cX(m, totalMonths)} y={CH - CPB + 14} fontSize="7.5" fill="#A9A6B8" textAnchor="middle">{m}</text>
+        <text key={i} x={cX(m, totalMonths)} y={CH - CPB + 14} fontSize="9.5" fill="#5E5C7A" textAnchor="middle" fontWeight="500">{m}</text>
       ))}
       <path d={cardArea} fill="rgba(212,79,72,.09)" />
       <path d={meltArea} fill="rgba(127,85,223,.11)" />
@@ -326,14 +326,14 @@ function CumulativeChart({ cardInt, meltInt, cardMonths, meltMonths, meltInteres
       {yLabels.map((v, i) => {
         const y = ccY(v, maxInt);
         return <g key={i}>
-          <line x1={CCPL} y1={y} x2={CCW - CCPR} y2={y} stroke="#EBEBF0" strokeWidth="1" />
-          <text x={CCPL - 5} y={y + 3} fontSize="7.5" fill="#B0AECA" textAnchor="end" fontWeight="500">{fmtShort(v)}</text>
+          <line x1={CCPL} y1={y} x2={CCW - CCPR} y2={y} stroke="#E8E6F2" strokeWidth="1" />
+          <text x={CCPL - 5} y={y + 3} fontSize="9.5" fill="#5E5C7A" textAnchor="end" fontWeight="600">{fmtShort(v)}</text>
         </g>;
       })}
 
       {/* x-axis labels */}
       {xLabels.map((m, i) => (
-        <text key={i} x={ccX(m, totalMonths)} y={CCH - CCPB + 14} fontSize="7.5" fill="#B0AECA" textAnchor="middle" fontWeight="500">{m}</text>
+        <text key={i} x={ccX(m, totalMonths)} y={CCH - CCPB + 14} fontSize="9.5" fill="#5E5C7A" textAnchor="middle" fontWeight="500">{m}</text>
       ))}
 
       {/* green gap area */}
@@ -345,6 +345,25 @@ function CumulativeChart({ cardInt, meltInt, cardMonths, meltMonths, meltInteres
       {/* curves */}
       <path d={cardPath} stroke="#E8453C" strokeWidth="3" fill="none" strokeLinecap="round" strokeLinejoin="round" />
       <path d={meltPath} stroke="var(--primary)" strokeWidth="3" fill="none" strokeLinecap="round" strokeLinejoin="round" />
+
+      {/* With Melt paid-off endpoint */}
+      {animMonths >= meltMonths && meltMonths < totalMonths && (() => {
+        const ex = ccX(meltMonths, totalMonths);
+        const ey = ccY(meltInterest, maxInt);
+        const badgeW = 72, badgeH = 28;
+        const badgeX = ex + 8 + badgeW > CCW - CCPR ? ex - badgeW - 8 : ex + 8;
+        const badgeY = ey + badgeH > CCH - CCPB ? ey - badgeH - 4 : ey - badgeH / 2;
+        return (
+          <g style={{ animation: 'fadeIn .4s both' }}>
+            <line x1={ex} y1={ey} x2={ex} y2={CCH - CCPB} stroke="var(--primary)" strokeWidth="1.2" strokeDasharray="3,3" opacity="0.32" />
+            <circle cx={ex} cy={ey} r="6" fill="var(--primary)" stroke="#fff" strokeWidth="2.5" />
+            <circle cx={ex} cy={ey} r="2.5" fill="#fff" />
+            <rect x={badgeX} y={badgeY} width={badgeW} height={badgeH} rx={7} fill="var(--primary)" />
+            <text x={badgeX + badgeW / 2} y={badgeY + 11} fontSize="8.5" fill="#fff" fontWeight="800" textAnchor="middle">✓ Paid off!</text>
+            <text x={badgeX + badgeW / 2} y={badgeY + 22} fontSize="7.5" fill="rgba(255,255,255,0.78)" textAnchor="middle">Month {meltMonths}</text>
+          </g>
+        );
+      })()}
 
       {/* savings callout badge */}
       {animPct > 0.85 && (
@@ -429,32 +448,6 @@ function Visualise({ go, ccrfRate = 22, monthly = 30000 }) {
     <div style={{ minHeight: '100%', background: '#F4F3FB', animation: 'fadeIn .35s' }}>
       <Header title="Savings Illustration" onBack={() => go('eligibility')} />
       <div style={{ padding: '2px 18px 32px' }}>
-
-        {/* ── Hero card ── */}
-        <div style={{
-          background: 'linear-gradient(140deg, #5B3FD4 0%, #3E2B9E 100%)',
-          borderRadius: 22, padding: '22px 20px 20px', marginTop: 8,
-          overflow: 'hidden', position: 'relative',
-          boxShadow: '0 2px 10px rgba(91,63,212,.16), 0 1px 4px rgba(0,0,0,.08)'
-        }}>
-          <div style={{ position: 'absolute', top: -40, right: -28, width: 140, height: 140, borderRadius: '50%', background: 'radial-gradient(circle, rgba(255,255,255,0.13) 0%, transparent 70%)', pointerEvents: 'none' }} />
-          <div style={{ position: 'absolute', bottom: -30, left: 10, width: 110, height: 110, borderRadius: '50%', background: 'radial-gradient(circle, rgba(255,255,255,0.07) 0%, transparent 70%)', pointerEvents: 'none' }} />
-          <div style={{ position: 'relative', zIndex: 1 }}>
-            <div style={{ fontSize: 11.5, fontWeight: 600, color: 'rgba(255,255,255,0.65)', letterSpacing: 0.2, marginBottom: 6 }}>Outstanding Credit Card Due</div>
-            <div style={{ fontWeight: 900, fontSize: 38, color: '#fff', letterSpacing: -1.5, fontFamily: 'Sora, sans-serif', lineHeight: 1 }}>{inr(VIZ_DUE)}</div>
-            <div style={{ fontSize: 11.5, color: 'rgba(255,255,255,0.55)', marginTop: 7 }}>Monthly payment · {inr(monthly)}</div>
-            <div style={{ display: 'inline-flex', alignItems: 'center', gap: 5, background: 'rgba(22,163,74,0.88)', borderRadius: 999, padding: '6px 13px', marginTop: 16 }}>
-              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="3"><polyline points="20 6 9 17 4 12"/></svg>
-              <span style={{ fontSize: 12, fontWeight: 700, color: '#fff' }}>Save {inr(intSaved)} with Melt</span>
-            </div>
-          </div>
-        </div>
-
-        {/* ── Comparison mini cards ── */}
-        <div style={{ display: 'flex', gap: 10, marginTop: 14 }}>
-          <Mini tone="red"  label="On Your Current Credit Card" rate={`${CARD_RATE_PCT}% (45% p.a. + 18% GST)`} time={`${cardMonths} months`} interest={inr(cardInterest)} />
-          <Mini tone="blue" label="With Melt" rate={`${MELT_RATE_PCT}% p.a.`} time={`${meltMonths} months`} interest={inr(meltInterest)} />
-        </div>
 
         {/* ── Savings banner ── */}
         <div style={{

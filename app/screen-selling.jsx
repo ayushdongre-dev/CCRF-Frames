@@ -127,6 +127,10 @@ function SellingStories({ go, storyMs = 7000 }) {
           <p style={{ fontSize: 14.5, color: '#6E6B82', lineHeight: 1.5, margin: 0, padding: '0 16px' }}>
             Consolidate your balances into a single low-interest plan.
           </p>
+          <div style={{ marginTop: 16, display: 'inline-flex', alignItems: 'center', gap: 7, background: 'rgba(91,63,212,0.09)', borderRadius: 999, padding: '7px 16px', border: '1px solid rgba(91,63,212,0.18)' }}>
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#5B3FD4" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 3H8"/></svg>
+            <span style={{ fontSize: 12, fontWeight: 700, color: '#5B3FD4', fontFamily: "'Sora',sans-serif" }}>Directly to your bank account</span>
+          </div>
         </div>
 
         {/* Loading dots */}
@@ -526,7 +530,7 @@ function SavingsScreen({ go, monthly = 30000, setMonthly }) {
   const monthlyInterestOnDebt = Math.round(500000 * 0.54 / 12);
 
   return (
-    <div style={{ minHeight: '100%', display: 'flex', flexDirection: 'column', background: '#F4F3FB', animation: 'fadeIn .35s', position: 'relative' }}>
+    <div style={{ minHeight: '100%', display: 'flex', flexDirection: 'column', background: '#FAFAFA', animation: 'fadeIn .35s', position: 'relative' }}>
 
       {/* Rate info click-away + popup — fixed so they escape scroll-container clipping */}
       {showRateInfo && (
@@ -565,25 +569,25 @@ function SavingsScreen({ go, monthly = 30000, setMonthly }) {
       {/* ── PAGE TITLE ── */}
       <div style={{ padding: '0 20px 8px', flexShrink: 0, animation: 'fadeUp .4s both', textAlign: 'center' }}>
         <div style={{ fontSize: 20, fontWeight: 900, color: '#1B192E', lineHeight: 1.18, letterSpacing: -0.6, fontFamily: 'Sora, sans-serif' }}>
-          Your Money is <span style={{ color: '#5B3FD4' }}>Frozen</span><br />in Card Debt
+          Your money is <span style={{ color: '#5B3FD4' }}>frozen</span><br />in card debt.
         </div>
-        <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6, marginTop: 8, background: 'rgba(237,232,255,0.55)', borderRadius: 10, padding: '4px 14px', border: '1px solid rgba(196,181,253,0.35)' }}>
-          <span style={{ fontSize: 10, color: '#9896B0', fontWeight: 600 }}>Card debt</span>
-          <div style={{ width: 1, height: 10, background: 'rgba(196,181,253,0.5)' }} />
-          <span style={{ fontSize: 13.5, fontWeight: 900, color: '#1B192E', fontFamily: 'Sora, sans-serif', letterSpacing: -0.4 }}>₹5,00,000</span>
+        <div style={{ display: 'inline-flex', alignItems: 'center', gap: 10, marginTop: 10, background: '#fff', borderRadius: 999, padding: '7px 18px', border: '1px solid #E3E1F3', boxShadow: '0 2px 10px rgba(91,63,212,.07)' }}>
+          <span style={{ fontSize: 13, color: '#9896B0', fontWeight: 500 }}>Card debt</span>
+          <div style={{ width: 1, height: 14, background: '#DDD9EF' }} />
+          <span style={{ fontSize: 15, fontWeight: 800, color: '#111118', fontFamily: 'Sora, sans-serif', letterSpacing: -0.4 }}>₹5,00,000</span>
         </div>
       </div>
 
       {/* ── COMPARISON ── */}
       <div style={{ margin: '12px 16px 0', animation: 'fadeUp .55s .06s both' }}>
         <div style={{ fontSize: 9.5, fontWeight: 700, color: '#AEACC4', letterSpacing: 1.1, textTransform: 'uppercase', marginBottom: 10, paddingLeft: 2 }}>Why Melt?</div>
-        <div style={{ display: 'flex', gap: 10, alignItems: 'flex-start', padding: '4px 0 6px', position: 'relative' }}>
+        <div style={{ display: 'flex', gap: 10, alignItems: 'stretch', padding: '4px 0 6px', position: 'relative' }}>
 
-          {/* Arrow — clean, centred */}
+          {/* Arrow — centred */}
           <div style={{
-            position: 'absolute', left: '50%', top: '46%',
+            position: 'absolute', left: '50%', top: '50%',
             transform: 'translate(-50%, -50%)',
-            width: 26, height: 26, borderRadius: '50%',
+            width: 30, height: 30, borderRadius: '50%',
             background: '#fff', zIndex: 3,
             boxShadow: '0 2px 10px rgba(91,63,212,0.16)',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
@@ -593,45 +597,46 @@ function SavingsScreen({ go, monthly = 30000, setMonthly }) {
             </svg>
           </div>
 
-          {/* Current card — muted, recedes */}
+          {/* Current card */}
           <div style={{
-            flex: 1, borderRadius: 20, padding: '16px 10px 16px',
-            background: 'rgba(255,242,242,0.6)',
-            border: '1px solid rgba(252,165,165,0.22)',
+            flex: 1, borderRadius: 18, padding: '14px 12px',
+            background: '#FFF5F5',
+            border: '1px solid rgba(252,165,165,0.3)',
             boxShadow: '0 1px 3px rgba(0,0,0,.04), 0 4px 12px rgba(220,38,38,.07)',
             display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center',
-            opacity: 0.88,
           }}>
-            <div style={{ fontSize: 9, fontWeight: 700, color: '#EF4444', letterSpacing: 0.5, textTransform: 'uppercase', marginBottom: 2 }}>Your Card Now</div>
+            <div style={{ height: 20, display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 7 }}>
+              <span style={{ fontSize: 9, fontWeight: 700, color: '#F87171', letterSpacing: 0.5, textTransform: 'uppercase' }}>Your Card Now</span>
+            </div>
             <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'center', gap: 3 }}>
-              <div style={{ fontSize: 32, fontWeight: 900, color: '#DC2626', fontFamily: 'Sora, sans-serif', letterSpacing: -1, lineHeight: 1.1 }}>54%</div>
+              <div style={{ fontSize: 38, fontWeight: 800, color: '#EF4444', fontFamily: 'Sora, sans-serif', letterSpacing: -1.5, lineHeight: 1 }}>54%</div>
               <button
                 onClick={function(e){ e.stopPropagation(); setShowRateInfo(function(v){ return !v; }); }}
-                style={{ marginTop: 5, width: 16, height: 16, borderRadius: '50%', border: '1px solid rgba(220,38,38,0.35)', background: 'rgba(220,38,38,0.08)', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', flexShrink: 0, padding: 0 }}>
-                <span style={{ fontSize: 10, fontWeight: 900, color: '#DC2626', lineHeight: 1, fontStyle: 'italic', fontFamily: 'Georgia, serif' }}>i</span>
+                style={{ marginTop: 5, width: 14, height: 14, borderRadius: '50%', border: '1.5px solid #FCA5A5', background: 'transparent', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', flexShrink: 0, padding: 0 }}>
+                <span style={{ fontSize: 9, fontWeight: 700, color: '#FCA5A5', lineHeight: 1, fontStyle: 'italic', fontFamily: 'Georgia, serif' }}>i</span>
               </button>
             </div>
-            <div style={{ fontSize: 8.5, fontWeight: 600, color: '#EF4444', marginBottom: 10, opacity: 0.75 }}>p.a. interest</div>
-            <div style={{ height: 52, display: 'flex', alignItems: 'center', justifyContent: 'center', animation: 'float 3.5s ease-in-out infinite' }}>
-              <IceCube size={66} />
+            <div style={{ fontSize: 10, fontWeight: 500, color: '#FCA5A5', marginTop: 2, marginBottom: 10 }}>p.a. interest</div>
+            <div style={{ flex: 1, display: 'flex', alignItems: 'flex-end', justifyContent: 'center', paddingTop: 4 }}>
+              <IceCube size={70} />
             </div>
           </div>
 
-          {/* Melt card — elevated winner */}
+          {/* Melt card — winner */}
           <div style={{
-            flex: 1, borderRadius: 20, padding: '16px 10px 16px',
-            background: 'linear-gradient(145deg, #EDE8FF 0%, #F5F3FF 55%, #fff 100%)',
+            flex: 1, borderRadius: 18, padding: '14px 12px',
+            background: '#fff',
             border: '2px solid #5B3FD4',
             boxShadow: '0 1px 4px rgba(91,63,212,.10), 0 4px 16px rgba(91,63,212,.12)',
-            transform: 'translateY(-4px)',
             display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center',
-            position: 'relative',
           }}>
-            <div style={{ fontSize: 9, fontWeight: 700, color: '#5B3FD4', letterSpacing: 0.5, textTransform: 'uppercase', marginBottom: 2 }}>With Melt</div>
-            <div style={{ fontSize: 32, fontWeight: 900, color: '#5B3FD4', fontFamily: 'Sora, sans-serif', letterSpacing: -1, lineHeight: 1.1 }}>25%</div>
-            <div style={{ fontSize: 8.5, fontWeight: 700, color: '#7C5CE7', marginBottom: 10 }}>p.a. interest</div>
-            <div style={{ height: 52, display: 'flex', alignItems: 'center', justifyContent: 'center', animation: 'float 3.5s ease-in-out infinite 1.75s', filter: 'drop-shadow(0 4px 12px rgba(245,158,11,0.25))' }}>
-              <Puddle size={66} />
+            <div style={{ height: 20, display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 7 }}>
+              <span style={{ color: '#5B3FD4', fontSize: 9, fontWeight: 800, letterSpacing: 0.5, textTransform: 'uppercase', whiteSpace: 'nowrap' }}>With Melt</span>
+            </div>
+            <div style={{ fontSize: 38, fontWeight: 800, color: '#5B3FD4', fontFamily: 'Sora, sans-serif', letterSpacing: -1.5, lineHeight: 1 }}>25%</div>
+            <div style={{ fontSize: 10, fontWeight: 500, color: '#A5B4FC', marginTop: 2, marginBottom: 10 }}>p.a. interest</div>
+            <div style={{ flex: 1, display: 'flex', alignItems: 'flex-end', justifyContent: 'center', paddingTop: 4 }}>
+              <Puddle size={70} />
             </div>
           </div>
         </div>
@@ -640,10 +645,10 @@ function SavingsScreen({ go, monthly = 30000, setMonthly }) {
       {/* ── HERO SAVINGS CARD ── */}
       <div style={{
         margin: '8px 16px 0',
-        background: 'linear-gradient(145deg, #0A6640 0%, #0F8A56 55%, #13A86A 100%)',
+        background: 'linear-gradient(135deg, #3730A8 0%, #4F46E5 100%)',
         borderRadius: 24, padding: '18px 16px 14px',
         position: 'relative', overflow: 'hidden',
-        boxShadow: '0 16px 40px -6px rgba(10,102,64,0.30), 0 6px 14px rgba(10,102,64,0.10)',
+        boxShadow: '0 16px 40px -6px rgba(55,48,168,.30), 0 6px 14px rgba(79,70,229,.10)',
         animation: 'fadeUp .6s .1s both',
       }}>
         <div style={{ position: 'absolute', top: -40, right: -20, width: 150, height: 150, borderRadius: '50%', background: 'radial-gradient(circle, rgba(255,255,255,0.09) 0%, transparent 65%)', pointerEvents: 'none' }} />
@@ -663,20 +668,26 @@ function SavingsScreen({ go, monthly = 30000, setMonthly }) {
             <span style={{ fontSize: 11.5, fontWeight: 600, color: 'rgba(255,255,255,0.78)', letterSpacing: 0.1 }}>{animMonthsDiff} months earlier · debt-free</span>
           </div>
         </div>
+
       </div>
 
       {/* ── EMI ADJUSTER ── */}
-      <div style={{ margin: '12px 16px 0', background: '#fff', borderRadius: 14, padding: '10px 16px', border: '1px solid rgba(196,181,253,0.28)', boxShadow: '0 4px 14px rgba(91,63,212,0.07)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10, animation: 'fadeUp .58s .1s both' }}>
-        <div style={{ fontSize: 11, fontWeight: 600, color: '#6E6B82', flex: 1, lineHeight: 1.3 }}>Visualise with monthly payment:</div>
+      <div style={{ margin: '8px 16px 0', background: '#fff', borderRadius: 14, padding: '10px 16px', boxShadow: '0 1px 4px rgba(0,0,0,.04),0 4px 16px rgba(0,0,0,.04)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10, animation: 'fadeUp .58s .1s both' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
+          <span style={{ fontSize: 11, fontWeight: 500, color: '#9896B0' }}>Visualise with</span>
+          <span style={{ fontSize: 11, fontWeight: 500, color: '#9896B0' }}>monthly payment</span>
+        </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexShrink: 0 }}>
           <button onClick={() => setMonthly(m => Math.max(MIN, m - STEP))} disabled={monthly <= MIN}
-            style={{ width: 28, height: 28, borderRadius: 999, border: '1px solid rgba(196,181,253,0.5)', background: '#F6F3FF', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: monthly <= MIN ? 'not-allowed' : 'pointer', opacity: monthly <= MIN ? 0.35 : 1 }}>
-            <svg width="9" height="9" viewBox="0 0 24 24" fill="none"><path d="M5 12h14" stroke="#5B3FD4" strokeWidth="3" strokeLinecap="round" /></svg>
+            style={{ width: 30, height: 30, borderRadius: 999, border: 'none', background: '#EDEEFF', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: monthly <= MIN ? 'not-allowed' : 'pointer', opacity: monthly <= MIN ? 0.35 : 1 }}>
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none"><path d="M5 12h14" stroke="#5B3FD4" strokeWidth="2.5" strokeLinecap="round" /></svg>
           </button>
-          <span style={{ fontWeight: 900, fontSize: 15, color: '#1B192E', fontFamily: 'Sora, sans-serif', letterSpacing: -0.5, minWidth: 64, textAlign: 'center' }}>{inr(animMonthly)}<span style={{ fontSize: 10, fontWeight: 500, color: '#AEACC4', marginLeft: 2 }}>/mo</span></span>
+          <div style={{ textAlign: 'right', minWidth: 72 }}>
+            <span style={{ fontWeight: 900, fontSize: 16, color: '#1B192E', fontFamily: 'Sora, sans-serif', letterSpacing: -0.7 }}>{inr(animMonthly)}</span><span style={{ fontSize: 11, fontWeight: 500, color: '#B5B3CA', marginLeft: 2 }}>/mo</span>
+          </div>
           <button onClick={() => setMonthly(m => Math.min(MAX, m + STEP))} disabled={monthly >= MAX}
-            style={{ width: 28, height: 28, borderRadius: 999, border: '1px solid rgba(196,181,253,0.5)', background: '#F6F3FF', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: monthly >= MAX ? 'not-allowed' : 'pointer', opacity: monthly >= MAX ? 0.35 : 1 }}>
-            <svg width="9" height="9" viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="#5B3FD4" strokeWidth="3" strokeLinecap="round" /></svg>
+            style={{ width: 30, height: 30, borderRadius: 999, border: 'none', background: '#EDEEFF', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: monthly >= MAX ? 'not-allowed' : 'pointer', opacity: monthly >= MAX ? 0.35 : 1 }}>
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="#5B3FD4" strokeWidth="2.5" strokeLinecap="round" /></svg>
           </button>
         </div>
       </div>
@@ -700,24 +711,30 @@ function SavingsScreen({ go, monthly = 30000, setMonthly }) {
       {/* ── LEARN MORE ── */}
       <div style={{ margin: '10px 16px 0', animation: 'fadeUp .64s .14s both' }}>
         <span style={{ fontSize: 10, fontWeight: 800, color: '#88859E', letterSpacing: 0.8, textTransform: 'uppercase', display: 'block', marginBottom: 8 }}>Learn more</span>
-        <button onClick={() => setSheetOpen('interest')} style={{
-          display: 'flex', alignItems: 'center', gap: 10, width: '100%',
-          background: '#F5F3FF', padding: '11px 12px', border: '1px solid rgba(196,181,253,0.35)',
-          borderRadius: 12, outline: 'none', cursor: 'pointer', textAlign: 'left', marginBottom: 8,
-        }}>
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="#9B96C8" strokeWidth="1.8"/><path d="M12 7v5l3 2" stroke="#9B96C8" strokeWidth="1.8" strokeLinecap="round"/></svg>
-          <span style={{ fontSize: 12.5, fontWeight: 600, color: '#4B4960', flex: 1 }}>How credit card interest works</span>
-          {Icon.chevR('#A89FD4', 12)}
-        </button>
-        <button onClick={() => setSheetOpen('minimum')} style={{
-          display: 'flex', alignItems: 'center', gap: 10, width: '100%',
-          background: '#F5F3FF', padding: '11px 12px', border: '1px solid rgba(196,181,253,0.35)',
-          borderRadius: 12, outline: 'none', cursor: 'pointer', textAlign: 'left',
-        }}>
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><rect x="2" y="5" width="20" height="14" rx="2" stroke="#9B96C8" strokeWidth="1.8"/></svg>
-          <span style={{ fontSize: 12.5, fontWeight: 600, color: '#4B4960', flex: 1 }}>What if you just pay minimum?</span>
-          {Icon.chevR('#A89FD4', 12)}
-        </button>
+        <div style={{ background: '#fff', borderRadius: 16, overflow: 'hidden', border: '1px solid #F0EEF8', boxShadow: '0 1px 4px rgba(0,0,0,.04)' }}>
+          <button onClick={() => setSheetOpen('interest')} style={{
+            display: 'flex', alignItems: 'center', gap: 12, width: '100%',
+            background: 'transparent', padding: '15px 16px', border: 'none', borderBottom: '1px solid #F0EEF8',
+            outline: 'none', cursor: 'pointer', textAlign: 'left',
+          }}>
+            <div style={{ width: 32, height: 32, borderRadius: 9, background: '#EDEEFF', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#5B3FD4" strokeWidth="2.2" strokeLinecap="round"><circle cx="12" cy="12" r="10"/><path d="M12 17v-5M12 7h.01"/></svg>
+            </div>
+            <span style={{ fontSize: 13.5, fontWeight: 600, color: '#1A1830', flex: 1, letterSpacing: -0.1 }}>How credit card interest works</span>
+            {Icon.chevR('#C4C2D8', 12)}
+          </button>
+          <button onClick={() => setSheetOpen('minimum')} style={{
+            display: 'flex', alignItems: 'center', gap: 12, width: '100%',
+            background: 'transparent', padding: '15px 16px', border: 'none',
+            outline: 'none', cursor: 'pointer', textAlign: 'left',
+          }}>
+            <div style={{ width: 32, height: 32, borderRadius: 9, background: '#EDEEFF', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#5B3FD4" strokeWidth="2.2" strokeLinecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            </div>
+            <span style={{ fontSize: 13.5, fontWeight: 600, color: '#1A1830', flex: 1, letterSpacing: -0.1 }}>What if you just pay minimum?</span>
+            {Icon.chevR('#C4C2D8', 12)}
+          </button>
+        </div>
       </div>
 
 
@@ -955,10 +972,10 @@ function SavingsScreen({ go, monthly = 30000, setMonthly }) {
       <BottomBar bg="rgba(244,243,251,0.95)">
         <button onClick={() => go('cards')} style={{
           width: '100%', height: 56, borderRadius: 16,
-          background: 'linear-gradient(135deg, #5B3FD4 0%, #3D3DC4 100%)',
+          background: '#1B192E',
           color: '#fff', fontWeight: 700, fontSize: 16,
           display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 9,
-          boxShadow: '0 8px 22px rgba(91,63,212,0.3)', border: 'none', cursor: 'pointer',
+          boxShadow: '0 4px 16px rgba(0,0,0,.22)', border: 'none', cursor: 'pointer', letterSpacing: -0.3,
         }}
           onMouseDown={e => e.currentTarget.style.transform = 'scale(.975)'}
           onMouseUp={e => e.currentTarget.style.transform = 'scale(1)'}

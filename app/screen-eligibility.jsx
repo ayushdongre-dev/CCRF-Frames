@@ -30,20 +30,20 @@ function HowItWorksModal({ onClose }) {
   var STEPS = [
     {
       num: '01', color: '#2D9E6B',
-      title: 'Money lands instantly',
-      sub: 'Same day · straight to your salary account.',
+      title: '₹2L lands in your bank — today',
+      sub: 'Melt wires money directly to your salary account. Same day, zero hassle.',
       Visual: Step1Anim,
     },
     {
       num: '02', color: '#3D3DC4',
-      title: 'Melt your card dues',
-      sub: 'Use the funds to clear your card bills within 10 days.',
+      title: 'Clear every card, one by one',
+      sub: 'Use those funds to pay off your credit card dues. Watch each balance drop to zero.',
       Visual: Step2Anim,
     },
     {
       num: '03', color: '#E8A020',
-      title: 'Phase 2 opens itself',
-      sub: 'Repay on time · ₹3,00,000 more unlocks automatically.',
+      title: 'Phase 2 opens — ₹3L more',
+      sub: 'Repay Phase 1 on time and ₹3,00,000 unlocks automatically. No re-apply needed.',
       Visual: Step3Anim,
     },
   ];
@@ -87,9 +87,9 @@ function HowItWorksModal({ onClose }) {
   }
 
   return (
-    <div style={{ position: 'absolute', inset: 0, zIndex: 999, display: 'flex', flexDirection: 'column', justifyContent: 'flex-end', background: 'rgba(12,10,30,0.55)' }}
+    <div style={{ position: 'absolute', inset: 0, zIndex: 999, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', padding: '16px', background: 'rgba(10,8,28,0.68)', backdropFilter: 'blur(4px)' }}
       onClick={function(e) { if (e.target === e.currentTarget) onClose(); }}>
-      <div style={{ background: '#fff', borderRadius: '26px 26px 0 0', height: '60%', display: 'flex', flexDirection: 'column', animation: 'fadeUp .28s both' }}>
+      <div style={{ background: '#fff', borderRadius: 28, width: '100%', maxHeight: '90%', display: 'flex', flexDirection: 'column', animation: 'popIn .32s cubic-bezier(.2,1.15,.4,1) both', boxShadow: '0 28px 70px -18px rgba(10,8,28,.72), 0 8px 24px rgba(0,0,0,.14)' }}>
 
         {/* Fixed header */}
         <div style={{ padding: '14px 20px 0', flexShrink: 0 }}>
@@ -154,9 +154,9 @@ function Eligibility({ go }) {
 
   // ── 3 clean stages ──
   const STAGES = [
-    { state: 'done', label: 'Available today', desc: 'Lands in your salary bank account' },
-    { state: 'active', label: 'Melt your card bills', desc: 'Pay your card dues within 10 days of disbursal' },
-    { state: 'locked', label: 'Unlock Phase 2', desc: 'Repay on time and Phase 2 opens up automatically' },
+    { state: 'done',   label: 'Available today',     desc: '₹2L hits your salary account same day', amount: '₹2,00,000', color: ML.green,   bg: ML.greenL },
+    { state: 'active', label: 'Melt your card bills', desc: 'Pay off all card dues within 10 days',   amount: '10 days',   color: ML.primary, bg: ML.primaryL },
+    { state: 'locked', label: 'Unlock Phase 2',       desc: 'Repay on time, ₹3L more opens up',       amount: '+₹3L',      color: ML.amber,   bg: ML.amberL },
   ];
 
   return (
@@ -165,6 +165,10 @@ function Eligibility({ go }) {
         @keyframes cashFall{0%{transform:translateY(-4px);opacity:0}25%{opacity:1}100%{transform:translateY(22px);opacity:0}}
         @keyframes paidDrop{0%{transform:rotate(-12deg) scale(1.7);opacity:0}55%{opacity:1}100%{transform:rotate(-12deg) scale(1);opacity:1}}
         @keyframes growBarX{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+        @keyframes dashFlow{from{stroke-dashoffset:8}to{stroke-dashoffset:0}}
+        @keyframes slideUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+        @keyframes coinRight{0%{transform:translate(0,-50%);opacity:0}15%{opacity:1}85%{opacity:1}100%{transform:translate(120px,-50%);opacity:0}}
+        @keyframes chevDown{0%,100%{opacity:.2;transform:translateY(-2px)}50%{opacity:1;transform:translateY(2px)}}
         @media (prefers-reduced-motion: reduce){[data-anim]{animation:none!important}}`}</style>
 
       {/* nav */}
@@ -181,8 +185,6 @@ function Eligibility({ go }) {
           <div style={{ position: 'relative', textAlign: 'center' }}>
             <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: 1.4, color: '#A99CF0', ...sora }}>YOUR TOTAL MELT LIMIT</div>
             <div style={{ fontWeight: 800, fontSize: 50, color: '#fff', letterSpacing: -2, lineHeight: 1.1, marginTop: 4, ...sora }}>₹5,00,000</div>
-
-            {/* availability bar */}
             <div style={{ marginTop: 18 }}>
               <div style={{ position: 'relative', height: 9, borderRadius: 9, background: 'rgba(255,255,255,.14)', overflow: 'hidden' }}>
                 <div style={{ position: 'absolute', left: 0, top: 0, bottom: 0, width: availPct + '%', background: 'linear-gradient(90deg,#37B179,#5DD79E)', borderRadius: 9, transformOrigin: 'left', animation: 'growBarX .8s cubic-bezier(.4,0,.2,1) both' }} />
@@ -197,41 +199,52 @@ function Eligibility({ go }) {
         </div>
 
         {/* ── 3 STAGES ── */}
-        <div style={{ background: ML.card, borderRadius: 20, padding: '18px 18px 10px', marginTop: 14, boxShadow: '0 1px 4px rgba(0,0,0,.08), 0 4px 14px rgba(40,30,80,.14)' }}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-            <div style={{ fontWeight: 800, fontSize: 20, color: ML.ink, letterSpacing: -0.4, ...sora }}>Three simple steps</div>
-            <button onClick={() => setShowHIW(true)} style={{ fontSize: 11, fontWeight: 700, color: ML.primary, background: ML.primaryL, borderRadius: 999, padding: '5px 11px', border: 'none', cursor: 'pointer', letterSpacing: 0.1, ...sora, flexShrink: 0 }}>How it works</button>
+        <div style={{ background: ML.card, borderRadius: 20, padding: '14px 16px 10px', marginTop: 12, boxShadow: '0 1px 4px rgba(0,0,0,.08), 0 4px 14px rgba(40,30,80,.14)' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
+            <div style={{ fontWeight: 800, fontSize: 17, color: ML.ink, letterSpacing: -0.3, ...sora }}>Three simple steps</div>
+            <button onClick={() => setShowHIW(true)} style={{ fontSize: 11, fontWeight: 700, color: ML.primary, background: ML.primaryL, borderRadius: 999, padding: '5px 11px', border: 'none', cursor: 'pointer', letterSpacing: 0.1, ...sora, flexShrink: 0 }}>How it works ›</button>
           </div>
 
-          <div style={{ marginTop: 16 }}>
+          {/* Vertical timeline */}
+          <div>
             {STAGES.map((s, i) => {
-              const last = i === STAGES.length - 1;
               const done = s.state === 'done', active = s.state === 'active', locked = s.state === 'locked';
-              const nodeColor = done ? ML.green : active ? ML.primary : '#C9C6DA';
-              const nextColor = !last ? (STAGES[i + 1].state === 'done' ? ML.green : STAGES[i + 1].state === 'active' ? ML.primary : '#C9C6DA') : null;
+              const isLast = i === STAGES.length - 1;
               return (
-                <div key={i} style={{ display: 'flex', gap: 14 }}>
-                  {/* node + connector */}
-                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', flexShrink: 0 }}>
-                    <div style={{ position: 'relative', width: 30, height: 30 }}>
-                      {active && <span style={{ position: 'absolute', inset: 0, borderRadius: 999, animation: 'meltPulse 2.2s ease-out infinite' }} />}
-                      <div style={{ width: 30, height: 30, borderRadius: 999, background: done ? ML.green : '#fff', border: done ? 'none' : `2px solid ${nodeColor}`, display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: done ? `0 6px 14px -6px ${ML.green}` : 'none' }}>
-                        {done ? Icon.check('#fff', 15) : <span style={{ fontSize: 13, fontWeight: 800, color: nodeColor, ...sora }}>{i + 1}</span>}
-                      </div>
+                <div key={i} style={{ display: 'flex', gap: 13, alignItems: 'flex-start', paddingBottom: isLast ? 0 : 20 }}>
+                  {/* Node + line */}
+                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: 22, flexShrink: 0 }}>
+                    <div style={{ position: 'relative', width: 22, height: 22, borderRadius: 999,
+                      background: done ? ML.green : active ? ML.primary : '#C8C5DE',
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      boxShadow: done ? '0 2px 8px rgba(45,158,107,.4)' : active ? '0 2px 8px rgba(61,61,196,.38)' : 'none',
+                      zIndex: 1,
+                    }}>
+                      {active && <span style={{ position: 'absolute', inset: 0, borderRadius: 999, animation: 'meltPulse 2s ease-out infinite' }} />}
+                      {done ? (
+                        <svg width="11" height="11" viewBox="0 0 14 14" fill="none"><path d="M3 7l3 3 5-5" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                      ) : locked ? (
+                        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#9A97B8" strokeWidth="2.4" strokeLinecap="round"><rect x="4" y="10" width="16" height="12" rx="2"/><path d="M8 10V7a4 4 0 018 0v3"/></svg>
+                      ) : (
+                        <div style={{ width: 7, height: 7, borderRadius: 999, background: '#fff' }} />
+                      )}
                     </div>
-                    {!last && <div style={{ width: 2.5, flex: 1, minHeight: 78, marginTop: 3, borderRadius: 9, background: `linear-gradient(${nodeColor}, ${nextColor})`, opacity: 0.4 }} />}
+                    {!isLast && <div style={{ width: 2, flex: 1, minHeight: 16, marginTop: 3, background: done ? 'rgba(45,158,107,.3)' : '#E2DFEF', borderRadius: 1 }} />}
                   </div>
 
-                  {/* content */}
-                  <div style={{ flex: 1, paddingBottom: last ? 4 : 16, minWidth: 0 }}>
-                    <div style={{ fontWeight: 800, fontSize: 16, color: locked ? ML.muted : ML.ink, letterSpacing: -0.3, ...sora }}>{s.label}</div>
-                    <div style={{ fontSize: 12.5, color: locked ? ML.muted2 : ML.muted, marginTop: 2, lineHeight: 1.45, ...sora }}>{s.desc}</div>
-                    {/* per-stage visual */}
-                    <div style={{ marginTop: 11 }}>
-                      {done && <StageReceive />}
-                      {active && <StageMelt />}
-                      {locked && <StageLocked />}
+                  {/* Content */}
+                  <div style={{ flex: 1, paddingTop: 3 }}>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8 }}>
+                      <span style={{ fontSize: 13, fontWeight: 700, color: locked ? ML.muted : ML.ink, ...sora, lineHeight: 1.25 }}>{s.label}</span>
+                      <span style={{
+                        fontSize: 11.5, fontWeight: 800, ...sora, flexShrink: 0,
+                        color: locked ? '#AEA9C9' : s.color,
+                        background: locked ? '#F0EFF8' : s.bg,
+                        borderRadius: 999, padding: '2px 9px',
+                        border: `1px solid ${locked ? '#E2DFEF' : s.color + '28'}`,
+                      }}>{s.amount}</span>
                     </div>
+                    {!locked && <div style={{ fontSize: 10.5, color: ML.muted, marginTop: 3, lineHeight: 1.45 }}>{s.desc}</div>}
                   </div>
                 </div>
               );
@@ -503,107 +516,234 @@ function CashStack({ color }) {
   );
 }
 
-// Step 1 — dark account card: amount rolls up, CREDITED badge fades in
+// Step 1 — Melt sends ₹2L → straight to your salary account
 function Step1Anim() {
-  return (
-    <div style={{ background: '#0C1F16', borderRadius: 18, padding: '18px 18px 16px', position: 'relative', overflow: 'hidden' }}>
-      <div style={{ position: 'absolute', top: -36, right: -18, width: 110, height: 110, borderRadius: '50%', background: 'radial-gradient(circle, rgba(45,158,107,.32) 0%, transparent 70%)', pointerEvents: 'none' }} />
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 14 }}>
-        <span style={{ fontSize: 9.5, fontWeight: 700, letterSpacing: 1.2, color: 'rgba(255,255,255,0.38)', fontFamily: "'Sora',sans-serif" }}>SALARY ACCOUNT</span>
-        <span style={{ background: '#2D9E6B', borderRadius: 999, padding: '3px 10px', fontSize: 9.5, fontWeight: 800, color: '#fff', letterSpacing: 0.3, animation: 'fadeIn .5s .9s both', fontFamily: "'Sora',sans-serif" }}>✓ CREDITED</span>
-      </div>
-      <SlotCount target={200000} color="#4ADE80" size={38} period={4200} climb={1600} />
-      <div style={{ marginTop: 14, height: 3, borderRadius: 999, background: 'rgba(255,255,255,0.08)', overflow: 'hidden' }}>
-        <div style={{ height: '100%', width: '100%', borderRadius: 999, background: 'linear-gradient(90deg,#2D9E6B,#4ADE80)', transformOrigin: 'left', animation: 'growBarX 1.8s .15s cubic-bezier(.4,0,.2,1) both' }} />
-      </div>
-    </div>
-  );
-}
-
-// Step 2 — card balance counts to zero, PAID stamp pops in, loops
-function Step2Anim() {
-  var bst = useState(187400); var balance = bst[0]; var setBalance = bst[1];
-  var pst = useState(false); var paid = pst[0]; var setPaid = pst[1];
-  var rafRef = useRef(null); var timerRef = useRef(null);
+  var ast = useState(false); var arrived = ast[0]; var setArrived = ast[1];
+  var timers = useRef([]);
 
   useEffect(function() {
-    var TOTAL = 187400, DURATION = 2600;
+    function clearAll() { timers.current.forEach(clearTimeout); timers.current = []; }
+    function push(fn, ms) { var t = setTimeout(fn, ms); timers.current.push(t); }
     function runLoop() {
-      setPaid(false); setBalance(TOTAL);
-      var start = performance.now();
-      function tick(now) {
-        var t = Math.min((now - start) / DURATION, 1);
-        var e = 1 - Math.pow(1 - t, 2.5);
-        setBalance(Math.round(TOTAL * (1 - e)));
-        if (t < 1) { rafRef.current = requestAnimationFrame(tick); }
-        else { setBalance(0); setPaid(true); timerRef.current = setTimeout(runLoop, 2000); }
-      }
-      rafRef.current = requestAnimationFrame(tick);
+      clearAll();
+      setArrived(false);
+      push(function() { setArrived(true); }, 1000);
+      push(runLoop, 4200);
     }
-    timerRef.current = setTimeout(runLoop, 280);
-    return function() { clearTimeout(timerRef.current); cancelAnimationFrame(rafRef.current); };
+    runLoop();
+    return clearAll;
   }, []);
 
   return (
-    <div style={{ position: 'relative', borderRadius: 18, padding: '20px 18px 18px', background: 'linear-gradient(135deg,#1E1660,#3D3DC4)', overflow: 'hidden' }}>
-      <div style={{ position: 'absolute', top: -28, right: -14, width: 88, height: 88, borderRadius: '50%', background: 'rgba(255,255,255,0.055)', pointerEvents: 'none' }} />
-      <div style={{ fontSize: 9.5, fontWeight: 700, color: 'rgba(255,255,255,0.4)', letterSpacing: 1, marginBottom: 8, fontFamily: "'Sora',sans-serif" }}>CARD BALANCE</div>
-      <div style={{ fontSize: 38, fontWeight: 900, color: '#fff', fontFamily: "'Sora',sans-serif", letterSpacing: -2, lineHeight: 1, marginBottom: 14, fontVariantNumeric: 'tabular-nums' }}>{inr(balance)}</div>
-      <div style={{ height: 5, borderRadius: 999, background: 'rgba(255,255,255,0.14)', overflow: 'hidden' }}>
-        <div style={{ height: '100%', borderRadius: 999, background: paid ? '#4ADE80' : '#FF6B6B', width: (balance / 187400 * 100) + '%', transition: 'background .35s ease' }} />
-      </div>
-      {paid && (
-        <div style={{ position: 'absolute', right: 18, top: '48%', transform: 'translateY(-50%) rotate(-10deg)', animation: 'paidDrop .38s cubic-bezier(.2,1.4,.4,1) both' }}>
-          <span style={{ display: 'inline-block', border: '2.5px solid #2D9E6B', color: '#1A5C3A', fontSize: 14, fontWeight: 900, letterSpacing: 1.5, borderRadius: 7, padding: '5px 11px', background: 'rgba(255,255,255,.97)', fontFamily: "'Sora',sans-serif" }}>PAID ✓</span>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
+      {/* Source — Melt */}
+      <div style={{ background: 'linear-gradient(135deg,#4A30B5,#5B3FD4)', borderRadius: '16px 16px 0 0', padding: '16px 18px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        <div>
+          <div style={{ fontSize: 9.5, fontWeight: 700, letterSpacing: 1.1, color: 'rgba(255,255,255,.45)', marginBottom: 5, fontFamily: "'Sora',sans-serif" }}>MELT SENDS</div>
+          <div style={{ fontSize: 30, fontWeight: 900, color: '#fff', letterSpacing: -1.5, lineHeight: 1, fontFamily: "'Sora',sans-serif" }}>₹2,00,000</div>
         </div>
-      )}
+        <div style={{ width: 46, height: 46, borderRadius: 13, background: 'rgba(255,255,255,.14)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <span style={{ fontSize: 22, fontWeight: 900, color: '#fff', fontFamily: "'Sora',sans-serif" }}>M</span>
+        </div>
+      </div>
+
+      {/* Arrow */}
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', background: '#F7F6FC', padding: '6px 0', borderLeft: '1px solid #E8E6F2', borderRight: '1px solid #E8E6F2', gap: 1 }}>
+        {[0, 1, 2].map(function(k) {
+          return (
+            <svg key={k} width="18" height="12" viewBox="0 0 18 12" fill="none"
+              style={{ animation: 'chevDown 1s ' + (k * 0.22) + 's ease-in-out infinite' }}>
+              <path d="M2 2l7 8 7-8" stroke="#5B3FD4" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" opacity={1 - k * 0.28} />
+            </svg>
+          );
+        })}
+      </div>
+
+      {/* Destination — Bank Account */}
+      <div style={{
+        background: '#0C1F16', borderRadius: '0 0 16px 16px', padding: '16px 18px',
+        display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+        border: arrived ? '1px solid rgba(74,222,128,.2)' : '1px solid transparent',
+        transition: 'border-color .4s',
+      }}>
+        <div>
+          <div style={{ fontSize: 9.5, fontWeight: 700, letterSpacing: 1.1, color: 'rgba(255,255,255,.38)', marginBottom: 5, fontFamily: "'Sora',sans-serif" }}>YOUR SALARY ACCOUNT</div>
+          <div style={{ fontSize: 30, fontWeight: 900, letterSpacing: -1.5, lineHeight: 1, fontFamily: "'Sora',sans-serif", color: arrived ? '#4ADE80' : '#2D5A3D', transition: 'color .5s .2s' }}>
+            {arrived ? '₹2,00,000' : '₹0'}
+          </div>
+        </div>
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 5 }}>
+          <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke={arrived ? '#4ADE80' : '#2D5A3D'} strokeWidth="1.8" strokeLinecap="round" style={{ transition: 'stroke .4s' }}>
+            <rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 3H8"/>
+          </svg>
+          {arrived && (
+            <span style={{ fontSize: 9, fontWeight: 800, color: '#4ADE80', background: 'rgba(74,222,128,.12)', borderRadius: 999, padding: '2px 8px', animation: 'fadeIn .3s both', fontFamily: "'Sora',sans-serif" }}>✓ CREDITED</span>
+          )}
+        </div>
+      </div>
     </div>
   );
 }
 
-// Step 3 — padlock opens, ₹3L amount rolls in
+// Step 2 — simple card deck: front card gets cleared, slides to back, next comes up, loops
+var DECK_COLORS = ['#3D3DC4', '#B5304A', '#1E5FA0'];
+
+function Step2Anim() {
+  var fst = useState(0); var frontIdx = fst[0]; var setFrontIdx = fst[1];
+  var pst = useState(false); var paid = pst[0]; var setPaid = pst[1];
+  var ext = useState(false); var exiting = ext[0]; var setExiting = ext[1];
+  var timers = useRef([]);
+
+  useEffect(function() {
+    function clearAll() { timers.current.forEach(clearTimeout); timers.current = []; }
+    function push(fn, ms) { var t = setTimeout(fn, ms); timers.current.push(t); }
+    function loop() {
+      clearAll();
+      setPaid(false); setExiting(false);
+      push(function() { setPaid(true); }, 700);
+      push(function() { setExiting(true); setPaid(false); }, 1600);
+      push(function() {
+        setFrontIdx(function(i) { return (i + 1) % DECK_COLORS.length; });
+        setExiting(false);
+        push(loop, 380);
+      }, 2100);
+    }
+    push(loop, 350);
+    return clearAll;
+  }, []);
+
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 14 }}>
+      <div style={{ position: 'relative', width: '100%', height: 120 }}>
+        {DECK_COLORS.map(function(color, idx) {
+          var rank = (idx - frontIdx + DECK_COLORS.length) % DECK_COLORS.length;
+          var isFront = rank === 0;
+          var isExit = isFront && exiting;
+
+          // stacking: rank0=front, rank1=mid, rank2=back
+          var ty = isExit ? 22 : rank === 0 ? 0 : rank === 1 ? 11 : 22;
+          var sc = isExit ? 0.84 : rank === 0 ? 1 : rank === 1 ? 0.91 : 0.84;
+          var op = isExit ? 0.55 : rank === 2 ? 0.6 : 1;
+          var zI = isExit ? 0 : rank === 0 ? 10 : rank === 1 ? 5 : 1;
+
+          return (
+            <div key={idx} style={{
+              position: 'absolute', left: 0, right: 0, top: 0, height: 98,
+              borderRadius: 22,
+              background: color,
+              transform: 'translateY(' + ty + 'px) scale(' + sc + ')',
+              transformOrigin: 'top center',
+              opacity: op,
+              zIndex: zI,
+              transition: 'transform .52s cubic-bezier(.4,0,.2,1), opacity .45s',
+              overflow: 'hidden',
+              boxShadow: isFront && !isExit ? '0 12px 32px rgba(0,0,0,.3)' : '0 2px 6px rgba(0,0,0,.1)',
+            }}>
+              {/* Shine overlay */}
+              <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(145deg,rgba(255,255,255,.22) 0%,transparent 55%)' }} />
+              {/* Card chip decoration */}
+              <div style={{ position: 'absolute', left: 16, top: 16, width: 28, height: 20, borderRadius: 5, background: 'rgba(255,255,255,.18)', border: '1px solid rgba(255,255,255,.25)' }} />
+              {/* Card circles (Mastercard-style) */}
+              <div style={{ position: 'absolute', right: 16, top: 14, display: 'flex' }}>
+                <div style={{ width: 22, height: 22, borderRadius: 999, background: 'rgba(255,255,255,.22)' }} />
+                <div style={{ width: 22, height: 22, borderRadius: 999, background: 'rgba(255,255,255,.14)', marginLeft: -8 }} />
+              </div>
+
+              {/* Paid overlay */}
+              {isFront && paid && !exiting && (
+                <div style={{ position: 'absolute', inset: 0, borderRadius: 22, background: 'rgba(45,158,107,.92)', display: 'flex', alignItems: 'center', justifyContent: 'center', animation: 'fadeIn .2s both' }}>
+                  <svg width="52" height="52" viewBox="0 0 52 52" fill="none">
+                    <circle cx="26" cy="26" r="24" fill="rgba(255,255,255,.15)"/>
+                    <path d="M16 26l7 7 13-14" stroke="#fff" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" style={{ animation: 'fadeIn .25s .05s both' }}/>
+                  </svg>
+                </div>
+              )}
+            </div>
+          );
+        })}
+      </div>
+
+      {/* Status label */}
+      <div style={{ fontSize: 12, fontWeight: 700, color: paid && !exiting ? '#2D9E6B' : '#8A879B', transition: 'color .3s', letterSpacing: 0.1, fontFamily: "'Sora',sans-serif" }}>
+        {paid && !exiting ? '✓ Card cleared' : 'Processing payment...'}
+      </div>
+    </div>
+  );
+}
+
+// Step 3 — Lock opens, ₹3L unlocks into your account
 function Step3Anim() {
   var ust = useState(false); var unlocked = ust[0]; var setUnlocked = ust[1];
   var ast = useState(false); var showAmt = ast[0]; var setShowAmt = ast[1];
-  var t1 = useRef(null); var t2 = useRef(null); var t3 = useRef(null);
+  var timers = useRef([]);
 
   useEffect(function() {
+    function clearAll() { timers.current.forEach(clearTimeout); timers.current = []; }
+    function push(fn, ms) { var t = setTimeout(fn, ms); timers.current.push(t); }
     function runLoop() {
+      clearAll();
       setUnlocked(false); setShowAmt(false);
-      t1.current = setTimeout(function() { setUnlocked(true); }, 1100);
-      t2.current = setTimeout(function() { setShowAmt(true); }, 1700);
-      t3.current = setTimeout(runLoop, 5000);
+      push(function() { setUnlocked(true); }, 900);
+      push(function() { setShowAmt(true); }, 1650);
+      push(runLoop, 5000);
     }
     runLoop();
-    return function() { clearTimeout(t1.current); clearTimeout(t2.current); clearTimeout(t3.current); };
+    return clearAll;
   }, []);
 
   return (
-    <div style={{ background: '#FDF5E4', borderRadius: 18, padding: '18px 18px', border: '1px solid #F0DCAE', display: 'flex', alignItems: 'center', gap: 18 }}>
-      <div style={{
-        width: 64, height: 64, borderRadius: 18, flexShrink: 0,
-        background: unlocked ? '#E8A020' : '#BDB9CE',
-        boxShadow: unlocked ? '0 6px 22px rgba(232,160,32,.5)' : '0 3px 8px rgba(0,0,0,.10)',
-        display: 'flex', alignItems: 'center', justifyContent: 'center',
-        transition: 'background .45s ease, box-shadow .45s ease',
-      }}>
-        <svg width="30" height="30" viewBox="0 0 24 24" fill="none">
-          {/* closed shackle */}
-          <path d="M8 11V7a4 4 0 018 0v4" stroke="#fff" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"
-            style={{ opacity: unlocked ? 0 : 1, transition: 'opacity .25s' }} />
-          {/* open shackle (raised) */}
-          <path d="M8 11V8.5A4 4 0 0115.8 7" stroke="#fff" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"
-            style={{ opacity: unlocked ? 1 : 0, transition: 'opacity .25s .15s' }} />
-          <rect x="3" y="11" width="18" height="11" rx="3" fill="rgba(255,255,255,0.92)" />
-          <circle cx="12" cy="17" r="2.3" fill={unlocked ? '#E8A020' : '#BDB9CE'} style={{ transition: 'fill .4s' }} />
-        </svg>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+      {/* Phase 1 done — compact */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: 9, background: '#E7F7EF', borderRadius: 11, padding: '9px 13px', border: '1px solid #B4E8D0' }}>
+        <div style={{ width: 22, height: 22, borderRadius: 7, background: '#2D9E6B', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+          <svg width="11" height="11" viewBox="0 0 14 14" fill="none"><path d="M3 7l3 3 5-5" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+        </div>
+        <span style={{ fontSize: 12, fontWeight: 700, color: '#1A5C3A', flex: 1 }}>Phase 1 repaid on time</span>
+        <span style={{ fontSize: 11.5, fontWeight: 800, color: '#2D9E6B' }}>₹2L ✓</span>
       </div>
-      <div>
-        <div style={{ fontSize: 9.5, fontWeight: 700, letterSpacing: 0.8, color: '#C6A560', marginBottom: 6, fontFamily: "'Sora',sans-serif" }}>PHASE 2 UNLOCKS</div>
-        {showAmt
-          ? <SlotCount target={300000} color="#92640A" size={34} period={4200} climb={1200} />
-          : <div style={{ fontSize: 30, fontWeight: 900, color: '#D4C4A0', fontFamily: "'Sora',sans-serif", letterSpacing: -0.5 }}>₹ • • •</div>
-        }
+
+      {/* Unlock card */}
+      <div style={{ borderRadius: 18, overflow: 'hidden', background: unlocked ? 'linear-gradient(135deg,#FDF3DC,#FFF6E8)' : '#F5F4FB', border: '1px solid ' + (unlocked ? '#EDD899' : '#E2DFEE'), transition: 'background .5s, border-color .5s' }}>
+        {/* Top bar — lock icon */}
+        <div style={{ padding: '18px 18px 14px', display: 'flex', alignItems: 'center', gap: 14 }}>
+          <div style={{
+            width: 62, height: 62, borderRadius: 18, flexShrink: 0,
+            background: unlocked ? 'linear-gradient(135deg,#F5A623,#E8A020)' : '#D4D1E6',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            boxShadow: unlocked ? '0 8px 22px rgba(232,160,32,.48)' : 'none',
+            transition: 'background .55s ease, box-shadow .55s ease',
+          }}>
+            <svg width="30" height="30" viewBox="0 0 24 24" fill="none">
+              <path d="M8 11V7a4 4 0 018 0v4" stroke="#fff" strokeWidth="2.4" strokeLinecap="round"
+                style={{ opacity: unlocked ? 0 : 1, transition: 'opacity .22s' }} />
+              <path d="M8 11V8.2A4 4 0 0116 7" stroke="#fff" strokeWidth="2.4" strokeLinecap="round"
+                style={{ opacity: unlocked ? 1 : 0, transition: 'opacity .28s .18s' }} />
+              <rect x="3" y="11" width="18" height="11" rx="3" fill="rgba(255,255,255,.9)" />
+              <circle cx="12" cy="17" r="2.4" fill={unlocked ? '#E8A020' : '#ACA9C4'} style={{ transition: 'fill .4s' }} />
+            </svg>
+          </div>
+
+          <div style={{ flex: 1 }}>
+            <div style={{ fontSize: 9.5, fontWeight: 700, letterSpacing: 1, color: unlocked ? '#B8882A' : '#A7A4B8', marginBottom: 7, fontFamily: "'Sora',sans-serif", transition: 'color .4s' }}>
+              {unlocked ? 'PHASE 2 UNLOCKED' : 'PHASE 2 LOCKED'}
+            </div>
+            {showAmt ? (
+              <div style={{ animation: 'slideUp .4s cubic-bezier(.2,1.15,.4,1) both' }}>
+                <SlotCount target={300000} color="#92640A" size={34} period={3800} climb={1200} />
+              </div>
+            ) : (
+              <div style={{ fontSize: 32, fontWeight: 900, color: unlocked ? '#D4A830' : '#C4C0DC', fontFamily: "'Sora',sans-serif", letterSpacing: -1, transition: 'color .4s' }}>₹ · · ·</div>
+            )}
+          </div>
+        </div>
+
+        {/* Bottom bar — status */}
+        <div style={{ background: unlocked ? 'rgba(232,160,32,.12)' : 'rgba(0,0,0,.04)', padding: '9px 18px', display: 'flex', alignItems: 'center', gap: 7, transition: 'background .4s' }}>
+          <div style={{ width: 7, height: 7, borderRadius: 999, background: unlocked ? '#E8A020' : '#B0ADC8', transition: 'background .4s' }} />
+          <span style={{ fontSize: 11, fontWeight: 600, color: unlocked ? '#B8862A' : '#8A87A0', fontFamily: "'Sora',sans-serif", transition: 'color .4s' }}>
+            {unlocked ? 'Credited to your account automatically' : 'Unlocks after Phase 1 repayment'}
+          </span>
+        </div>
       </div>
     </div>
   );
