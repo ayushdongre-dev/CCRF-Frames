@@ -7,9 +7,9 @@ function MeltJourneyScreen({ go }) {
 
   var STEPS = [
     { state: 'done', title: 'Application Approved', desc: 'Your Melt eligibility was verified and approved.', tag: null },
-    { state: 'done', title: '₹2,00,000 Disbursed', desc: 'Credited directly to your salary account.', tag: 'Phase 1' },
+    { state: 'done', title: '₹2,00,000 Disbursed', desc: 'Credited directly to your salary account.', tag: 'Step 1' },
     { state: 'active', title: 'Clear Your Card Dues', desc: 'Use the funds to pay off outstanding card balances.', tag: '6 days left' },
-    { state: 'upcoming', title: 'Phase 2 Unlocks', desc: 'Repay Phase 1 on time and ₹3,00,000 opens automatically.', tag: '+₹3,00,000' },
+    { state: 'upcoming', title: 'Step 2 Unlocks', desc: 'Repay Step 1 on time and ₹3,00,000 opens automatically.', tag: '+₹3,00,000' },
     { state: 'upcoming', title: 'Fully Refinanced', desc: 'All card debt cleared, moved to one simple EMI.', tag: null },
   ];
 
@@ -21,7 +21,7 @@ function MeltJourneyScreen({ go }) {
         <button onClick={function () { go('home'); }} style={{ width: 38, height: 38, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'none', border: 'none', cursor: 'pointer' }}>
           {Icon.back('var(--ink)')}
         </button>
-        <span style={{ fontWeight: 700, fontSize: 15.5, color: 'var(--ink)', letterSpacing: -0.2, ...sora }}>Your Melt Journey</span>
+        <span style={{ fontWeight: 700, fontSize: 15.5, color: 'var(--ink)', letterSpacing: -0.2, ...sora }}>Your Melt Status</span>
         <div style={{ width: 38 }} />
       </div>
 
@@ -37,7 +37,7 @@ function MeltJourneyScreen({ go }) {
           <div style={{ position: 'relative' }}>
             <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: 1.2, color: 'rgba(255,255,255,.5)', marginBottom: 8 }}>OVERALL PROGRESS</div>
             <div style={{ display: 'flex', alignItems: 'baseline', gap: 8, marginBottom: 14 }}>
-              <span style={{ fontSize: 30, fontWeight: 900, color: '#fff', letterSpacing: -1, ...sora }}>Phase 1</span>
+              <span style={{ fontSize: 30, fontWeight: 900, color: '#fff', letterSpacing: -1, ...sora }}>Step 1</span>
               <span style={{ fontSize: 14, fontWeight: 600, color: 'rgba(255,255,255,.5)' }}>of 3</span>
             </div>
             <div style={{ display: 'flex', gap: 5 }}>
@@ -109,7 +109,7 @@ function MeltJourneyScreen({ go }) {
           </div>
           <div style={{ marginTop: 14 }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 6 }}>
-              <span style={{ fontSize: 11, fontWeight: 600, color: '#8A6A22' }}>Phase 1 repayment</span>
+              <span style={{ fontSize: 11, fontWeight: 600, color: '#8A6A22' }}>Step 1 repayment</span>
               <span style={{ fontSize: 11, fontWeight: 700, color: '#B8882A' }}>4 of 10 days</span>
             </div>
             <div style={{ height: 5, borderRadius: 999, background: 'rgba(232,160,32,.18)', overflow: 'hidden' }}>
