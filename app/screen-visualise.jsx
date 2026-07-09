@@ -157,6 +157,7 @@ function CumulativeChart({ cardInt, meltInt, cardMonths, meltMonths, meltInteres
 
   const totalMonths = cardMonths;
   const maxInt = Math.max(...cardInt, 100000);
+  const moSaved = totalMonths - meltMonths;
 
   const startTimeoutRef = React.useRef(null);
   const intervalRef = React.useRef(null);
@@ -218,18 +219,14 @@ function CumulativeChart({ cardInt, meltInt, cardMonths, meltMonths, meltInteres
   }, [cardMonths, meltMonths, totalMonths]);
 
   const animMonths = Math.round(animPct * totalMonths);
+  // The melt line must stop the moment the melt loan is paid off — no flat tail beyond it.
+  const meltAnimMonths = Math.min(animMonths, meltMonths);
 
   const cardPts = cardInt.slice(0, animMonths + 1).map((v, i) => ({ x: ccX(i, totalMonths), y: ccY(v, maxInt) }));
-  const meltPts = meltInt.slice(0, animMonths + 1).map((v, i) => ({ x: ccX(i, totalMonths), y: ccY(v, maxInt) }));
+  const meltPts = meltInt.slice(0, meltAnimMonths + 1).map((v, i) => ({ x: ccX(i, totalMonths), y: ccY(v, maxInt) }));
 
   const cardPath = smoothPts(cardPts);
   const meltPath = smoothPts(meltPts);
-
-  // Green gap: melt forward then card backward
-  const gapPath = cardPts.length > 1 && meltPts.length > 1
-    ? meltPts.map((p, i) => `${i === 0 ? 'M' : 'L'}${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(' ')
-      + ' ' + [...cardPts].reverse().map(p => `L${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(' ') + ' Z'
-    : '';
 
   // Y-axis labels
   const yMax = Math.ceil(maxInt / 100000) * 100000;
@@ -336,31 +333,47 @@ function CumulativeChart({ cardInt, meltInt, cardMonths, meltMonths, meltInteres
         <text key={i} x={ccX(m, totalMonths)} y={CCH - CCPB + 14} fontSize="9.5" fill="#5E5C7A" textAnchor="middle" fontWeight="500">{m}</text>
       ))}
 
-      {/* green gap area */}
-      <path d={gapPath} fill="rgba(22,163,74,0.13)" />
-
-      {/* pink under-card area */}
-      <path d={cardPath ? `${cardPath} L${ccX(animMonths, totalMonths).toFixed(1)},${ccY(0, maxInt).toFixed(1)} L${ccX(0, totalMonths).toFixed(1)},${ccY(0, maxInt).toFixed(1)} Z` : ''} fill="rgba(232,69,60,0.07)" />
-
       {/* curves */}
       <path d={cardPath} stroke="#E8453C" strokeWidth="3" fill="none" strokeLinecap="round" strokeLinejoin="round" />
       <path d={meltPath} stroke="var(--primary)" strokeWidth="3" fill="none" strokeLinecap="round" strokeLinejoin="round" />
 
-      {/* With Melt paid-off endpoint */}
-      {animMonths >= meltMonths && meltMonths < totalMonths && (() => {
-        const ex = ccX(meltMonths, totalMonths);
-        const ey = ccY(meltInterest, maxInt);
-        const badgeW = 72, badgeH = 28;
-        const badgeX = ex + 8 + badgeW > CCW - CCPR ? ex - badgeW - 8 : ex + 8;
-        const badgeY = ey + badgeH > CCH - CCPB ? ey - badgeH - 4 : ey - badgeH / 2;
+      {/* Two end-lines — where each line stops — plus the time delta between them */}
+      {animPct > 0.9 && meltMonths < totalMonths && (() => {
+        const mx = ccX(meltMonths, totalMonths);
+        const my = ccY(meltInterest, maxInt);
+        const cx = ccX(totalMonths, totalMonths);
+        const cardFinal = cardInt[cardInt.length - 1];
+        const cy = ccY(cardFinal, maxInt);
+        const axisY = CCH - CCPB;
+        const dimY = axisY - 14;
+        const gapW = cx - mx;
+        const midX = (mx + cx) / 2;
+        const showTag = gapW > 34;
         return (
           <g style={{ animation: 'fadeIn .4s both' }}>
-            <line x1={ex} y1={ey} x2={ex} y2={CCH - CCPB} stroke="var(--primary)" strokeWidth="1.2" strokeDasharray="3,3" opacity="0.32" />
-            <circle cx={ex} cy={ey} r="6" fill="var(--primary)" stroke="#fff" strokeWidth="2.5" />
-            <circle cx={ex} cy={ey} r="2.5" fill="#fff" />
-            <rect x={badgeX} y={badgeY} width={badgeW} height={badgeH} rx={7} fill="var(--primary)" />
-            <text x={badgeX + badgeW / 2} y={badgeY + 11} fontSize="8.5" fill="#fff" fontWeight="800" textAnchor="middle">✓ Paid off!</text>
-            <text x={badgeX + badgeW / 2} y={badgeY + 22} fontSize="7.5" fill="rgba(255,255,255,0.78)" textAnchor="middle">Month {meltMonths}</text>
+            {/* end-line: With Melt */}
+            <line x1={mx} y1={my} x2={mx} y2={axisY} stroke="var(--primary)" strokeWidth="1.2" strokeDasharray="3,3" opacity="0.35" />
+            <circle cx={mx} cy={my} r="5" fill="var(--primary)" stroke="#fff" strokeWidth="2.2" />
+            {/* minimal tick — replaces the old "paid off" text badge */}
+            <g transform={`translate(${mx}, ${my - 15})`}>
+              <circle cx="0" cy="0" r="6.5" fill="var(--primary)" />
+              <path d="M-2.8 0.3l1.8 1.8 3.4-3.6" stroke="#fff" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+            </g>
+
+            {/* end-line: Credit Card */}
+            <line x1={cx} y1={cy} x2={cx} y2={axisY} stroke="#E8453C" strokeWidth="1.2" strokeDasharray="3,3" opacity="0.35" />
+            <circle cx={cx} cy={cy} r="5" fill="#E8453C" stroke="#fff" strokeWidth="2.2" />
+
+            {/* time-delta dimension line */}
+            <line x1={mx} y1={dimY} x2={cx} y2={dimY} stroke="#B8B5CC" strokeWidth="1.2" />
+            <line x1={mx} y1={dimY - 4} x2={mx} y2={dimY + 4} stroke="#B8B5CC" strokeWidth="1.2" />
+            <line x1={cx} y1={dimY - 4} x2={cx} y2={dimY + 4} stroke="#B8B5CC" strokeWidth="1.2" />
+            {showTag && (
+              <>
+                <rect x={midX - 30} y={dimY - 9} width="60" height="15" rx="7.5" fill="#fff" stroke="#E1DEF0" />
+                <text x={midX} y={dimY + 1.5} fontSize="7.5" fill="var(--primary)" fontWeight="800" textAnchor="middle">{moSaved} mo saved</text>
+              </>
+            )}
           </g>
         );
       })()}
@@ -386,14 +399,6 @@ function Card({ children }) {
   return (
     <div style={{ background: '#fff', borderRadius: 22, padding: '18px 16px 16px', marginTop: 14, border: '1px solid rgba(0,0,0,0.05)', boxShadow: '0 1px 3px rgba(0,0,0,.05), 0 4px 14px rgba(0,0,0,.07)' }}>
       {children}
-    </div>
-  );
-}
-function Row({ label, value }) {
-  return (
-    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px 0' }}>
-      <span style={{ fontSize: 13.5, color: '#1A5C3A', fontWeight: 600 }}>{label}</span>
-      <span style={{ fontWeight: 900, fontSize: 20, color: '#16A34A', whiteSpace: 'nowrap', fontFamily: 'Sora, sans-serif', letterSpacing: -0.5 }}>{value}</span>
     </div>
   );
 }
@@ -438,7 +443,6 @@ function Visualise({ go, ccrfRate = 22, monthly = 30000 }) {
   const cardInterest = cardAmort.totalInt;
   const meltInterest = meltAmort.totalInt;
   const intSaved     = cardInterest - meltInterest;
-  const moSaved      = cardMonths - meltMonths;
 
   // Pad melt balance/interest arrays to card length
   const meltBalPadded = [...meltAmort.balArr, ...Array(Math.max(0, cardMonths - meltAmort.months)).fill(0)];
@@ -449,26 +453,10 @@ function Visualise({ go, ccrfRate = 22, monthly = 30000 }) {
       <Header title="Savings Illustration" onBack={() => go('eligibility')} />
       <div style={{ padding: '2px 18px 32px' }}>
 
-        {/* ── Savings banner ── */}
-        <div style={{
-          background: 'linear-gradient(135deg, #F0FDF4, #DCFCE7)',
-          borderRadius: 20, padding: '17px 18px', marginTop: 14,
-          border: '1px solid rgba(22,163,74,0.18)',
-          boxShadow: '0 4px 18px rgba(22,163,74,0.10)'
-        }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 9, marginBottom: 13 }}>
-            <div style={{ width: 30, height: 30, borderRadius: 999, background: 'var(--green)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, boxShadow: '0 2px 8px rgba(22,163,74,0.3)' }}>{Icon.check('#fff', 17)}</div>
-            <span style={{ fontWeight: 800, fontSize: 15.5, color: '#14532D', lineHeight: 1.2 }}>Total Potential Savings With Melt</span>
-          </div>
-          <Row label="Interest Saved" value={inr(intSaved)} />
-          <div style={{ height: 1, background: 'rgba(22,163,74,0.16)', margin: '1px 0' }} />
-          <Row label="Time Saved" value={`${moSaved} months`} />
-        </div>
-
         {/* ── Cumulative interest chart ── */}
         <Card>
           <div style={{ marginBottom: 12 }}>
-            <div style={{ fontWeight: 800, fontSize: 15, color: 'var(--ink)', lineHeight: 1.3 }}>Interest Paid Over Time</div>
+            <div style={{ fontWeight: 800, fontSize: 15, color: 'var(--ink)', lineHeight: 1.3 }}>Interest You'll Pay Over Time</div>
             <div style={{ fontSize: 11.5, color: 'var(--muted)', marginTop: 3, fontWeight: 500 }}>Credit Card vs Melt · drag to explore</div>
           </div>
           <CumulativeChart cardInt={cardAmort.intArr} meltInt={meltIntPadded} cardMonths={cardMonths} meltMonths={meltMonths} meltInterest={meltInterest} intSaved={intSaved} />
@@ -478,7 +466,7 @@ function Visualise({ go, ccrfRate = 22, monthly = 30000 }) {
         {/* ── Balance repayment chart ── */}
         <Card>
           <div style={{ marginBottom: 12 }}>
-            <div style={{ fontWeight: 800, fontSize: 15, color: 'var(--ink)', lineHeight: 1.3 }}>Repayment Journey Over Time</div>
+            <div style={{ fontWeight: 800, fontSize: 15, color: 'var(--ink)', lineHeight: 1.3 }}>Debt You'll Clear Over Time</div>
             <div style={{ fontSize: 11.5, color: 'var(--muted)', marginTop: 3, fontWeight: 500 }}>Outstanding balance month by month</div>
           </div>
           <BalanceChart cardBal={cardAmort.balArr} meltBal={meltBalPadded} cardMonths={cardMonths} meltMonths={meltMonths} />

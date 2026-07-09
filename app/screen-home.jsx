@@ -1,212 +1,161 @@
-// screen-home.jsx — EQUALL Home Dashboard
+// screen-home.jsx — premium fintech dashboard (Apple Wallet / Revolut / CRED inspired)
 function HomeScreen({ go, meltState }) {
-  var inMeltHold = meltState === 'txn_not_found' || meltState === 'retry_exhausted' || meltState === 'bureau_fallback';
-  const steps = [
-    { label: 'Apply',            done: false, active: true },
-    { label: 'Your Offer',       done: false, active: false },
-    { label: 'Verify & Approve', done: false, active: false },
-    { label: 'Setup & Disbursal',done: false, active: false },
-  ];
+  var sora = { fontFamily: "'Sora', -apple-system, system-ui, sans-serif" };
 
-  const useCases = [
-    { icon: <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M12 2L3 7v5c0 5.5 4 10.7 9 12 5-1.3 9-6.5 9-12V7L12 2Z" stroke="#5B3FD4" strokeWidth="1.8" strokeLinejoin="round"/><path d="M9 12l2 2 4-4" stroke="#5B3FD4" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/></svg>, title: 'Education Purpose', desc: 'Fund school, courses or scholarships.' },
-    { icon: <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="#5B3FD4" strokeWidth="1.8"/><circle cx="12" cy="12" r="3" stroke="#5B3FD4" strokeWidth="1.8"/><line x1="12" y1="3" x2="12" y2="6" stroke="#5B3FD4" strokeWidth="1.8" strokeLinecap="round"/><line x1="12" y1="18" x2="12" y2="21" stroke="#5B3FD4" strokeWidth="1.8" strokeLinecap="round"/><line x1="3" y1="12" x2="6" y2="12" stroke="#5B3FD4" strokeWidth="1.8" strokeLinecap="round"/><line x1="18" y1="12" x2="21" y2="12" stroke="#5B3FD4" strokeWidth="1.8" strokeLinecap="round"/></svg>, title: 'Medical Expenses', desc: 'Cover unexpected health or emergency costs.' },
-    { icon: <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M3 10.5L12 2l9 8.5V21a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V10.5Z" stroke="#5B3FD4" strokeWidth="1.8" strokeLinejoin="round"/><path d="M9 22v-7h6v7" stroke="#5B3FD4" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/></svg>, title: 'Home Renovation', desc: 'Renovate your home without upfront stress.' },
-    { icon: <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78Z" stroke="#5B3FD4" strokeWidth="1.8" strokeLinejoin="round"/></svg>, title: 'Personal Events', desc: 'Plan weddings, birthdays or festivals.' },
-  ];
+  var loan = {
+    amount: 200000,
+    outstanding: 168420,
+    emi: 18810,
+    nextEmiDate: '14 Aug',
+    paidEmis: 3,
+    totalEmis: 15,
+  };
+  var repayPct = Math.round((loan.paidEmis / loan.totalEmis) * 100);
 
   return (
-    <div style={{ minHeight: '100%', display: 'flex', flexDirection: 'column', background: '#F4F3FB', animation: 'fadeIn .35s' }}>
+    <div style={{ minHeight: '100%', display: 'flex', flexDirection: 'column', background: '#fff', animation: 'fadeIn .3s' }}>
 
-      {/* header */}
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '14px 18px 8px' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-          {/* logo mark */}
-          <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
-            <path d="M11 2L3 8v6l8 6 8-6V8L11 2Z" fill="#5B3FD4" opacity=".85"/>
-            <path d="M11 6L6 10v3l5 3.5L16 13v-3L11 6Z" fill="#fff" opacity=".7"/>
-          </svg>
-          <div>
-            <div style={{ fontWeight: 800, fontSize: 15, color: '#1A1A2E', letterSpacing: 0.5 }}>EQUALL</div>
-            <div style={{ fontSize: 9.5, color: '#888', fontWeight: 500, marginTop: -1 }}>A brand of <span style={{ fontWeight: 700 }}>LTCV Credit</span></div>
-          </div>
+      {/* ── header ── */}
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 20px 4px', flexShrink: 0 }}>
+        <div>
+          <div style={{ fontSize: 13, color: 'var(--muted)', fontWeight: 500 }}>Good Morning,</div>
+          <div style={{ fontSize: 20, fontWeight: 800, color: 'var(--ink)', letterSpacing: -0.4, ...sora }}>Ayush 👋</div>
         </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-          <div style={{ position: 'relative', width: 36, height: 36, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 0 1-3.46 0" stroke="#555" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/></svg>
-            <div style={{ position: 'absolute', top: 6, right: 6, width: 7, height: 7, borderRadius: 999, background: '#E8A020', border: '1.5px solid #F4F3FB' }} />
-          </div>
-          <div style={{ width: 36, height: 36, borderRadius: 999, background: '#5B3FD4', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700, fontSize: 15, color: '#fff' }}>S</div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          <button style={{ position: 'relative', width: 40, height: 40, borderRadius: 999, background: '#F6F5FC', display: 'flex', alignItems: 'center', justifyContent: 'center', border: 'none', cursor: 'pointer' }}>
+            <svg width="19" height="19" viewBox="0 0 24 24" fill="none"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 0 1-3.46 0" stroke="var(--ink-2)" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/></svg>
+            <div style={{ position: 'absolute', top: 8, right: 9, width: 7, height: 7, borderRadius: 999, background: '#E8A020', border: '1.5px solid #fff' }} />
+          </button>
+          <button style={{ width: 40, height: 40, borderRadius: 999, background: 'var(--primary)', display: 'flex', alignItems: 'center', justifyContent: 'center', border: 'none', cursor: 'pointer', fontWeight: 700, fontSize: 15, color: '#fff', ...sora }}>A</button>
         </div>
       </div>
 
-      <div style={{ padding: '4px 18px 24px', display: 'flex', flexDirection: 'column', gap: 16 }}>
+      <div style={{ flex: 1, padding: '14px 18px 26px', display: 'flex', flexDirection: 'column', gap: 14 }}>
 
-        {/* greeting */}
-        <div>
-          <div style={{ fontSize: 14, color: '#666' }}>Good morning,</div>
-          <div style={{ fontSize: 21, fontWeight: 800, color: '#1A1A2E', letterSpacing: -0.3 }}>Shatakshi Singh 👋</div>
-        </div>
+        {/* ── HERO — Know Your Melt Journey ── */}
+        <button
+          onClick={function () { go('meltjourney'); }}
+          style={{
+            textAlign: 'left', border: 'none', cursor: 'pointer', padding: 0,
+            borderRadius: 24, overflow: 'hidden', position: 'relative',
+            background: 'linear-gradient(150deg,#1A1438 0%,#241B54 55%,#3B2C8C 100%)',
+            boxShadow: '0 22px 46px -18px rgba(26,20,56,.55)',
+            transition: 'transform .15s',
+          }}
+          onMouseDown={function (e) { e.currentTarget.style.transform = 'scale(.985)'; }}
+          onMouseUp={function (e) { e.currentTarget.style.transform = 'scale(1)'; }}
+          onMouseLeave={function (e) { e.currentTarget.style.transform = 'scale(1)'; }}
+        >
+          <div style={{ position: 'absolute', top: -50, right: -40, width: 190, height: 190, borderRadius: '50%', background: 'radial-gradient(circle, rgba(127,85,223,.55) 0%, transparent 70%)', pointerEvents: 'none' }} />
 
-        {/* hero card */}
-        <div style={{
-          borderRadius: 22, background: '#0F0D2E', overflow: 'hidden', position: 'relative',
-          boxShadow: '0 18px 40px -18px rgba(15,13,46,.7)', minHeight: 148,
-        }}>
-          {/* glow */}
-          <div style={{ position: 'absolute', top: -30, left: -30, width: 180, height: 180, borderRadius: '50%', background: 'radial-gradient(circle, rgba(91,63,212,.4) 0%, transparent 70%)', pointerEvents: 'none' }} />
-          <div style={{ padding: '22px 20px 22px', position: 'relative', zIndex: 1, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-            <div style={{ flex: 1 }}>
-              <div style={{ fontSize: 12.5, color: 'rgba(255,255,255,.65)', fontWeight: 500 }}>You can get a loan upto</div>
-              <div style={{ fontSize: 36, fontWeight: 800, color: '#fff', letterSpacing: -1.5, lineHeight: 1.1, marginTop: 4 }}>₹5,00,000</div>
-              <div style={{ fontSize: 12, color: 'rgba(255,255,255,.55)', marginTop: 6, lineHeight: 1.4 }}>Resume your loan<br/>application to continue</div>
-              <button
-                onClick={() => go('multioffer')}
-                style={{
-                  marginTop: 14, padding: '9px 18px', borderRadius: 22, background: '#fff', color: '#1A1A2E',
-                  fontWeight: 700, fontSize: 13, display: 'inline-flex', alignItems: 'center', gap: 5,
-                }}
-              >
-                Check eligibility »
-              </button>
-            </div>
-            {/* card stack illustration */}
-            <div style={{ position: 'relative', width: 70, height: 90, flexShrink: 0, marginRight: 4 }}>
-              <div style={{ position: 'absolute', bottom: 0, right: 0, width: 60, height: 38, borderRadius: 8, background: 'rgba(91,63,212,.6)', transform: 'rotate(-8deg)' }} />
-              <div style={{ position: 'absolute', bottom: 8, right: 4, width: 60, height: 38, borderRadius: 8, background: 'rgba(91,63,212,.85)', transform: 'rotate(-3deg)' }}>
-                <div style={{ position: 'absolute', bottom: 6, left: 8, width: 20, height: 14, borderRadius: 3, background: 'rgba(255,200,80,.9)' }} />
-                <div style={{ position: 'absolute', top: 8, right: 8 }}>
-                  <svg width="14" height="10" viewBox="0 0 14 10" fill="none"><circle cx="5" cy="5" r="5" fill="rgba(255,255,255,.25)"/><circle cx="9" cy="5" r="5" fill="rgba(255,255,255,.15)"/></svg>
+          <div style={{ position: 'relative', padding: '20px 20px 18px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                <div style={{ width: 30, height: 30, borderRadius: 10, background: 'rgba(255,255,255,.12)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <span style={{ fontSize: 15, fontWeight: 900, color: '#fff', ...sora }}>M</span>
                 </div>
+                <span style={{ fontSize: 14.5, fontWeight: 700, color: '#fff', letterSpacing: -0.2, ...sora }}>Know Your Melt Journey</span>
               </div>
-              <div style={{ position: 'absolute', bottom: 16, right: 8, width: 60, height: 38, borderRadius: 8, background: '#5B3FD4' }}>
-                <div style={{ position: 'absolute', top: 8, left: 8, fontSize: 9, fontWeight: 800, color: 'rgba(255,255,255,.7)' }}>₹</div>
-              </div>
+              <span style={{ fontSize: 10.5, fontWeight: 700, color: '#C4B5FD', background: 'rgba(127,85,223,.28)', border: '1px solid rgba(196,181,253,.3)', borderRadius: 999, padding: '3px 9px', whiteSpace: 'nowrap' }}>Phase 1 of 3</span>
+            </div>
+
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8 }}>
+              <svg width="15" height="15" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="7" fill="#2D9E6B"/><path d="M4 7l2 2 4-4" stroke="#fff" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/></svg>
+              <span style={{ fontSize: 14.5, fontWeight: 800, color: '#fff', letterSpacing: -0.3, ...sora }}>₹2,00,000 Disbursed</span>
+            </div>
+
+            <div style={{ fontSize: 12.5, color: 'rgba(255,255,255,.62)', fontWeight: 500, lineHeight: 1.4, marginBottom: 16 }}>
+              Next: Pay your credit card dues within 10 days
+            </div>
+
+            {/* minimal progress indicator */}
+            <div style={{ display: 'flex', gap: 5, marginBottom: 16 }}>
+              {[0, 1, 2].map(function (i) {
+                return <div key={i} style={{ flex: 1, height: 4, borderRadius: 999, background: i === 0 ? 'linear-gradient(90deg,#8B6FF0,#C4B5FD)' : 'rgba(255,255,255,.14)' }} />;
+              })}
+            </div>
+
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <span style={{ fontSize: 11.5, color: 'rgba(255,255,255,.45)', fontWeight: 500 }}>Tap to see your full journey</span>
+              <span style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 13, fontWeight: 700, color: '#fff', ...sora }}>
+                View Journey
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M5 12h13m0 0l-5-5m5 5l-5 5" stroke="#fff" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+              </span>
             </div>
           </div>
-        </div>
+        </button>
 
-        {/* steps */}
-        <div style={{ background: '#fff', borderRadius: 20, padding: '18px 18px 16px', boxShadow: '0 1px 3px rgba(0,0,0,.05), 0 4px 14px rgba(0,0,0,.07)' }}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
-            <div style={{ fontWeight: 700, fontSize: 15, color: '#1A1A2E' }}>Steps to get the loan</div>
-            <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: 0.5, color: '#E8A020', background: '#FFF8EC', border: '1px solid #F5D9A0', borderRadius: 20, padding: '3px 9px' }}>IN PROGRESS</div>
-          </div>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
-            {steps.map((s, i) => (
-              <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 12, paddingBottom: i < steps.length - 1 ? 16 : 0, position: 'relative' }}>
-                {i < steps.length - 1 && (
-                  <div style={{ position: 'absolute', left: 11, top: 24, width: 2, height: 16, background: s.active ? '#E8A020' : '#E8E4F0' }} />
-                )}
-                <div style={{
-                  width: 24, height: 24, borderRadius: 999, flexShrink: 0,
-                  background: s.done ? '#1A7A4A' : s.active ? '#E8A020' : '#E8E4F0',
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  boxShadow: s.active ? '0 0 0 4px rgba(232,160,32,.15)' : 'none',
-                }}>
-                  {s.done
-                    ? <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2.5 6l2.5 2.5 5-5" stroke="#fff" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
-                    : <div style={{ width: 8, height: 8, borderRadius: 999, background: s.active ? '#fff' : '#C4BEDC' }} />
-                  }
-                </div>
-                <div style={{ fontSize: 14, fontWeight: s.active ? 700 : 500, color: s.active ? '#1A1A2E' : '#9A95B5' }}>{s.label}</div>
-              </div>
-            ))}
-          </div>
-        </div>
+        {/* ── LOAN SNAPSHOT ── */}
+        <div style={{ background: '#fff', borderRadius: 20, padding: '17px 18px', border: '1px solid var(--line)', boxShadow: '0 1px 3px rgba(0,0,0,.04), 0 8px 20px -8px rgba(40,30,80,.10)' }}>
+          <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: 1, color: 'var(--muted)', marginBottom: 14, textTransform: 'uppercase' }}>Loan Snapshot</div>
 
-        {/* TrustIQ */}
-        <div style={{ background: '#fff', borderRadius: 20, padding: '16px 18px', boxShadow: '0 1px 3px rgba(0,0,0,.05), 0 4px 14px rgba(0,0,0,.07)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: 0.8, color: '#999', position: 'absolute', marginTop: -38 }} />
-          <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
-            {/* semicircle gauge */}
-            <div style={{ position: 'relative', width: 56, height: 36 }}>
-              <svg width="56" height="36" viewBox="0 0 56 36">
-                <path d="M4 34 A24 24 0 0 1 52 34" stroke="#E8E4F0" strokeWidth="5" fill="none" strokeLinecap="round"/>
-                <path d="M4 34 A24 24 0 0 1 52 34" stroke="#1A7A4A" strokeWidth="5" fill="none" strokeLinecap="round"
-                  strokeDasharray="75.4" strokeDashoffset="18"/>
-              </svg>
-              <div style={{ position: 'absolute', bottom: 0, left: '50%', transform: 'translateX(-50%)', fontWeight: 800, fontSize: 16, color: '#1A1A2E' }}>78</div>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', rowGap: 16, columnGap: 10, marginBottom: 16 }}>
+            <div>
+              <div style={{ fontSize: 10.5, color: 'var(--muted)', fontWeight: 600, marginBottom: 4 }}>Loan Amount</div>
+              <div style={{ fontSize: 16.5, fontWeight: 800, color: 'var(--ink)', letterSpacing: -0.3, ...sora }}>{inr(loan.amount)}</div>
             </div>
             <div>
-              <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: 0.8, color: '#999', marginBottom: 3 }}>TRUSTIQ SCORE</div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 7 }}>
-                <span style={{ fontWeight: 700, fontSize: 15, color: '#1A1A2E' }}>TrustIQ</span>
-                <span style={{ fontSize: 11, fontWeight: 700, color: '#1A7A4A', background: '#E8F8EE', borderRadius: 20, padding: '2px 8px' }}>Strong</span>
-              </div>
+              <div style={{ fontSize: 10.5, color: 'var(--muted)', fontWeight: 600, marginBottom: 4 }}>Outstanding</div>
+              <div style={{ fontSize: 16.5, fontWeight: 800, color: 'var(--ink)', letterSpacing: -0.3, ...sora }}>{inr(loan.outstanding)}</div>
+            </div>
+            <div>
+              <div style={{ fontSize: 10.5, color: 'var(--muted)', fontWeight: 600, marginBottom: 4 }}>EMI Amount</div>
+              <div style={{ fontSize: 16.5, fontWeight: 800, color: 'var(--ink)', letterSpacing: -0.3, ...sora }}>{inr(loan.emi)}<span style={{ fontSize: 11, color: 'var(--muted)', fontWeight: 600 }}>/mo</span></div>
+            </div>
+            <div>
+              <div style={{ fontSize: 10.5, color: 'var(--muted)', fontWeight: 600, marginBottom: 4 }}>Next EMI Date</div>
+              <div style={{ fontSize: 16.5, fontWeight: 800, color: 'var(--ink)', letterSpacing: -0.3, ...sora }}>{loan.nextEmiDate}</div>
             </div>
           </div>
-          <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M7 4l6 6-6 6" stroke="#C4BEDC" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/></svg>
-        </div>
 
-        {/* ways to use */}
-        <div>
-          <div style={{ fontWeight: 800, fontSize: 17, color: '#1A1A2E', marginBottom: 12 }}>Ways to use EQUALL loans</div>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
-            {useCases.map((u, i) => (
-              <div key={i} style={{ background: '#fff', borderRadius: 16, padding: '16px 14px', boxShadow: '0 1px 3px rgba(0,0,0,.05), 0 4px 14px rgba(0,0,0,.07)' }}>
-                <div style={{ width: 42, height: 42, borderRadius: 12, background: '#EDEAFA', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 10 }}>
-                  {u.icon}
-                </div>
-                <div style={{ fontWeight: 700, fontSize: 13.5, color: '#1A1A2E', marginBottom: 4 }}>{u.title}</div>
-                <div style={{ fontSize: 11.5, color: '#888', lineHeight: 1.45 }}>{u.desc}</div>
-              </div>
-            ))}
+          <div style={{ height: 1, background: 'var(--line)', marginBottom: 12 }} />
+
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 7 }}>
+            <span style={{ fontSize: 11.5, fontWeight: 600, color: 'var(--ink-2)' }}>Repayment Progress</span>
+            <span style={{ fontSize: 11.5, fontWeight: 700, color: 'var(--primary)' }}>{loan.paidEmis} of {loan.totalEmis} EMIs</span>
+          </div>
+          <div style={{ height: 6, borderRadius: 999, background: 'var(--line)', overflow: 'hidden' }}>
+            <div style={{ height: '100%', width: repayPct + '%', borderRadius: 999, background: 'linear-gradient(90deg,var(--primary),#9B87F5)' }} />
           </div>
         </div>
 
-        {/* products for you */}
-        <div>
-          <div style={{ fontWeight: 800, fontSize: 17, color: '#1A1A2E', marginBottom: 12 }}>Products For You</div>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-            {/* Melt */}
-            <div
-              onClick={() => go(inMeltHold ? 'meltstatus' : 'multioffer')}
-              style={{
-                width: '100%', borderRadius: 18, background: '#1A1740', padding: '16px 18px',
-                display: 'flex', alignItems: 'center', gap: 14, textAlign: 'left',
-                boxShadow: '0 2px 8px rgba(0,0,0,.14), 0 6px 18px rgba(15,13,46,.24)', cursor: 'pointer',
-              }}
-            >
-              <div style={{ width: 44, height: 44, borderRadius: 14, background: 'rgba(91,63,212,.35)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 2C8 8 5 10 5 14a7 7 0 0 0 14 0c0-4-3-6-7-12Z" fill="#60A5FA" opacity=".85"/><path d="M12 14c-1.5-2-2-3-2-4.5a2 2 0 0 1 4 0C14 11 13.5 12 12 14Z" fill="#fff" opacity=".5"/></svg>
-              </div>
-              <div style={{ flex: 1 }}>
-                <div style={{ fontWeight: 700, fontSize: 14.5, color: '#fff' }}>Melt · Card Debt Relief</div>
-                {inMeltHold
-                  ? <div style={{ fontSize: 12, color: 'rgba(255,255,255,.55)', marginTop: 3 }}>Verification in progress · Phase 2</div>
-                  : <div style={{ fontSize: 12, color: 'rgba(255,255,255,.55)', marginTop: 3 }}>Manage card debt smarter, with lower monthly payments</div>
-                }
-              </div>
-              {inMeltHold
-                ? <div style={{ fontSize: 11, fontWeight: 700, color: '#fff', background: 'rgba(127,85,223,.5)', border: '1px solid rgba(255,255,255,.2)', borderRadius: 999, padding: '5px 11px', flexShrink: 0, whiteSpace: 'nowrap' }}>See status →</div>
-                : <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M6 4l5 5-5 5" stroke="rgba(255,255,255,.4)" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/></svg>
-              }
+        {/* ── ACTION CARDS ── */}
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+          <button onClick={function () { go('postdisbursal'); }} style={{
+            textAlign: 'left', border: '1px solid var(--line)', cursor: 'pointer', background: '#fff',
+            borderRadius: 18, padding: '16px 15px', boxShadow: '0 1px 3px rgba(0,0,0,.04), 0 6px 16px -8px rgba(40,30,80,.10)',
+            display: 'flex', flexDirection: 'column', gap: 10, transition: 'transform .12s',
+          }}
+            onMouseDown={function (e) { e.currentTarget.style.transform = 'scale(.97)'; }}
+            onMouseUp={function (e) { e.currentTarget.style.transform = 'scale(1)'; }}
+            onMouseLeave={function (e) { e.currentTarget.style.transform = 'scale(1)'; }}>
+            <div style={{ width: 38, height: 38, borderRadius: 12, background: 'var(--primary-l)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round"><path d="M13 2L4 14h6l-1 8 9-12h-6l1-8z"/></svg>
             </div>
+            <div style={{ fontSize: 13.5, fontWeight: 700, color: 'var(--ink)' }}>Prepay EMI</div>
+            <div style={{ fontSize: 11, color: 'var(--muted)', lineHeight: 1.4 }}>Reduce your tenure or EMI</div>
+          </button>
 
-            {/* Instant Cash */}
-            <button style={{
-              width: '100%', borderRadius: 18, background: '#0D3D2B', padding: '16px 18px',
-              display: 'flex', alignItems: 'center', gap: 14, textAlign: 'left',
-              boxShadow: '0 2px 8px rgba(0,0,0,.12), 0 6px 18px rgba(13,61,43,.22)',
-            }}>
-              <div style={{ width: 44, height: 44, borderRadius: 14, background: 'rgba(26,122,74,.35)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M13 2L4 14h7l-1 8 9-12h-7l1-8Z" fill="#4ADE80"/></svg>
-              </div>
-              <div style={{ flex: 1 }}>
-                <div style={{ fontWeight: 700, fontSize: 14.5, color: '#fff' }}>Instant Cash</div>
-                <div style={{ fontSize: 12, color: 'rgba(255,255,255,.55)', marginTop: 3 }}>Quick personal loans disbursed in minutes.</div>
-              </div>
-              <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M6 4l5 5-5 5" stroke="rgba(255,255,255,.4)" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/></svg>
-            </button>
-          </div>
+          <button onClick={function () { go('postdisbursal'); }} style={{
+            textAlign: 'left', border: '1px solid var(--line)', cursor: 'pointer', background: '#fff',
+            borderRadius: 18, padding: '16px 15px', boxShadow: '0 1px 3px rgba(0,0,0,.04), 0 6px 16px -8px rgba(40,30,80,.10)',
+            display: 'flex', flexDirection: 'column', gap: 10, transition: 'transform .12s',
+          }}
+            onMouseDown={function (e) { e.currentTarget.style.transform = 'scale(.97)'; }}
+            onMouseUp={function (e) { e.currentTarget.style.transform = 'scale(1)'; }}
+            onMouseLeave={function (e) { e.currentTarget.style.transform = 'scale(1)'; }}>
+            <div style={{ width: 38, height: 38, borderRadius: 12, background: 'var(--primary-l)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" strokeWidth="1.9" strokeLinecap="round"><path d="M6 3h8l4 4v14a1 1 0 01-1 1H6a1 1 0 01-1-1V4a1 1 0 011-1z"/><path d="M14 3v4h4" strokeLinejoin="round"/></svg>
+            </div>
+            <div style={{ fontSize: 13.5, fontWeight: 700, color: 'var(--ink)' }}>Loan Details</div>
+            <div style={{ fontSize: 11, color: 'var(--muted)', lineHeight: 1.4 }}>Statement, schedule & docs</div>
+          </button>
         </div>
 
         {/* footer */}
-        <div style={{ fontSize: 10.5, color: '#AAA', textAlign: 'center', lineHeight: 1.55, padding: '4px 8px 8px' }}>
-          EQUALL is a product of <span style={{ fontWeight: 700, color: '#888' }}>LTCV Credit Private Limited</span>, a registered NBFC. Loan products are subject to credit approval.
+        <div style={{ fontSize: 10.5, color: '#AAA', textAlign: 'center', lineHeight: 1.55, padding: '6px 8px 4px' }}>
+          EQUALL is a product of <span style={{ fontWeight: 700, color: '#888' }}>LTCV Credit Private Limited</span>, a registered NBFC.
         </div>
-
       </div>
     </div>
   );

@@ -6,9 +6,9 @@ const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
   "ccrfRate": 22
 }/*EDITMODE-END*/;
 
-const ORDER = ['home', 'multioffer', 'selling', 'savings', 'cards', 'eligibility', 'visualise', 'amountselect', 'revisedoffer', 'journeycontinues', 'postdisbursal', 'meltbank', 'meltpayment', 'verifying', 'meltnotfound', 'verreview', 'meltstatus', 'reward', 'newloan', 'success'];
+const ORDER = ['home', 'meltjourney', 'multioffer', 'selling', 'savings', 'cards', 'eligibility', 'visualise', 'amountselect', 'revisedoffer', 'journeycontinues', 'postdisbursal', 'meltbank', 'meltpayment', 'verifying', 'meltnotfound', 'verreview', 'meltstatus', 'reward', 'newloan', 'success'];
 const LABELS = {
-  home: 'Home', multioffer: 'Multi Offer', selling: 'General Selling', savings: 'Savings', cards: 'Card Selection',
+  home: 'Home', meltjourney: 'Melt Journey', multioffer: 'Multi Offer', selling: 'General Selling', savings: 'Savings', cards: 'Card Selection',
   eligibility: 'Eligibility', visualise: 'Visualise', amountselect: 'Amount', revisedoffer: 'Final Offer',
   journeycontinues: 'Journey', postdisbursal: 'Post Disbursal', meltbank: 'Bank Account', meltpayment: 'Payment Details',
   verifying: 'Verifying', meltnotfound: 'Not Found', verreview: 'Ver. Review', meltstatus: 'Melt Status', reward: 'Reward', newloan: 'New Loan', success: 'Done',
@@ -62,6 +62,7 @@ function App() {
   const screen = (() => {
     switch (route) {
       case 'home': return <HomeScreen go={go} meltState={meltState} />;
+      case 'meltjourney': return <MeltJourneyScreen go={go} />;
       case 'multioffer': return <MultiOffer go={go} />;
       case 'selling': return <SellingStories go={go} storyMs={storyMs} />;
       case 'savings': return <SavingsScreen go={go} ccrfRate={t.ccrfRate} monthly={monthly} setMonthly={setMonthly} />;
@@ -87,7 +88,8 @@ function App() {
 
   const light = route === 'selling';
   const bg = route === 'savings' ? '#F7F7FC'
-    : (route === 'eligibility' || route === 'home') ? '#F7F7FB'
+    : (route === 'eligibility') ? '#F7F7FB'
+      : (route === 'home' || route === 'meltjourney') ? '#FFFFFF'
       : (route === 'multioffer' || route === 'amountselect' || route === 'revisedoffer') ? '#FFFFFF'
         : (route === 'selling' || route === 'visualise' || route === 'success') ? '#EFEEFE'
           : (route === 'postdisbursal' || route === 'meltbank' || route === 'meltpayment' || route === 'verifying' || route === 'meltnotfound' || route === 'verreview' || route === 'meltstatus' || route === 'reward' || route === 'newloan') ? '#FFFFFF'
