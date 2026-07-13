@@ -41,7 +41,7 @@ function MeltBankAccountScreen({ go, setMeltSelBank }) {
       <div style={{ background: '#fff', padding: '12px 16px', flexShrink: 0, borderBottom: '1px solid #F0EEF8' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 10 }}>
           <button
-            onClick={function () { go('postdisbursal'); }}
+            onClick={function () { go('home'); }}
             style={{ width: 36, height: 36, borderRadius: 12, border: '1.5px solid #ECEAF4', background: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, cursor: 'pointer' }}
           >
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M15 5l-7 7 7 7" stroke={ink} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>

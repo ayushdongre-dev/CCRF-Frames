@@ -6,11 +6,11 @@ const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
   "ccrfRate": 22
 }/*EDITMODE-END*/;
 
-const ORDER = ['home', 'meltjourney', 'multioffer', 'selling', 'savings', 'cards', 'eligibility', 'visualise', 'amountselect', 'revisedoffer', 'journeycontinues', 'postdisbursal', 'meltbank', 'meltpayment', 'verifying', 'meltnotfound', 'verreview', 'meltstatus', 'reward', 'newloan', 'success'];
+const ORDER = ['home', 'home2', 'home3', 'meltjourney', 'meltjourney2', 'meltjourney3', 'multioffer', 'selling', 'savings', 'cards', 'eligibility', 'visualise', 'amountselect', 'revisedoffer', 'journeycontinues', 'meltbank', 'meltpayment', 'verifying', 'meltnotfound', 'verreview', 'meltstatus', 'reward', 'newloan', 'success'];
 const LABELS = {
-  home: 'Home', meltjourney: 'Melt Journey', multioffer: 'Multi Offer', selling: 'General Selling', savings: 'Savings', cards: 'Card Selection',
+  home: 'Home 1', home2: 'Home 2', home3: 'Home 3', meltjourney: 'Melt Status 1', meltjourney2: 'Melt Status 2', meltjourney3: 'Melt Status 3', multioffer: 'Multi Offer', selling: 'General Selling', savings: 'Savings', cards: 'Card Selection',
   eligibility: 'Eligibility', visualise: 'Visualise', amountselect: 'Amount', revisedoffer: 'Final Offer',
-  journeycontinues: 'Journey', postdisbursal: 'Post Disbursal', meltbank: 'Bank Account', meltpayment: 'Payment Details',
+  journeycontinues: 'Journey', meltbank: 'Bank Account', meltpayment: 'Payment Details',
   verifying: 'Verifying', meltnotfound: 'Not Found', verreview: 'Ver. Review', meltstatus: 'Melt Status', reward: 'Reward', newloan: 'New Loan', success: 'Done',
 };
 
@@ -27,7 +27,6 @@ function App() {
   });
   const [selected, setSelected] = useState(['FEDERAL', 'ICICI', 'HDFC']);
   const [monthly, setMonthly] = useState(30000);
-  const [pdState, setPdState] = useState('action');
   const [meltState, setMeltState] = useState('idle'); // 'idle'|'txn_not_found'|'retry_exhausted'|'bureau_fallback'
   const [retryCount, setRetryCount] = useState(0);
   const [verifyAttempt, setVerifyAttempt] = useState(0); // 0=first attempt (always fails), 1+=retry (goes to verreview)
@@ -62,7 +61,11 @@ function App() {
   const screen = (() => {
     switch (route) {
       case 'home': return <HomeScreen go={go} meltState={meltState} />;
+      case 'home2': return <HomeScreen2 go={go} meltState={meltState} />;
+      case 'home3': return <HomeScreen3 go={go} meltState={meltState} />;
       case 'meltjourney': return <MeltJourneyScreen go={go} />;
+      case 'meltjourney2': return <MeltJourneyScreen2 go={go} />;
+      case 'meltjourney3': return <MeltJourneyScreen3 go={go} />;
       case 'multioffer': return <MultiOffer go={go} />;
       case 'selling': return <SellingStories go={go} storyMs={storyMs} />;
       case 'savings': return <SavingsScreen go={go} ccrfRate={t.ccrfRate} monthly={monthly} setMonthly={setMonthly} />;
@@ -72,13 +75,12 @@ function App() {
       case 'amountselect': return <AmountSelection go={go} ccrfRate={t.ccrfRate} />;
       case 'revisedoffer': return <RevisedOffer go={go} ccrfRate={t.ccrfRate} />;
       case 'journeycontinues': return <JourneyContinues go={go} />;
-      case 'postdisbursal': return <PostDisbursal go={go} pdState={pdState} setPdState={setPdState} setVerifyAttempt={setVerifyAttempt} />;
       case 'meltbank': return <MeltBankAccountScreen go={go} setMeltSelBank={setMeltSelBank} />;
       case 'meltpayment': return <MeltPaymentScreen go={go} setMeltPayDate={setMeltPayDate} setMeltPayAmount={setMeltPayAmount} />;
       case 'meltnotfound': return <MeltNotFoundScreen go={go} retryCount={retryCount} setRetryCount={setRetryCount} setMeltState={setMeltState} />;
       case 'meltstatus': return <MeltStatusScreen go={go} meltState={meltState} retryCount={retryCount} setRetryCount={setRetryCount} />;
-      case 'verifying': return <VerifyingScreen go={go} setPdState={setPdState} verifyAttempt={verifyAttempt} setVerifyAttempt={setVerifyAttempt} setMeltState={setMeltState} />;
-      case 'verreview': return <MeltVerReviewScreen go={go} meltSelBank={meltSelBank} meltPayDate={meltPayDate} meltPayAmount={meltPayAmount} setMeltState={setMeltState} setPdState={setPdState} />;
+      case 'verifying': return <VerifyingScreen go={go} verifyAttempt={verifyAttempt} setVerifyAttempt={setVerifyAttempt} setMeltState={setMeltState} />;
+      case 'verreview': return <MeltVerReviewScreen go={go} meltSelBank={meltSelBank} meltPayDate={meltPayDate} meltPayAmount={meltPayAmount} setMeltState={setMeltState} />;
       case 'reward': return <RewardScreen go={go} />;
       case 'newloan': return <NewLoanScreen go={go} />;
       case 'success': return <Success go={go} />;
@@ -89,10 +91,10 @@ function App() {
   const light = route === 'selling';
   const bg = route === 'savings' ? '#F7F7FC'
     : (route === 'eligibility') ? '#F7F7FB'
-      : (route === 'home' || route === 'meltjourney') ? '#FFFFFF'
+      : (route === 'home' || route === 'home2' || route === 'home3' || route === 'meltjourney' || route === 'meltjourney2' || route === 'meltjourney3') ? '#FFFFFF'
       : (route === 'multioffer' || route === 'amountselect' || route === 'revisedoffer') ? '#FFFFFF'
         : (route === 'selling' || route === 'visualise' || route === 'success') ? '#EFEEFE'
-          : (route === 'postdisbursal' || route === 'meltbank' || route === 'meltpayment' || route === 'verifying' || route === 'meltnotfound' || route === 'verreview' || route === 'meltstatus' || route === 'reward' || route === 'newloan') ? '#FFFFFF'
+          : (route === 'meltbank' || route === 'meltpayment' || route === 'verifying' || route === 'meltnotfound' || route === 'verreview' || route === 'meltstatus' || route === 'reward' || route === 'newloan') ? '#FFFFFF'
             : 'var(--bg)';
 
   return (
@@ -138,17 +140,13 @@ function App() {
         <TweakSection label="Savings illustration" />
         <TweakSlider label="CCRF rate" value={t.ccrfRate} min={16} max={28} step={1} unit="%"
           onChange={(v) => setTweak('ccrfRate', v)} />
-        <TweakSection label="Post Disbursal (dev)" />
-        <TweakButton label="Reset → action" onClick={() => { setPdState('action'); go('postdisbursal'); }} />
-        <TweakButton label="Set → pending" onClick={() => { setPdState('pending'); go('postdisbursal'); }} />
-        <TweakButton label="Simulate bureau confirm →" onClick={() => { setPdState('unlocked'); go('postdisbursal'); }} />
         <TweakSection label="Melt Tranche 2 (dev)" />
         <TweakButton label="→ Bank Account" onClick={() => go('meltbank')} />
         <TweakButton label="→ Payment Details" onClick={() => go('meltpayment')} />
         <TweakSection label="Verify flow (dev)" />
         <TweakButton label="Reset verify attempt" onClick={() => { setVerifyAttempt(0); setRetryCount(0); setMeltState('idle'); }} />
         <TweakButton label="→ Verification Review" onClick={() => go('verreview')} />
-        <TweakButton label="Reset melt state" onClick={() => { setMeltState('idle'); setRetryCount(0); setVerifyAttempt(0); go('postdisbursal'); }} />
+        <TweakButton label="Reset melt state" onClick={() => { setMeltState('idle'); setRetryCount(0); setVerifyAttempt(0); go('home'); }} />
         <TweakButton label="→ Not Found" onClick={() => { setMeltState('txn_not_found'); go('meltnotfound'); }} />
         <TweakButton label="Set bureau fallback" onClick={() => { setMeltState('bureau_fallback'); go('meltstatus'); }} />
       </TweaksPanel>

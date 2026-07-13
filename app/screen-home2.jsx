@@ -1,5 +1,8 @@
-// screen-home.jsx — premium fintech dashboard (Apple Wallet / Revolut / CRED inspired)
-function HomeScreen({ go, meltState }) {
+// screen-home2.jsx — Home 2: Verification in Progress
+// Cloned from the approved Home 1 template (screen-home.jsx). Layout, spacing,
+// typography, Loan Snapshot, and action cards are identical — only the hero
+// card's badge, icon, headline, message, progress and CTA text differ.
+function HomeScreen2({ go, meltState }) {
   var sora = { fontFamily: "'Sora', -apple-system, system-ui, sans-serif" };
 
   var loan = {
@@ -32,9 +35,9 @@ function HomeScreen({ go, meltState }) {
 
       <div style={{ flex: 1, padding: '14px 18px 26px', display: 'flex', flexDirection: 'column', gap: 14 }}>
 
-        {/* ── HERO — Know Your Melt Journey ── */}
+        {/* ── HERO — Your Melt Journey ── */}
         <button
-          onClick={function () { go('meltjourney'); }}
+          onClick={function () { go('meltjourney2'); }}
           style={{
             textAlign: 'left', border: 'none', cursor: 'pointer', padding: 0,
             borderRadius: 24, overflow: 'hidden', position: 'relative',
@@ -56,29 +59,29 @@ function HomeScreen({ go, meltState }) {
                 </div>
                 <span style={{ fontSize: 14.5, fontWeight: 700, color: '#fff', letterSpacing: -0.2, ...sora }}>Your Melt Journey</span>
               </div>
-              <span style={{ fontSize: 10.5, fontWeight: 700, color: '#C4B5FD', background: 'rgba(127,85,223,.28)', border: '1px solid rgba(196,181,253,.3)', borderRadius: 999, padding: '3px 9px', whiteSpace: 'nowrap' }}>Step 1 of 3</span>
+              <span style={{ fontSize: 10.5, fontWeight: 700, color: '#C4B5FD', background: 'rgba(127,85,223,.28)', border: '1px solid rgba(196,181,253,.3)', borderRadius: 999, padding: '3px 9px', whiteSpace: 'nowrap' }}>Step 2 of 3</span>
             </div>
 
             <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8 }}>
-              <svg width="15" height="15" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="7" fill="#E8A020"/><path d="M5.5 7V5.3A1.7 1.7 0 018.5 4" stroke="#fff" strokeWidth="1.4" strokeLinecap="round"/></svg>
-              <span style={{ fontSize: 14.5, fontWeight: 800, color: '#fff', letterSpacing: -0.3, ...sora }}>₹3,00,000 to unlock more</span>
+              <svg width="15" height="15" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="6" stroke="#8B6FF0" strokeWidth="1.6" strokeDasharray="3,2.4"/></svg>
+              <span style={{ fontSize: 14.5, fontWeight: 800, color: '#fff', letterSpacing: -0.3, ...sora }}>Verifying your documents</span>
             </div>
 
             <div style={{ fontSize: 12.5, color: 'rgba(255,255,255,.62)', fontWeight: 500, lineHeight: 1.4, marginBottom: 16 }}>
-              Next: Pay your credit card dues to unlock more
+              We've received your documents. No action is needed from you right now.
             </div>
 
             {/* minimal progress indicator */}
             <div style={{ display: 'flex', gap: 5, marginBottom: 16 }}>
               {[0, 1, 2].map(function (i) {
-                return <div key={i} style={{ flex: 1, height: 4, borderRadius: 999, background: i === 0 ? 'linear-gradient(90deg,#8B6FF0,#C4B5FD)' : 'rgba(255,255,255,.14)' }} />;
+                return <div key={i} style={{ flex: 1, height: 4, borderRadius: 999, background: i <= 1 ? 'linear-gradient(90deg,#8B6FF0,#C4B5FD)' : 'rgba(255,255,255,.14)' }} />;
               })}
             </div>
 
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-              
+
               <span style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 13, fontWeight: 700, color: '#fff', ...sora }}>
-                See your Melt status
+                View Your Melt Journey
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M5 12h13m0 0l-5-5m5 5l-5 5" stroke="#fff" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"/></svg>
               </span>
             </div>
@@ -121,7 +124,7 @@ function HomeScreen({ go, meltState }) {
 
         {/* ── ACTION CARDS — styled to clearly read as tappable CTAs ── */}
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
-          <button onClick={function () { go('meltjourney'); }} style={{
+          <button onClick={function () { go('meltjourney2'); }} style={{
             textAlign: 'left', border: '1px solid var(--line)', cursor: 'pointer', background: '#fff',
             borderRadius: 18, padding: '15px', boxShadow: '0 1px 3px rgba(0,0,0,.04), 0 6px 16px -8px rgba(40,30,80,.10)',
             display: 'flex', flexDirection: 'column', gap: 8, transition: 'transform .12s',
@@ -142,7 +145,7 @@ function HomeScreen({ go, meltState }) {
             <div style={{ fontSize: 11.5, fontWeight: 700, color: 'var(--primary)', marginTop: 2 }}>Pay now</div>
           </button>
 
-          <button onClick={function () { go('meltjourney'); }} style={{
+          <button onClick={function () { go('meltjourney2'); }} style={{
             textAlign: 'left', border: '1px solid var(--line)', cursor: 'pointer', background: '#fff',
             borderRadius: 18, padding: '15px', boxShadow: '0 1px 3px rgba(0,0,0,.04), 0 6px 16px -8px rgba(40,30,80,.10)',
             display: 'flex', flexDirection: 'column', gap: 8, transition: 'transform .12s',
@@ -172,4 +175,4 @@ function HomeScreen({ go, meltState }) {
     </div>
   );
 }
-window.HomeScreen = HomeScreen;
+window.HomeScreen2 = HomeScreen2;

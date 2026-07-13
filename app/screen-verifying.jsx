@@ -2,7 +2,7 @@
 
 var VERIFY_DURATION = 5; // seconds
 
-function VerifyingScreen({ go, setPdState, verifyAttempt, setVerifyAttempt, setMeltState }) {
+function VerifyingScreen({ go, verifyAttempt, setVerifyAttempt, setMeltState }) {
   var ink  = '#1B192E';
   var ink2 = '#4B4960';
   var muted= '#8A879B';
@@ -176,8 +176,7 @@ function VerifyingScreen({ go, setPdState, verifyAttempt, setVerifyAttempt, setM
       <BottomBar>
         <button
           onClick={function(){
-            if (setPdState) setPdState('pending');
-            go('postdisbursal');
+            go('home');
           }}
           style={{ width: '100%', height: 52, borderRadius: 15, border: '1.5px solid var(--line)', background: '#fff', color: ink2, fontWeight: 700, fontSize: 15, ...sora, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}
         >

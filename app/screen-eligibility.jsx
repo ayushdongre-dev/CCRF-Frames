@@ -74,7 +74,6 @@ function MeltJourneyAnim() {
   var dks = useState(false); var deckOn = dks[0]; var setDeckOn = dks[1];
   var fis = useState(0); var frontIdx = fis[0]; var setFrontIdx = fis[1];
   var mds = useState([false, false, false, false]); var melted = mds[0]; var setMelted = mds[1];
-  var mis = useState(null); var meltingId = mis[0]; var setMeltingId = mis[1];
   var lps = useState('hidden'); var lockPhase = lps[0]; var setLockPhase = lps[1]; // 'hidden' | 'locked' | 'unlocked'
   var scn = useState(0); var step = scn[0]; var setStep = scn[1];
   var timers = useRef([]);
@@ -94,7 +93,7 @@ function MeltJourneyAnim() {
       setLoopKey(function(k) { return k + 1; });
       setStep(0); setMelt('hidden'); setMeltAmt('₹2,00,000');
       setBankAmt(0); setBankGlow(false); setCoinOn(false);
-      setDeckOn(false); setFrontIdx(0); setMelted([false, false, false, false]); setMeltingId(null); setLockPhase('hidden');
+      setDeckOn(false); setFrontIdx(0); setMelted([false, false, false, false]); setLockPhase('hidden');
 
       // Step 1 — Melt sends money straight into your bank.
       // The card lands and fades first; the bank reacts a beat later —
@@ -106,37 +105,38 @@ function MeltJourneyAnim() {
       push(function() { setBankGlow(false); }, 2820);
 
       // Step 2 — that balance clears 3 of the 4 cards, one at a time.
-      // Each melted card simply slides to the back of the deck — the 4th card
-      // stays untouched at the front, honestly showing what's still due.
+      // Each card simply turns green with a tick, then moves to the back of the
+      // deck — the 4th card stays untouched at the front, honestly showing what's
+      // still due. No extra motion beyond that; the color change says it all.
       push(function() { setStep(1); setDeckOn(true); }, 3500);
 
       push(function() { setCoinOn(true); }, 4150);
-      push(function() { setCoinOn(false); setMeltingId(0); markMelted(0); }, 4770);
+      push(function() { setCoinOn(false); markMelted(0); }, 4770);
       push(function() { setBankAmt(200000 - CARD_DUES[0]); }, 5280);
-      push(function() { setMeltingId(null); setFrontIdx(1); }, 5540);
+      push(function() { setFrontIdx(1); }, 5700);
 
-      push(function() { setCoinOn(true); }, 5900);
-      push(function() { setCoinOn(false); setMeltingId(1); markMelted(1); }, 6520);
-      push(function() { setBankAmt(200000 - CARD_DUES[0] - CARD_DUES[1]); }, 7030);
-      push(function() { setMeltingId(null); setFrontIdx(2); }, 7290);
+      push(function() { setCoinOn(true); }, 6050);
+      push(function() { setCoinOn(false); markMelted(1); }, 6670);
+      push(function() { setBankAmt(200000 - CARD_DUES[0] - CARD_DUES[1]); }, 7180);
+      push(function() { setFrontIdx(2); }, 7600);
 
-      push(function() { setCoinOn(true); }, 7650);
-      push(function() { setCoinOn(false); setMeltingId(2); markMelted(2); }, 8270);
-      push(function() { setBankAmt(0); }, 8780);
-      push(function() { setMeltingId(null); setFrontIdx(3); }, 9040);
-      // (9040 → 9900 is a deliberate hold: 3 cards green + checked behind, the
+      push(function() { setCoinOn(true); }, 7950);
+      push(function() { setCoinOn(false); markMelted(2); }, 8570);
+      push(function() { setBankAmt(0); }, 9080);
+      push(function() { setFrontIdx(3); }, 9500);
+      // (9500 → 10400 is a deliberate hold: 3 cards green + checked behind, the
       // 4th still due and purple at the front, bank back at ₹0)
 
       // Step 3 — a lock clicks open, then a bigger amount unlocks into the bank.
-      push(function() { setStep(2); setDeckOn(false); setLockPhase('locked'); }, 9900);
-      push(function() { setLockPhase('unlocked'); }, 10900);
-      push(function() { setLockPhase('hidden'); setMeltAmt('₹3,00,000'); setMelt('in'); }, 11700);
-      push(function() { setMelt('merging'); }, 12650);
-      push(function() { setMelt('hidden'); }, 13280);
-      push(function() { setBankAmt(300000); setBankGlow(true); }, 13440);
-      push(function() { setBankGlow(false); }, 14200);
+      push(function() { setStep(2); setDeckOn(false); setLockPhase('locked'); }, 10400);
+      push(function() { setLockPhase('unlocked'); }, 11400);
+      push(function() { setLockPhase('hidden'); setMeltAmt('₹3,00,000'); setMelt('in'); }, 12200);
+      push(function() { setMelt('merging'); }, 13150);
+      push(function() { setMelt('hidden'); }, 13780);
+      push(function() { setBankAmt(300000); setBankGlow(true); }, 13940);
+      push(function() { setBankGlow(false); }, 14700);
 
-      push(loop, 15500);
+      push(loop, 16000);
     }
 
     loop();
@@ -220,18 +220,10 @@ function MeltJourneyAnim() {
 
         {/* card-deck zone — fixed height, fades in only for step 2 */}
         <div style={{ position: 'relative', height: 92, display: 'flex', alignItems: 'center', justifyContent: 'center', opacity: deckOn ? 1 : 0, transition: 'opacity .4s ease' }}>
-          {/* melt puddle — glows briefly beneath the deck each time a card melts */}
-          <div style={{
-            position: 'absolute', bottom: 6, width: 88, height: 20, borderRadius: '50%',
-            background: 'radial-gradient(ellipse, rgba(139,111,240,.55), rgba(139,111,240,.12) 60%, transparent 80%)',
-            filter: 'blur(1px)',
-            opacity: meltingId !== null ? 1 : 0, transform: meltingId !== null ? 'scale(1)' : 'scale(.6)',
-            transition: 'opacity .35s ease, transform .35s ease',
-          }} />
           <div style={{ position: 'relative', width: 110, height: 70 }}>
             {[0, 1, 2, 3].map(function(id) {
               var rank = (id - frontIdx + 4) % 4;
-              return <DeckCard key={id} pos={DECK_POS[rank]} melted={melted[id]} pulsing={meltingId === id} />;
+              return <DeckCard key={id} pos={DECK_POS[rank]} melted={melted[id]} />;
             })}
           </div>
         </div>
@@ -333,30 +325,24 @@ function FlyCoin() {
 }
 
 // a proper purple, brand-true credit card — chip, masked number, "CREDIT CARD" label.
-// Melting = it droops into the puddle below while turning green — colour and shape
-// change together — then it reforms, settled and checked, at the back of the deck.
-function DeckCard({ pos, melted, pulsing }) {
-  var squash = pulsing
-    ? 'translate(calc(-50% + ' + pos.x + 'px), calc(-50% + ' + (pos.y + 11) + 'px)) rotate(' + (pos.r * 0.25) + 'deg) scale(' + (pos.s * 1.1) + ', ' + (pos.s * 0.22) + ')'
-    : 'translate(calc(-50% + ' + pos.x + 'px), calc(-50% + ' + pos.y + 'px)) rotate(' + pos.r + 'deg) scale(' + pos.s + ')';
+// Melting = simply: the card turns green, a tick appears, then it moves to the
+// back of the deck. No squash, no liquefy — the color change says it all.
+function DeckCard({ pos, melted }) {
   return (
     <div style={{
-      position: 'absolute', left: '50%', top: '50%', width: 76, height: 48,
-      borderRadius: pulsing ? '9px 9px 28px 28px' : 9,
-      transform: squash,
-      transformOrigin: pulsing ? 'center bottom' : 'center center', zIndex: pulsing ? 4 : pos.z,
-      transition: 'transform .46s ' + EASE + ', border-radius .46s ease',
+      position: 'absolute', left: '50%', top: '50%', width: 76, height: 48, borderRadius: 9,
+      transform: 'translate(calc(-50% + ' + pos.x + 'px), calc(-50% + ' + pos.y + 'px)) rotate(' + pos.r + 'deg) scale(' + pos.s + ')',
+      transformOrigin: 'center center', zIndex: pos.z,
+      transition: 'transform .46s ' + EASE,
       overflow: 'hidden', background: 'linear-gradient(150deg,#7B5FEA 0%,#5B3FD4 55%,#3D2A9C 100%)',
-      boxShadow: pos.z === 3 && !pulsing ? '0 14px 28px -8px rgba(45,25,130,.5)' : '0 4px 10px -4px rgba(45,25,130,.3)',
+      boxShadow: pos.z === 3 ? '0 14px 28px -8px rgba(45,25,130,.5)' : '0 4px 10px -4px rgba(45,25,130,.3)',
       border: '1px solid rgba(255,255,255,.14)',
     }}>
-      {/* melted → the card body itself turns green, permanently, once cleared */}
+      {/* melted → the card body simply turns green, permanently, once cleared */}
       <div style={{
         position: 'absolute', inset: 0, background: 'linear-gradient(150deg,#3FC08A 0%,#2D9E6B 55%,#1F7A52 100%)',
-        opacity: melted ? 1 : 0, transition: 'opacity .46s ease' + (melted ? ' .05s' : ''),
+        opacity: melted ? 1 : 0, transition: 'opacity .4s ease',
       }} />
-      {/* brief flash of heat right as it melts */}
-      <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(circle at 50% 25%, rgba(255,255,255,.65), transparent 60%)', opacity: pulsing ? 1 : 0, transition: 'opacity .5s ease' }} />
       {/* shine */}
       <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(125deg,rgba(255,255,255,.2),transparent 55%)' }} />
       {/* chip */}
@@ -372,13 +358,13 @@ function DeckCard({ pos, melted, pulsing }) {
       {/* label */}
       <div style={{ position: 'absolute', left: 8, bottom: 6, fontSize: 6.5, fontWeight: 800, letterSpacing: 0.9, color: 'rgba(255,255,255,.7)' }}>CREDIT CARD</div>
 
-      {/* cleared badge — small, permanent, doesn't hide the card */}
+      {/* tick mark — appears once melted */}
       <div style={{
         position: 'absolute', right: -3, top: -3, width: 17, height: 17, borderRadius: 999,
         background: '#fff', border: '2px solid #1F7A52',
         display: 'flex', alignItems: 'center', justifyContent: 'center',
-        opacity: (melted && !pulsing) ? 1 : 0, transform: (melted && !pulsing) ? 'scale(1)' : 'scale(.4)',
-        transition: 'transform .3s cubic-bezier(.2,1.3,.4,1) .1s, opacity .2s .1s',
+        opacity: melted ? 1 : 0, transform: melted ? 'scale(1)' : 'scale(.4)',
+        transition: 'transform .3s cubic-bezier(.2,1.3,.4,1) .15s, opacity .2s .15s',
       }}>
         <svg width="9" height="9" viewBox="0 0 14 14" fill="none"><path d="M3 7l3 3 5-5" stroke="#2D9E6B" strokeWidth="2.8" strokeLinecap="round" strokeLinejoin="round"/></svg>
       </div>

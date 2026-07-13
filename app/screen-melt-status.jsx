@@ -213,7 +213,7 @@ function MeltStatusScreen({ go, meltState, retryCount, setRetryCount }) {
       {/* ── CTA ── */}
       <BottomBar>
         <button
-          onClick={function(){ go('postdisbursal'); }}
+          onClick={function(){ go('home'); }}
           style={{ width: '100%', height: 54, borderRadius: 16, border: '1.5px solid #ECEAF4', background: '#fff', color: ink2, fontWeight: 700, fontSize: 15, ...sora, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, cursor: 'pointer', letterSpacing: -0.1 }}
         >
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M3 11l9-7 9 7" stroke={ink2} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/><path d="M5 9.5V20h5v-5h4v5h5V9.5" stroke={ink2} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/></svg>

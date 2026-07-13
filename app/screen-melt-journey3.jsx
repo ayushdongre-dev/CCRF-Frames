@@ -1,14 +1,17 @@
-// screen-melt-journey.jsx — "Know Your Melt Journey" · premium vertical timeline
-function MeltJourneyScreen({ go }) {
+// screen-melt-journey3.jsx — "Your Melt Status" for Home 3: Verified, awaiting disbursement
+// Cloned from screen-melt-journey.jsx (the approved Status 1 template). Same
+// layout, spacing and typography — only the timeline states, bottom callout
+// and CTA change to reflect verification completing and the ₹3,00,000
+// disbursement now being processed (not yet landed).
+function MeltJourneyScreen3({ go }) {
   var sora = { fontFamily: "'Sora', -apple-system, system-ui, sans-serif" };
   var PRIMARY = 'var(--primary)';
   var GREEN = '#2D9E6B';
-  var AMBER = '#E8A020';
 
   var STEPS = [
     { state: 'done', title: '₹2,00,000 Disbursed', desc: 'Credited directly to your salary account.', tag: 'Step 1' },
-    { state: 'active', title: 'Paid your Card Debts?', desc: 'Settle your outstanding dues to proceed.', tag: '6 days left' },
-    { state: 'upcoming', title: 'Step 2 Unlocks', desc: 'Repay Step 1 on time and ₹3,00,000 opens automatically.', tag: '+₹3,00,000' },
+    { state: 'done', title: 'Verification Completed', desc: 'Melt confirmed your dues were fully cleared.', tag: '✓ Verified' },
+    { state: 'active', title: '₹3,00,000 Unlocked', desc: 'Continue your journey to receive this amount in your bank.', tag: 'Action needed' },
   ];
 
   return (
@@ -16,7 +19,7 @@ function MeltJourneyScreen({ go }) {
 
       {/* nav */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 16px 4px', flexShrink: 0 }}>
-        <button onClick={function () { go('home'); }} style={{ width: 38, height: 38, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'none', border: 'none', cursor: 'pointer' }}>
+        <button onClick={function () { go('home3'); }} style={{ width: 38, height: 38, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'none', border: 'none', cursor: 'pointer' }}>
           {Icon.back('var(--ink)')}
         </button>
         <span style={{ fontWeight: 700, fontSize: 15.5, color: 'var(--ink)', letterSpacing: -0.2, ...sora }}>Your Melt Status</span>
@@ -32,12 +35,11 @@ function MeltJourneyScreen({ go }) {
         }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 8 }}>
             <span style={{ fontSize: 12.5, fontWeight: 700, color: 'var(--ink)', letterSpacing: -0.1, ...sora }}>Your Melt Journey</span>
-            <span style={{ fontSize: 10.5, fontWeight: 800, color: PRIMARY, background: 'var(--primary-l)', borderRadius: 999, padding: '2px 8px', flexShrink: 0, ...sora }}>Step 1 of 3</span>
+            <span style={{ fontSize: 10.5, fontWeight: 800, color: GREEN, background: '#E7F7EF', borderRadius: 999, padding: '2px 8px', flexShrink: 0, ...sora }}>Verified</span>
           </div>
           <div style={{ display: 'flex', gap: 4 }}>
             {[0, 1, 2].map(function (i) {
-              var filled = i === 0;
-              return <div key={i} style={{ flex: 1, height: 4, borderRadius: 999, background: filled ? GREEN : '#E8E5F2' }} />;
+              return <div key={i} style={{ flex: 1, height: 4, borderRadius: 999, background: GREEN }} />;
             })}
           </div>
         </div>
@@ -87,39 +89,33 @@ function MeltJourneyScreen({ go }) {
           })}
         </div>
 
-        {/* ── Unlock More ── */}
+        {/* ── Amount unlocked — customer must continue to claim it ── */}
         <div style={{
           marginTop: 20, borderRadius: 20, padding: '18px 18px', position: 'relative', overflow: 'hidden',
-          background: 'linear-gradient(135deg,#FDF3DC,#FFF6E8)', border: '1px solid #EDD899',
+          background: 'linear-gradient(135deg,#E8F8F1 0%,#D4F0E3 100%)', border: '1px solid rgba(31,169,113,0.25)',
         }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
-            <div style={{ width: 50, height: 50, borderRadius: 15, flexShrink: 0, background: 'linear-gradient(135deg,#F5A623,#E8A020)', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 8px 18px rgba(232,160,32,.4)' }}>
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M8 11V8.2A4 4 0 0116 7" stroke="#fff" strokeWidth="2.2" strokeLinecap="round"/><rect x="3" y="11" width="18" height="11" rx="3" fill="rgba(255,255,255,.9)"/><circle cx="12" cy="17" r="2.2" fill="#E8A020"/></svg>
+            <div style={{ width: 50, height: 50, borderRadius: 15, flexShrink: 0, background: 'linear-gradient(135deg,#37B179,#2D9E6B)', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 8px 18px rgba(45,158,107,.4)' }}>
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M8 11V8.2A4 4 0 0116 7" stroke="#fff" strokeWidth="2.2" strokeLinecap="round"/><rect x="3" y="11" width="18" height="11" rx="3" fill="rgba(255,255,255,.9)"/><circle cx="12" cy="17" r="2.2" fill="#2D9E6B"/></svg>
             </div>
             <div style={{ flex: 1 }}>
-              <div style={{ fontSize: 9.5, fontWeight: 700, letterSpacing: 1, color: '#B8882A', marginBottom: 4 }}>UNLOCK MORE</div>
-              <div style={{ fontSize: 14, fontWeight: 700, color: '#5C4212', letterSpacing: -0.1, ...sora }}>+₹3,00,000 on time repayment</div>
+              <div style={{ fontSize: 9.5, fontWeight: 700, letterSpacing: 1, color: '#1A7A4A', marginBottom: 4 }}>₹3,00,000 UNLOCKED</div>
+              <div style={{ fontSize: 14, fontWeight: 700, color: '#14532D', letterSpacing: -0.1, ...sora }}>Verified — continue to receive it in your bank</div>
             </div>
           </div>
-          <div style={{ marginTop: 14 }}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 6 }}>
-              <span style={{ fontSize: 11, fontWeight: 600, color: '#8A6A22' }}>Step 1 repayment</span>
-              <span style={{ fontSize: 11, fontWeight: 700, color: '#B8882A' }}>4 of 10 days</span>
-            </div>
-            <div style={{ height: 5, borderRadius: 999, background: 'rgba(232,160,32,.18)', overflow: 'hidden' }}>
-              <div style={{ height: '100%', width: '40%', borderRadius: 999, background: 'linear-gradient(90deg,#F5A623,#E8A020)' }} />
-            </div>
+          <div style={{ marginTop: 12, fontSize: 11.5, color: '#3F7A66', lineHeight: 1.5 }}>
+            You've been successfully verified and this amount is unlocked. Claim your reward to continue your journey and receive it in your account.
           </div>
         </div>
       </div>
 
       {/* CTA */}
       <BottomBar>
-        <Btn onClick={function () { go('meltbank'); }}>
-          Verify your Payment {Icon.arrowR('#fff')}
+        <Btn onClick={function () { go('reward'); }}>
+          Claim Your Reward {Icon.arrowR('#fff')}
         </Btn>
       </BottomBar>
     </div>
   );
 }
-window.MeltJourneyScreen = MeltJourneyScreen;
+window.MeltJourneyScreen3 = MeltJourneyScreen3;

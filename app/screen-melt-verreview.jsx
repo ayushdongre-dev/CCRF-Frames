@@ -1,6 +1,6 @@
 // screen-melt-verreview.jsx — Verification Review
 
-function MeltVerReviewScreen({ go, meltSelBank, meltPayDate, meltPayAmount, setMeltState, setPdState }) {
+function MeltVerReviewScreen({ go, meltSelBank, meltPayDate, meltPayAmount, setMeltState }) {
   var ink   = '#1B192E';
   var ink2  = '#4B4960';
   var muted = '#8A879B';
@@ -10,7 +10,6 @@ function MeltVerReviewScreen({ go, meltSelBank, meltPayDate, meltPayAmount, setM
   var sora  = { fontFamily: "'Sora',sans-serif" };
 
   function handleApprove() {
-    if (setPdState) setPdState('unlocked');
     go('reward');
   }
 

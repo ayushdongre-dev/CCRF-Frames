@@ -63,7 +63,7 @@ function JourneyContinues({ go }) {
         width: '100%',
       }}>
         <button
-          onClick={function () { go('postdisbursal'); }}
+          onClick={function () { go('home'); }}
           style={{
             width: '100%', height: 52, borderRadius: 15, border: 'none', cursor: 'pointer',
             background: 'rgba(255,255,255,.12)',

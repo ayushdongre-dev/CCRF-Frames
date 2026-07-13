@@ -1,14 +1,16 @@
-// screen-melt-journey.jsx — "Know Your Melt Journey" · premium vertical timeline
-function MeltJourneyScreen({ go }) {
+// screen-melt-journey2.jsx — "Your Melt Status" for Home 2: Verification in Progress
+// Cloned from screen-melt-journey.jsx (the approved Status 1 template). Same
+// layout, spacing and typography — only the timeline states, bottom callout
+// and CTA change to reflect that dues are paid and verification is underway.
+function MeltJourneyScreen2({ go }) {
   var sora = { fontFamily: "'Sora', -apple-system, system-ui, sans-serif" };
   var PRIMARY = 'var(--primary)';
   var GREEN = '#2D9E6B';
-  var AMBER = '#E8A020';
 
   var STEPS = [
     { state: 'done', title: '₹2,00,000 Disbursed', desc: 'Credited directly to your salary account.', tag: 'Step 1' },
-    { state: 'active', title: 'Paid your Card Debts?', desc: 'Settle your outstanding dues to proceed.', tag: '6 days left' },
-    { state: 'upcoming', title: 'Step 2 Unlocks', desc: 'Repay Step 1 on time and ₹3,00,000 opens automatically.', tag: '+₹3,00,000' },
+    { state: 'active', title: 'Verifying Your Documents', desc: "We've received your documents and are confirming everything.", tag: 'In progress' },
+    { state: 'upcoming', title: 'Step 2 Unlocks', desc: 'Once verified, ₹3,00,000 opens automatically.', tag: '+₹3,00,000' },
   ];
 
   return (
@@ -16,7 +18,7 @@ function MeltJourneyScreen({ go }) {
 
       {/* nav */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 16px 4px', flexShrink: 0 }}>
-        <button onClick={function () { go('home'); }} style={{ width: 38, height: 38, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'none', border: 'none', cursor: 'pointer' }}>
+        <button onClick={function () { go('home2'); }} style={{ width: 38, height: 38, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'none', border: 'none', cursor: 'pointer' }}>
           {Icon.back('var(--ink)')}
         </button>
         <span style={{ fontWeight: 700, fontSize: 15.5, color: 'var(--ink)', letterSpacing: -0.2, ...sora }}>Your Melt Status</span>
@@ -32,11 +34,11 @@ function MeltJourneyScreen({ go }) {
         }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 8 }}>
             <span style={{ fontSize: 12.5, fontWeight: 700, color: 'var(--ink)', letterSpacing: -0.1, ...sora }}>Your Melt Journey</span>
-            <span style={{ fontSize: 10.5, fontWeight: 800, color: PRIMARY, background: 'var(--primary-l)', borderRadius: 999, padding: '2px 8px', flexShrink: 0, ...sora }}>Step 1 of 3</span>
+            <span style={{ fontSize: 10.5, fontWeight: 800, color: PRIMARY, background: 'var(--primary-l)', borderRadius: 999, padding: '2px 8px', flexShrink: 0, ...sora }}>Step 2 of 3</span>
           </div>
           <div style={{ display: 'flex', gap: 4 }}>
             {[0, 1, 2].map(function (i) {
-              var filled = i === 0;
+              var filled = i <= 1;
               return <div key={i} style={{ flex: 1, height: 4, borderRadius: 999, background: filled ? GREEN : '#E8E5F2' }} />;
             })}
           </div>
@@ -60,7 +62,10 @@ function MeltJourneyScreen({ go }) {
                     {done ? (
                       <svg width="12" height="12" viewBox="0 0 14 14" fill="none"><path d="M3 7l3 3 5-5" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
                     ) : active ? (
-                      <div style={{ width: 8, height: 8, borderRadius: 999, background: '#fff' }} />
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" style={{ animation: 'spin 1s linear infinite' }}>
+                        <circle cx="12" cy="12" r="9" stroke="rgba(255,255,255,.3)" strokeWidth="2.4" />
+                        <path d="M12 3a9 9 0 019 9" stroke="#fff" strokeWidth="2.4" strokeLinecap="round" />
+                      </svg>
                     ) : (
                       <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#A7A2C4" strokeWidth="2.4" strokeLinecap="round"><rect x="4" y="10" width="16" height="12" rx="2"/><path d="M8 10V7a4 4 0 018 0v3"/></svg>
                     )}
@@ -87,39 +92,40 @@ function MeltJourneyScreen({ go }) {
           })}
         </div>
 
-        {/* ── Unlock More ── */}
+        {/* ── Verification status ── */}
         <div style={{
           marginTop: 20, borderRadius: 20, padding: '18px 18px', position: 'relative', overflow: 'hidden',
-          background: 'linear-gradient(135deg,#FDF3DC,#FFF6E8)', border: '1px solid #EDD899',
+          background: 'linear-gradient(135deg,#F2F0FE,#EAE6FD)', border: '1px solid #D9D2F7',
         }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
-            <div style={{ width: 50, height: 50, borderRadius: 15, flexShrink: 0, background: 'linear-gradient(135deg,#F5A623,#E8A020)', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 8px 18px rgba(232,160,32,.4)' }}>
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M8 11V8.2A4 4 0 0116 7" stroke="#fff" strokeWidth="2.2" strokeLinecap="round"/><rect x="3" y="11" width="18" height="11" rx="3" fill="rgba(255,255,255,.9)"/><circle cx="12" cy="17" r="2.2" fill="#E8A020"/></svg>
+            <div style={{ width: 50, height: 50, borderRadius: 15, flexShrink: 0, background: 'linear-gradient(135deg,#8B6FF0,#5B3FD4)', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 8px 18px rgba(91,63,212,.4)' }}>
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" style={{ animation: 'spin 1.4s linear infinite' }}>
+                <circle cx="12" cy="12" r="9" stroke="rgba(255,255,255,.35)" strokeWidth="2.6" />
+                <path d="M12 3a9 9 0 019 9" stroke="#fff" strokeWidth="2.6" strokeLinecap="round" />
+              </svg>
             </div>
             <div style={{ flex: 1 }}>
-              <div style={{ fontSize: 9.5, fontWeight: 700, letterSpacing: 1, color: '#B8882A', marginBottom: 4 }}>UNLOCK MORE</div>
-              <div style={{ fontSize: 14, fontWeight: 700, color: '#5C4212', letterSpacing: -0.1, ...sora }}>+₹3,00,000 on time repayment</div>
+              <div style={{ fontSize: 9.5, fontWeight: 700, letterSpacing: 1, color: '#7A5FD1', marginBottom: 4 }}>VERIFICATION IN PROGRESS</div>
+              <div style={{ fontSize: 14, fontWeight: 700, color: '#3D2A9C', letterSpacing: -0.1, ...sora }}>We'll notify you the moment it's done</div>
             </div>
           </div>
-          <div style={{ marginTop: 14 }}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 6 }}>
-              <span style={{ fontSize: 11, fontWeight: 600, color: '#8A6A22' }}>Step 1 repayment</span>
-              <span style={{ fontSize: 11, fontWeight: 700, color: '#B8882A' }}>4 of 10 days</span>
-            </div>
-            <div style={{ height: 5, borderRadius: 999, background: 'rgba(232,160,32,.18)', overflow: 'hidden' }}>
-              <div style={{ height: '100%', width: '40%', borderRadius: 999, background: 'linear-gradient(90deg,#F5A623,#E8A020)' }} />
-            </div>
+          <div style={{ marginTop: 12, fontSize: 11.5, color: '#6A5CA8', lineHeight: 1.5 }}>
+            No action needed from you right now — verification usually completes within 24 hours.
           </div>
         </div>
       </div>
 
       {/* CTA */}
       <BottomBar>
-        <Btn onClick={function () { go('meltbank'); }}>
-          Verify your Payment {Icon.arrowR('#fff')}
-        </Btn>
+        <button onClick={function () { go('home2'); }} style={{
+          width: '100%', height: 54, borderRadius: 16, border: '1.5px solid var(--line)', background: '#fff',
+          color: 'var(--ink-2)', fontWeight: 700, fontSize: 15.5, ...sora,
+          display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, cursor: 'pointer',
+        }}>
+          Back to Home
+        </button>
       </BottomBar>
     </div>
   );
 }
-window.MeltJourneyScreen = MeltJourneyScreen;
+window.MeltJourneyScreen2 = MeltJourneyScreen2;

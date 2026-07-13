@@ -89,7 +89,7 @@ function NewLoanScreen({ go }) {
     <div style={{ minHeight: '100%', display: 'flex', flexDirection: 'column', background: '#fff', animation: 'fadeIn .25s' }}>
       {/* Header */}
       <div style={{ position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '8px 16px 10px', flexShrink: 0 }}>
-        <button onClick={function(){ go('postdisbursal'); }} style={{ position: 'absolute', left: 16, top: 5, width: 38, height: 38, borderRadius: 999, border: '1.5px solid #C7C4F2', background: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <button onClick={function(){ go('home'); }} style={{ position: 'absolute', left: 16, top: 5, width: 38, height: 38, borderRadius: 999, border: '1.5px solid #C7C4F2', background: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M3 11l9-7 9 7" stroke="#5B5BD6" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" /><path d="M5 9.5V20h5v-5h4v5h5V9.5" stroke="#5B5BD6" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" /></svg>
         </button>
         <div style={{ textAlign: 'center' }}>
