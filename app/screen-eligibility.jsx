@@ -135,8 +135,7 @@ function MeltJourneyAnim() {
       push(function() { setMelt('hidden'); }, 13780);
       push(function() { setBankAmt(300000); setBankGlow(true); }, 13940);
       push(function() { setBankGlow(false); }, 14700);
-
-      push(loop, 16000);
+      // stop here — no re-loop. The animation plays once and settles on step 3.
     }
 
     loop();
@@ -234,15 +233,36 @@ function MeltJourneyAnim() {
           <div style={{ fontSize: 11, color: '#8A879B', marginTop: 3, fontWeight: 500 }}>{HIW_STEPS[step].sub}</div>
         </div>
 
-        {/* step dots */}
-        <div style={{ display: 'flex', justifyContent: 'center', gap: 6, marginTop: 14 }}>
+        {/* step tabs — numbered, clearly labelled, done/active/upcoming states */}
+        <div style={{ display: 'flex', gap: 6, marginTop: 16 }}>
           {[0, 1, 2].map(function(i) {
-            return <div key={i} style={{
-              width: i === step ? 20 : 6, height: 6, borderRadius: 999,
-              background: i === step ? 'linear-gradient(90deg,#8B6FF0,' + HIW_ACCENT + ')' : '#E2DFEF',
-              boxShadow: i === step ? '0 1px 4px rgba(91,63,212,.4)' : 'none',
-              transition: 'all .3s',
-            }} />;
+            var done = i < step, active = i === step;
+            return (
+              <div key={i} style={{
+                flex: 1, borderRadius: 12, padding: '8px 6px', textAlign: 'center',
+                background: active ? 'linear-gradient(150deg,#8B6FF0,' + HIW_ACCENT + ')' : done ? '#EFECFB' : '#F4F3FB',
+                border: active ? 'none' : '1px solid ' + (done ? '#DCD5F5' : '#E9E7F2'),
+                boxShadow: active ? '0 6px 16px -6px rgba(91,63,212,.5)' : 'none',
+                transition: 'all .3s',
+              }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 5 }}>
+                  <span style={{
+                    width: 16, height: 16, borderRadius: 999, flexShrink: 0,
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    background: active ? 'rgba(255,255,255,.22)' : done ? HIW_ACCENT : '#D6D2EA',
+                    fontSize: 9, fontWeight: 800, color: active ? '#fff' : done ? '#fff' : '#9490AE',
+                  }}>
+                    {done ? (
+                      <svg width="8" height="8" viewBox="0 0 14 14" fill="none"><path d="M3 7l3 3 5-5" stroke="#fff" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                    ) : (i + 1)}
+                  </span>
+                  <span style={{
+                    fontSize: 10.5, fontWeight: 800, letterSpacing: 0.1, fontFamily: "'Sora',sans-serif",
+                    color: active ? '#fff' : done ? HIW_ACCENT : '#9490AE',
+                  }}>Step {i + 1}</span>
+                </div>
+              </div>
+            );
           })}
         </div>
       </div>
