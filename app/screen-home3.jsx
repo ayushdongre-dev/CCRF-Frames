@@ -35,13 +35,13 @@ function HomeScreen3({ go, meltState }) {
 
       <div style={{ flex: 1, padding: '14px 18px 26px', display: 'flex', flexDirection: 'column', gap: 14 }}>
 
-        {/* ── HERO — celebration card, direct CTA to claim reward ── */}
+        {/* ── HERO — approved & unlocked, direct CTA to claim reward ── */}
         <button
           onClick={function () { go('reward'); }}
           style={{
             textAlign: 'left', border: 'none', cursor: 'pointer', padding: 0,
             borderRadius: 24, overflow: 'hidden', position: 'relative',
-            background: 'linear-gradient(150deg,#1A1438 0%,#2A1F5E 45%,#3D2A9C 75%,#5B3FD4 100%)',
+            background: 'linear-gradient(150deg,#1A1438 0%,#241B54 55%,#3B2C8C 100%)',
             boxShadow: '0 22px 46px -18px rgba(26,20,56,.55)',
             transition: 'transform .15s',
           }}
@@ -49,45 +49,34 @@ function HomeScreen3({ go, meltState }) {
           onMouseUp={function (e) { e.currentTarget.style.transform = 'scale(1)'; }}
           onMouseLeave={function (e) { e.currentTarget.style.transform = 'scale(1)'; }}
         >
-          <div style={{ position: 'absolute', top: -50, right: -40, width: 190, height: 190, borderRadius: '50%', background: 'radial-gradient(circle, rgba(139,111,240,.6) 0%, transparent 70%)', pointerEvents: 'none' }} />
-          <div style={{ position: 'absolute', bottom: -60, left: -30, width: 160, height: 160, borderRadius: '50%', background: 'radial-gradient(circle, rgba(45,158,107,.28) 0%, transparent 70%)', pointerEvents: 'none' }} />
+          <div style={{ position: 'absolute', top: -50, right: -40, width: 190, height: 190, borderRadius: '50%', background: 'radial-gradient(circle, rgba(127,85,223,.5) 0%, transparent 70%)', pointerEvents: 'none' }} />
 
-          {/* confetti flecks — subtle, celebratory, not distracting */}
-          {[
-            { top: 14, left: '18%', c: '#FFD76A', r: -18 },
-            { top: 22, left: '82%', c: '#8B6FF0', r: 14 },
-            { top: 44, left: '92%', c: '#5DD79E', r: -8 },
-            { top: 10, left: '48%', c: '#FF8AAE', r: 22 },
-          ].map(function (d, i) {
-            return <div key={i} style={{ position: 'absolute', top: d.top, left: d.left, width: 6, height: 6, borderRadius: 2, background: d.c, opacity: 0.85, transform: 'rotate(' + d.r + 'deg)', pointerEvents: 'none' }} />;
-          })}
-
-          <div style={{ position: 'relative', padding: '22px 20px 20px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 14 }}>
+          <div style={{ position: 'relative', padding: '20px 20px 18px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                <div style={{ width: 32, height: 32, borderRadius: 999, background: 'linear-gradient(150deg,#FFDD8C,#E8A020)', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 4px 12px -2px rgba(232,160,32,.5)' }}>
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 2l2.4 6.6L21 11l-6.6 2.4L12 20l-2.4-6.6L3 11l6.6-2.4L12 2z" fill="#fff"/></svg>
+                <div style={{ width: 30, height: 30, borderRadius: 10, background: 'rgba(255,255,255,.12)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M8 11V8.2A4 4 0 0116 7" stroke="#fff" strokeWidth="2" strokeLinecap="round"/><rect x="3" y="11" width="18" height="11" rx="3" fill="#fff"/><circle cx="12" cy="17" r="1.4" fill="#241B54"/></svg>
                 </div>
-                <span style={{ fontSize: 14.5, fontWeight: 700, color: '#fff', letterSpacing: -0.2, ...sora }}>Congratulations!</span>
+                <span style={{ fontSize: 14.5, fontWeight: 700, color: '#fff', letterSpacing: -0.2, ...sora }}>Round 2 Unlocked</span>
               </div>
-              <span style={{ fontSize: 10.5, fontWeight: 700, color: '#8FE3B8', background: 'rgba(45,158,107,.22)', border: '1px solid rgba(93,215,158,.35)', borderRadius: 999, padding: '3px 9px', whiteSpace: 'nowrap' }}>Approved</span>
+              <span style={{ fontSize: 10.5, fontWeight: 700, color: '#8FE3B8', background: 'rgba(45,158,107,.2)', border: '1px solid rgba(93,215,158,.3)', borderRadius: 999, padding: '3px 9px', whiteSpace: 'nowrap' }}>Approved</span>
             </div>
 
-            <div style={{ fontSize: 21, fontWeight: 800, color: '#fff', letterSpacing: -0.6, lineHeight: 1.2, marginBottom: 6, ...sora }}>
-              ₹3,00,000 more unlocked
+            <div style={{ fontSize: 26, fontWeight: 800, color: '#fff', letterSpacing: -0.8, lineHeight: 1.1, marginBottom: 6, ...sora }}>
+              ₹3,00,000
             </div>
 
-            <div style={{ fontSize: 12.5, color: 'rgba(255,255,255,.65)', fontWeight: 500, lineHeight: 1.45, marginBottom: 18 }}>
-              You've successfully cleared Round 1. Claim your reward now to move this amount into your bank account.
+            <div style={{ fontSize: 12.5, color: 'rgba(255,255,255,.62)', fontWeight: 500, lineHeight: 1.45, marginBottom: 18 }}>
+              Round 1 is fully cleared. Your next amount is approved — claim it to move the funds into your bank account.
             </div>
 
-            <div style={{
-              display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
-              background: '#fff', borderRadius: 14, padding: '13px 16px',
-              boxShadow: '0 8px 20px -6px rgba(0,0,0,.3)',
-            }}>
-              <span style={{ fontSize: 14, fontWeight: 800, color: '#3D2A9C', letterSpacing: -0.1, ...sora }}>Claim Your Reward</span>
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M5 12h13m0 0l-5-5m5 5l-5 5" stroke="#3D2A9C" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"/></svg>
+            <div style={{ height: 1, background: 'rgba(255,255,255,.12)', marginBottom: 16 }} />
+
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <span style={{ fontSize: 13, fontWeight: 700, color: '#fff', ...sora }}>Claim Your Reward</span>
+              <div style={{ width: 30, height: 30, borderRadius: 999, background: 'rgba(255,255,255,.14)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M5 12h13m0 0l-5-5m5 5l-5 5" stroke="#fff" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+              </div>
             </div>
           </div>
         </button>
