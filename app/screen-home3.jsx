@@ -35,7 +35,7 @@ function HomeScreen3({ go, meltState }) {
 
       <div style={{ flex: 1, padding: '14px 18px 26px', display: 'flex', flexDirection: 'column', gap: 14 }}>
 
-        {/* ── HERO — approved & unlocked, direct CTA to claim reward ── */}
+        {/* ── HERO — approved & unlocked, single clear CTA to continue ── */}
         <button
           onClick={function () { go('reward'); }}
           style={{
@@ -67,16 +67,15 @@ function HomeScreen3({ go, meltState }) {
             </div>
 
             <div style={{ fontSize: 12.5, color: 'rgba(255,255,255,.62)', fontWeight: 500, lineHeight: 1.45, marginBottom: 18 }}>
-              Round 1 is fully cleared. Your next amount is approved — claim it to move the funds into your bank account.
+              Round 1 is fully cleared. Your next amount is approved and ready — continue to move it into your bank account.
             </div>
 
-            <div style={{ height: 1, background: 'rgba(255,255,255,.12)', marginBottom: 16 }} />
-
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-              <span style={{ fontSize: 13, fontWeight: 700, color: '#fff', ...sora }}>Claim Your Reward</span>
-              <div style={{ width: 30, height: 30, borderRadius: 999, background: 'rgba(255,255,255,.14)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M5 12h13m0 0l-5-5m5 5l-5 5" stroke="#fff" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"/></svg>
-              </div>
+            <div style={{
+              display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
+              background: '#fff', borderRadius: 14, padding: '13px 16px',
+            }}>
+              <span style={{ fontSize: 14, fontWeight: 800, color: '#3D2A9C', letterSpacing: -0.1, ...sora }}>Continue</span>
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M5 12h13m0 0l-5-5m5 5l-5 5" stroke="#3D2A9C" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"/></svg>
             </div>
           </div>
         </button>
@@ -115,7 +114,7 @@ function HomeScreen3({ go, meltState }) {
           </div>
         </div>
 
-        {/* ── ACTION CARDS — styled to clearly read as tappable CTAs ── */}
+        {/* ── ACTION CARDS — clear, plain-language, tied to this stage ── */}
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
           <button onClick={function () { go('reward'); }} style={{
             textAlign: 'left', border: '1px solid var(--line)', cursor: 'pointer', background: '#fff',
@@ -126,19 +125,19 @@ function HomeScreen3({ go, meltState }) {
             onMouseUp={function (e) { e.currentTarget.style.transform = 'scale(1)'; }}
             onMouseLeave={function (e) { e.currentTarget.style.transform = 'scale(1)'; }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-              <div style={{ width: 38, height: 38, borderRadius: 12, background: 'var(--primary-l)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round"><path d="M13 2L4 14h6l-1 8 9-12h-6l1-8z"/></svg>
+              <div style={{ width: 38, height: 38, borderRadius: 12, background: 'var(--green-l)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--green)" strokeWidth="1.9" strokeLinecap="round"><path d="M8 11V8.2A4 4 0 0116 7"/><rect x="3" y="11" width="18" height="11" rx="3"/><circle cx="12" cy="17" r="1.4" fill="var(--green)" stroke="none"/></svg>
               </div>
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M9 5l7 7-7 7" stroke="#C4C1D9" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"/></svg>
             </div>
             <div>
-              <div style={{ fontSize: 13.5, fontWeight: 700, color: 'var(--ink)' }}>Prepay EMI</div>
-              <div style={{ fontSize: 11, color: 'var(--muted)', lineHeight: 1.4, marginTop: 2 }}>Reduce your tenure or EMI</div>
+              <div style={{ fontSize: 13.5, fontWeight: 700, color: 'var(--ink)' }}>Claim ₹3,00,000</div>
+              <div style={{ fontSize: 11, color: 'var(--muted)', lineHeight: 1.4, marginTop: 2 }}>Your Round 2 amount, ready now</div>
             </div>
-            <div style={{ fontSize: 11.5, fontWeight: 700, color: 'var(--primary)', marginTop: 2 }}>Pay now</div>
+            <div style={{ fontSize: 11.5, fontWeight: 700, color: 'var(--green)', marginTop: 2 }}>Continue</div>
           </button>
 
-          <button onClick={function () { go('reward'); }} style={{
+          <button onClick={function () { go('home'); }} style={{
             textAlign: 'left', border: '1px solid var(--line)', cursor: 'pointer', background: '#fff',
             borderRadius: 18, padding: '15px', boxShadow: '0 1px 3px rgba(0,0,0,.04), 0 6px 16px -8px rgba(40,30,80,.10)',
             display: 'flex', flexDirection: 'column', gap: 8, transition: 'transform .12s',
