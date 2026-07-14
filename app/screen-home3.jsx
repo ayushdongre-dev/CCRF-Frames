@@ -35,13 +35,13 @@ function HomeScreen3({ go, meltState }) {
 
       <div style={{ flex: 1, padding: '14px 18px 26px', display: 'flex', flexDirection: 'column', gap: 14 }}>
 
-        {/* ── HERO — Your Melt Journey ── */}
+        {/* ── HERO — celebration card, direct CTA to claim reward ── */}
         <button
-          onClick={function () { go('meltjourney3'); }}
+          onClick={function () { go('reward'); }}
           style={{
             textAlign: 'left', border: 'none', cursor: 'pointer', padding: 0,
             borderRadius: 24, overflow: 'hidden', position: 'relative',
-            background: 'linear-gradient(150deg,#1A1438 0%,#241B54 55%,#3B2C8C 100%)',
+            background: 'linear-gradient(150deg,#1A1438 0%,#2A1F5E 45%,#3D2A9C 75%,#5B3FD4 100%)',
             boxShadow: '0 22px 46px -18px rgba(26,20,56,.55)',
             transition: 'transform .15s',
           }}
@@ -49,41 +49,45 @@ function HomeScreen3({ go, meltState }) {
           onMouseUp={function (e) { e.currentTarget.style.transform = 'scale(1)'; }}
           onMouseLeave={function (e) { e.currentTarget.style.transform = 'scale(1)'; }}
         >
-          <div style={{ position: 'absolute', top: -50, right: -40, width: 190, height: 190, borderRadius: '50%', background: 'radial-gradient(circle, rgba(127,85,223,.55) 0%, transparent 70%)', pointerEvents: 'none' }} />
+          <div style={{ position: 'absolute', top: -50, right: -40, width: 190, height: 190, borderRadius: '50%', background: 'radial-gradient(circle, rgba(139,111,240,.6) 0%, transparent 70%)', pointerEvents: 'none' }} />
+          <div style={{ position: 'absolute', bottom: -60, left: -30, width: 160, height: 160, borderRadius: '50%', background: 'radial-gradient(circle, rgba(45,158,107,.28) 0%, transparent 70%)', pointerEvents: 'none' }} />
 
-          <div style={{ position: 'relative', padding: '20px 20px 18px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
+          {/* confetti flecks — subtle, celebratory, not distracting */}
+          {[
+            { top: 14, left: '18%', c: '#FFD76A', r: -18 },
+            { top: 22, left: '82%', c: '#8B6FF0', r: 14 },
+            { top: 44, left: '92%', c: '#5DD79E', r: -8 },
+            { top: 10, left: '48%', c: '#FF8AAE', r: 22 },
+          ].map(function (d, i) {
+            return <div key={i} style={{ position: 'absolute', top: d.top, left: d.left, width: 6, height: 6, borderRadius: 2, background: d.c, opacity: 0.85, transform: 'rotate(' + d.r + 'deg)', pointerEvents: 'none' }} />;
+          })}
+
+          <div style={{ position: 'relative', padding: '22px 20px 20px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 14 }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                <div style={{ width: 30, height: 30, borderRadius: 10, background: 'rgba(255,255,255,.12)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <span style={{ fontSize: 15, fontWeight: 900, color: '#fff', ...sora }}>M</span>
+                <div style={{ width: 32, height: 32, borderRadius: 999, background: 'linear-gradient(150deg,#FFDD8C,#E8A020)', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 4px 12px -2px rgba(232,160,32,.5)' }}>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 2l2.4 6.6L21 11l-6.6 2.4L12 20l-2.4-6.6L3 11l6.6-2.4L12 2z" fill="#fff"/></svg>
                 </div>
-                <span style={{ fontSize: 14.5, fontWeight: 700, color: '#fff', letterSpacing: -0.2, ...sora }}>Your Melt Journey</span>
+                <span style={{ fontSize: 14.5, fontWeight: 700, color: '#fff', letterSpacing: -0.2, ...sora }}>Congratulations!</span>
               </div>
-              <span style={{ fontSize: 10.5, fontWeight: 700, color: '#C4B5FD', background: 'rgba(127,85,223,.28)', border: '1px solid rgba(196,181,253,.3)', borderRadius: 999, padding: '3px 9px', whiteSpace: 'nowrap' }}>Unlocked</span>
+              <span style={{ fontSize: 10.5, fontWeight: 700, color: '#8FE3B8', background: 'rgba(45,158,107,.22)', border: '1px solid rgba(93,215,158,.35)', borderRadius: 999, padding: '3px 9px', whiteSpace: 'nowrap' }}>Approved</span>
             </div>
 
-            <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8 }}>
-              <svg width="15" height="15" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="7" fill="#2D9E6B"/><path d="M4 7l2 2 4-4" stroke="#fff" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/></svg>
-              <span style={{ fontSize: 14.5, fontWeight: 800, color: '#fff', letterSpacing: -0.3, ...sora }}>₹3,00,000 More Unlocked!</span>
+            <div style={{ fontSize: 21, fontWeight: 800, color: '#fff', letterSpacing: -0.6, lineHeight: 1.2, marginBottom: 6, ...sora }}>
+              ₹3,00,000 more unlocked
             </div>
 
-            <div style={{ fontSize: 12.5, color: 'rgba(255,255,255,.62)', fontWeight: 500, lineHeight: 1.4, marginBottom: 16 }}>
-              You've been successfully approved — your next amount is unlocked and ready.
+            <div style={{ fontSize: 12.5, color: 'rgba(255,255,255,.65)', fontWeight: 500, lineHeight: 1.45, marginBottom: 18 }}>
+              You've successfully cleared Round 1. Claim your reward now to move this amount into your bank account.
             </div>
 
-            {/* minimal progress indicator */}
-            <div style={{ display: 'flex', gap: 5, marginBottom: 16 }}>
-              {[0, 1, 2].map(function (i) {
-                return <div key={i} style={{ flex: 1, height: 4, borderRadius: 999, background: 'linear-gradient(90deg,#8B6FF0,#C4B5FD)' }} />;
-              })}
-            </div>
-
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-
-              <span style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 13, fontWeight: 700, color: '#fff', ...sora }}>
-                View Your Melt Journey
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M5 12h13m0 0l-5-5m5 5l-5 5" stroke="#fff" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"/></svg>
-              </span>
+            <div style={{
+              display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
+              background: '#fff', borderRadius: 14, padding: '13px 16px',
+              boxShadow: '0 8px 20px -6px rgba(0,0,0,.3)',
+            }}>
+              <span style={{ fontSize: 14, fontWeight: 800, color: '#3D2A9C', letterSpacing: -0.1, ...sora }}>Claim Your Reward</span>
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M5 12h13m0 0l-5-5m5 5l-5 5" stroke="#3D2A9C" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"/></svg>
             </div>
           </div>
         </button>
@@ -124,7 +128,7 @@ function HomeScreen3({ go, meltState }) {
 
         {/* ── ACTION CARDS — styled to clearly read as tappable CTAs ── */}
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
-          <button onClick={function () { go('meltjourney3'); }} style={{
+          <button onClick={function () { go('reward'); }} style={{
             textAlign: 'left', border: '1px solid var(--line)', cursor: 'pointer', background: '#fff',
             borderRadius: 18, padding: '15px', boxShadow: '0 1px 3px rgba(0,0,0,.04), 0 6px 16px -8px rgba(40,30,80,.10)',
             display: 'flex', flexDirection: 'column', gap: 8, transition: 'transform .12s',
@@ -145,7 +149,7 @@ function HomeScreen3({ go, meltState }) {
             <div style={{ fontSize: 11.5, fontWeight: 700, color: 'var(--primary)', marginTop: 2 }}>Pay now</div>
           </button>
 
-          <button onClick={function () { go('meltjourney3'); }} style={{
+          <button onClick={function () { go('reward'); }} style={{
             textAlign: 'left', border: '1px solid var(--line)', cursor: 'pointer', background: '#fff',
             borderRadius: 18, padding: '15px', boxShadow: '0 1px 3px rgba(0,0,0,.04), 0 6px 16px -8px rgba(40,30,80,.10)',
             display: 'flex', flexDirection: 'column', gap: 8, transition: 'transform .12s',
