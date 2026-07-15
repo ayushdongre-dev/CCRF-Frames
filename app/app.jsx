@@ -6,9 +6,9 @@ const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
   "ccrfRate": 22
 }/*EDITMODE-END*/;
 
-const ORDER = ['home', 'home2', 'home3', 'meltjourney', 'meltjourney2', 'multioffer', 'selling', 'savings', 'cards', 'eligibility', 'visualise', 'amountselect', 'revisedoffer', 'journeycontinues', 'meltbank', 'meltpayment', 'verifying', 'meltnotfound', 'verreview', 'meltstatus', 'reward', 'newloan', 'success'];
+const ORDER = ['home', 'home2', 'home3', 'home4', 'meltjourney', 'meltjourney2', 'multioffer', 'selling', 'savings', 'cards', 'eligibility', 'visualise', 'amountselect', 'revisedoffer', 'journeycontinues', 'meltbank', 'meltpayment', 'verifying', 'meltnotfound', 'verreview', 'meltstatus', 'reward', 'newloan', 'success'];
 const LABELS = {
-  home: 'Home 1', home2: 'Home 2', home3: 'Home 3', meltjourney: 'Melt Status 1', meltjourney2: 'Melt Status 2', multioffer: 'Multi Offer', selling: 'General Selling', savings: 'Savings', cards: 'Card Selection',
+  home: 'Home 1', home2: 'Home 2', home3: 'Home 3', home4: 'Home 4', meltjourney: 'Melt Status 1', meltjourney2: 'Melt Status 2', multioffer: 'Multi Offer', selling: 'General Selling', savings: 'Savings', cards: 'Card Selection',
   eligibility: 'Eligibility', visualise: 'Visualise', amountselect: 'Amount', revisedoffer: 'Final Offer',
   journeycontinues: 'Journey', meltbank: 'Bank Account', meltpayment: 'Payment Details',
   verifying: 'Verifying', meltnotfound: 'Not Found', verreview: 'Ver. Review', meltstatus: 'Melt Status', reward: 'Reward', newloan: 'New Loan', success: 'Done',
@@ -63,6 +63,7 @@ function App() {
       case 'home': return <HomeScreen go={go} meltState={meltState} />;
       case 'home2': return <HomeScreen2 go={go} meltState={meltState} />;
       case 'home3': return <HomeScreen3 go={go} meltState={meltState} />;
+      case 'home4': return <HomeScreen4 go={go} meltState={meltState} />;
       case 'meltjourney': return <MeltJourneyScreen go={go} />;
       case 'meltjourney2': return <MeltJourneyScreen2 go={go} />;
       case 'multioffer': return <MultiOffer go={go} />;
@@ -90,7 +91,7 @@ function App() {
   const light = route === 'selling';
   const bg = route === 'savings' ? '#F7F7FC'
     : (route === 'eligibility') ? '#F7F7FB'
-      : (route === 'home' || route === 'home2' || route === 'home3' || route === 'meltjourney' || route === 'meltjourney2') ? '#FFFFFF'
+      : (route === 'home' || route === 'home2' || route === 'home3' || route === 'home4' || route === 'meltjourney' || route === 'meltjourney2') ? '#FFFFFF'
       : (route === 'multioffer' || route === 'amountselect' || route === 'revisedoffer') ? '#FFFFFF'
         : (route === 'selling' || route === 'visualise' || route === 'success') ? '#EFEEFE'
           : (route === 'meltbank' || route === 'meltpayment' || route === 'verifying' || route === 'meltnotfound' || route === 'verreview' || route === 'meltstatus' || route === 'reward' || route === 'newloan') ? '#FFFFFF'
