@@ -117,13 +117,9 @@ function MeltJourneyScreen2({ go }) {
 
       {/* CTA */}
       <BottomBar>
-        <button onClick={function () { go('verifying'); }} style={{
-          width: '100%', height: 54, borderRadius: 16, border: '1.5px solid var(--line)', background: '#fff',
-          color: 'var(--ink-2)', fontWeight: 700, fontSize: 15.5, ...sora,
-          display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, cursor: 'pointer',
-        }}>
-          Check Verification Status
-        </button>
+        <Btn onClick={function () { go('verifying'); }}>
+          Check Verification Status {Icon.arrowR('#fff')}
+        </Btn>
       </BottomBar>
     </div>
   );
