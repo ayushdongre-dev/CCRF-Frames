@@ -598,6 +598,7 @@ function Eligibility({ go }) {
           onMouseLeave={e => e.currentTarget.style.transform = 'scale(1)'}>
           Continue {Icon.arrowR('#fff')}
         </button>
+        <BackToCashLoanLink onConfirm={() => go('multioffer')} style={{ marginTop: 12 }} />
       </div>
 
       {showHIW && <HowItWorksModal onClose={() => setShowHIW(false)} />}

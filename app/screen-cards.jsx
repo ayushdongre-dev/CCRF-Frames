@@ -103,6 +103,7 @@ function CardSelection({ go, selected, setSelected, showLogos }) {
           </div>
         </div>
         <Btn onClick={() => selected.length && go('eligibility')} style={{ opacity: selected.length ? 1 : 0.5 }}>Confirm selection</Btn>
+        <BackToCashLoanLink onConfirm={() => go('multioffer')} style={{ marginTop: 12 }} />
         <div style={{ fontSize: 10.5, color: 'var(--muted)', textAlign: 'center', marginTop: 10, lineHeight: 1.4 }}>
           Estimated offer is not final and is subject to credit approval based on verified income.
         </div>

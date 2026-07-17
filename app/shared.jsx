@@ -207,4 +207,77 @@ function BottomBar({ children, bg = 'rgba(244,243,251,.86)' }) {
   );
 }
 
-Object.assign(window, { useState, useEffect, useRef, useCallback, inr, lakh, BANKS, BankLogo, EquallMark, Icon, Btn, Chip, StatusBar, Phone, BottomBar });
+// ── "Back to Cash Loan" exit link + warning confirmation ────
+// A plain-text link meant to sit just below a page's main CTA. Tapping it
+// never navigates immediately — it always confirms first, since leaving this
+// journey is a one-way door (the card-debt journey can't be resumed).
+function BackToCashLoanLink({ onConfirm, style = {} }) {
+  const [open, setOpen] = useState(false);
+  return (
+    <>
+      <button onClick={() => setOpen(true)} style={{
+        display: 'block', width: '100%', textAlign: 'center',
+        fontSize: 13.5, fontWeight: 700, color: 'var(--primary)', background: 'none', border: 'none', cursor: 'pointer',
+        ...style,
+      }}>Back to Cash Loan</button>
+      {open && <BackToCashLoanWarning onClose={() => setOpen(false)} onConfirm={onConfirm} />}
+    </>
+  );
+}
+
+function BackToCashLoanWarning({ onClose, onConfirm }) {
+  const sora = { fontFamily: "'Sora', -apple-system, system-ui, sans-serif" };
+
+  // Portalled to the phone frame's own fixed-size container (sibling of the
+  // scrollable page content), not `position: fixed` to the browser viewport —
+  // the phone frame is itself transform-scaled and the page content scrolls
+  // independently, so a plain fixed/absolute overlay either gets clipped by
+  // the phone's rounded-corner mask or centers on the wrong (scrolled) box.
+  // This mirrors the same portal target used by the bottom sheets in
+  // screen-selling.jsx, which is the one proven way an overlay reliably
+  // covers the full visible phone screen regardless of scroll position.
+  const portalContainer = typeof document !== 'undefined' ? document.getElementById('phone-scroll-viewport')?.parentNode : null;
+  if (!portalContainer) return null;
+
+  return ReactDOM.createPortal(
+    <div style={{
+      position: 'absolute', inset: 0, zIndex: 999, display: 'flex', alignItems: 'center', justifyContent: 'center',
+      padding: 24, background: 'rgba(20,16,32,.55)', backdropFilter: 'blur(3px)', animation: 'fadeIn .18s',
+    }} onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}>
+      <div style={{
+        width: '100%', maxWidth: 340, background: '#fff', borderRadius: 24, padding: '26px 22px 22px',
+        boxShadow: '0 30px 70px -20px rgba(10,8,28,.55)', animation: 'popIn .28s cubic-bezier(.2,1.1,.4,1) both', textAlign: 'center',
+      }}>
+        <div style={{
+          width: 56, height: 56, borderRadius: 999, margin: '0 auto 16px', background: 'var(--red-l)',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+        }}>
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none">
+            <path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" stroke="var(--red)" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+            <line x1="12" y1="9" x2="12" y2="13" stroke="var(--red)" strokeWidth="2" strokeLinecap="round"/>
+            <line x1="12" y1="17" x2="12.01" y2="17" stroke="var(--red)" strokeWidth="2.4" strokeLinecap="round"/>
+          </svg>
+        </div>
+        <div style={{ fontSize: 17, fontWeight: 800, color: 'var(--ink)', letterSpacing: -0.3, marginBottom: 8, ...sora }}>
+          Leave this journey?
+        </div>
+        <div style={{ fontSize: 13, color: 'var(--ink-2)', lineHeight: 1.55, marginBottom: 22 }}>
+          If you continue, you'll be taken back to the Cash Loan journey. <strong>You won't be able to return to this Clear Card Debt journey.</strong>
+        </div>
+        <div style={{ display: 'flex', gap: 10 }}>
+          <button onClick={onClose} style={{
+            flex: 1, height: 50, borderRadius: 14, border: '1.5px solid var(--line)', cursor: 'pointer',
+            background: '#fff', color: 'var(--ink-2)', fontWeight: 700, fontSize: 15, ...sora,
+          }}>No</button>
+          <button onClick={onConfirm} style={{
+            flex: 1, height: 50, borderRadius: 14, border: 'none', cursor: 'pointer',
+            background: 'var(--red)', color: '#fff', fontWeight: 700, fontSize: 15, ...sora,
+          }}>Yes</button>
+        </div>
+      </div>
+    </div>,
+    portalContainer
+  );
+}
+
+Object.assign(window, { useState, useEffect, useRef, useCallback, inr, lakh, BANKS, BankLogo, EquallMark, Icon, Btn, Chip, StatusBar, Phone, BottomBar, BackToCashLoanLink });
