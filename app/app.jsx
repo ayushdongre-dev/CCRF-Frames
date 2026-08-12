@@ -33,6 +33,8 @@ function App() {
   const [meltSelBank, setMeltSelBank] = useState(null);
   const [meltPayDate, setMeltPayDate] = useState('');
   const [meltPayAmount, setMeltPayAmount] = useState('');
+  const [meltPayments, setMeltPayments] = useState([]); // [{ date, amount }] — customer can log many repayments
+  const CARD_DUE = 200000; // total card dues to clear in tranche 1
 
   const go = useCallback((r) => { setRoute(r); localStorage.setItem('ccrf_route', r); }, []);
 
@@ -75,12 +77,12 @@ function App() {
       case 'amountselect': return <AmountSelection go={go} ccrfRate={t.ccrfRate} />;
       case 'revisedoffer': return <RevisedOffer go={go} ccrfRate={t.ccrfRate} />;
       case 'journeycontinues': return <JourneyContinues go={go} />;
-      case 'meltbank': return <MeltBankAccountScreen go={go} setMeltSelBank={setMeltSelBank} />;
-      case 'meltpayment': return <MeltPaymentScreen go={go} setMeltPayDate={setMeltPayDate} setMeltPayAmount={setMeltPayAmount} />;
+      case 'meltbank': return <MeltBankAccountScreen go={go} setMeltSelBank={setMeltSelBank} cardDue={CARD_DUE} />;
+      case 'meltpayment': return <MeltPaymentScreen go={go} cardDue={CARD_DUE} meltSelBank={meltSelBank} setMeltPayments={setMeltPayments} setMeltPayDate={setMeltPayDate} setMeltPayAmount={setMeltPayAmount} />;
       case 'meltnotfound': return <MeltNotFoundScreen go={go} retryCount={retryCount} setRetryCount={setRetryCount} setMeltState={setMeltState} />;
       case 'meltstatus': return <MeltStatusScreen go={go} meltState={meltState} retryCount={retryCount} setRetryCount={setRetryCount} />;
       case 'verifying': return <VerifyingScreen go={go} verifyAttempt={verifyAttempt} setVerifyAttempt={setVerifyAttempt} setMeltState={setMeltState} />;
-      case 'verreview': return <MeltVerReviewScreen go={go} meltSelBank={meltSelBank} meltPayDate={meltPayDate} meltPayAmount={meltPayAmount} setMeltState={setMeltState} />;
+      case 'verreview': return <MeltVerReviewScreen go={go} meltSelBank={meltSelBank} meltPayDate={meltPayDate} meltPayAmount={meltPayAmount} meltPayments={meltPayments} cardDue={CARD_DUE} setMeltState={setMeltState} />;
       case 'reward': return <RewardScreen go={go} />;
       case 'newloan': return <NewLoanScreen go={go} />;
       case 'success': return <Success go={go} />;
@@ -140,7 +142,7 @@ function App() {
         <TweakSection label="Savings illustration" />
         <TweakSlider label="CCRF rate" value={t.ccrfRate} min={16} max={28} step={1} unit="%"
           onChange={(v) => setTweak('ccrfRate', v)} />
-        <TweakSection label="Melt Tranche 2 (dev)" />
+        <TweakSection label="Melt Part 2 (dev)" />
         <TweakButton label="→ Bank Account" onClick={() => go('meltbank')} />
         <TweakButton label="→ Payment Details" onClick={() => go('meltpayment')} />
         <TweakSection label="Verify flow (dev)" />

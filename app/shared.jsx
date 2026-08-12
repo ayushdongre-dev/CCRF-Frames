@@ -280,4 +280,69 @@ function BackToCashLoanWarning({ onClose, onConfirm }) {
   );
 }
 
-Object.assign(window, { useState, useEffect, useRef, useCallback, inr, lakh, BANKS, BankLogo, EquallMark, Icon, Btn, Chip, StatusBar, Phone, BottomBar, BackToCashLoanLink });
+// ── Repayment-proof flow: shared step header ─────────────────
+// Both steps of the "confirm your repayment" flow (bank account → payments)
+// render the SAME header so the two screens read as one task, not two
+// unrelated forms: same flow name, same step counter, same progress bar.
+function MeltStepHeader({ step = 1, steps = 2, title, flow = 'Payment validation', onBack }) {
+  const sora = { fontFamily: "'Sora',sans-serif" };
+  const ink = '#1B192E', muted = '#8A879B';
+  return (
+    <div style={{ background: '#fff', padding: '12px 16px', flexShrink: 0, borderBottom: '1px solid #F0EEF8' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 10 }}>
+        <button onClick={onBack}
+          style={{ width: 36, height: 36, borderRadius: 12, border: '1.5px solid #ECEAF4', background: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, cursor: 'pointer' }}>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M15 5l-7 7 7 7" stroke={ink} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>
+        </button>
+        <div style={{ flex: 1, minWidth: 0 }}>
+          <div style={{ fontSize: 10, fontWeight: 700, color: muted, letterSpacing: 0.7, textTransform: 'uppercase', marginBottom: 3, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+            {flow} · Step {step} of {steps}
+          </div>
+          <div style={{ fontSize: 16, fontWeight: 800, color: ink, ...sora, lineHeight: 1 }}>{title}</div>
+        </div>
+        <div style={{ display: 'flex', gap: 4, flexShrink: 0 }}>
+          {Array.from({ length: steps }).map((_, i) => (
+            <div key={i} style={{ width: 20, height: 4, borderRadius: 999, background: i < step ? 'var(--primary)' : 'var(--line)' }} />
+          ))}
+        </div>
+      </div>
+      <div style={{ height: 3, background: '#F0EEF8', borderRadius: 999, overflow: 'hidden' }}>
+        <div style={{ width: (step / steps * 100) + '%', height: '100%', background: 'var(--primary)', borderRadius: 999, transition: 'width .3s' }} />
+      </div>
+    </div>
+  );
+}
+
+// ── Repayment-proof flow: shared context strip ───────────────
+// Carries the same two facts across both steps — what has to be cleared, and
+// which account it was cleared from — so step 2 never feels like a fresh start.
+function MeltDuesStrip({ cardDue, bank, note }) {
+  const sora = { fontFamily: "'Sora',sans-serif" };
+  return (
+    <div style={{
+      background: '#fff', border: '1px solid var(--line)', borderRadius: 14,
+      padding: '10px 12px', marginBottom: 18,
+    }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+        <div style={{ width: 34, height: 34, borderRadius: 10, background: 'var(--primary-l)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none"><rect x="3" y="6" width="18" height="13" rx="2.5" stroke="var(--primary)" strokeWidth="1.8" /><path d="M3 10h18" stroke="var(--primary)" strokeWidth="1.8" /></svg>
+        </div>
+        <div style={{ flex: 1, minWidth: 0 }}>
+          <div style={{ fontSize: 10, fontWeight: 700, color: '#8A879B', letterSpacing: 0.6, textTransform: 'uppercase' }}>Your Part 1 loan</div>
+          <div style={{ fontSize: 15, fontWeight: 800, color: '#1B192E', ...sora, letterSpacing: -0.3, marginTop: 2 }}>{inr(cardDue)}</div>
+        </div>
+        {bank && (
+          <div style={{ display: 'flex', alignItems: 'center', gap: 7, background: '#F7F6FC', border: '1px solid var(--line)', borderRadius: 999, padding: '4px 10px 4px 5px', flexShrink: 0 }}>
+            <BankLogo id={bank.bank} size={20} show={!!bank.bank} />
+            <span style={{ fontSize: 11, fontWeight: 700, color: '#4B4960' }}>···· {bank.last4}</span>
+          </div>
+        )}
+      </div>
+      {note && (
+        <div style={{ fontSize: 11.5, color: '#8A879B', lineHeight: 1.45, marginTop: 8, paddingTop: 8, borderTop: '1px solid #F4F2FB' }}>{note}</div>
+      )}
+    </div>
+  );
+}
+
+Object.assign(window, { useState, useEffect, useRef, useCallback, inr, lakh, BANKS, BankLogo, EquallMark, Icon, Btn, Chip, StatusBar, Phone, BottomBar, BackToCashLoanLink, MeltStepHeader, MeltDuesStrip });

@@ -53,7 +53,7 @@ function RevisedOffer({ go }) {
         {/* ── tranche notice (one line) ── */}
         <div style={{ display: 'flex', alignItems: 'center', gap: 9, background: REV.purpleL, border: `1px solid ${REV.purpleBorder}`, borderRadius: 12, padding: '10px 13px', marginTop: 14 }}>
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" style={{ flexShrink: 0 }}><circle cx="12" cy="12" r="9.2" stroke={REV.purple} strokeWidth="1.7" /><path d="M12 11v5M12 7.6h.01" stroke={REV.purple} strokeWidth="2" strokeLinecap="round" /></svg>
-          <span style={{ fontSize: 12, fontWeight: 600, color: REV.ink2, lineHeight: 1.4 }}>Phase 1 of your <b style={{ color: REV.ink }}>₹5,00,000</b> limit — Phase 2 unlocks once you repay.</span>
+          <span style={{ fontSize: 12, fontWeight: 600, color: REV.ink2, lineHeight: 1.4 }}>Part 1 of your <b style={{ color: REV.ink }}>₹5,00,000</b> limit — Part 2 unlocks once you repay.</span>
         </div>
 
         {/* ── select EMI plan ── */}

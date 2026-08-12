@@ -6,9 +6,9 @@ function MeltJourneyScreen({ go }) {
   var AMBER = '#E8A020';
 
   var STEPS = [
-    { state: 'done', title: '₹2,00,000 Disbursed', desc: 'Credited directly to your salary account.', tag: 'Step 1' },
+    { state: 'done', title: '₹2,00,000 Disbursed', desc: 'Credited directly to your salary account.', tag: 'Part 1' },
     { state: 'active', title: 'Paid your Card Debts?', desc: 'Settle your outstanding dues to proceed.', tag: '6 days left' },
-    { state: 'upcoming', title: 'Step 2 Unlocks', desc: 'Repay Step 1 on time and ₹3,00,000 opens automatically.', tag: '+₹3,00,000' },
+    { state: 'upcoming', title: 'Part 2 Unlocks', desc: 'Clear your card bills with Part 1 and ₹3,00,000 opens automatically.', tag: '+₹3,00,000' },
   ];
 
   return (
@@ -103,7 +103,7 @@ function MeltJourneyScreen({ go }) {
           </div>
           <div style={{ marginTop: 14 }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 6 }}>
-              <span style={{ fontSize: 11, fontWeight: 600, color: '#8A6A22' }}>Step 1 repayment</span>
+              <span style={{ fontSize: 11, fontWeight: 600, color: '#8A6A22' }}>Part 1 repayment</span>
               <span style={{ fontSize: 11, fontWeight: 700, color: '#B8882A' }}>4 of 10 days</span>
             </div>
             <div style={{ height: 5, borderRadius: 999, background: 'rgba(232,160,32,.18)', overflow: 'hidden' }}>
@@ -116,7 +116,7 @@ function MeltJourneyScreen({ go }) {
       {/* CTA */}
       <BottomBar>
         <Btn onClick={function () { go('meltbank'); }}>
-          Verify your Payment {Icon.arrowR('#fff')}
+          Validate your payments {Icon.arrowR('#fff')}
         </Btn>
       </BottomBar>
     </div>
