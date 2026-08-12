@@ -316,7 +316,7 @@ function MeltStepHeader({ step = 1, steps = 2, title, flow = 'Payment validation
 // ── Repayment-proof flow: shared context strip ───────────────
 // Carries the same two facts across both steps — what has to be cleared, and
 // which account it was cleared from — so step 2 never feels like a fresh start.
-function MeltDuesStrip({ cardDue, bank, note }) {
+function MeltDuesStrip({ cardDue, bank, note, label = 'Part 1 loan disbursed' }) {
   const sora = { fontFamily: "'Sora',sans-serif" };
   return (
     <div style={{
@@ -328,8 +328,11 @@ function MeltDuesStrip({ cardDue, bank, note }) {
           <svg width="17" height="17" viewBox="0 0 24 24" fill="none"><rect x="3" y="6" width="18" height="13" rx="2.5" stroke="var(--primary)" strokeWidth="1.8" /><path d="M3 10h18" stroke="var(--primary)" strokeWidth="1.8" /></svg>
         </div>
         <div style={{ flex: 1, minWidth: 0 }}>
-          <div style={{ fontSize: 10, fontWeight: 700, color: '#8A879B', letterSpacing: 0.6, textTransform: 'uppercase' }}>Your Part 1 loan</div>
-          <div style={{ fontSize: 15, fontWeight: 800, color: '#1B192E', ...sora, letterSpacing: -0.3, marginTop: 2 }}>{inr(cardDue)}</div>
+          <div style={{ fontSize: 10, fontWeight: 700, color: '#8A879B', letterSpacing: 0.6, textTransform: 'uppercase' }}>{label}</div>
+          <div style={{ display: 'flex', alignItems: 'baseline', gap: 6, marginTop: 2 }}>
+            <span style={{ fontSize: 15, fontWeight: 800, color: '#1B192E', ...sora, letterSpacing: -0.3 }}>{inr(cardDue)}</span>
+            <span style={{ fontSize: 11, fontWeight: 600, color: '#8A879B' }}>credited to you</span>
+          </div>
         </div>
         {bank && (
           <div style={{ display: 'flex', alignItems: 'center', gap: 7, background: '#F7F6FC', border: '1px solid var(--line)', borderRadius: 999, padding: '4px 10px 4px 5px', flexShrink: 0 }}>
