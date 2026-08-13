@@ -98,14 +98,14 @@ function MeltJourneyScreen({ go, salaryAcc }) {
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M8 11V8.2A4 4 0 0116 7" stroke="#fff" strokeWidth="2.2" strokeLinecap="round"/><rect x="3" y="11" width="18" height="11" rx="3" fill="rgba(255,255,255,.9)"/><circle cx="12" cy="17" r="2.2" fill="#E8A020"/></svg>
             </div>
             <div style={{ flex: 1 }}>
-              <div style={{ fontSize: 9.5, fontWeight: 700, letterSpacing: 1, color: '#B8882A', marginBottom: 4 }}>UNLOCK MORE</div>
-              <div style={{ fontSize: 14, fontWeight: 700, color: '#5C4212', letterSpacing: -0.1, ...sora }}>+₹3,00,000 on time repayment</div>
+              <div style={{ fontSize: 9.5, fontWeight: 700, letterSpacing: 1, color: '#B8882A', marginBottom: 4 }}>UNLOCK PART 2</div>
+              <div style={{ fontSize: 14, fontWeight: 700, color: '#5C4212', letterSpacing: -0.1, ...sora }}>+₹3,00,000 once your payments are validated</div>
             </div>
           </div>
           <div style={{ marginTop: 14 }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 6 }}>
-              <span style={{ fontSize: 11, fontWeight: 600, color: '#8A6A22' }}>Part 1 repayment</span>
-              <span style={{ fontSize: 11, fontWeight: 700, color: '#B8882A' }}>4 of 10 days</span>
+              <span style={{ fontSize: 11, fontWeight: 600, color: '#8A6A22' }}>Clear &amp; validate your card bills by 22 Jun</span>
+              <span style={{ fontSize: 11, fontWeight: 700, color: '#B8882A' }}>6 days left</span>
             </div>
             <div style={{ height: 5, borderRadius: 999, background: 'rgba(232,160,32,.18)', overflow: 'hidden' }}>
               <div style={{ height: '100%', width: '40%', borderRadius: 999, background: 'linear-gradient(90deg,#F5A623,#E8A020)' }} />
