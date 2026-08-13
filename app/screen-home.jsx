@@ -66,7 +66,7 @@ function HomeScreen({ go, meltState, salaryAcc }) {
             </div>
 
             <div style={{ fontSize: 12.5, color: 'rgba(255,255,255,.62)', fontWeight: 500, lineHeight: 1.45, marginBottom: 16 }}>
-              Clear your card bills with the <b style={{ color: '#fff', fontWeight: 700 }}>{inr(loan.amount)}</b> in <b style={{ color: '#fff', fontWeight: 700 }}>XX{(salaryAcc && salaryAcc.last4) || '4321'}</b>, then validate here.
+              Clear your card bills with the <b style={{ color: '#fff', fontWeight: 700 }}>{inr(loan.amount)}</b> loan we credited to <b style={{ color: '#fff', fontWeight: 700 }}>XX{(salaryAcc && salaryAcc.last4) || '4321'}</b>, then validate here.
             </div>
 
             {/* minimal progress indicator */}
