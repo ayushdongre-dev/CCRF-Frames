@@ -9,7 +9,7 @@ function MeltJourneyScreen2({ go }) {
 
   var STEPS = [
     { state: 'done', title: '₹2,00,000 Disbursed', desc: 'Credited directly to your salary account.', tag: 'Part 1' },
-    { state: 'active', title: 'Verifying Your Documents', desc: "We've received your documents and are confirming everything.", tag: 'In progress' },
+    { state: 'active', title: 'Verifying Your Payments', desc: "We've received your card bill payments and are checking them against your bank statement.", tag: 'In progress' },
     { state: 'upcoming', title: 'Part 2 Unlocks', desc: 'Once verified, ₹3,00,000 opens automatically.', tag: '+₹3,00,000' },
   ];
 

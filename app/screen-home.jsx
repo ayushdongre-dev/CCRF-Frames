@@ -65,8 +65,19 @@ function HomeScreen({ go, meltState, salaryAcc }) {
               <span style={{ fontSize: 14.5, fontWeight: 800, color: '#fff', letterSpacing: -0.3, ...sora }}>Unlock ₹3,00,000 more</span>
             </div>
 
-            <div style={{ fontSize: 12.5, color: 'rgba(255,255,255,.62)', fontWeight: 500, lineHeight: 1.4, marginBottom: 16 }}>
-              Pay your credit card dues with the {inr(loan.amount)} loan disbursed to you on {loan.disbursedOn} from account XX{(salaryAcc && salaryAcc.last4) || '4321'}, then validate it here.
+            <div style={{ marginBottom: 16 }}>
+              {[
+                <span>Pay your card dues from account <b style={{ color: '#fff', fontWeight: 700 }}>XX{(salaryAcc && salaryAcc.last4) || '4321'}</b></span>,
+                <span>Use the <b style={{ color: '#fff', fontWeight: 700 }}>{inr(loan.amount)}</b> disbursed on {loan.disbursedOn}</span>,
+                <span>Come back and validate those payments</span>,
+              ].map(function (node, i) {
+                return (
+                  <div key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: 8, marginBottom: i === 2 ? 0 : 6 }}>
+                    <span style={{ width: 4, height: 4, borderRadius: 999, background: 'rgba(255,255,255,.45)', flexShrink: 0, marginTop: 7 }} />
+                    <span style={{ fontSize: 12.5, color: 'rgba(255,255,255,.62)', fontWeight: 500, lineHeight: 1.45 }}>{node}</span>
+                  </div>
+                );
+              })}
             </div>
 
             {/* minimal progress indicator */}

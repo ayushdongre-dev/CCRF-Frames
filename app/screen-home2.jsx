@@ -64,11 +64,11 @@ function HomeScreen2({ go, meltState }) {
 
             <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8 }}>
               <svg width="15" height="15" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="6" stroke="#8B6FF0" strokeWidth="1.6" strokeDasharray="3,2.4"/></svg>
-              <span style={{ fontSize: 14.5, fontWeight: 800, color: '#fff', letterSpacing: -0.3, ...sora }}>Verifying your documents</span>
+              <span style={{ fontSize: 14.5, fontWeight: 800, color: '#fff', letterSpacing: -0.3, ...sora }}>Verifying your payments</span>
             </div>
 
             <div style={{ fontSize: 12.5, color: 'rgba(255,255,255,.62)', fontWeight: 500, lineHeight: 1.4, marginBottom: 16 }}>
-              We've received your documents. No action is needed from you right now.
+              We've received your card bill payments. No action is needed from you right now.
             </div>
 
             {/* minimal progress indicator */}
