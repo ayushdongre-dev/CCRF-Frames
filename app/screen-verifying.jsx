@@ -57,7 +57,7 @@ function VerifyingScreen({ go, verifyAttempt, setVerifyAttempt, setMeltState }) 
   var STEPS = [
     { label: 'Payment flagged for review', detail: 'We received your update' },
     { label: 'Statement processing',       detail: 'Extracting payment data…' },
-    { label: verifyAttempt === 0 ? 'Checking AA records' : 'Payment Verification', detail: timeLeft <= 0 ? 'Processing result…' : 'Verification in progress' },
+    { label: verifyAttempt === 0 ? 'Validating Your Card Bill Payments' : 'Payment Verification', detail: timeLeft <= 0 ? 'Processing result…' : 'Verification in progress' },
   ];
 
   var allDone = timeLeft <= 0;
