@@ -1,13 +1,14 @@
 // screen-melt-journey.jsx — "Know Your Melt Journey" · premium vertical timeline
-function MeltJourneyScreen({ go }) {
+function MeltJourneyScreen({ go, salaryAcc }) {
   var sora = { fontFamily: "'Sora', -apple-system, system-ui, sans-serif" };
   var PRIMARY = 'var(--primary)';
   var GREEN = '#2D9E6B';
   var AMBER = '#E8A020';
 
+  var ACC4 = (salaryAcc && salaryAcc.last4) || '4321';
   var STEPS = [
     { state: 'done', title: '₹2,00,000 Disbursed', desc: 'Credited directly to your salary account.', tag: 'Part 1' },
-    { state: 'active', title: 'Paid your Card Debts?', desc: 'Settle your outstanding dues to proceed.', tag: '6 days left' },
+    { state: 'active', title: 'Paid your Card Debts?', desc: 'Clear your card debts with the money above. Use account XX' + ACC4 + ' to pay them off.', tag: '6 days left' },
     { state: 'upcoming', title: 'Part 2 Unlocks', desc: 'Clear your card bills with Part 1 and ₹3,00,000 opens automatically.', tag: '+₹3,00,000' },
   ];
 

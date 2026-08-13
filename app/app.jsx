@@ -6,10 +6,10 @@ const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
   "ccrfRate": 22
 }/*EDITMODE-END*/;
 
-const ORDER = ['home', 'home2', 'home3', 'home4', 'meltjourney', 'meltjourney2', 'multioffer', 'selling', 'savings', 'cards', 'eligibility', 'visualise', 'amountselect', 'revisedoffer', 'journeycontinues', 'meltbank', 'meltpayment', 'verifying', 'meltnotfound', 'verreview', 'meltstatus', 'reward', 'newloan', 'success'];
+const ORDER = ['home', 'home2', 'home3', 'home4', 'meltjourney', 'meltjourney2', 'multioffer', 'selling', 'savings', 'cards', 'eligibility', 'visualise', 'amountselect', 'revisedoffer', 'bankselect', 'riskreview', 'journeycontinues', 'meltbank', 'meltpayment', 'verifying', 'meltnotfound', 'verreview', 'meltstatus', 'reward', 'newloan', 'success'];
 const LABELS = {
   home: 'Home 1', home2: 'Home 2', home3: 'Home 3', home4: 'Home 4', meltjourney: 'Melt Status 1', meltjourney2: 'Melt Status 2', multioffer: 'Multi Offer', selling: 'General Selling', savings: 'Savings', cards: 'Card Selection',
-  eligibility: 'Eligibility', visualise: 'Visualise', amountselect: 'Amount', revisedoffer: 'Final Offer',
+  eligibility: 'Eligibility', visualise: 'Visualise', amountselect: 'Amount', revisedoffer: 'Final Offer', bankselect: 'Bank Selection', riskreview: 'Final Risk Review',
   journeycontinues: 'Journey', meltbank: 'Bank Account', meltpayment: 'Payment Details',
   verifying: 'Verifying', meltnotfound: 'Not Found', verreview: 'Ver. Review', meltstatus: 'Melt Status', reward: 'Reward', newloan: 'New Loan', success: 'Done',
 };
@@ -33,6 +33,7 @@ function App() {
   const [meltSelBank, setMeltSelBank] = useState(null);
   const [meltPayDate, setMeltPayDate] = useState('');
   const [meltPayAmount, setMeltPayAmount] = useState('');
+  const [salaryAcc, setSalaryAcc] = useState({ id: 'HDFC', bank: 'HDFC', name: 'HDFC Bank', short: 'HDFC', last4: '4321' });
   const [meltPayments, setMeltPayments] = useState([]); // [{ date, amount }] — customer can log many repayments
   const CARD_DUE = 200000; // total card dues to clear in tranche 1
 
@@ -62,11 +63,11 @@ function App() {
 
   const screen = (() => {
     switch (route) {
-      case 'home': return <HomeScreen go={go} meltState={meltState} />;
+      case 'home': return <HomeScreen go={go} meltState={meltState} salaryAcc={salaryAcc} />;
       case 'home2': return <HomeScreen2 go={go} meltState={meltState} />;
       case 'home3': return <HomeScreen3 go={go} meltState={meltState} />;
       case 'home4': return <HomeScreen4 go={go} meltState={meltState} />;
-      case 'meltjourney': return <MeltJourneyScreen go={go} />;
+      case 'meltjourney': return <MeltJourneyScreen go={go} salaryAcc={salaryAcc} />;
       case 'meltjourney2': return <MeltJourneyScreen2 go={go} />;
       case 'multioffer': return <MultiOffer go={go} />;
       case 'selling': return <SellingStories go={go} storyMs={storyMs} />;
@@ -76,6 +77,8 @@ function App() {
       case 'visualise': return <Visualise go={go} ccrfRate={t.ccrfRate} monthly={monthly} />;
       case 'amountselect': return <AmountSelection go={go} ccrfRate={t.ccrfRate} />;
       case 'revisedoffer': return <RevisedOffer go={go} ccrfRate={t.ccrfRate} />;
+      case 'bankselect': return <BankSelectScreen go={go} salaryAcc={salaryAcc} setSalaryAcc={setSalaryAcc} />;
+      case 'riskreview': return <RiskReviewScreen go={go} salaryAcc={salaryAcc} />;
       case 'journeycontinues': return <JourneyContinues go={go} />;
       case 'meltbank': return <MeltBankAccountScreen go={go} setMeltSelBank={setMeltSelBank} cardDue={CARD_DUE} />;
       case 'meltpayment': return <MeltPaymentScreen go={go} cardDue={CARD_DUE} meltSelBank={meltSelBank} setMeltPayments={setMeltPayments} setMeltPayDate={setMeltPayDate} setMeltPayAmount={setMeltPayAmount} />;
@@ -92,7 +95,7 @@ function App() {
 
   const light = route === 'selling';
   const bg = route === 'savings' ? '#F7F7FC'
-    : (route === 'eligibility') ? '#F7F7FB'
+    : (route === 'eligibility' || route === 'bankselect' || route === 'riskreview') ? '#F7F7FB'
       : (route === 'home' || route === 'home2' || route === 'home3' || route === 'home4' || route === 'meltjourney' || route === 'meltjourney2') ? '#FFFFFF'
       : (route === 'multioffer' || route === 'amountselect' || route === 'revisedoffer') ? '#FFFFFF'
         : (route === 'selling' || route === 'visualise' || route === 'success') ? '#EFEEFE'

@@ -112,7 +112,7 @@ function RevisedOffer({ go }) {
 
       {/* CTA */}
       <BottomBar bg="#fff">
-        <button onClick={() => go('journeycontinues')} style={{
+        <button onClick={() => go('bankselect')} style={{
           width: '100%', height: 56, borderRadius: 15, background: REV.navy, color: '#fff',
           fontWeight: 700, fontSize: 16.5, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 9, whiteSpace: 'nowrap', ...sora,
           boxShadow: '0 14px 30px -10px rgba(30,58,95,.55)', transition: 'transform .12s',

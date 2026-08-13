@@ -1,5 +1,5 @@
 // screen-home.jsx — premium fintech dashboard (Apple Wallet / Revolut / CRED inspired)
-function HomeScreen({ go, meltState }) {
+function HomeScreen({ go, meltState, salaryAcc }) {
   var sora = { fontFamily: "'Sora', -apple-system, system-ui, sans-serif" };
 
   var loan = {
@@ -65,7 +65,7 @@ function HomeScreen({ go, meltState }) {
             </div>
 
             <div style={{ fontSize: 12.5, color: 'rgba(255,255,255,.62)', fontWeight: 500, lineHeight: 1.4, marginBottom: 16 }}>
-              Next: Pay your credit card dues to unlock more
+              Pay your credit card dues from bank account XX{(salaryAcc && salaryAcc.last4) || '4321'} to unlock more
             </div>
 
             {/* minimal progress indicator */}
