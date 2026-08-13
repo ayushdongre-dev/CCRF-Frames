@@ -67,8 +67,8 @@ function HomeScreen({ go, meltState, salaryAcc }) {
 
             <div style={{ marginBottom: 16 }}>
               {[
-                <span>Pay your card dues from account <b style={{ color: '#fff', fontWeight: 700 }}>XX{(salaryAcc && salaryAcc.last4) || '4321'}</b></span>,
-                <span>Use the <b style={{ color: '#fff', fontWeight: 700 }}>{inr(loan.amount)}</b> disbursed on {loan.disbursedOn}</span>,
+                <span>Use the <b style={{ color: '#fff', fontWeight: 700 }}>{inr(loan.amount)}</b> loan we credited to account <b style={{ color: '#fff', fontWeight: 700 }}>XX{(salaryAcc && salaryAcc.last4) || '4321'}</b> on {loan.disbursedOn}</span>,
+                <span>Pay your credit card bills from that same account</span>,
                 <span>Come back and validate those payments</span>,
               ].map(function (node, i) {
                 return (

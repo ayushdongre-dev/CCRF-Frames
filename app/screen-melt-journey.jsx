@@ -31,7 +31,7 @@ function MeltJourneyScreen({ go, salaryAcc }) {
     },
     {
       title: 'Which account to pay from',
-      body: ACC_NAME + ' XX' + ACC4 + ' — the same account the loan landed in. Payments from any other account cannot be matched.',
+      body: ACC_NAME + ' XX' + ACC4 + ' — the same account the loan landed in.',
       icon: <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M3 10l9-6 9 6" stroke={PRIMARY} strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" /><path d="M5 10v9h14v-9M3 19h18" stroke={PRIMARY} strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" /></svg>,
     },
   ];
