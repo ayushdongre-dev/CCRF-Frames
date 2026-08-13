@@ -65,19 +65,8 @@ function HomeScreen({ go, meltState, salaryAcc }) {
               <span style={{ fontSize: 14.5, fontWeight: 800, color: '#fff', letterSpacing: -0.3, ...sora }}>Unlock ₹3,00,000 more</span>
             </div>
 
-            <div style={{ marginBottom: 16 }}>
-              {[
-                <span>Use the <b style={{ color: '#fff', fontWeight: 700 }}>{inr(loan.amount)}</b> loan we credited to account <b style={{ color: '#fff', fontWeight: 700 }}>XX{(salaryAcc && salaryAcc.last4) || '4321'}</b> on {loan.disbursedOn}</span>,
-                <span>Pay your credit card bills from that same account</span>,
-                <span>Come back and validate those payments</span>,
-              ].map(function (node, i) {
-                return (
-                  <div key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: 8, marginBottom: i === 2 ? 0 : 6 }}>
-                    <span style={{ width: 4, height: 4, borderRadius: 999, background: 'rgba(255,255,255,.45)', flexShrink: 0, marginTop: 7 }} />
-                    <span style={{ fontSize: 12.5, color: 'rgba(255,255,255,.62)', fontWeight: 500, lineHeight: 1.45 }}>{node}</span>
-                  </div>
-                );
-              })}
+            <div style={{ fontSize: 12.5, color: 'rgba(255,255,255,.62)', fontWeight: 500, lineHeight: 1.45, marginBottom: 16 }}>
+              Clear your card bills with the <b style={{ color: '#fff', fontWeight: 700 }}>{inr(loan.amount)}</b> in <b style={{ color: '#fff', fontWeight: 700 }}>XX{(salaryAcc && salaryAcc.last4) || '4321'}</b>, then validate here.
             </div>
 
             {/* minimal progress indicator */}
