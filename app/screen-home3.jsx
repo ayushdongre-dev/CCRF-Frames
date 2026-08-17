@@ -57,7 +57,7 @@ function HomeScreen3({ go, meltState }) {
                 <div style={{ width: 30, height: 30, borderRadius: 10, background: 'rgba(255,255,255,.12)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                   <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M8 11V8.2A4 4 0 0116 7" stroke="#fff" strokeWidth="2" strokeLinecap="round"/><rect x="3" y="11" width="18" height="11" rx="3" fill="#fff"/><circle cx="12" cy="17" r="1.4" fill="#241B54"/></svg>
                 </div>
-                <span style={{ fontSize: 14.5, fontWeight: 700, color: '#fff', letterSpacing: -0.2, ...sora }}>Round 2 Unlocked</span>
+                <span style={{ fontSize: 14.5, fontWeight: 700, color: '#fff', letterSpacing: -0.2, ...sora }}>Part 2 Unlocked</span>
               </div>
               <span style={{ fontSize: 10.5, fontWeight: 700, color: '#8FE3B8', background: 'rgba(45,158,107,.2)', border: '1px solid rgba(93,215,158,.3)', borderRadius: 999, padding: '3px 9px', whiteSpace: 'nowrap' }}>Approved</span>
             </div>
@@ -67,7 +67,7 @@ function HomeScreen3({ go, meltState }) {
             </div>
 
             <div style={{ fontSize: 12.5, color: 'rgba(255,255,255,.62)', fontWeight: 500, lineHeight: 1.45, marginBottom: 18 }}>
-              Round 1 is fully cleared. Your next amount is approved and ready — continue to move it into your bank account.
+              Part 1 is fully cleared. Your next amount is approved and ready — continue to move it into your bank account.
             </div>
 
             <div style={{
@@ -132,7 +132,7 @@ function HomeScreen3({ go, meltState }) {
             </div>
             <div>
               <div style={{ fontSize: 13.5, fontWeight: 700, color: 'var(--ink)' }}>Claim ₹3,00,000</div>
-              <div style={{ fontSize: 11, color: 'var(--muted)', lineHeight: 1.4, marginTop: 2 }}>Your Round 2 amount, ready now</div>
+              <div style={{ fontSize: 11, color: 'var(--muted)', lineHeight: 1.4, marginTop: 2 }}>Your Part 2 amount, ready now</div>
             </div>
             <div style={{ fontSize: 11.5, fontWeight: 700, color: 'var(--green)', marginTop: 2 }}>Continue</div>
           </button>

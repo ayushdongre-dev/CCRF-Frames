@@ -50,7 +50,7 @@ function JourneyContinues({ go }) {
           continues.
         </div>
         <div style={{ fontSize: 14, color: 'rgba(255,255,255,.45)', marginTop: 18, lineHeight: 1.6, maxWidth: 240, margin: '18px auto 0' }}>
-          Phase 1 is complete. You're on your way to clearing your card.
+          Part 1 is complete. You're on your way to clearing your card.
         </div>
       </div>
 

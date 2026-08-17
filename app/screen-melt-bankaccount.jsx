@@ -1,6 +1,8 @@
-// screen-melt-bankaccount.jsx — Melt: Bank Account Selection
+// screen-melt-bankaccount.jsx — Step 1 of "Confirm your repayment": the account
+// Shares its header and dues strip with step 2 (screen-melt-payment.jsx) so the
+// two screens read as one continuous task rather than two separate forms.
 
-function MeltBankAccountScreen({ go, setMeltSelBank }) {
+function MeltBankAccountScreen({ go, setMeltSelBank, cardDue }) {
   var ink   = '#1B192E';
   var muted = '#8A879B';
   var P     = 'var(--primary)';
@@ -37,39 +39,19 @@ function MeltBankAccountScreen({ go, setMeltSelBank }) {
   return (
     <div style={{ minHeight: '100%', display: 'flex', flexDirection: 'column', background: '#F9F8FC', animation: 'fadeIn .25s' }}>
 
-      {/* ── Header ── */}
-      <div style={{ background: '#fff', padding: '12px 16px', flexShrink: 0, borderBottom: '1px solid #F0EEF8' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 10 }}>
-          <button
-            onClick={function () { go('home'); }}
-            style={{ width: 36, height: 36, borderRadius: 12, border: '1.5px solid #ECEAF4', background: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, cursor: 'pointer' }}
-          >
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M15 5l-7 7 7 7" stroke={ink} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>
-          </button>
-          <div style={{ flex: 1 }}>
-            <div style={{ fontSize: 10.5, fontWeight: 700, color: muted, letterSpacing: 0.8, textTransform: 'uppercase', marginBottom: 2 }}>Step 1 of 2</div>
-            <div style={{ fontSize: 16, fontWeight: 800, color: ink, ...sora, lineHeight: 1 }}>Bank Account</div>
-          </div>
-          <div style={{ display: 'flex', gap: 4 }}>
-            <div style={{ width: 20, height: 4, borderRadius: 999, background: P }} />
-            <div style={{ width: 20, height: 4, borderRadius: 999, background: LINE }} />
-          </div>
-        </div>
-        {/* progress bar */}
-        <div style={{ height: 3, background: '#F0EEF8', borderRadius: 999, overflow: 'hidden' }}>
-          <div style={{ width: '50%', height: '100%', background: P, borderRadius: 999 }} />
-        </div>
-      </div>
+      <MeltStepHeader step={1} steps={2} title="Payment account" onBack={function () { go('home'); }} />
 
-      <div className="scr" style={{ flex: 1, overflowY: 'auto', padding: '26px 20px 8px' }}>
+      <div className="scr" style={{ flex: 1, overflowY: 'auto', padding: '20px 20px 8px' }}>
+
+        <MeltDuesStrip cardDue={cardDue || 200000} bank={null} note="Hope this helped settle some of your card bills." />
 
         {/* ── Title ── */}
         <div style={{ animation: 'fadeUp .35s both' }}>
           <div style={{ fontSize: 23, fontWeight: 900, color: ink, ...sora, lineHeight: 1.2, letterSpacing: -0.5, marginBottom: 6 }}>
-            Which account did<br />you repay from?
+            Which account paid<br />your card bills?
           </div>
-          <div style={{ fontSize: 12.5, fontWeight: 500, color: muted, lineHeight: 1.6, marginBottom: 26 }}>
-            Select the account used to settle your card dues.
+          <div style={{ fontSize: 12.5, fontWeight: 500, color: muted, lineHeight: 1.6, marginBottom: 22 }}>
+            The account your Part 1 loan landed in — next you'll add the card bill payments you made from it.
           </div>
         </div>
 
@@ -277,7 +259,7 @@ function MeltBankAccountScreen({ go, setMeltSelBank }) {
           onMouseUp={function (e) { e.currentTarget.style.transform = 'scale(1)'; }}
           onMouseLeave={function (e) { e.currentTarget.style.transform = 'scale(1)'; }}
         >
-          Continue
+          Continue to payments
           {canContinue && (
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="#fff" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" /></svg>
           )}

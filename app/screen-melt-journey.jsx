@@ -1,14 +1,39 @@
 // screen-melt-journey.jsx — "Know Your Melt Journey" · premium vertical timeline
-function MeltJourneyScreen({ go }) {
+function MeltJourneyScreen({ go, salaryAcc }) {
   var sora = { fontFamily: "'Sora', -apple-system, system-ui, sans-serif" };
   var PRIMARY = 'var(--primary)';
   var GREEN = '#2D9E6B';
   var AMBER = '#E8A020';
 
+  var ACC4     = (salaryAcc && salaryAcc.last4) || '4321';
+  var ACC_NAME = (salaryAcc && (salaryAcc.short || salaryAcc.name)) || 'HDFC';
+  var PART1    = 200000;
+  var DISBURSED_ON = '12 Jun 2026';
+
   var STEPS = [
-    { state: 'done', title: '₹2,00,000 Disbursed', desc: 'Credited directly to your salary account.', tag: 'Step 1' },
-    { state: 'active', title: 'Paid your Card Debts?', desc: 'Settle your outstanding dues to proceed.', tag: '6 days left' },
-    { state: 'upcoming', title: 'Step 2 Unlocks', desc: 'Repay Step 1 on time and ₹3,00,000 opens automatically.', tag: '+₹3,00,000' },
+    { state: 'done', title: '₹2,00,000 Disbursed', desc: 'Credited to ' + ACC_NAME + ' XX' + ACC4 + ' on ' + DISBURSED_ON + '.', tag: 'Part 1' },
+    { state: 'active', title: 'Clear your card bills', desc: 'Pay them off with that money, then validate the payments here.', tag: '6 days left' },
+    { state: 'upcoming', title: 'Part 2 Unlocks', desc: 'Once your payments are validated, ₹3,00,000 opens automatically.', tag: '+₹3,00,000' },
+  ];
+
+  // A returning customer lands here days after disbursal — restate what to
+  // clear, what to clear it with, and which account to clear it from.
+  var TODO = [
+    {
+      title: 'What to clear',
+      body: 'The credit card bills you picked when you applied.',
+      icon: <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><rect x="3" y="6" width="18" height="13" rx="2.5" stroke={PRIMARY} strokeWidth="1.9" /><path d="M3 10h18" stroke={PRIMARY} strokeWidth="1.9" /></svg>,
+    },
+    {
+      title: 'What to pay with',
+      body: 'The ' + inr(PART1) + ' Part 1 loan credited to you on ' + DISBURSED_ON + '.',
+      icon: <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 3v18M8.5 7.5h6a2.5 2.5 0 010 5h-5a2.5 2.5 0 000 5h6" stroke={PRIMARY} strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" /></svg>,
+    },
+    {
+      title: 'Which account to pay from',
+      body: ACC_NAME + ' XX' + ACC4 + ' — the same account the loan landed in.',
+      icon: <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M3 10l9-6 9 6" stroke={PRIMARY} strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" /><path d="M5 10v9h14v-9M3 19h18" stroke={PRIMARY} strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" /></svg>,
+    },
   ];
 
   return (
@@ -23,12 +48,12 @@ function MeltJourneyScreen({ go }) {
         <div style={{ width: 38 }} />
       </div>
 
-      <div style={{ flex: 1, padding: '10px 20px 26px' }}>
+      <div style={{ flex: 1, padding: '10px 20px 16px' }}>
 
         {/* ── summary hero — compact progress strip ── */}
         <div style={{
           borderRadius: 14, padding: '12px 14px', background: '#fff',
-          border: '1px solid var(--line)', marginBottom: 18,
+          border: '1px solid var(--line)', marginBottom: 14,
         }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 8 }}>
             <span style={{ fontSize: 12.5, fontWeight: 700, color: 'var(--ink)', letterSpacing: -0.1, ...sora }}>Your Melt Journey</span>
@@ -50,7 +75,7 @@ function MeltJourneyScreen({ go }) {
             var nodeColor = done ? GREEN : active ? PRIMARY : '#D6D2EA';
             var lineColor = (done || (active && i > 0)) ? 'rgba(45,158,107,.3)' : '#E8E5F2';
             return (
-              <div key={i} style={{ display: 'flex', gap: 14, alignItems: 'flex-start', paddingBottom: isLast ? 0 : 22, position: 'relative' }}>
+              <div key={i} style={{ display: 'flex', gap: 14, alignItems: 'flex-start', paddingBottom: isLast ? 0 : 18, position: 'relative' }}>
                 <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: 26, flexShrink: 0 }}>
                   <div style={{
                     position: 'relative', width: 26, height: 26, borderRadius: 999, flexShrink: 0,
@@ -87,36 +112,48 @@ function MeltJourneyScreen({ go }) {
           })}
         </div>
 
-        {/* ── Unlock More ── */}
+        {/* ── Deadline strip ── */}
         <div style={{
-          marginTop: 20, borderRadius: 20, padding: '18px 18px', position: 'relative', overflow: 'hidden',
+          marginTop: 14, borderRadius: 16, padding: '12px 14px',
           background: 'linear-gradient(135deg,#FDF3DC,#FFF6E8)', border: '1px solid #EDD899',
         }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
-            <div style={{ width: 50, height: 50, borderRadius: 15, flexShrink: 0, background: 'linear-gradient(135deg,#F5A623,#E8A020)', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 8px 18px rgba(232,160,32,.4)' }}>
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M8 11V8.2A4 4 0 0116 7" stroke="#fff" strokeWidth="2.2" strokeLinecap="round"/><rect x="3" y="11" width="18" height="11" rx="3" fill="rgba(255,255,255,.9)"/><circle cx="12" cy="17" r="2.2" fill="#E8A020"/></svg>
-            </div>
-            <div style={{ flex: 1 }}>
-              <div style={{ fontSize: 9.5, fontWeight: 700, letterSpacing: 1, color: '#B8882A', marginBottom: 4 }}>UNLOCK MORE</div>
-              <div style={{ fontSize: 14, fontWeight: 700, color: '#5C4212', letterSpacing: -0.1, ...sora }}>+₹3,00,000 on time repayment</div>
-            </div>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10, marginBottom: 7 }}>
+            <span style={{ fontSize: 11.5, fontWeight: 600, color: '#8A6A22' }}>Clear &amp; validate by 22 Jun</span>
+            <span style={{ fontSize: 11.5, fontWeight: 800, color: '#B8882A', ...sora }}>6 days left</span>
           </div>
-          <div style={{ marginTop: 14 }}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 6 }}>
-              <span style={{ fontSize: 11, fontWeight: 600, color: '#8A6A22' }}>Step 1 repayment</span>
-              <span style={{ fontSize: 11, fontWeight: 700, color: '#B8882A' }}>4 of 10 days</span>
-            </div>
-            <div style={{ height: 5, borderRadius: 999, background: 'rgba(232,160,32,.18)', overflow: 'hidden' }}>
-              <div style={{ height: '100%', width: '40%', borderRadius: 999, background: 'linear-gradient(90deg,#F5A623,#E8A020)' }} />
-            </div>
+          <div style={{ height: 5, borderRadius: 999, background: 'rgba(232,160,32,.18)', overflow: 'hidden' }}>
+            <div style={{ height: '100%', width: '40%', borderRadius: 999, background: 'linear-gradient(90deg,#F5A623,#E8A020)' }} />
           </div>
         </div>
+
+        {/* ── What to do (returning-customer recap) ── */}
+        <div style={{
+          marginTop: 12, borderRadius: 20, padding: '14px 15px 4px',
+          background: '#fff', border: '1px solid var(--line)',
+          boxShadow: '0 1px 3px rgba(0,0,0,.04), 0 8px 20px -14px rgba(40,30,80,.18)',
+        }}>
+          <div style={{ fontSize: 13, fontWeight: 800, color: 'var(--ink)', letterSpacing: -0.1, marginBottom: 12, ...sora }}>
+            How to unlock Part 2
+          </div>
+          {TODO.map(function (t, i) {
+            return (
+              <div key={t.title} style={{ display: 'flex', gap: 11, alignItems: 'flex-start', paddingBottom: 10, marginBottom: 10, borderBottom: i === TODO.length - 1 ? 'none' : '1px solid #F4F2FB' }}>
+                <div style={{ width: 30, height: 30, borderRadius: 10, flexShrink: 0, background: 'var(--primary-l)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>{t.icon}</div>
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <div style={{ fontSize: 12, fontWeight: 700, color: 'var(--ink)', marginBottom: 3, ...sora }}>{t.title}</div>
+                  <div style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.5 }}>{t.body}</div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+
       </div>
 
       {/* CTA */}
       <BottomBar>
         <Btn onClick={function () { go('meltbank'); }}>
-          Verify your Payment {Icon.arrowR('#fff')}
+          Validate your payments {Icon.arrowR('#fff')}
         </Btn>
       </BottomBar>
     </div>

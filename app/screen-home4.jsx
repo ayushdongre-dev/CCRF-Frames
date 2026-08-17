@@ -74,7 +74,7 @@ function HomeScreen4({ go, meltState }) {
             </div>
 
             <div style={{ fontSize: 14.5, fontWeight: 800, color: '#fff', letterSpacing: -0.3, marginBottom: 8, ...sora }}>
-              We couldn't verify your documents
+              We couldn't verify your payments
             </div>
 
             <div style={{ fontSize: 12.5, color: '#C9CAD7', fontWeight: 500, lineHeight: 1.45, marginBottom: 16 }}>

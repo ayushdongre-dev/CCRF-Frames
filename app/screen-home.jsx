@@ -1,5 +1,5 @@
 // screen-home.jsx — premium fintech dashboard (Apple Wallet / Revolut / CRED inspired)
-function HomeScreen({ go, meltState }) {
+function HomeScreen({ go, meltState, salaryAcc }) {
   var sora = { fontFamily: "'Sora', -apple-system, system-ui, sans-serif" };
 
   var loan = {
@@ -9,6 +9,7 @@ function HomeScreen({ go, meltState }) {
     nextEmiDate: '14 Aug',
     paidEmis: 3,
     totalEmis: 15,
+    disbursedOn: '12 Jun 2026',
   };
   var repayPct = Math.round((loan.paidEmis / loan.totalEmis) * 100);
 
@@ -61,11 +62,11 @@ function HomeScreen({ go, meltState }) {
 
             <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8 }}>
               <svg width="15" height="15" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="7" fill="#E8A020"/><path d="M5.5 7V5.3A1.7 1.7 0 018.5 4" stroke="#fff" strokeWidth="1.4" strokeLinecap="round"/></svg>
-              <span style={{ fontSize: 14.5, fontWeight: 800, color: '#fff', letterSpacing: -0.3, ...sora }}>₹3,00,000 to unlock more</span>
+              <span style={{ fontSize: 14.5, fontWeight: 800, color: '#fff', letterSpacing: -0.3, ...sora }}>Unlock ₹3,00,000 more</span>
             </div>
 
-            <div style={{ fontSize: 12.5, color: 'rgba(255,255,255,.62)', fontWeight: 500, lineHeight: 1.4, marginBottom: 16 }}>
-              Next: Pay your credit card dues to unlock more
+            <div style={{ fontSize: 12.5, color: 'rgba(255,255,255,.62)', fontWeight: 500, lineHeight: 1.45, marginBottom: 16 }}>
+              Clear your card bills with the <b style={{ color: '#fff', fontWeight: 700 }}>{inr(loan.amount)}</b> loan we credited to <b style={{ color: '#fff', fontWeight: 700 }}>XX{(salaryAcc && salaryAcc.last4) || '4321'}</b>, then validate here.
             </div>
 
             {/* minimal progress indicator */}
@@ -78,7 +79,7 @@ function HomeScreen({ go, meltState }) {
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
               
               <span style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 13, fontWeight: 700, color: '#fff', ...sora }}>
-                See your Melt status
+                Unlock now
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M5 12h13m0 0l-5-5m5 5l-5 5" stroke="#fff" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"/></svg>
               </span>
             </div>
